@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Review {
@@ -74,6 +76,12 @@ public class Review {
 
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    public String getCreatedAtAsString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = dateFormat.format(this.createdAt).replace(" ", "T") + "Z";
+        return date;
     }
 
     public void setCreatedAt(Date createdAt) {

@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -15,9 +16,14 @@ public class PodcastMongo {
 
     // ------------------------------- CRUD OPERATION ----------------------------------- //
 
-    public void addPodcast(Podcast podcast) {
+    // --------- CREATE --------- //
 
+    public boolean addPodcast(Podcast podcast) {
+        // podcast.setId(risultato.getObjectId("_id").toString());
+        return false;
     }
+
+    // ---------- READ ---------- //
 
     public Podcast findPodcastById(String id) {
         MongoManager manager = MongoManager.getInstance();
@@ -72,32 +78,72 @@ public class PodcastMongo {
         return null;
     }
 
-    public List<Podcast> findPodcastByName(String name) {
+    public List<Podcast> findPodcastsByName(String name) {
         return null;
     }
 
-    public List<Podcast> findPodcastByAuthorId(String authorId) {
+    public List<Podcast> findPodcastsByAuthorId(String authorId) {
         return null;
     }
 
-    public List<Podcast> findPodcastByAuthorName(String authorName) {
+    public List<Podcast> findPodcastsByAuthorName(String authorName) {
         return null;
     }
 
-    public List<Podcast> findPodcastByPrimaryCategory(String primaryCategory) {
+    public List<Podcast> findPodcastsByPrimaryCategory(String primaryCategory) {
         return null;
     }
 
-    public List<Podcast> findPodcastByCategory(String category) {
+    public List<Podcast> findPodcastsByCategory(String category) {
         return null;
     }
 
-    public void updatePodcast(Podcast podcast) {
+    // --------- UPDATE --------- //
 
+    public boolean updatePodcast(Podcast podcast) {
+        return false;
     }
 
-    public void deletePodcast(String id) {
+    public boolean addEpisodeToPodcast(String podcastId, String episodeName, String episodeDescription, Date episodeReleaseDate, int episodeTimeMillis) {
+        return false;
+    }
 
+    public boolean addReviewToPodcast(String podcastId, String reviewId, int rating) {
+        return false;
+    }
+
+    // --------- DELETE --------- //
+
+    public boolean deletePodcastById(String id) {
+        return false;
+    }
+
+    public int deletePodcastsByName(String name) {
+        return -1;
+    }
+
+    public int deletePodcastsByAuthorId(String authorId) {
+        return -1;
+    }
+
+    public int deletePodcastsByAuthorName(String authorName) {
+        return -1;
+    }
+
+    public boolean deleteEpisodeOfPodcast(String podcastId, String episodeName) {
+        return false;
+    }
+
+    public int deleteAllEpisodesOfPodcast(String podcastId) {
+        return -1;
+    }
+
+    public boolean deleteReviewOfPodcast(String podcastId, String reviewId) {
+        return false;
+    }
+
+    public int deleteAllReviewsOfPodcast(String podcastId) {
+        return -1;
     }
 
     // ---------------------------------------------------------------------------------- //
@@ -113,6 +159,14 @@ public class PodcastMongo {
     }
 
     public List<Podcast> showPodcastsWithHighestAverageRatingPerCountry(int limit) {
+        return null;
+    }
+
+    public List<Podcast> showPodcastsWithHighestNumberOfReviews(int limit) {
+        return null;
+    }
+
+    public List<String> showAuthorWithHighestAverageRating(int limit) {
         return null;
     }
 

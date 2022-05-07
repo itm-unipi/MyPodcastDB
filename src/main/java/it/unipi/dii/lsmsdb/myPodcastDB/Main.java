@@ -16,6 +16,7 @@ public class Main {
         PodcastMongo pm = new PodcastMongo();
         Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
         System.out.println(podcast);
+        System.out.println(podcast.getReleaseDateAsString());
 
         manager.closeConnection();
     }
