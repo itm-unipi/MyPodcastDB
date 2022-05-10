@@ -67,15 +67,15 @@ public class PodcastMongo {
 
     // ---------- READ ---------- //
 
-    public Podcast findPodcastById(String id) {
+    public Podcast findPodcastById(String podcastId) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("_id", new ObjectId(id))).iterator()) {
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("_id", new ObjectId(podcastId))).iterator()) {
             if (cursor.hasNext()) {
                 Document podcast = cursor.next();
 
                 // podcast attributes
-                String podcastId = id;
+                String id = podcastId;
                 String name = podcast.getString("podcastName");
                 String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
@@ -87,7 +87,7 @@ public class PodcastMongo {
                 List<String> categories = podcast.getList("categories", String.class);
                 String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
                 Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
-                Podcast newPodcast = new Podcast(podcastId, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -120,17 +120,17 @@ public class PodcastMongo {
         return null;
     }
 
-    public List<Podcast> findPodcastsByName(String name) {
+    public List<Podcast> findPodcastsByName(String podcastName, int limit) {
         MongoManager manager = MongoManager.getInstance();
         List<Podcast> podcasts = new ArrayList<>();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("podcastName", name)).iterator()) {
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("podcastName", podcastName)).limit(limit).iterator()) {
             while (cursor.hasNext()) {
                 Document podcast = cursor.next();
 
                 // podcast attributes
-                String podcastId = podcast.getObjectId("_id").toString();
-                String podcastName = name;
+                String id = podcast.getObjectId("_id").toString();
+                String name = podcastName;
                 String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
                 String artworkUrl60 = podcast.getString("artworkUrl60");
@@ -141,7 +141,7 @@ public class PodcastMongo {
                 List<String> categories = podcast.getList("categories", String.class);
                 String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
                 Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
-                Podcast newPodcast = new Podcast(podcastId, podcastName, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -173,16 +173,163 @@ public class PodcastMongo {
         return podcasts;
     }
 
-    public List<Podcast> findPodcastsByAuthorId(String authorId) {
-        return null;
+    public List<Podcast> findPodcastsByAuthorId(String podcastAuthorId, int limit) {
+        MongoManager manager = MongoManager.getInstance();
+        List<Podcast> podcasts = new ArrayList<>();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("authorId", new ObjectId(podcastAuthorId))).limit(limit).iterator()) {
+            while (cursor.hasNext()) {
+                Document podcast = cursor.next();
+
+                // podcast attributes
+                String id = podcast.getObjectId("_id").toString();
+                String name = podcast.getString("podcastName");
+                String authorId = podcastAuthorId;
+                String authorName = podcast.getString("authorName");
+                String artworkUrl60 = podcast.getString("artworkUrl60");
+                String artworkUrl600 = podcast.getString("artworkUrl600");
+                String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
+                String country = podcast.getString("country");
+                String primaryCategory = podcast.getString("primaryCategory");
+                List<String> categories = podcast.getList("categories", String.class);
+                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
+                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+
+                // episodes
+                List<Document> episodes = podcast.getList("episodes", Document.class);
+                for (Document episode : episodes) {
+                    String episodeName = episode.getString("episodeName");
+                    String episodeDescription = episode.getString("episodeDescription");
+                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
+                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
+
+                    newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
+                }
+
+                // reviews
+                List<Document> reviews = podcast.getList("reviews", Document.class);
+                for (Document review : reviews) {
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    int rating = review.getInteger("rating");
+
+                    newPodcast.addReview(reviewId, rating);
+                }
+
+                podcasts.add(newPodcast);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return podcasts;
     }
 
-    public List<Podcast> findPodcastsByAuthorName(String authorName) {
-        return null;
+    public List<Podcast> findPodcastsByAuthorName(String podcastAuthorName, int limit) {
+        MongoManager manager = MongoManager.getInstance();
+        List<Podcast> podcasts = new ArrayList<>();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("authorName", podcastAuthorName)).limit(limit).iterator()) {
+            while (cursor.hasNext()) {
+                Document podcast = cursor.next();
+
+                // podcast attributes
+                String id = podcast.getObjectId("_id").toString();
+                String name = podcast.getString("podcastName");
+                String authorId = podcast.getObjectId("authorId").toString();
+                String authorName = podcastAuthorName;
+                String artworkUrl60 = podcast.getString("artworkUrl60");
+                String artworkUrl600 = podcast.getString("artworkUrl600");
+                String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
+                String country = podcast.getString("country");
+                String primaryCategory = podcast.getString("primaryCategory");
+                List<String> categories = podcast.getList("categories", String.class);
+                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
+                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+
+                // episodes
+                List<Document> episodes = podcast.getList("episodes", Document.class);
+                for (Document episode : episodes) {
+                    String episodeName = episode.getString("episodeName");
+                    String episodeDescription = episode.getString("episodeDescription");
+                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
+                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
+
+                    newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
+                }
+
+                // reviews
+                List<Document> reviews = podcast.getList("reviews", Document.class);
+                for (Document review : reviews) {
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    int rating = review.getInteger("rating");
+
+                    newPodcast.addReview(reviewId, rating);
+                }
+
+                podcasts.add(newPodcast);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return podcasts;
     }
 
-    public List<Podcast> findPodcastsByPrimaryCategory(String primaryCategory) {
-        return null;
+    public List<Podcast> findPodcastsByPrimaryCategory(String podcastPrimaryCategory, int limit) {
+        MongoManager manager = MongoManager.getInstance();
+        List<Podcast> podcasts = new ArrayList<>();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("primaryCategory", podcastPrimaryCategory)).limit(limit).iterator()) {
+            while (cursor.hasNext()) {
+                Document podcast = cursor.next();
+
+                // podcast attributes
+                String id = podcast.getObjectId("_id").toString();
+                String name = podcast.getString("podcastName");
+                String authorId = podcast.getObjectId("authorId").toString();
+                String authorName = podcast.getString("authorName");
+                String artworkUrl60 = podcast.getString("artworkUrl60");
+                String artworkUrl600 = podcast.getString("artworkUrl600");
+                String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
+                String country = podcast.getString("country");
+                String primaryCategory = podcastPrimaryCategory;
+                List<String> categories = podcast.getList("categories", String.class);
+                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
+                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+
+                // episodes
+                List<Document> episodes = podcast.getList("episodes", Document.class);
+                for (Document episode : episodes) {
+                    String episodeName = episode.getString("episodeName");
+                    String episodeDescription = episode.getString("episodeDescription");
+                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
+                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
+
+                    newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
+                }
+
+                // reviews
+                List<Document> reviews = podcast.getList("reviews", Document.class);
+                for (Document review : reviews) {
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    int rating = review.getInteger("rating");
+
+                    newPodcast.addReview(reviewId, rating);
+                }
+
+                podcasts.add(newPodcast);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return podcasts;
     }
 
     public List<Podcast> findPodcastsByCategory(String category) {
