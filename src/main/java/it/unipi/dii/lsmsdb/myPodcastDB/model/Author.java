@@ -21,7 +21,7 @@ public class Author {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.ownPodcasts = new ArrayList();
+        this.ownPodcasts = new ArrayList<>();
     }
 
     public Author(Author other) {
