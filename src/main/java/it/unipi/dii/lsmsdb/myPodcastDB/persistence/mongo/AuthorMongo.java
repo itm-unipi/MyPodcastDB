@@ -1,9 +1,17 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
+import com.mongodb.client.MongoCursor;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import org.bson.Document;
+import org.bson.types.ObjectId;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import static com.mongodb.client.model.Filters.eq;
 
 public class AuthorMongo {
 
@@ -12,21 +20,127 @@ public class AuthorMongo {
     // --------- CREATE --------- //
 
     public boolean addAuthor(Author author) {
-        // author.setId(risultato.getObjectId("_id").toString());
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        //name, email, password, podcasts
+        try {
+            Document newAuthor = new Document("name", author.getName())
+                    .append("email", author.getEmail())
+                    .append("password", author.getPassword())
+                    .append("podcasts", new ArrayList());
+
+            //add newAuthor
+            manager.getCollection("author").insertOne(newAuthor);
+            author.setId(newAuthor.getObjectId("_id").toString());
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // ---------- READ ---------- //
 
     public Author findAuthorById(String id) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("_id", new ObjectId(id))).iterator()) {
+            if (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                String authorName = author.getString("name");
+                String authorPassword = author.getString("password");
+                String authorEmail = author.getString("email");
+
+                Author newAuthor = new Author(id, authorName, authorPassword, authorEmail);
+
+                // retrieve author's podcasts
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for (Document podcast : podcasts) {
+                    String podcastId = podcast.getString("podcastId");
+                    String podcastName = podcast.getString("podcastName");
+                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
+                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+
+                    newAuthor.addPodcast(podcastId, podcastName, podcastReleaseDate);
+                }
+
+                return newAuthor;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 
     public Author findAuthorByName(String name) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("name", name)).iterator()) {
+            if (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                String authorId = author.getObjectId("_id").toString();
+                String authorPassword = author.getString("password");
+                String authorEmail = author.getString("email");
+
+                Author newAuthor = new Author(authorId, name, authorPassword, authorEmail);
+
+                // retrieve author's podcasts
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for (Document podcast : podcasts) {
+                    String podcastId = podcast.getString("podcastId");
+                    String podcastName = podcast.getString("podcastName");
+                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
+                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+
+                    newAuthor.addPodcast(podcastId, podcastName, podcastReleaseDate);
+                }
+
+                return newAuthor;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 
     public Author findAuthorByEmail(String email) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("email", email)).iterator()) {
+            if (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                String authorId = author.getObjectId("_id").toString();
+                String authorName = author.getString("name");
+                String authorPassword = author.getString("password");
+
+                Author newAuthor = new Author(authorId, authorName, authorPassword, email);
+
+                // retrieve author's podcasts
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for (Document podcast : podcasts) {
+                    String podcastId = podcast.getString("podcastId");
+                    String podcastName = podcast.getString("podcastName");
+                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
+                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+
+                    newAuthor.addPodcast(podcastId, podcastName, podcastReleaseDate);
+                }
+
+                return newAuthor;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 
@@ -38,7 +152,9 @@ public class AuthorMongo {
         return null;
     }
 
-    public List<Author> findAuthorsByCountry(String country) { return null; }
+    public List<Author> findAuthorsByCountry(String country) {
+        return null;
+    }
 
     // --------- UPDATE --------- //
 

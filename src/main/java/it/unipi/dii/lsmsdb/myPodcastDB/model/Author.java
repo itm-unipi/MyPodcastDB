@@ -1,6 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Author {
@@ -13,12 +16,12 @@ public class Author {
     public Author() {
     }
 
-    public Author(String id, String name, String password, String email, List<ReducedPodcast> ownPodcasts) {
+    public Author(String id, String name, String password, String email) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.email = email;
-        this.ownPodcasts = ownPodcasts;
+        this.ownPodcasts = new ArrayList();
     }
 
     public Author(Author other) {
@@ -69,6 +72,11 @@ public class Author {
         this.ownPodcasts = ownPodcasts;
     }
 
+    public void addPodcast(String id, String name, Date releaseDate) {
+        ReducedPodcast podcast = new ReducedPodcast(id, name, releaseDate);
+        this.ownPodcasts.add(podcast);
+    }
+
     @Override
     public String toString() {
         return "Author{" +
@@ -84,7 +92,16 @@ public class Author {
 class ReducedPodcast {
     private String id;
     private String name;
-    private String releaseDate;
+    private Date releaseDate;
+
+    public ReducedPodcast() {
+    }
+
+    public ReducedPodcast(String id, String name, Date releaseDate) {
+        this.id = id;
+        this.name = name;
+        this.releaseDate = releaseDate;
+    }
 
     public String getId() {
         return id;
@@ -102,11 +119,17 @@ class ReducedPodcast {
         this.name = name;
     }
 
-    public String getReleaseDate() {
+    public Date getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public String getReleaseDateAsString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = dateFormat.format(this.releaseDate).replace(" ", "T") + "Z";
+        return date;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }
 

@@ -26,6 +26,7 @@ public class Main {
         mongoManager.closeConnection();
 
         // serie di operazioni da usare nei controller per neo4j
+        /*
         Neo4jManager neo4jManager = Neo4jManager.getInstance();
         neo4jManager.openConnection();
 
@@ -36,5 +37,6 @@ public class Main {
         }
 
         neo4jManager.closeConnection();
+        */
     }
 }
