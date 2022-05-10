@@ -1,46 +1,33 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
+
+import java.util.List;
+import java.util.Map;
+
 public class PodcastMongoTest {
 
-    PodcastMongo podcastMongo;
-
-    public PodcastMongoTest() {
-        this.podcastMongo = new PodcastMongo();
-    }
-
-    void deleteAllEpisodesTest() {
-        boolean test = this.podcastMongo.deleteAllEpisodesOfPodcast("9aaae9ac725c3a586701abf4");
-        if (test)
-            System.out.println("[+] deleteAllEpisodesOfPodcast");
-        else
-            System.err.println("[-] deleteAllEpisodesOfPodcast");
-    }
-
-    void deleteReviewTest() {
-        boolean test = this.podcastMongo.deleteReviewOfPodcast("34e734b09246d17dc5d56f63", "000000000000000000080116");
-        if (test)
-            System.out.println("[+] deleteReviewOfPodcast");
-        else
-            System.err.println("[-] deleteReviewOfPodcast");
-    }
-
-    void deleteAllReviewsTest() {
-        boolean test = this.podcastMongo.deleteAllReviewsOfPodcast("9aaae9ac725c3a586701abf4");
-        if (test)
-            System.out.println("[+] deleteAllReviewsOfPodcast");
-        else
-            System.err.println("[-] deleteAllReviewsOfPodcast");
-    }
-
     public static void main(String[] args) {
-        MongoManager manager = MongoManager.getInstance();
-        manager.openConnection();
-        PodcastMongoTest test = new PodcastMongoTest();
+        System.out.println("Test CRUD operation for podcasts");
 
-        test.deleteAllEpisodesTest();
-        test.deleteReviewTest();
-        test.deleteAllReviewsTest();
+        // serie di operazioni da usare nei controller per mongo
+        MongoManager mongoManager = MongoManager.getInstance();
+        mongoManager.openConnection();
 
-        manager.closeConnection();
+        PodcastMongo pm = new PodcastMongo();
+
+        //test findPodcastById
+        Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
+        System.out.println(podcast);
+        System.out.println(podcast.getReleaseDateAsString());
+
+        //test addPodcast
+        podcast.setName("test1");
+        String newId = pm.addPodcast(podcast);
+        System.out.println("id: " + newId);
+
+        mongoManager.closeConnection();
     }
 }

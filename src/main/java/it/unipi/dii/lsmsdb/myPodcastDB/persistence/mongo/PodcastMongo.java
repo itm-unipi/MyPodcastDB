@@ -1,12 +1,13 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
-import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.UpdateResult;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import java.util.Map.Entry;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,10 +23,47 @@ public class PodcastMongo {
 
     // --------- CREATE --------- //
 
-    public boolean addPodcast(Podcast podcast) {
+    public String addPodcast(Podcast podcast) {
         // podcast.setId(risultato.getObjectId("_id").toString());
-        return false;
+
+        MongoManager manager = MongoManager.getInstance();
+        List<Document> episodes = new ArrayList<>();
+        List<Document> reviews = new ArrayList<>();
+
+        for (Episode episode : podcast.getEpisodes()) {
+            Document newEpisode = new Document()
+                    .append("episodeName", episode.getName())
+                    .append("episodeDescription", episode.getDescription())
+                    .append("episodeReleaseDate", episode.getReleaseDateAsString())
+                    .append("episodeTimeMillis", episode.getTimeMillis());
+            episodes.add(newEpisode);
+        }
+
+        for (Entry<String, Integer> review : podcast.getReviews()) {
+            Document newReview = new Document()
+                    .append("reviewId", review.getKey())
+                    .append("rating", review.getValue());
+            reviews.add(newReview);
+        }
+
+        Document newPodcast = new Document()
+                .append("podcastName", podcast.getName())
+                .append("authorId", podcast.getAuthorId())
+                .append("authorName", podcast.getAuthorName())
+                .append("artworkUrl60", podcast.getArtworkUrl60())
+                .append("artworkUrl600", podcast.getArtworkUrl600())
+                .append("contentAdvisoryRating", podcast.getContentAdvisoryRating())
+                .append("country", podcast.getCountry())
+                .append("primaryCategory", podcast.getPrimaryCategory())
+                .append("categories", podcast.getCategories())
+                .append("releaseDate", podcast.getReleaseDateAsString())
+                .append("episodes", episodes)
+                .append("reviews", reviews);
+
+        manager.getCollection("podcast").insertOne(newPodcast);
+        return newPodcast.getObjectId("_id").toString();
     }
+
 
     // ---------- READ ---------- //
 
