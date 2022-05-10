@@ -21,12 +21,22 @@ public class PodcastMongoTest {
         //test findPodcastById
         Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
         System.out.println(podcast);
-        System.out.println(podcast.getReleaseDateAsString());
 
         //test addPodcast
-        podcast.setName("test1");
+        podcast.setName("testPodcast");
         String newId = pm.addPodcast(podcast);
         System.out.println("id: " + newId);
+
+        //test findPodcastsByName
+        newId = pm.addPodcast(podcast);
+        System.out.println("id: " + newId);
+        List <Podcast> podcasts = pm.findPodcastsByName("testPodcast");
+        if( podcasts.isEmpty())
+            System.out.println("podcast not found");
+        else
+            for( Podcast newPodcast: podcasts)
+                System.out.println(newPodcast);
+
 
         mongoManager.closeConnection();
 
