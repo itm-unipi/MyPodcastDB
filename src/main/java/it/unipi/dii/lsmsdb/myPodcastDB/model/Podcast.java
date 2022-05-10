@@ -54,12 +54,13 @@ public class Podcast {
         this.name = name;
     }
 
-    public ReducedAuthor getAuthor() {
-        return author;
-    }
+    public String getAuthorId() { return author.getId(); }
 
-    public void setAuthor(ReducedAuthor author) {
-        this.author = author;
+    public String getAuthorName() { return author.getName(); }
+
+    public void setAuthor(String authorId, String authorName) {
+        ReducedAuthor newAuthor = new ReducedAuthor(authorId, authorName);
+        this.author = newAuthor;
     }
 
     public String getArtworkUrl60() {
