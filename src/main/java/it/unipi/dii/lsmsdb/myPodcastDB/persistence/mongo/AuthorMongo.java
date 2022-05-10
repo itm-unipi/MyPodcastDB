@@ -1,9 +1,12 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
@@ -12,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.set;
 
 public class AuthorMongo {
 
@@ -58,7 +63,7 @@ public class AuthorMongo {
                 // retrieve author's podcasts
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for (Document podcast : podcasts) {
-                    String podcastId = podcast.getString("podcastId");
+                    String podcastId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
@@ -92,7 +97,7 @@ public class AuthorMongo {
                 // retrieve author's podcasts
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for (Document podcast : podcasts) {
-                    String podcastId = podcast.getString("podcastId");
+                    String podcastId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
@@ -126,7 +131,7 @@ public class AuthorMongo {
                 // retrieve author's podcasts
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for (Document podcast : podcasts) {
-                    String podcastId = podcast.getString("podcastId");
+                    String podcastId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
@@ -147,7 +152,7 @@ public class AuthorMongo {
     public Author findAuthorByPodcastId(String podcastId) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("podcasts.podcastId", podcastId)).iterator()) {
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("podcasts.podcastId", new ObjectId(podcastId))).iterator()) {
             if (cursor.hasNext()) {
                 Document author = cursor.next();
 
@@ -160,7 +165,7 @@ public class AuthorMongo {
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for(Document podcast : podcasts) {
-                    String podId = podcast.getString("podcastId");
+                    String podId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
@@ -197,7 +202,7 @@ public class AuthorMongo {
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for(Document podcast : podcasts) {
-                    String podId = podcast.getString("podcastId");
+                    String podId = podcast.getObjectId("podcastId").toString();
                     String podName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
@@ -225,25 +230,140 @@ public class AuthorMongo {
     // --------- UPDATE --------- //
 
     public boolean updateAuthor(Author author) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            manager.getCollection("author").updateOne(
+                    eq("_id", new ObjectId(author.getId())),
+                    combine(set("name", author.getName()),
+                            set("password", author.getPassword()),
+                            set("email", author.getEmail())
+                    )
+            );
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public boolean addPodcastToAuthor(String authorId, Podcast podcast) { return false; }
+    public boolean updatePodcastOfAuthor(String authorId, String PodcastId, String PodcastName, String PodcastReleaseDate) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("_id", new ObjectId(authorId))).iterator()) {
+            if (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for(Document podcast : podcasts) {
+                    System.out.println("PodId Found: " + podcast.getObjectId("podcastId").toString() + " - PodId Provided: " + PodcastId);
+                    if(PodcastId.equals(podcast.getObjectId("podcastId").toString())) {
+                        // TODO
+                        System.out.println("Found!");
+                    }
+                }
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addPodcastToAuthor(String authorId, Podcast podcast) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Document newPodcast = new Document("podcastId", new ObjectId())
+                    .append("podcastName", podcast.getName())
+                    .append("podcastReleaseDate", podcast.getReleaseDateAsString());
+
+            Bson filter = Filters.eq( "_id", new ObjectId(authorId));
+            Bson setUpdate = Updates.push("podcasts", newPodcast);
+
+            manager.getCollection("author").updateOne(filter, setUpdate);
+            // TO CHECK
+            podcast.setId(newPodcast.getObjectId("podcastId").toString());
+
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     // --------- DELETE --------- //
 
     public boolean deleteAuthorById(String id) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            manager.getCollection("author").deleteOne(eq("_id", new ObjectId(id)));
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public boolean deleteAuthorByName(String id) {
-        return false;
+    public boolean deleteAuthorByName(String name) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            manager.getCollection("author").deleteOne(eq("name", name));
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public boolean deletePodcastOfAuthor(String authorId, String podcastId) { return false; }
+    public boolean deletePodcastOfAuthor(String authorId, String podcastId) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson fields = new Document().append("podcasts", new Document().append("podcastId", new ObjectId(podcastId)));
+            Bson update = new Document("$pull", fields);
+
+            manager.getCollection("author").updateOne(eq("_id", new ObjectId(authorId)), update);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public int deleteAllPodcastsOfAuthor(String authorId) {
-        return -1;
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("_id", new ObjectId(authorId))).iterator()) {
+            int DeletedCount = 0;
+
+            if (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for(Document podcast : podcasts) {
+                    deletePodcastOfAuthor(authorId, podcast.getObjectId("podcastId").toString());
+                    System.out.println(podcast.getString("podcastName"));
+                    DeletedCount++;
+                }
+            }
+
+            return DeletedCount;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     // ---------------------------------------------------------------------------------- //
