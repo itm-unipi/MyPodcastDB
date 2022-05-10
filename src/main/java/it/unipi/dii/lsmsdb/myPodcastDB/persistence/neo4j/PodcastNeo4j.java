@@ -50,7 +50,7 @@ public class PodcastNeo4j {
             String podcastId = record.get(0).get("podcastId").asString();
             String podcastName = record.get(0).get("name").asString();
 
-            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName) ;
+            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
             podcasts.add(podcast);
         }
 
