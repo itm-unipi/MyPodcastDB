@@ -10,8 +10,6 @@ import java.util.Map.Entry;
 import static org.neo4j.driver.Values.parameters;
 import org.neo4j.driver.Record;
 
-import javax.swing.*;
-
 public class PodcastNeo4j {
 
     // ------------------------------- CRUD OPERATION ----------------------------------- //
@@ -31,8 +29,6 @@ public class PodcastNeo4j {
     }
 
     // ---------- READ ---------- //
-
-    // TODO
 
     public List<Entry<String, String>> findPodcastsByName(String name) {
         Neo4jManager manager = Neo4jManager.getInstance();

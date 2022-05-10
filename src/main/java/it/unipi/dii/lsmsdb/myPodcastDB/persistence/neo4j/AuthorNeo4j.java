@@ -20,8 +20,6 @@ public class AuthorNeo4j {
 
     // ---------- READ ---------- //
 
-    // TODO
-
     // --------- UPDATE --------- //
 
     public boolean updateAuthor(Author author) {

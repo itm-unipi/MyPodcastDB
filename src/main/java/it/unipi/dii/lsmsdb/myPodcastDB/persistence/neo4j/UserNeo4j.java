@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
+import java.util.List;
+
 public class UserNeo4j {
 
     // ------------------------------- CRUD OPERATION ----------------------------------- //
@@ -29,8 +31,6 @@ public class UserNeo4j {
     }
 
     // ---------- READ ---------- //
-
-    // TODO
 
     // --------- UPDATE --------- //
 
@@ -80,7 +80,13 @@ public class UserNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    // TODO: query per consigliare user???
+    public List<String> showSuggestedUsersByFollowedAuthors(String username) {
+        return null;
+    }
+
+    public List<String> showSuggestedUsersByLikedPodcasts(String username) {
+        return null;
+    }
 
     // ---------------------------------------------------------------------------------- //
 }
