@@ -145,15 +145,81 @@ public class AuthorMongo {
     }
 
     public Author findAuthorByPodcastId(String podcastId) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("podcasts.podcastId", podcastId)).iterator()) {
+            if (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                String authorId = author.getObjectId("_id").toString();
+                String authorName = author.getString("name");
+                String authorPassword = author.getString("password");
+                String authorEmail = author.getString("email");
+
+                Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail);
+
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for(Document podcast : podcasts) {
+                    String podId = podcast.getString("podcastId");
+                    String podcastName = podcast.getString("podcastName");
+                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
+                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+
+                    newAuthor.addPodcast(podId, podcastName, podcastReleaseDate);
+                }
+
+                return newAuthor;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 
-    public Author findAuthorByPodcastName(String podcastName) {
-        return null;
-    }
+    public List<Author> findAuthorsByPodcastName(String podcastName, int limit) {
+        MongoManager manager = MongoManager.getInstance();
+        List<Author> authors= new ArrayList();
 
-    public List<Author> findAuthorsByCountry(String country) {
-        return null;
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("podcasts.podcastName", podcastName)).iterator()) {
+            int counter = 0;
+
+            while (cursor.hasNext()) {
+                Document author = cursor.next();
+
+                String authorId = author.getObjectId("_id").toString();
+                String authorName = author.getString("name");
+                String authorPassword = author.getString("password");
+                String authorEmail = author.getString("email");
+
+                Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail);
+
+                List<Document> podcasts = author.getList("podcasts", Document.class);
+                for(Document podcast : podcasts) {
+                    String podId = podcast.getString("podcastId");
+                    String podName = podcast.getString("podcastName");
+                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
+                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+
+                    newAuthor.addPodcast(podId, podName, podcastReleaseDate);
+                }
+
+                authors.add(newAuthor);
+
+                if (limit != 0) {
+                    counter += 1;
+                    if (counter == limit)
+                        break;
+                }
+            }
+
+            return authors;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // --------- UPDATE --------- //

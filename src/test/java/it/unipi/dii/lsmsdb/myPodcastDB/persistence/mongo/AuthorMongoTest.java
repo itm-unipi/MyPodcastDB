@@ -1,49 +1,64 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+
+import java.util.List;
 
 public class AuthorMongoTest {
     public static void main(String[] args) {
-
-        System.out.println("Test Author Mongo");
-
         MongoManager mongoManager = MongoManager.getInstance();
         mongoManager.openConnection();
         AuthorMongo am = new AuthorMongo();
 
-        /*
-        Author newAuthor = new Author("0", "Matteo", "testPassword2", "test2@example.com");
-        if(am.addAuthor(newAuthor)) {
-            System.out.println("Success! \n" + newAuthor.toString());
+        System.out.println("\n*********************** CREATE NEW AUTHOR ***********************");
+        Author newAuthor1 = new Author("0", "Matteo", "testPassword2", "test2@example.com");
+        if(am.addAuthor(newAuthor1)) {
+            System.out.println("[+] OK");
         } else {
-            System.out.println("Fail!");
+            System.err.println("[-] FAILED");
         }
-        */
+
+        Author newAuthor;
 
         System.out.println("\n*********************** FIND AUTHOR BY ID ***********************");
-        Author newAuthor2 = am.findAuthorById("000000000000000000000005");
-        if(newAuthor2 != null) {
-            System.out.println(newAuthor2.toString());
-        } else {
-            System.out.println("Author not found!");
-        }
+        newAuthor = am.findAuthorById("000000000000000000000004");
+        if(newAuthor != null)
+            System.out.println("[+] OK");
+        else
+            System.err.println("[-] FAILED");
+
 
         System.out.println("\n*********************** FIND AUTHOR BY NAME ***********************");
-        Author newAuthor3 = am.findAuthorByName("Michael Colosi");
-        if(newAuthor3 != null) {
-            System.out.println(newAuthor3.toString());
-        } else {
-            System.out.println("Author not found!");
-        }
+        newAuthor = am.findAuthorByName("Michael Colosi");
+        if(newAuthor != null)
+            System.out.println("[+] OK");
+        else
+            System.err.println("[-] FAILED");
 
         System.out.println("\n*********************** FIND AUTHOR BY EMAIL ***********************");
-        Author newAuthor4 = am.findAuthorByEmail("michaelcolosi@example.com");
-        if(newAuthor4 != null) {
-            System.out.println(newAuthor4.toString());
-        } else {
-            System.out.println("Author not found!");
-        }
+        newAuthor = am.findAuthorByEmail("michaelcolosi@example.com");
+        if(newAuthor != null)
+            System.out.println("[+] OK");
+        else
+            System.err.println("[-] FAILED");
+
+        System.out.println("\n*********************** FIND AUTHOR BY PODCAST ID ***********************");
+        newAuthor = am.findAuthorByPodcastId("b027e4d3c91a9f36d2a828b7551dc3db");
+        if(newAuthor != null)
+            System.out.println("[+] OK");
+        else
+            System.err.println("[-] FAILED");
+
+        System.out.println("\n*********************** FIND AUTHORS BY PODCAST NAME ***********************");
+        List<Author> authors = am.findAuthorsByPodcastName("Iconoclash", 3);
+        if(authors != null) {
+            int counter = 0;
+            for (Author author : authors) {
+                System.out.println("[+] OK - FOUND " + counter);
+                counter += 1;
+            }
+        } else
+            System.err.println("[-] FAILED");
 
         mongoManager.closeConnection();
     }
