@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Sorts.ascending;
+import static com.mongodb.client.model.Sorts.descending;
 
 public class ReviewMongo {
 
@@ -54,7 +56,7 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " "). replace("Z", "");
+                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
                 Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
                 String authorName = review.getString("authorName");
 
@@ -72,7 +74,34 @@ public class ReviewMongo {
     public List<Review> findReviewsByPodcastId(String podcastId, int limit, String attributeToOrder, boolean ascending) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId))).limit(limit).iterator()) {
+        try {
+            MongoCursor<Document> cursor;
+
+            // order by attribute specified
+            if (attributeToOrder.equals("createdAt")) {
+                if (ascending) {
+                    cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
+                            .sort(ascending("createdAt"))
+                            .limit(limit).iterator();
+                } else {
+                    cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
+                            .sort(descending("createdAt"))
+                            .limit(limit).iterator();
+                }
+            } else if (attributeToOrder.equals("rating")) {
+                if (ascending) {
+                    cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
+                            .sort(ascending("rating"))
+                            .limit(limit).iterator();
+                } else {
+                    cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
+                            .sort(descending("rating"))
+                            .limit(limit).iterator();
+                }
+            } else {
+                cursor = cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId))).limit(limit).iterator();
+            }
+
             List<Review> reviews = new ArrayList<>();
 
             while (cursor.hasNext()) {
@@ -83,14 +112,14 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " "). replace("Z", "");
+                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
                 Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
                 String authorUsername = review.getString("authorUsername");
 
                 Review newReview = new Review(id, podcastId, authorUsername, title, content, rating, createdAt);
                 reviews.add(newReview);
             }
-            
+
             return reviews;
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,7 +130,34 @@ public class ReviewMongo {
     public List<Review> findReviewsByAuthorUsername(String authorUsername, int limit, String attributeToOrder, boolean ascending) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername)).limit(limit).iterator()) {
+        try {
+            MongoCursor<Document> cursor;
+
+            // order by attribute specified
+            if (attributeToOrder.equals("createdAt")) {
+                if (ascending) {
+                    cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername))
+                            .sort(ascending("createdAt"))
+                            .limit(limit).iterator();
+                } else {
+                    cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername))
+                            .sort(descending("createdAt"))
+                            .limit(limit).iterator();
+                }
+            } else if (attributeToOrder.equals("rating")) {
+                if (ascending) {
+                    cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername))
+                            .sort(ascending("rating"))
+                            .limit(limit).iterator();
+                } else {
+                    cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername))
+                            .sort(descending("rating"))
+                            .limit(limit).iterator();
+                }
+            } else {
+                cursor = cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername)).limit(limit).iterator();
+            }
+
             List<Review> reviews = new ArrayList<>();
 
             while (cursor.hasNext()) {
@@ -113,38 +169,12 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " "). replace("Z", "");
+                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
                 Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
 
                 Review newReview = new Review(id, podcastId, authorUsername, title, content, rating, createdAt);
                 reviews.add(newReview);
             }
-
-            /* / order by rating
-            if (attributeToOrder.equals("rating")) {
-                if (ascending) {
-                    reviews.sort((Review r1, Review r2) -> {
-                        if (r1.getRating() > r2.getRating())
-                            return -1;
-                        else if (r1.getRating() == r2.getRating())
-                            return 0;
-                        return 1;
-                    });
-                } else {
-                    reviews.sort((Review r1, Review r2) -> {
-                        if (r1.getRating() < r2.getRating())
-                            return -1;
-                        else if (r1.getRating() == r2.getRating())
-                            return 0;
-                        return 1;
-                    });
-                }
-            } else if (attributeToOrder.equals("createdAt")) {
-                if (ascending)
-                    reviews.sort((Review r1, Review r2) -> r1.getCreatedAt().compareTo(r2.getCreatedAt()));
-                else
-                    reviews.sort((Review r1, Review r2) -> r2.getCreatedAt().compareTo(r1.getCreatedAt()));
-            }*/
 
             return reviews;
         } catch (Exception e) {
