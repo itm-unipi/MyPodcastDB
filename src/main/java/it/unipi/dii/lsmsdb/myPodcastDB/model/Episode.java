@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.model;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Episode {
     private String name;
@@ -66,5 +67,18 @@ public class Episode {
                 ", releaseDate=" + releaseDate +
                 ", timeMillis=" + timeMillis +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Episode)) return false;
+        Episode episode = (Episode) o;
+        return getTimeMillis() == episode.getTimeMillis() && Objects.equals(getName(), episode.getName()) && Objects.equals(getDescription(), episode.getDescription()) && Objects.equals(getReleaseDate(), episode.getReleaseDate());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getDescription(), getReleaseDate(), getTimeMillis());
     }
 }

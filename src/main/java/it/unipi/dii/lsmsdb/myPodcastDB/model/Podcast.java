@@ -2,10 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class Podcast {
@@ -54,6 +51,10 @@ public class Podcast {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    protected ReducedAuthor getAuthor() {
+        return author;
     }
 
     public String getAuthorId() { return author.getId(); }
@@ -135,6 +136,10 @@ public class Podcast {
         this.episodes = episodes;
     }
 
+    protected List<ReducedReview> getReducedReviews() {
+        return reviews;
+    }
+
     public List<Entry<String, Integer>> getReviews() {
 
         List<Entry<String, Integer>> reducedReviews = new ArrayList<>();
@@ -159,6 +164,31 @@ public class Podcast {
         this.reviews.add(review);
     }
 
+    /*public boolean compare(Podcast p){
+        if (!this.getId().equals(p.getId()) ||
+                !this.getName().equals(p.getName()) ||
+                !this.getArtworkUrl60().equals(p.getArtworkUrl60()) ||
+                !this.getArtworkUrl600().equals(p.getArtworkUrl600()) ||
+                !this.getContentAdvisoryRating().equals(p.getContentAdvisoryRating()) ||
+                !this.getCountry().equals(p.getCountry()) ||
+                !this.getPrimaryCategory().equals(p.getPrimaryCategory()) ||
+                !this.getReleaseDateAsString().equals(p.getReleaseDateAsString())
+                !this.getAuthor().compare(p.getAuthor()) ||
+        ) {
+            return false;
+        }
+
+
+
+        //compare epi
+        private List<String> categories;
+        private List<Episode> episodes;
+        private List<ReducedReview> reviews;
+
+
+        return false;
+    }*/
+
     @Override
     public String toString() {
         return "Podcast{" +
@@ -175,6 +205,19 @@ public class Podcast {
                 ", episodes=" + episodes +
                 ", reviews=" + reviews +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Podcast)) return false;
+        Podcast podcast = (Podcast) o;
+        return Objects.equals(getId(), podcast.getId()) && Objects.equals(getName(), podcast.getName()) && Objects.equals(getAuthor(), podcast.getAuthor()) && Objects.equals(getArtworkUrl60(), podcast.getArtworkUrl60()) && Objects.equals(getArtworkUrl600(), podcast.getArtworkUrl600()) && Objects.equals(getContentAdvisoryRating(), podcast.getContentAdvisoryRating()) && Objects.equals(getCountry(), podcast.getCountry()) && Objects.equals(getPrimaryCategory(), podcast.getPrimaryCategory()) && Objects.equals(getCategories(), podcast.getCategories()) && Objects.equals(getReleaseDate(), podcast.getReleaseDate()) && Objects.equals(getEpisodes(), podcast.getEpisodes()) && Objects.equals(getReviews(), podcast.getReviews());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getAuthor(), getArtworkUrl60(), getArtworkUrl600(), getContentAdvisoryRating(), getCountry(), getPrimaryCategory(), getCategories(), getReleaseDate(), getEpisodes(), getReviews());
     }
 }
 
@@ -213,6 +256,20 @@ class ReducedAuthor {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ReducedAuthor)) return false;
+        ReducedAuthor that = (ReducedAuthor) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName());
+    }
 }
 
 class ReducedReview {
@@ -249,5 +306,18 @@ class ReducedReview {
                 "id='" + id + '\'' +
                 ", rating=" + rating +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ReducedReview)) return false;
+        ReducedReview that = (ReducedReview) o;
+        return getRating() == that.getRating() && Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getRating());
     }
 }
