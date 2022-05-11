@@ -37,7 +37,6 @@ public class AuthorMongoTest {
             return false;
 
         // TODO: redefine equals for podcasts
-
         return true;
     }
 
@@ -236,19 +235,28 @@ public class AuthorMongoTest {
     }
 
     public void updatePodcastOfAuthorTest() {
-        // TODO
-        am.updatePodcastOfAuthor("000000000000000000000000", "6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit UPDATED", "2012-01-15T12:47:00Z");
+        Author newAuthor = addAuthorForTest();
+        String authorId = newAuthor.getId();
 
-        if(am.findAuthorByPodcastId("6a70d8d5ffcc27889ba41086") != null) {
-            System.out.println("[+] OK");
-        } else
-            System.err.println("[-] FAILED OR NOT FOUND");
+        Date date = new Date();
+        Podcast podcast = new Podcast("0", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
+        am.addPodcastToAuthor(authorId, podcast);
+
+        if(am.updatePodcastOfAuthor(authorId, podcast.getId(), "Podcast Test UPDATED", "2012-01-15T12:47:00Z"))
+            if(am.findAuthorByPodcastId(podcast.getId()) != null)
+                System.out.println("[+] updatePodcastOfAuthor");
+            else
+                System.err.println("[-] updatePodcastOfAuthorTest");
+        else
+            System.err.println("[-] updatePodcastOfAuthorTest");
+
+        deleteAuthorForTest(newAuthor.getId());
     }
 
     public void updateAuthorTest() {
         Author newAuthor = addAuthorForTest();
-
         String authorId = newAuthor.getId();
+
         Author oldAuthor = am.findAuthorById(authorId);
         Author updatedAuthor = new Author(authorId, "Gianluca X", "modifiedPassword", "test@example.com");
 
@@ -283,7 +291,7 @@ public class AuthorMongoTest {
         test.addPodcastToAuthorTest();
 
         test.updateAuthorTest();
-        //test.updatePodcastOfAuthorTest();
+        test.updatePodcastOfAuthorTest();
 
         mongoManager.closeConnection();
     }
