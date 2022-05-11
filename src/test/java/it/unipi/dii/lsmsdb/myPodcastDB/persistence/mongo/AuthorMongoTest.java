@@ -16,6 +16,16 @@ public class AuthorMongoTest {
         this.am = new AuthorMongo();
     }
 
+    public Author addAuthorForTest() {
+        Author newAuthor = new Author("0", "Matteo", "testPassword", "test@example.com");
+        am.addAuthor(newAuthor);
+        return newAuthor;
+    }
+
+    public void deleteAuthorForTest(String authorId) {
+        am.deleteAuthorById(authorId);
+    }
+
     public static boolean compare(Author a1, Author a2) {
         if (!a1.getId().equals(a2.getId()))
             return false;
@@ -32,15 +42,15 @@ public class AuthorMongoTest {
     }
 
     public void addAuthorTest() {
-        Author newAuthor = new Author("0", "Matteo", "testPassword", "test@example.com");
-        am.addAuthor(newAuthor);
-
+        Author newAuthor = addAuthorForTest();
         Author foundAuthor = am.findAuthorById(newAuthor.getId());
 
         if (foundAuthor != null && compare(newAuthor, foundAuthor))
             System.out.println("[+] addAuthor");
         else
             System.err.println("[-] addAuthor");
+
+        deleteAuthorForTest(newAuthor.getId());
     }
 
     public void findAuthorByIdTest() {
@@ -119,22 +129,22 @@ public class AuthorMongoTest {
     }
 
     public void deleteAuthorByIdTest() {
-        Author a1 = new Author("0", "Author Test 1", "testPassword", "test@example.com");
-        am.addAuthor(a1);
+        Author a1 = addAuthorForTest();
 
         String authorId = a1.getId();
         am.deleteAuthorById(authorId);
 
         if(am.findAuthorById(authorId) == null)
             System.out.println("[+] deleteAuthorById");
-        else
+        else {
             System.err.println("[-] deleteAuthorById");
+            deleteAuthorForTest(a1.getId());
+        }
     }
 
 
     public void deleteAuthorByNameTest() {
-        Author a1 = new Author("0", "Author Test 2", "testPassword", "test@example.com");
-        am.addAuthor(a1);
+        Author a1 = addAuthorForTest();
 
         String authorId = a1.getId();
         String authorName = a1.getName();
@@ -142,14 +152,15 @@ public class AuthorMongoTest {
 
         if(am.findAuthorById(authorId) == null)
             System.out.println("[+] deleteAuthorByName");
-        else
+        else {
             System.err.println("[-] deleteAuthorByName");
+            deleteAuthorForTest(a1.getId());
+        }
     }
 
 
     public void deletePodcastOfAuthorTest() {
-        Author newAuthor = new Author("0", "Test Author 3", "testPassword", "test@example.com");
-        am.addAuthor(newAuthor);
+        Author newAuthor = addAuthorForTest();
 
         // Add a new podcast
         Date date = new Date();
@@ -164,11 +175,12 @@ public class AuthorMongoTest {
                 System.err.println("[-] deletePodcastOfAuthor");
         else
             System.err.println("[-] deletePodcastOfAuthor");
+
+        deleteAuthorForTest(newAuthor.getId());
     }
 
     public void deleteAllPodcastsOfAuthorTest() {
-        Author newAuthor = new Author("0", "Gianluca G", "testPassword", "test@example.com");
-        am.addAuthor(newAuthor);
+        Author newAuthor = addAuthorForTest();
 
         // Add two podcasts
         Date date = new Date();
@@ -197,13 +209,17 @@ public class AuthorMongoTest {
             System.out.println("[+] deleteAllPodcastsOfAuthor");
         else
             System.err.println("[-] deleteAllPodcastsOfAuthor");
+
+        deleteAuthorForTest(newAuthor.getId());
     }
 
     public void addPodcastToAuthorTest() {
+        Author newAuthor = addAuthorForTest();
+        String authorId = newAuthor.getId();
+
         Date date = new Date();
         Podcast podcast = new Podcast("0", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
 
-        String authorId = "627bdeaefb42e00db224c2a4";
         if (am.addPodcastToAuthor(authorId, podcast)) {
             // try to find the new podcast
             Author a = am.findAuthorByPodcastId(podcast.getId());
@@ -215,6 +231,8 @@ public class AuthorMongoTest {
                 System.err.println("[-] addPodcastToAuthor");
         } else
             System.err.println("[-] addPodcastToAuthor");
+
+        deleteAuthorForTest(newAuthor.getId());
     }
 
     public void updatePodcastOfAuthorTest() {
@@ -228,8 +246,7 @@ public class AuthorMongoTest {
     }
 
     public void updateAuthorTest() {
-        Author newAuthor = new Author("0", "Gianluca X", "testPassword", "test@example.com");
-        am.addAuthor(newAuthor);
+        Author newAuthor = addAuthorForTest();
 
         String authorId = newAuthor.getId();
         Author oldAuthor = am.findAuthorById(authorId);
@@ -242,6 +259,8 @@ public class AuthorMongoTest {
                 System.err.println("[!] updateAuthor - INFO: no changes");
         } else
             System.err.println("[-] updateAuthor");
+
+        deleteAuthorForTest(newAuthor.getId());
     }
 
     public static void main(String[] args) {
@@ -249,7 +268,7 @@ public class AuthorMongoTest {
         mongoManager.openConnection();
 
         AuthorMongoTest test = new AuthorMongoTest();
-        //test.addAuthorTest();
+        test.addAuthorTest();
         test.findAuthorByIdTest();
         test.findAuthorByNameTest();
         test.findAuthorByEmailTest();
@@ -265,7 +284,7 @@ public class AuthorMongoTest {
 
         test.updateAuthorTest();
         //test.updatePodcastOfAuthorTest();
-        
+
         mongoManager.closeConnection();
     }
 }
