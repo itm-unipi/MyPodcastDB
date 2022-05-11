@@ -1,8 +1,10 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
@@ -14,8 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.and;
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.set;
 
@@ -35,7 +36,6 @@ public class AuthorMongo {
                     .append("password", author.getPassword())
                     .append("podcasts", new ArrayList());
 
-            //add newAuthor
             manager.getCollection("author").insertOne(newAuthor);
             author.setId(newAuthor.getObjectId("_id").toString());
             return true;
@@ -51,7 +51,10 @@ public class AuthorMongo {
     public Author findAuthorById(String id) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("_id", new ObjectId(id))).iterator()) {
+        try {
+            Bson filter = Filters.eq("_id", new ObjectId(id));
+            MongoCursor<Document> cursor = manager.getCollection("author").find(filter).iterator();
+
             if (cursor.hasNext()) {
                 Document author = cursor.next();
 
@@ -85,7 +88,10 @@ public class AuthorMongo {
     public Author findAuthorByName(String name) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("name", name)).iterator()) {
+        try {
+            Bson filter = Filters.eq("name", name);
+            MongoCursor<Document> cursor = manager.getCollection("author").find(filter).iterator();
+
             if (cursor.hasNext()) {
                 Document author = cursor.next();
 
@@ -119,7 +125,10 @@ public class AuthorMongo {
     public Author findAuthorByEmail(String email) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("email", email)).iterator()) {
+        try {
+            Bson filter = Filters.eq("email", email);
+            MongoCursor<Document> cursor = manager.getCollection("author").find(filter).iterator();
+
             if (cursor.hasNext()) {
                 Document author = cursor.next();
 
@@ -153,7 +162,10 @@ public class AuthorMongo {
     public Author findAuthorByPodcastId(String podcastId) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("podcasts.podcastId", new ObjectId(podcastId))).iterator()) {
+        try {
+            Bson filter = Filters.eq("podcasts.podcastId", new ObjectId(podcastId));
+            MongoCursor<Document> cursor = manager.getCollection("author").find(filter).iterator();
+
             if (cursor.hasNext()) {
                 Document author = cursor.next();
 
@@ -188,7 +200,10 @@ public class AuthorMongo {
         MongoManager manager = MongoManager.getInstance();
         List<Author> authors= new ArrayList();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("podcasts.podcastName", podcastName)).limit(limit).iterator()) {
+        try {
+            Bson filter = Filters.eq("podcasts.podcastName", podcastName);
+            MongoCursor<Document> cursor = manager.getCollection("author").find(filter).limit(limit).iterator();
+
             while (cursor.hasNext()) {
                 Document author = cursor.next();
 
@@ -233,7 +248,6 @@ public class AuthorMongo {
             );
 
             manager.getCollection("author").updateOne(filter, updates);
-
             return true;
 
         } catch (Exception e) {
@@ -245,17 +259,20 @@ public class AuthorMongo {
     public boolean updatePodcastOfAuthor(String authorId, String podcastId, String podcastName, String podcastReleaseDate) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("_id", new ObjectId(authorId))).iterator()) {
+        try {
+            Bson filter = Filters.eq("_id", new ObjectId(authorId));
+            MongoCursor<Document> cursor = manager.getCollection("author").find(filter).iterator();
+
             if (cursor.hasNext()) {
                 Document author = cursor.next();
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for(Document podcast : podcasts) {
                     if(podcastId.equals(podcast.getObjectId("podcastId").toString())) {
-                        Bson filter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcastId)));
-                        Bson updates = combine(set("podcasts.$.podcastName", podcastName), set("podcasts.$.podcastReleaseDate", podcastReleaseDate));
+                        Bson podcastFilter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcastId)));
+                        Bson podcastUpdates = combine(set("podcasts.$.podcastName", podcastName), set("podcasts.$.podcastReleaseDate", podcastReleaseDate));
 
-                        manager.getCollection("author").updateOne(filter, updates);
+                        manager.getCollection("author").updateOne(podcastFilter, podcastUpdates);
                     }
                 }
             }
@@ -280,7 +297,6 @@ public class AuthorMongo {
             Bson setUpdate = Updates.push("podcasts", newPodcast);
 
             manager.getCollection("author").updateOne(filter, setUpdate);
-            // TO CHECK
             podcast.setId(newPodcast.getObjectId("podcastId").toString());
 
             return true;
@@ -293,11 +309,11 @@ public class AuthorMongo {
 
     // --------- DELETE --------- //
 
-    public boolean deleteAuthorById(String id) {
+    public boolean deleteAuthorById(String authorId) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            manager.getCollection("author").deleteOne(eq("_id", new ObjectId(id)));
+            manager.getCollection("author").deleteOne(eq("_id", new ObjectId(authorId)));
             return true;
 
         } catch (Exception e) {
@@ -306,11 +322,11 @@ public class AuthorMongo {
         }
     }
 
-    public boolean deleteAuthorByName(String name) {
+    public boolean deleteAuthorByName(String authorName) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            manager.getCollection("author").deleteOne(eq("name", name));
+            manager.getCollection("author").deleteOne(eq("name", authorName));
             return true;
 
         } catch (Exception e) {
@@ -335,28 +351,19 @@ public class AuthorMongo {
         }
     }
 
-    public int deleteAllPodcastsOfAuthor(String authorId) {
+    public boolean deleteAllPodcastsOfAuthor(String authorId) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("author").find(eq("_id", new ObjectId(authorId))).iterator()) {
-            int DeletedCount = 0;
+        try {
+            manager.getCollection("author").updateOne(
+                    Filters.eq("_id", new ObjectId(authorId)),
+                    Updates.set("podcasts", new ArrayList()));
 
-            if (cursor.hasNext()) {
-                Document author = cursor.next();
-
-                List<Document> podcasts = author.getList("podcasts", Document.class);
-                for(Document podcast : podcasts) {
-                    deletePodcastOfAuthor(authorId, podcast.getObjectId("podcastId").toString());
-                    System.out.println(podcast.getString("podcastName"));
-                    DeletedCount++;
-                }
-            }
-
-            return DeletedCount;
+            return true;
 
         } catch (Exception e) {
             e.printStackTrace();
-            return -1;
+            return false;
         }
     }
 

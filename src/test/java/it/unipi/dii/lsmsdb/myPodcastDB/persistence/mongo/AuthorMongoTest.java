@@ -13,8 +13,8 @@ public class AuthorMongoTest {
         mongoManager.openConnection();
         AuthorMongo am = new AuthorMongo();
 
-        System.out.println("\n*********************** CREATE NEW AUTHOR ***********************");
         /*
+        System.out.println("\n*********************** CREATE NEW AUTHOR ***********************");
         Author newAuthor1 = new Author("0", "Matteo", "testPassword2", "test2@example.com");
         if(am.addAuthor(newAuthor1)) {
             if(am.findAuthorById(newAuthor1.getId()) != null)
@@ -24,13 +24,11 @@ public class AuthorMongoTest {
         } else {
             System.err.println("[-] FAILED");
         }
-         */
-
-
+        */
         Author newAuthor;
 
         System.out.println("\n*********************** FIND AUTHOR BY ID ***********************");
-        newAuthor = am.findAuthorById("000000000000000000000004");
+        newAuthor = am.findAuthorById("627b9a32d49c2b49647457f5");
         if(newAuthor != null)
             System.out.println("[+] OK");
         else
@@ -68,6 +66,7 @@ public class AuthorMongoTest {
         } else
             System.err.println("[-] FAILED");
 
+
         System.out.println("\n*********************** DELETE AUTHOR BY ID ***********************");
         if(am.deleteAuthorById("627a8beceb66577c8e5367b3")) {
             if(am.findAuthorById("627a8beceb66577c8e5367b3") != null)
@@ -77,6 +76,7 @@ public class AuthorMongoTest {
         } else
             System.err.println("[-] FAILED");
 
+        /*
         System.out.println("\n*********************** DELETE AUTHOR BY NAME ***********************");
         if(am.deleteAuthorByName("Matteo"))
             if(am.findAuthorByName("Matteo") != null)
@@ -85,7 +85,8 @@ public class AuthorMongoTest {
                 System.out.println("[+] OK");
         else
             System.err.println("[-] FAILED");
-
+        */
+        /*
         System.out.println("\n*********************** ADD PODCASTS TO A SPECIFIC AUTHOR ***********************");
         Date date = new Date();
         Podcast podcast = new Podcast("0", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
@@ -97,25 +98,26 @@ public class AuthorMongoTest {
                 System.err.println("[-] FAILED FIND");
         } else
             System.err.println("[-] FAILED");
-
-        System.out.println("\n*********************** DELETE PODCAST OF A SPECIFIC AUTHOR BY ITS NAME ***********************");
-        if(am.deletePodcastOfAuthor("000000000000000000000004", "627aab1996badc34f06140a2"))
-            if(am.findAuthorByPodcastId("627aab1996badc34f06140a2") != null)
+        */
+        /*
+        System.out.println("\n*********************** DELETE PODCAST OF A SPECIFIC AUTHOR ***********************");
+        String podcastToDelete = "6a70d8d5ffcc27889ba41086";
+        if(am.deletePodcastOfAuthor("000000000000000000000000", podcastToDelete))
+            if(am.findAuthorByPodcastId(podcastToDelete) != null)
                 System.err.println("[-] FAILED - PODCAST STILL PRESENT");
             else
                 System.out.println("[+] OK");
         else
             System.err.println("[-] FAILED");
-
-        System.out.println("\n*********************** DELETE ALL PODCASTS OF AN AUTHOR ***********************");
+        */
         /*
-        int DeletedCount = am.deleteAllPodcastsOfAuthor("000000000000000000000004");
-        if(DeletedCount >= 0)
-            System.out.println("[+] OK - DELETED " + DeletedCount);
+        System.out.println("\n*********************** DELETE ALL PODCASTS OF AN AUTHOR ***********************");
+        if(am.deleteAllPodcastsOfAuthor("000000000000000000000002"))
+            System.out.println("[+] OK ");
         else
             System.err.println("[-] FAILED");
-         */
-
+        */
+        /*
         System.out.println("\n*********************** UPDATE AUTHOR ***********************");
         Author updatedAuthor = new Author("000000000000000000000004", "Kennedy HS Students", "modPasswd", "kennedyhsstudents@example.com");
 
@@ -126,16 +128,16 @@ public class AuthorMongoTest {
                 System.err.println("[-] FAILED FIND");
         } else
             System.err.println("[-] FAILED");
-
+        */
+        /*
         System.out.println("\n*********************** UPDATE PODCAST AUTHOR ***********************");
-        //Date date = new Date();
-        am.updatePodcastOfAuthor("000000000000000000000000", "6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit", "2012-01-15T12:47:00Z");
+        am.updatePodcastOfAuthor("000000000000000000000000", "6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit UPDATED", "2012-01-15T12:47:00Z");
 
         if(am.findAuthorByPodcastId("6a70d8d5ffcc27889ba41086") != null) {
             System.out.println("[+] OK");
         } else
-            System.err.println("[-] FAILED");
-
+            System.err.println("[-] FAILED OR NOT FOUND");
+        */
         mongoManager.closeConnection();
     }
 }
