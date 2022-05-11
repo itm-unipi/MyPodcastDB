@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import java.util.Map.Entry;
 
@@ -14,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.set;
 
 public class PodcastMongo {
 
@@ -57,7 +60,12 @@ public class PodcastMongo {
                 .append("episodes", episodes)
                 .append("reviews", reviews);
 
-        manager.getCollection("podcast").insertOne(newPodcast);
+        try{
+            manager.getCollection("podcast").insertOne(newPodcast);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
         String newId = newPodcast.getObjectId("_id").toString();
         if( newId.isEmpty())
             return false;
@@ -390,7 +398,32 @@ public class PodcastMongo {
     // --------- UPDATE --------- //
 
     public boolean updatePodcast(Podcast podcast) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        try{
+            Bson filter = eq("_id", new ObjectId(podcast.getId()));
+            Bson updates = combine(
+                    set("podcastName", podcast.getName()),
+                    set("authorId", new ObjectId(podcast.getAuthorId())),
+                    set("authorName", podcast.getAuthorName()),
+                    set("artworkUrl60", podcast.getArtworkUrl60()),
+                    set("artworkUrl600", podcast.getArtworkUrl600()),
+                    set("contentAdvisoryRating", podcast.getContentAdvisoryRating()),
+                    set("country", podcast.getCountry()),
+                    set("primaryCategory", podcast.getPrimaryCategory()),
+                    set("categories", podcast.getCategories()),
+                    set("releaseDate", podcast.getReleaseDateAsString())
+            );
+
+            manager.getCollection("author").updateOne(filter, updates);
+
+            return true;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     public boolean addEpisodeToPodcast(String podcastId, String episodeName, String episodeDescription, Date episodeReleaseDate, int episodeTimeMillis) {
