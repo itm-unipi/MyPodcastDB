@@ -14,6 +14,24 @@ public class ReviewMongoTest {
         this.reviewMongo = new ReviewMongo();
     }
 
+    static boolean compare(Review r1, Review r2) {
+        if (!r1.getId().equals(r2.getId()))
+            return false;
+        if (!r1.getPodcastId().equals(r2.getPodcastId()))
+            return false;
+        if (!r1.getAuthorUsername().equals(r2.getAuthorUsername()))
+            return false;
+        if (!r1.getTitle().equals(r2.getTitle()))
+            return false;
+        if (!r1.getContent().equals(r2.getContent()))
+            return false;
+        if (r1.getRating() != r2.getRating())
+            return false;
+        if (!r1.getCreatedAtAsString().equals(r2.getCreatedAtAsString()))
+            return false;
+        return true;
+    }
+
     public void findByIdTest() {
         Review review = this.reviewMongo.findReviewById("000000000000000000000000");
         if (review.getPodcastId().equals("7d7281ba3edb77da6a9fe95c") && review.getTitle().equals("Best podcast like, Ever."))
@@ -22,7 +40,34 @@ public class ReviewMongoTest {
             System.err.println("[-] findReviewById");
     }
 
-    public void findTest() {
+    public void addTest() {
+        String podcastId = "000000000000000000000000";
+        String title = "Si";
+        String content = "No";
+        String authorUsername = "Mariorossi123456";
+        int rating = 5;
+        Date createdAt = new Date();
+
+        Review newReview = new Review("", podcastId, authorUsername, title, content, rating, createdAt);
+        this.reviewMongo.addReview(newReview);
+
+        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId(podcastId, 0, "", true);
+        boolean test = false;
+        for (Review review : reviews) {
+            if (compare(newReview, review)) {
+                test = true;
+                break;
+            }
+        }
+
+        if (test)
+            System.out.println("[+] addReview");
+        else
+            System.err.println("[-] addReview");
+    }
+
+    // TODO: test ordering
+    public void findByAuthorUsernameTest() {
         List<Review> reviews = this.reviewMongo.findReviewsByAuthorUsername("angrybear104838", 2, "", true);
         if (reviews.size() != 2)
             System.err.println("[-] findReviewsByAuthorUsername: limit doesn't work");
@@ -35,11 +80,14 @@ public class ReviewMongoTest {
         }
         if (test)
             System.out.println("[+] findReviewsByAuthorUsername");
+    }
 
-        reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 4, "", true);
+    // TODO: test ordering
+    public void findByPodcastIdTest() {
+        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 4, "", true);
         if (reviews.size() != 4)
             System.err.println("[-] findReviewsByPodcastId: limit doesn't work");
-        test = true;
+        boolean test = true;
         for (Review review : reviews) {
             if (!review.getPodcastId().equals("0005852e3f81889c1ff0f26c")) {
                 System.err.println("[-] findReviewsByPodcastId");
@@ -96,7 +144,9 @@ public class ReviewMongoTest {
         ReviewMongoTest test = new ReviewMongoTest();
 
         test.findByIdTest();
-        test.findTest();
+        test.findByAuthorUsernameTest();
+        test.findByPodcastIdTest();
+        test.addTest();
         test.deleteReviewByIdTest();
         test.deleteReviewsByPodcastIdTest();
         test.deleteReviewsByAuthorUsernameTest();
