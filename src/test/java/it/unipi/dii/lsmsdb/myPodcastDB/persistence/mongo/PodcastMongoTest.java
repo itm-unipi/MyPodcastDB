@@ -29,14 +29,14 @@ public class PodcastMongoTest {
         //test addPodcast
         System.out.println("addPodcast...");
         podcast.setName("testPodcast");
-        String newId = pm.addPodcast(podcast);
-        System.out.println("id: " + newId);
+        if(!pm.addPodcast(podcast))
+            System.out.println("addPodcast failed");
         System.out.println("/-------------------/");
 
         //test findPodcastsByName
         System.out.println("findPodcastsByName...");
-        newId = pm.addPodcast(podcast);
-        System.out.println("id: " + newId);
+        if(!pm.addPodcast(podcast))
+            System.out.println("addPodcast failed");
         List <Podcast> podcasts = pm.findPodcastsByName("testPodcast",0);
         if( podcasts.isEmpty())
             System.out.println("podcast not found");

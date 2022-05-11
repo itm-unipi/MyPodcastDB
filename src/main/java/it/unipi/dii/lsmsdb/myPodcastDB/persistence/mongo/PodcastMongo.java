@@ -21,7 +21,7 @@ public class PodcastMongo {
 
     // --------- CREATE --------- //
 
-    public String addPodcast(Podcast podcast) {
+    public boolean addPodcast(Podcast podcast) {
         // podcast.setId(risultato.getObjectId("_id").toString());
 
         MongoManager manager = MongoManager.getInstance();
@@ -59,7 +59,14 @@ public class PodcastMongo {
                 .append("reviews", reviews);
 
         manager.getCollection("podcast").insertOne(newPodcast);
-        return newPodcast.getObjectId("_id").toString();
+        String newId = newPodcast.getObjectId("_id").toString();
+        if( newId.isEmpty())
+            return false;
+        else{
+            System.out.println("id: " + newId);
+            return true;
+        }
+            
     }
 
 
