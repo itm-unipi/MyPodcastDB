@@ -129,13 +129,13 @@ public class AuthorMongoTest {
 
         System.out.println("\n*********************** UPDATE PODCAST AUTHOR ***********************");
         //Date date = new Date();
-        am.updatePodcastOfAuthor("000000000000000000000000", "6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit NEW", "2012-01-15T12:47:00Z");
-        /*
-        if(am.findAuthorByPodcastId("000000000000000000000000") != null) {
+        am.updatePodcastOfAuthor("000000000000000000000000", "6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit", "2012-01-15T12:47:00Z");
+
+        if(am.findAuthorByPodcastId("6a70d8d5ffcc27889ba41086") != null) {
             System.out.println("[+] OK");
         } else
             System.err.println("[-] FAILED");
-        */
+
         mongoManager.closeConnection();
     }
 }
