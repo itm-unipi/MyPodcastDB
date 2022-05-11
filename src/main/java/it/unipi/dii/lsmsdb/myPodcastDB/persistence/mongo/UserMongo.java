@@ -144,10 +144,9 @@ public class UserMongo {
     public List<User> findUsersByCountry(String country, int limit) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("user").find(eq("country", country)).iterator()) {
+        try (MongoCursor<Document> cursor = manager.getCollection("user").find(eq("country", country)).limit(limit).iterator()) {
             List<User> users = new ArrayList<>();
 
-            int counter = 0;
             while (cursor.hasNext()) {
                 Document user = cursor.next();
 
@@ -166,12 +165,6 @@ public class UserMongo {
 
                 User newUser = new User(id, username, password, name, surname, email, country, pictureSmall, pictureMedium, favouriteGenre, age, gender);
                 users.add(newUser);
-
-                if (limit != 0) {
-                    counter += 1;
-                    if (counter == limit)
-                        break;
-                }
             }
 
             return users;
