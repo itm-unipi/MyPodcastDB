@@ -20,62 +20,92 @@ public class PodcastMongoTest {
         PodcastMongo pm = new PodcastMongo();
 
         //test findPodcastById
-        System.out.println("findPodcastById...");
         Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
-        System.out.println(podcast);
-        System.out.println("/-------------------/");
+        if (podcast.getId().equals("54eb342567c94dacfb2a3e50"))
+            System.out.println("[+] findPodcastById");
+        else
+            System.err.println("[-] findPodcastById");
 
 
         //test addPodcast
-        System.out.println("addPodcast...");
         podcast.setName("testPodcast");
-        if(!pm.addPodcast(podcast))
-            System.out.println("addPodcast failed");
-        System.out.println("/-------------------/");
+        if (!pm.addPodcast(podcast))
+            System.err.println("[-] addPodcast");
+        else
+            System.out.println("[+] addPodcast");
 
         //test findPodcastsByName
-        System.out.println("findPodcastsByName...");
-        if(!pm.addPodcast(podcast))
-            System.out.println("addPodcast failed");
-        List <Podcast> podcasts = pm.findPodcastsByName("testPodcast",0);
-        if( podcasts.isEmpty())
-            System.out.println("podcast not found");
-        else
-            for( Podcast newPodcast: podcasts)
-                System.out.println(newPodcast);
-        System.out.println("/-------------------/");
+        String name = "testPodcast";
+        List <Podcast> podcasts = pm.findPodcastsByName(name,0);
+        if (podcasts.isEmpty())
+            System.err.println("[-] findPodcastsByName");
+        else {
+            boolean err = true;
+            for (Podcast newPodcast : podcasts)
+                if (!newPodcast.getName().equals(name)){
+                    err = false;
+                    System.err.println("[-] findPodcastsByName");
+                    break;
+                }
+            if(err)
+                System.out.println("[+] findPodcastsByName");
+        }
 
         //test findPodcastsByAuthorId
-        System.out.println("findPodcastsByAuthorId...");
-        podcasts = pm.findPodcastsByAuthorId("000000000000000000016776",2);
-        if( podcasts.isEmpty())
-            System.out.println("podcast not found");
-        else
-            for( Podcast newPodcast: podcasts)
-                System.out.println(newPodcast);
-        System.out.println("/-------------------/");
+        String authorId = "000000000000000000016776";
+        podcasts = pm.findPodcastsByAuthorId(authorId,0);
+        if (podcasts.isEmpty())
+            System.err.println("[-] findPodcastsByAuthorId");
+        else {
+            boolean err = true;
+            for (Podcast newPodcast : podcasts)
+                if (!newPodcast.getAuthorId().equals(authorId)) {
+                    err = false;
+                    System.err.println("[-] findPodcastsByAuthorId");
+                    break;
+                }
+            if(err)
+                System.out.println("[+] findPodcastsByAuthorId");
+        }
 
         //test findPodcastsByAuthorName
-        System.out.println("findPodcastsByAuthorName...");
-        podcasts = pm.findPodcastsByAuthorName("Slate Studios", 3);
-        if( podcasts.isEmpty())
-            System.out.println("podcast not found");
-        else
-            for( Podcast newPodcast: podcasts)
-                System.out.println(newPodcast);
-        System.out.println("/-------------------/");
+        String authorName = "Slate Studios";
+        podcasts = pm.findPodcastsByAuthorName("Slate Studios", 0);
+        if (podcasts.isEmpty())
+            System.err.println("[-] findPodcastsByAuthorName");
+        else {
+            boolean err = true;
+            for (Podcast newPodcast : podcasts)
+                if (!newPodcast.getAuthorName().equals(authorName)) {
+                    err = false;
+                    System.out.println(newPodcast);
+                    break;
+                }
+            if(err)
+                System.out.println("[+] findPodcastsByAuthorName");
+        }
 
         //find findPodcastsByPrimaryCategory
-        System.out.println("findPodcastsByPrimaryCategory...");
-        podcasts = pm.findPodcastsByPrimaryCategory("Business", 2);
-        if( podcasts.isEmpty())
-            System.out.println("podcast not found");
-        else
+        String category = "Business";
+        podcasts = pm.findPodcastsByPrimaryCategory(category, 0);
+        if (podcasts.isEmpty())
+            System.out.println("[-] findPodcastsByPrimaryCategory");
+        else{
+            boolean err = true;
             for( Podcast newPodcast: podcasts)
-                System.out.println(newPodcast);
-        System.out.println("/-------------------/");
+                if (!newPodcast.getPrimaryCategory().equals(category)){
+                    err = false;
+                    System.err.println("[-] findPodcastsByPrimaryCategory");
+                    break;
+                }
+            if(err)
+                System.out.println("[+] findPodcastsByPrimaryCategory");
+        }
+
+        //
 
         mongoManager.closeConnection();
 
     }
+
 }
