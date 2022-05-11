@@ -86,14 +86,14 @@ public class PodcastMongoTest {
         }
 
         //find findPodcastsByPrimaryCategory
-        String category = "Business";
-        podcasts = pm.findPodcastsByPrimaryCategory(category, 0);
+        String primaryCategory = "Business";
+        podcasts = pm.findPodcastsByPrimaryCategory(primaryCategory, 0);
         if (podcasts.isEmpty())
             System.out.println("[-] findPodcastsByPrimaryCategory");
         else{
             boolean err = true;
             for( Podcast newPodcast: podcasts)
-                if (!newPodcast.getPrimaryCategory().equals(category)){
+                if (!newPodcast.getPrimaryCategory().equals(primaryCategory)){
                     err = false;
                     System.err.println("[-] findPodcastsByPrimaryCategory");
                     break;
@@ -102,7 +102,22 @@ public class PodcastMongoTest {
                 System.out.println("[+] findPodcastsByPrimaryCategory");
         }
 
-        //
+        //find findPodcastsByCategory
+        String category = "Business";
+        podcasts = pm.findPodcastsByCategory(category, 0);
+        if (podcasts.isEmpty())
+            System.out.println("[-] findPodcastsByCategory");
+        else{
+            boolean err = true;
+            for( Podcast newPodcast: podcasts)
+                if (!newPodcast.getCategories().contains(category)){
+                    err = false;
+                    System.err.println("[-] findPodcastsByCategory");
+                    break;
+                }
+            if(err)
+                System.out.println("[+] findPodcastsByCategory");
+        }
 
         mongoManager.closeConnection();
 
