@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 import com.mongodb.client.MongoCursor;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -180,21 +181,22 @@ public class UserMongo {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            manager.getCollection("user").updateOne(
-                    eq("_id", new ObjectId(user.getId())),
-                    combine(set("username", user.getUsername()),
-                            set("password", user.getPassword()),
-                            set("name", user.getName()),
-                            set("surname", user.getSurname()),
-                            set("email", user.getEmail()),
-                            set("country", user.getCountry()),
-                            set("pictureSmall", user.getPictureSmall()),
-                            set("pictureMedium", user.getPictureMedium()),
-                            set("favouriteGenre", user.getFavouriteGenre()),
-                            set("age", user.getAge()),
-                            set("gender", user.getGender())
-                    )
+            Bson filter = eq("_id", new ObjectId(user.getId()));
+            Bson update = combine(
+                    set("username", user.getUsername()),
+                    set("password", user.getPassword()),
+                    set("name", user.getName()),
+                    set("surname", user.getSurname()),
+                    set("email", user.getEmail()),
+                    set("country", user.getCountry()),
+                    set("pictureSmall", user.getPictureSmall()),
+                    set("pictureMedium", user.getPictureMedium()),
+                    set("favouriteGenre", user.getFavouriteGenre()),
+                    set("age", user.getAge()),
+                    set("gender", user.getGender())
             );
+
+            manager.getCollection("user").updateOne(filter, update);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
