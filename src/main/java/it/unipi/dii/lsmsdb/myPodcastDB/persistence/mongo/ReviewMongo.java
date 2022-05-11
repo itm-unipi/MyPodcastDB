@@ -1,22 +1,18 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
-import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.lt;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.combine;
 
 public class ReviewMongo {
 
@@ -45,7 +41,25 @@ public class ReviewMongo {
     // --------- UPDATE --------- //
 
     public boolean updateReview(Review review) {
-        return false;
+        MongoManager manger = MongoManager.getInstance();
+
+        try {
+            Bson filter = Filters.eq("_id", new ObjectId(review.getId()));
+            Bson update = combine(set("podcastId", new ObjectId(review.getPodcastId())),
+                    set("authorUsername", review.getAuthorUsername()),
+                    set("title", review.getTitle()),
+                    set("content", review.getContent()),
+                    set("rating", review.getRating()),
+                    set("createdAt", review.getCreatedAtAsString())
+            );
+
+            manger.getCollection("review").updateOne(filter, update);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // --------- DELETE --------- //

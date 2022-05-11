@@ -1,10 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.DeleteResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
@@ -29,12 +27,11 @@ public class AuthorMongo {
     public boolean addAuthor(Author author) {
         MongoManager manager = MongoManager.getInstance();
 
-        //name, email, password, podcasts
         try {
             Document newAuthor = new Document("name", author.getName())
                     .append("email", author.getEmail())
                     .append("password", author.getPassword())
-                    .append("podcasts", new ArrayList());
+                    .append("podcasts", new ArrayList<>());
 
             manager.getCollection("author").insertOne(newAuthor);
             author.setId(newAuthor.getObjectId("_id").toString());
@@ -198,11 +195,12 @@ public class AuthorMongo {
 
     public List<Author> findAuthorsByPodcastName(String podcastName, int limit) {
         MongoManager manager = MongoManager.getInstance();
-        List<Author> authors= new ArrayList();
 
         try {
             Bson filter = Filters.eq("podcasts.podcastName", podcastName);
             MongoCursor<Document> cursor = manager.getCollection("author").find(filter).limit(limit).iterator();
+
+            List<Author> authors = new ArrayList<>();
 
             while (cursor.hasNext()) {
                 Document author = cursor.next();
@@ -215,7 +213,7 @@ public class AuthorMongo {
                 Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail);
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
-                for(Document podcast : podcasts) {
+                for (Document podcast : podcasts) {
                     String podId = podcast.getObjectId("podcastId").toString();
                     String podName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
@@ -267,8 +265,8 @@ public class AuthorMongo {
                 Document author = cursor.next();
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
-                for(Document podcast : podcasts) {
-                    if(podcastId.equals(podcast.getObjectId("podcastId").toString())) {
+                for (Document podcast : podcasts) {
+                    if (podcastId.equals(podcast.getObjectId("podcastId").toString())) {
                         Bson podcastFilter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcastId)));
                         Bson podcastUpdates = combine(set("podcasts.$.podcastName", podcastName), set("podcasts.$.podcastReleaseDate", podcastReleaseDate));
 
@@ -357,7 +355,7 @@ public class AuthorMongo {
         try {
             manager.getCollection("author").updateOne(
                     Filters.eq("_id", new ObjectId(authorId)),
-                    Updates.set("podcasts", new ArrayList()));
+                    Updates.set("podcasts", new ArrayList<>()));
 
             return true;
 
