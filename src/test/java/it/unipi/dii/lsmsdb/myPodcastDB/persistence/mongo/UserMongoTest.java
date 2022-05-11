@@ -39,12 +39,12 @@ public class UserMongoTest {
         return true;
     }
 
-    public void findByIdTest() {
-        User user = this.userMongo.findUserById("6275040d29c6dd2b02682bae");
+    public void findByUsernameTest() {
+        User user = this.userMongo.findUserByUsername("silverelephant716273");
         if (user.getUsername().equals("silverelephant716273"))
-            System.out.println("findUserById works");
+            System.out.println("[+] findUserByUsername");
         else
-            System.err.println("findUserById doesn't works");
+            System.err.println("[-] findUserByUsername");
     }
 
     public void addTest() {
@@ -65,25 +65,25 @@ public class UserMongoTest {
 
         User createdUser = this.userMongo.findUserById(newUser.getId());
         if(compare(newUser, createdUser, false))
-            System.out.println("addUser works");
+            System.out.println("[+] addUser");
         else
             System.err.println("addUser doesn't works");
     }
 
     public void findsTest() {
-        User user1 = this.userMongo.findUserById("6275040d29c6dd2b02682bae");
-        User user2 = this.userMongo.findUserByUsername(user1.getUsername());
+        User user1 = this.userMongo.findUserByUsername("silverelephant716273");
+        User user2 = this.userMongo.findUserById(user1.getId());
         User user3 = this.userMongo.findUserByEmail(user1.getEmail());
 
-        if(compare(user1, user2, true))
-            System.out.println("findUserByUsername works");
+        if(user2 != null && compare(user1, user2, true))
+            System.out.println("[+] findUserById");
         else
-            System.err.println("findUserByUsername doesn't works");
+            System.err.println("[-] findUserById");
 
-        if(compare(user1, user3, true))
-            System.out.println("findUserByEmail works");
+        if(user2 != null && compare(user1, user3, true))
+            System.out.println("[+] findUserByEmail");
         else
-            System.err.println("findUserByEmail doesn't works");
+            System.err.println("[-] findUserByEmail");
 
         List<User> users = this.userMongo.findUsersByCountry("Ireland", 3);
         boolean test = true;
@@ -92,9 +92,9 @@ public class UserMongoTest {
                 test = false;
 
         if(test)
-            System.out.println("findUserByCountry works");
+            System.out.println("[+] findUserByCountry");
         else
-            System.err.println("findUserByCountry doesn't works");
+            System.err.println("[-] findUserByCountry");
     }
 
     public void updateTest() {
@@ -104,9 +104,9 @@ public class UserMongoTest {
         this.userMongo.updateUser(newUser);
         newUser = this.userMongo.findUserById(id);
         if (newUser.getAge() == 25)
-            System.out.println("updateUser work");
+            System.out.println("[+] updateUser");
         else
-            System.err.println("updateUser doesn't work");
+            System.err.println("[-] updateUser");
     }
 
     public void deleteTest() {
@@ -115,25 +115,25 @@ public class UserMongoTest {
         this.userMongo.deleteUserById(id);
         User testUser = this.userMongo.findUserById(id);
         if (testUser == null)
-            System.out.println("deleteUserById work");
+            System.out.println("[+] deleteUserById");
         else
-            System.err.println("deleteUserById doesn't work");
+            System.err.println("[-] deleteUserById");
 
         this.userMongo.addUser(newUser);
         id = newUser.getId();
         this.userMongo.deleteUserByUsername(newUser.getUsername());
         testUser = this.userMongo.findUserById(id);
         if (testUser == null)
-            System.out.println("deleteUserByUsername work");
+            System.out.println("[+] deleteUserByUsername");
         else
-            System.err.println("deleteUserByUsername doesn't work");
+            System.err.println("[-] deleteUserByUsername");
     }
 
     public static void main(String[] args) {
         MongoManager manager = MongoManager.getInstance();
         manager.openConnection();
         UserMongoTest test = new UserMongoTest();
-        test.findByIdTest();
+        test.findByUsernameTest();
         test.addTest();
         test.findsTest();
         test.updateTest();
