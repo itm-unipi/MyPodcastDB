@@ -1,16 +1,22 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Filters.lt;
 
 public class ReviewMongo {
 
@@ -60,25 +66,31 @@ public class ReviewMongo {
     public int deleteReviewsByPodcastId(String podcastId) {
         MongoManager manager = MongoManager.getInstance();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId))).iterator()) {
-            int deletedCount = 0;
+        try {
+            Bson filter = eq("podcastId", new ObjectId(podcastId));
+            DeleteResult result = manager.getCollection("review").deleteMany(filter);
 
-            if (cursor.hasNext()) {
-                Document review = cursor.next();
+            return (int)result.getDeletedCount();
 
-
-            }
-            return deletedCount;
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
         }
-
-        //return -1;
     }
 
     public int deleteReviewsByAuthorUsername(String authorUsername) {
-        return -1;
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson filter = eq("authorUsername", authorUsername);
+            DeleteResult result = manager.getCollection("review").deleteMany(filter);
+
+            return (int)result.getDeletedCount();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     // ---------------------------------------------------------------------------------- //
