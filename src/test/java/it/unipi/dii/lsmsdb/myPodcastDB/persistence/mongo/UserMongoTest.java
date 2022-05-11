@@ -12,7 +12,7 @@ public class UserMongoTest {
         this.userMongo = new UserMongo();
     }
 
-    boolean compare(User a, User b, boolean sameId) {
+    static boolean compare(User a, User b, boolean sameId) {
         if (sameId && !a.getId().equals(b.getId()))
             return false;
         if (!a.getUsername().equals(b.getUsername()))
@@ -133,11 +133,13 @@ public class UserMongoTest {
         MongoManager manager = MongoManager.getInstance();
         manager.openConnection();
         UserMongoTest test = new UserMongoTest();
+
         test.findByUsernameTest();
         test.addTest();
         test.findsTest();
         test.updateTest();
         test.deleteTest();
+        
         manager.closeConnection();
     }
 }
