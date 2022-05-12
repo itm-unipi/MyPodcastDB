@@ -73,7 +73,6 @@ public class PodcastMongo {
             
     }
 
-
     // ---------- READ ---------- //
 
     public Podcast findPodcastById(String podcastId) {
@@ -414,9 +413,9 @@ public class PodcastMongo {
                     set("releaseDate", podcast.getReleaseDateAsString())
             );
 
-            manager.getCollection("author").updateOne(filter, updates);
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, updates);
 
-            return true;
+            return result.getModifiedCount() == 1;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -425,12 +424,42 @@ public class PodcastMongo {
 
     }
 
-    public boolean addEpisodeToPodcast(String podcastId, String episodeName, String episodeDescription, Date episodeReleaseDate, int episodeTimeMillis) {
-        return false;
+    public boolean addEpisodeToPodcast(String podcastId, Episode episode) {
+        MongoManager manager = MongoManager.getInstance();
+
+        Document newEpisode= new Document()
+                .append("episodeName", episode.getName())
+                .append("episodeDescription", episode.getDescription())
+                .append("episodeReleaseDate", episode.getReleaseDateAsString())
+                .append("episodeTimeMillis", episode.getTimeMillis());
+        try {
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = push("episodes", newEpisode);
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean addReviewToPodcast(String podcastId, String reviewId, int rating) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        Document newReview = new Document()
+                .append("reviewId", new ObjectId(reviewId))
+                .append("rating", rating);
+        try {
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = push("reviews", newReview);
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // --------- DELETE --------- //
