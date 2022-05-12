@@ -152,7 +152,7 @@ public class ReviewMongoTest {
 
         reviewMongo.deleteReviewById(reviewId);
     }
-    
+
     public static void main(String[] args) {
         MongoManager manager = MongoManager.getInstance();
         manager.openConnection();
