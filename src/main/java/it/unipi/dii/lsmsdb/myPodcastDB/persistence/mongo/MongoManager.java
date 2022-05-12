@@ -20,7 +20,7 @@ public class MongoManager implements AutoCloseable {
 
     public boolean openConnection() {
         try {
-            ConnectionString uri = new ConnectionString("mongodb://admin:admin@localhost:27017/"); // ConfigManager.GetMongoDBConnectorString()
+            ConnectionString uri = new ConnectionString("mongodb://admin:password@localhost:27017/"); // ConfigManager.GetMongoDBConnectorString()
             this.mongoClient = MongoClients.create(uri);
             this.database = mongoClient.getDatabase("myPodcastDB"); // ConfigManager.GetMongoDBName()
         } catch (Exception e) {
