@@ -148,10 +148,7 @@ public class PodcastMongo {
             UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
 
             // check the number of modified field
-            if (result.getModifiedCount() == 1)
-                return true;
-            else
-                return false;
+            return result.getModifiedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -168,10 +165,7 @@ public class PodcastMongo {
             UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
 
             // check the number of modified field
-            if (result.getModifiedCount() == 1)
-                return true;
-            else
-                return false;
+            return result.getModifiedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -188,10 +182,7 @@ public class PodcastMongo {
             UpdateResult result = manager.getCollection("podcast").updateOne(filter, update);
 
             // check the number of modified field
-            if (result.getModifiedCount() == 1)
-                return true;
-            else
-                return false;
+            return result.getModifiedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
