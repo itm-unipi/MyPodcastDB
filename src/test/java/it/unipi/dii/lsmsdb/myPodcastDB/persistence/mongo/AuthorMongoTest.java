@@ -1,7 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
-import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -183,7 +182,7 @@ public class AuthorMongoTest {
 
         // Add two podcasts
         Date date = new Date();
-        List<Podcast> pods = new ArrayList<Podcast>();
+        List<Podcast> pods = new ArrayList<>();
 
         Podcast podcast1 = new Podcast("0", "PodcastTest1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
         pods.add(podcast1);
@@ -258,7 +257,7 @@ public class AuthorMongoTest {
         String authorId = newAuthor.getId();
 
         Author oldAuthor = am.findAuthorById(authorId);
-        Author updatedAuthor = new Author(authorId, "Gianluca X", "modifiedPassword", "test@example.com");
+        Author updatedAuthor = new Author(authorId, "Matteo", "modifiedPassword", "test@example.com");
 
         if(am.updateAuthor(updatedAuthor)) {
             if (am.findAuthorById(authorId) != null && !compare(oldAuthor, updatedAuthor))

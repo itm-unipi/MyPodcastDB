@@ -337,10 +337,11 @@ public class AuthorMongo {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            Bson fields = new Document().append("podcasts", new Document().append("podcastId", new ObjectId(podcastId)));
-            Bson update = new Document("$pull", fields);
+            Bson filterAuthor = eq("_id", new ObjectId(authorId));
+            Bson filterPodcast = new Document().append("podcasts", new Document().append("podcastId", new ObjectId(podcastId)));
+            Bson update = Updates.pullByFilter(filterPodcast);
 
-            manager.getCollection("author").updateOne(eq("_id", new ObjectId(authorId)), update);
+            manager.getCollection("author").updateOne(filterAuthor, update);
             return true;
 
         } catch (Exception e) {
