@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -44,7 +45,7 @@ public class ReviewMongo {
         MongoManager manger = MongoManager.getInstance();
 
         try {
-            Bson filter = Filters.eq("_id", new ObjectId(review.getId()));
+            Bson filter = eq("_id", new ObjectId(review.getId()));
             Bson update = combine(set("podcastId", new ObjectId(review.getPodcastId())),
                     set("authorUsername", review.getAuthorUsername()),
                     set("title", review.getTitle()),
@@ -53,9 +54,8 @@ public class ReviewMongo {
                     set("createdAt", review.getCreatedAtAsString())
             );
 
-            manger.getCollection("review").updateOne(filter, update);
-            return true;
-
+            UpdateResult result = manger.getCollection("review").updateOne(filter, update);
+            return result.getMatchedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -68,9 +68,8 @@ public class ReviewMongo {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            manager.getCollection("review").deleteOne(eq("_id", new ObjectId(reviewId)));
-            return true;
-
+            DeleteResult result = manager.getCollection("review").deleteOne(eq("_id", new ObjectId(reviewId)));
+            return result.getDeletedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -85,7 +84,6 @@ public class ReviewMongo {
             DeleteResult result = manager.getCollection("review").deleteMany(filter);
 
             return (int)result.getDeletedCount();
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
@@ -100,7 +98,6 @@ public class ReviewMongo {
             DeleteResult result = manager.getCollection("review").deleteMany(filter);
 
             return (int)result.getDeletedCount();
-
         } catch (Exception e) {
             e.printStackTrace();
             return -1;
