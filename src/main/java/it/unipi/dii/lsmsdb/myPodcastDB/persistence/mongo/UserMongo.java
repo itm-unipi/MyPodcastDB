@@ -1,6 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.DeleteResult;
+import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -196,13 +198,12 @@ public class UserMongo {
                     set("gender", user.getGender())
             );
 
-            manager.getCollection("user").updateOne(filter, update);
+            UpdateResult result = manager.getCollection("user").updateOne(filter, update);
+            return result.getModifiedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-
-        return true;
     }
 
     // --------- DELETE --------- //
@@ -211,26 +212,24 @@ public class UserMongo {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            manager.getCollection("user").deleteOne(eq("_id", new ObjectId(id)));
+            DeleteResult result = manager.getCollection("user").deleteOne(eq("_id", new ObjectId(id)));
+            return result.getDeletedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-
-        return true;
     }
 
     public boolean deleteUserByUsername(String username) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            manager.getCollection("user").deleteOne(eq("username", username));
+            DeleteResult result = manager.getCollection("user").deleteOne(eq("username", username));
+            return result.getDeletedCount() == 1;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-
-        return true;
     }
 
     // ---------------------------------------------------------------------------------- //
