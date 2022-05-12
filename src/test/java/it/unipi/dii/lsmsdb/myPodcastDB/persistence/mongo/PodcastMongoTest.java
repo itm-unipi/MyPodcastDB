@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 public class PodcastMongoTest {
-
+    
     PodcastMongo podcastMongo;
 
     public PodcastMongoTest() {
@@ -45,9 +45,8 @@ public class PodcastMongoTest {
         mongoManager.closeConnection();
 
     }
-
+    
     void testEquals(){
-
         Podcast p1 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         Podcast p2 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
 
@@ -56,27 +55,24 @@ public class PodcastMongoTest {
         else
             System.out.println("[+] equals");
     }
-
+    
     void addPodcastTest(){
-
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         podcast.setName("testPodcast");
         if (!this.podcastMongo.addPodcast(podcast))
             System.err.println("[-] addPodcast");
         else
             System.out.println("[+] addPodcast");
-
     }
-
+    
     void findPodcastByIdTest(){
-
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         if (podcast.getId().equals("54eb342567c94dacfb2a3e50"))
             System.out.println("[+] findPodcastById");
         else
             System.err.println("[-] findPodcastById");
     }
-
+ 
     void findPodcastsByNameTest(){
         String name = "testPodcast";
         List <Podcast> podcasts = this.podcastMongo.findPodcastsByName(name,0);
@@ -94,9 +90,8 @@ public class PodcastMongoTest {
                 System.out.println("[+] findPodcastsByName");
         }
     }
-
+ 
     void findPodcastsByAuthorIdTest(){
-
         String authorId = "000000000000000000016776";
         List<Podcast> podcasts = this.podcastMongo.findPodcastsByAuthorId(authorId,0);
         if (podcasts.isEmpty())
@@ -113,9 +108,8 @@ public class PodcastMongoTest {
                 System.out.println("[+] findPodcastsByAuthorId");
         }
     }
-
+ 
     void findPodcastsByAuthorNameTest(){
-
         String authorName = "Slate Studios";
         List<Podcast> podcasts = this.podcastMongo.findPodcastsByAuthorName("Slate Studios", 0);
         if (podcasts.isEmpty())
@@ -134,11 +128,11 @@ public class PodcastMongoTest {
 
 
     }
-
+ 
     void findPodcastsByPrimaryCategoryTest(){
-
         String primaryCategory = "Business";
         List<Podcast> podcasts = this.podcastMongo.findPodcastsByPrimaryCategory(primaryCategory, 0);
+
         if (podcasts.isEmpty())
             System.err.println("[-] findPodcastsByPrimaryCategory");
         else{
@@ -155,11 +149,12 @@ public class PodcastMongoTest {
 
 
     }
-
+ 
     void findPodcastsByCategoryTest(){
 
         String category = "Business";
         List<Podcast> podcasts = this.podcastMongo.findPodcastsByCategory(category, 0);
+
         if (podcasts.isEmpty())
             System.err.println("[-] findPodcastsByCategory");
         else{
@@ -172,7 +167,7 @@ public class PodcastMongoTest {
                 }
             if(err)
                 System.out.println("[+] findPodcastsByCategory");
-        }
+        } 
     }
 
     void updatePodcastTest(){
@@ -192,15 +187,16 @@ public class PodcastMongoTest {
         p1.setReleaseDate(p2.getReleaseDate());
 
         p2.setName(name);
-
+ 
         boolean result = this.podcastMongo.updatePodcast(p1);
         Podcast p3 = this.podcastMongo.findPodcastById(p1.getId());
+
         if (!result || p3 == null || !p2.equals(p3))
             System.err.println("[-] updatePodcast");
         else
             System.out.println("[+] updatePodcast");
     }
-
+ 
     void addEpisodeToPodcastTest(){
 
         String podcastName = "testPodcastAfterUpdate";
@@ -208,13 +204,14 @@ public class PodcastMongoTest {
         Episode newEpisode = new Episode("testEpisode", "episode for test", podcast.getReleaseDate(), 1000);
         boolean result = this.podcastMongo.addEpisodeToPodcast(podcast.getId(), newEpisode);
         Podcast podcastUpdated = this.podcastMongo.findPodcastsByName(podcastName,1).get(0);
+
         List<Episode> episodes = podcastUpdated.getEpisodes();
         if(!result || !episodes.contains(newEpisode))
             System.err.println("[-] addEpisodeToPodcastTest");
         else
             System.out.println("[+] addEpisodeToPodcastTest");
     }
-
+ 
     void addReviewToPodcastTest(){
 
         String podcastName = "testPodcastAfterUpdate";
@@ -222,13 +219,14 @@ public class PodcastMongoTest {
         Entry<String, Integer> newReview = new AbstractMap.SimpleEntry<>("100000000000000001021405", 5) ;
         boolean result = this.podcastMongo.addReviewToPodcast(podcast.getId(), newReview.getKey(), newReview.getValue());
         Podcast podcastUpdated = this.podcastMongo.findPodcastsByName(podcastName,1).get(0);
+
         List<Entry<String, Integer>> reviews = podcastUpdated.getReviews();
         if(!result || !reviews.contains(newReview))
             System.err.println("[-] addReviewToPodcastTest");
         else
             System.out.println("[+] addReviewToPodcastTest");
     }
-
+ 
     void deletePodcastByIdTest() {
 
         Podcast podcast = this.podcastMongo.findPodcastsByName("testPodcastAfterUpdate",1).get(0);
@@ -238,7 +236,7 @@ public class PodcastMongoTest {
         else
             System.err.println("[-] deletePodcastById");
     }
-
+ 
     void deletePodcastsByNameTest() {
 
         String name = "testPodcast";
@@ -250,7 +248,7 @@ public class PodcastMongoTest {
         else
             System.err.println("[-] deletePodcastByName");
     }
-
+ 
     void deletePodcastByAuthorIdTest(){
         String name = "testPodcast";
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
@@ -258,6 +256,7 @@ public class PodcastMongoTest {
         String authorName = podcast.getAuthorName();
         podcast.setName(name);
         podcast.setAuthor(authorId, authorName);
+
         this.podcastMongo.addPodcast(podcast);
         if ((this.podcastMongo.deletePodcastsByAuthorId(authorId) > 0) && this.podcastMongo.findPodcastsByAuthorId(authorId,0).isEmpty())
             System.out.println("[+] deletePodcastByAuthorId");
@@ -273,6 +272,7 @@ public class PodcastMongoTest {
         String authorName = "author test";
         podcast.setName(name);
         podcast.setAuthor(authorId, authorName);
+
         this.podcastMongo.addPodcast(podcast);
         if ((this.podcastMongo.deletePodcastsByAuthorName(authorName) > 0) && this.podcastMongo.findPodcastsByAuthorName(authorName,0).isEmpty())
             System.out.println("[+] deletePodcastByAuthorName");
@@ -280,7 +280,7 @@ public class PodcastMongoTest {
             System.err.println("[-] deletePodcastByAuthorName");
 
     }
-
+    
     void deleteEpisodeOfPodcastTest(){
 
         String name = "testPodcast";
@@ -294,7 +294,7 @@ public class PodcastMongoTest {
             System.out.println("[+] deleteEpisodeOfPodcast");
         else
             System.out.println("[-] deleteEpisodeOfPodcast");
-
+        
         this.podcastMongo.deletePodcastsByName("testPodcast");
 
     }
@@ -323,5 +323,4 @@ public class PodcastMongoTest {
         else
             System.err.println("[-] deleteAllReviewsOfPodcast");
     }
-
 }
