@@ -62,7 +62,7 @@ public class ReviewMongo {
                 int rating = review.getInteger("rating");
                 String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
                 Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
-                String authorName = review.getString("authorName");
+                String authorName = review.getString("authorUsername");
 
                 Review newReview = new Review(id, podcastId, authorName, title, content, rating, createdAt);
                 return newReview;
