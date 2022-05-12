@@ -139,7 +139,7 @@ public class UserMongoTest {
         test.findsTest();
         test.updateTest();
         test.deleteTest();
-        
+
         manager.closeConnection();
     }
 }
