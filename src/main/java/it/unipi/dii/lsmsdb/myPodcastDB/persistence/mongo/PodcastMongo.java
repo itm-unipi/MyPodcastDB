@@ -1,16 +1,20 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.*;
 
 public class PodcastMongo {
 
@@ -134,16 +138,64 @@ public class PodcastMongo {
         return false;
     }
 
-    public int deleteAllEpisodesOfPodcast(String podcastId) {
-        return -1;
+    public boolean deleteAllEpisodesOfPodcast(String podcastId) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            // remove the review from reviews field
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = set("episodes", new ArrayList<>());
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            // check the number of modified field
+            if (result.getModifiedCount() == 1)
+                return true;
+            else
+                return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deleteReviewOfPodcast(String podcastId, String reviewId) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            // remove the review from reviews field
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = pull("reviews", new Document("reviewId", new ObjectId(reviewId)));
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            // check the number of modified field
+            if (result.getModifiedCount() == 1)
+                return true;
+            else
+                return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public int deleteAllReviewsOfPodcast(String podcastId) {
-        return -1;
+    public boolean deleteAllReviewsOfPodcast(String podcastId) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            // remove the review from reviews field
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = set("reviews", new ArrayList<>());
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, update);
+
+            // check the number of modified field
+            if (result.getModifiedCount() == 1)
+                return true;
+            else
+                return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // ---------------------------------------------------------------------------------- //
