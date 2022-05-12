@@ -1,7 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
@@ -15,8 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.mongodb.client.model.Filters.*;
-import static com.mongodb.client.model.Updates.combine;
-import static com.mongodb.client.model.Updates.set;
+import static com.mongodb.client.model.Updates.*;
 
 public class PodcastMongo {
 
@@ -73,7 +72,6 @@ public class PodcastMongo {
             return true;
             
     }
-
 
     // ---------- READ ---------- //
 
@@ -415,9 +413,9 @@ public class PodcastMongo {
                     set("releaseDate", podcast.getReleaseDateAsString())
             );
 
-            manager.getCollection("author").updateOne(filter, updates);
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, updates);
 
-            return true;
+            return result.getModifiedCount() == 1;
 
         }catch (Exception e){
             e.printStackTrace();
@@ -426,12 +424,42 @@ public class PodcastMongo {
 
     }
 
-    public boolean addEpisodeToPodcast(String podcastId, String episodeName, String episodeDescription, Date episodeReleaseDate, int episodeTimeMillis) {
-        return false;
+    public boolean addEpisodeToPodcast(String podcastId, Episode episode) {
+        MongoManager manager = MongoManager.getInstance();
+
+        Document newEpisode= new Document()
+                .append("episodeName", episode.getName())
+                .append("episodeDescription", episode.getDescription())
+                .append("episodeReleaseDate", episode.getReleaseDateAsString())
+                .append("episodeTimeMillis", episode.getTimeMillis());
+        try {
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = push("episodes", newEpisode);
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean addReviewToPodcast(String podcastId, String reviewId, int rating) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        Document newReview = new Document()
+                .append("reviewId", new ObjectId(reviewId))
+                .append("rating", rating);
+        try {
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = push("reviews", newReview);
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // --------- DELETE --------- //

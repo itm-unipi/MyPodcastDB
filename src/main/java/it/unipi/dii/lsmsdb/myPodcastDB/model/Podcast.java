@@ -150,7 +150,13 @@ public class Podcast {
         return reducedReviews;
     }
 
-    public void setReviews(List<ReducedReview> reviews) {
+    public void setReviews(List<Entry<String, Integer>> newReviews) {
+
+        List<ReducedReview> reviews = new ArrayList<>();
+        for(Entry<String, Integer> entry : newReviews){
+            ReducedReview newReview = new ReducedReview(entry.getKey(), entry.getValue());
+            reviews.add(newReview);
+        }
         this.reviews = reviews;
     }
 
@@ -163,31 +169,6 @@ public class Podcast {
         ReducedReview review = new ReducedReview(id, rating);
         this.reviews.add(review);
     }
-
-    /*public boolean compare(Podcast p){
-        if (!this.getId().equals(p.getId()) ||
-                !this.getName().equals(p.getName()) ||
-                !this.getArtworkUrl60().equals(p.getArtworkUrl60()) ||
-                !this.getArtworkUrl600().equals(p.getArtworkUrl600()) ||
-                !this.getContentAdvisoryRating().equals(p.getContentAdvisoryRating()) ||
-                !this.getCountry().equals(p.getCountry()) ||
-                !this.getPrimaryCategory().equals(p.getPrimaryCategory()) ||
-                !this.getReleaseDateAsString().equals(p.getReleaseDateAsString())
-                !this.getAuthor().compare(p.getAuthor()) ||
-        ) {
-            return false;
-        }
-
-
-
-        //compare epi
-        private List<String> categories;
-        private List<Episode> episodes;
-        private List<ReducedReview> reviews;
-
-
-        return false;
-    }*/
 
     @Override
     public String toString() {
@@ -212,7 +193,7 @@ public class Podcast {
         if (this == o) return true;
         if (!(o instanceof Podcast)) return false;
         Podcast podcast = (Podcast) o;
-        return Objects.equals(getId(), podcast.getId()) && Objects.equals(getName(), podcast.getName()) && Objects.equals(getAuthor(), podcast.getAuthor()) && Objects.equals(getArtworkUrl60(), podcast.getArtworkUrl60()) && Objects.equals(getArtworkUrl600(), podcast.getArtworkUrl600()) && Objects.equals(getContentAdvisoryRating(), podcast.getContentAdvisoryRating()) && Objects.equals(getCountry(), podcast.getCountry()) && Objects.equals(getPrimaryCategory(), podcast.getPrimaryCategory()) && Objects.equals(getCategories(), podcast.getCategories()) && Objects.equals(getReleaseDate(), podcast.getReleaseDate()) && Objects.equals(getEpisodes(), podcast.getEpisodes()) && Objects.equals(getReviews(), podcast.getReviews());
+        return Objects.equals(getName(), podcast.getName()) && Objects.equals(getAuthor(), podcast.getAuthor()) && Objects.equals(getArtworkUrl60(), podcast.getArtworkUrl60()) && Objects.equals(getArtworkUrl600(), podcast.getArtworkUrl600()) && Objects.equals(getContentAdvisoryRating(), podcast.getContentAdvisoryRating()) && Objects.equals(getCountry(), podcast.getCountry()) && Objects.equals(getPrimaryCategory(), podcast.getPrimaryCategory()) && Objects.equals(getCategories(), podcast.getCategories()) && Objects.equals(getReleaseDate(), podcast.getReleaseDate()) && Objects.equals(getEpisodes(), podcast.getEpisodes()) && Objects.equals(getReviews(), podcast.getReviews());
     }
 
     @Override
