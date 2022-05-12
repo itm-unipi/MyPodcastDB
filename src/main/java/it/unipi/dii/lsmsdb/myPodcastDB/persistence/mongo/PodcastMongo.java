@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
@@ -66,6 +67,7 @@ public class PodcastMongo {
             return false;
         }
         String newId = newPodcast.getObjectId("_id").toString();
+        podcast.setId(newId);
         if( newId.isEmpty())
             return false;
         else
@@ -435,7 +437,7 @@ public class PodcastMongo {
         try {
             Bson filter = eq("_id", new ObjectId(podcastId));
             Bson update = push("episodes", newEpisode);
-            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, update);
 
             return result.getModifiedCount() == 1;
         } catch (Exception e) {
@@ -453,7 +455,7 @@ public class PodcastMongo {
         try {
             Bson filter = eq("_id", new ObjectId(podcastId));
             Bson update = push("reviews", newReview);
-            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, update);
 
             return result.getModifiedCount() == 1;
         } catch (Exception e) {
@@ -465,23 +467,62 @@ public class PodcastMongo {
     // --------- DELETE --------- //
 
     public boolean deletePodcastById(String id) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+        try{
+            DeleteResult result = manager.getCollection("podcast").deleteOne(eq("_id", new ObjectId(id)));
+            return result.getDeletedCount() == 1;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public int deletePodcastsByName(String name) {
-        return -1;
+        MongoManager manager = MongoManager.getInstance();
+        try{
+            DeleteResult result = manager.getCollection("podcast").deleteMany(eq("podcastName", name));
+            return (int) result.getDeletedCount();
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public int deletePodcastsByAuthorId(String authorId) {
-        return -1;
+        MongoManager manager = MongoManager.getInstance();
+        try{
+            DeleteResult result = manager.getCollection("podcast").deleteMany(eq("authorId", new ObjectId(authorId)));
+            return (int) result.getDeletedCount();
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public int deletePodcastsByAuthorName(String authorName) {
-        return -1;
+        MongoManager manager = MongoManager.getInstance();
+        try{
+            DeleteResult result = manager.getCollection("podcast").deleteMany(eq("authorName", authorName));
+            return (int) result.getDeletedCount();
+        }catch (Exception e){
+            e.printStackTrace();
+            return -1;
+        }
     }
 
     public boolean deleteEpisodeOfPodcast(String podcastId, String episodeName) {
-        return false;
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson filter = eq("_id", new ObjectId(podcastId));
+            Bson update = pull("episodes", new Document("episodeName", episodeName));
+            UpdateResult result = manager.getCollection("podcast").updateMany(filter, update);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deleteAllEpisodesOfPodcast(String podcastId) {

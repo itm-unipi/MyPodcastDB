@@ -28,6 +28,12 @@ public class PodcastMongoTest {
         updatePodcastTest(pm);
         addEpisodeToPodcastTest(pm);
         addReviewToPodcastTest(pm);
+        deletePodcastByIdTest(pm);
+        deletePodcastsByNameTest(pm);
+        deletePodcastByAuthorIdTest(pm);
+        deletePodcastByAuthorNameTest(pm);
+        deleteEpisodeOfPodcastTest(pm);
+
 
         mongoManager.closeConnection();
 
@@ -215,6 +221,77 @@ public class PodcastMongoTest {
         else
             System.out.println("[+] addReviewToPodcastTest");
     }
+
+    static void deletePodcastByIdTest(PodcastMongo pm) {
+
+        Podcast podcast = pm.findPodcastsByName("testPodcastAfterUpdate",1).get(0);
+        String id = podcast.getId();
+        if (pm.deletePodcastById(id) && pm.findPodcastById(id) == null)
+            System.out.println("[+] deletePodcastById");
+        else
+            System.err.println("[-] deletePodcastById");
+    }
+
+    static void deletePodcastsByNameTest(PodcastMongo pm) {
+
+        String name = "testPodcast";
+        Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
+        podcast.setName(name);
+        pm.addPodcast(podcast);
+        if ((pm.deletePodcastsByName(name) > 0) && pm.findPodcastsByName(name,0).isEmpty())
+            System.out.println("[+] deletePodcastByName");
+        else
+            System.err.println("[-] deletePodcastByName");
+    }
+
+    static void deletePodcastByAuthorIdTest(PodcastMongo pm){
+        String name = "testPodcast";
+        Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
+        String authorId = "010000000000000000016776";
+        String authorName = podcast.getAuthorName();
+        podcast.setName(name);
+        podcast.setAuthor(authorId, authorName);
+        pm.addPodcast(podcast);
+        if ((pm.deletePodcastsByAuthorId(authorId) > 0) && pm.findPodcastsByAuthorId(authorId,0).isEmpty())
+            System.out.println("[+] deletePodcastByAuthorId");
+        else
+            System.err.println("[-] deletePodcastByAuthorId");
+
+    }
+
+    static void deletePodcastByAuthorNameTest(PodcastMongo pm){
+        String name = "testPodcast";
+        Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
+        String authorId = "010000000000000000016776";
+        String authorName = "author test";
+        podcast.setName(name);
+        podcast.setAuthor(authorId, authorName);
+        pm.addPodcast(podcast);
+        if ((pm.deletePodcastsByAuthorName(authorName) > 0) && pm.findPodcastsByAuthorName(authorName,0).isEmpty())
+            System.out.println("[+] deletePodcastByAuthorName");
+        else
+            System.err.println("[-] deletePodcastByAuthorName");
+
+    }
+
+    static void deleteEpisodeOfPodcastTest(PodcastMongo pm){
+
+        String name = "testPodcast";
+        Podcast podcast = pm.findPodcastById("54eb342567c94dacfb2a3e50");
+        podcast.setName(name);
+        pm.addPodcast(podcast);
+        Episode newEpisode = new Episode("testEpisode", "episode for test", podcast.getReleaseDate(), 1000);
+        pm.addEpisodeToPodcast(podcast.getId(), newEpisode);
+
+        if(pm.deleteEpisodeOfPodcast(podcast.getId(), "testEpisode"))
+            System.out.println("[+] deleteEpisodeOfPodcast");
+        else
+            System.out.println("[-] deleteEpisodeOfPodcast");
+
+        pm.deletePodcastsByName("testPodcast");
+
+    }
+
 
 
 }
