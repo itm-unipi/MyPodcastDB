@@ -8,6 +8,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -250,23 +251,52 @@ public class UserMongo {
     }
 
     public List<Entry<String, Integer>> showNumberOfUsersPerCountry(int limit) {
+        MongoManager manager = MongoManager.getInstance();
 
-       return null;
+        try {
+            Bson group = group("$country", sum("num", 1));
+            Bson sort = sort(descending("num"));
+            Bson project = project(fields(excludeId(), computed("country", "$_id"), computed("users", "$num")));
+            Bson limitRes = limit(limit);
+
+            List<Document> results = manager.getCollection("user").aggregate(Arrays.asList(group, sort, project, limitRes)).into(new ArrayList<>());
+            if(results.isEmpty())
+                return null;
+
+            List<Entry<String, Integer>> countries = new ArrayList<>();
+            for (Document result : results){
+                Entry<String, Integer> country = new AbstractMap.SimpleEntry<>(result.getString("country"), result.getInteger("users"));
+                countries.add(country);
+            }
+
+            return countries;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
-    public String showFavouriteCategoryForGender(String gender) {
+    public List<String> showFavouriteCategoryForGender(String gender, int limit) {
 
         MongoManager manager = MongoManager.getInstance();
 
         try {
             Bson match = match(eq("gender", gender));
-            Bson group = group("$favouriteGenre", sum("num", 1L));
+            Bson group = group("$favouriteGenre", sum("num", 1));
             Bson sort = sort(descending("num"));
             Bson project = project(fields(excludeId(), computed("category", "$_id")));
-            Bson limit = limit(1);
+            Bson limitRes = limit(limit);
 
-            List<Document> results = manager.getCollection("user").aggregate(Arrays.asList(match, group, sort, project, limit)).into(new ArrayList<>());
-            return results.get(0).toString();
+            List<Document> results = manager.getCollection("user").aggregate(Arrays.asList(match, group, sort, project, limitRes)).into(new ArrayList<>());
+            if(results.isEmpty())
+                return null;
+            List<String> categories = new ArrayList<>();
+            for (Document category : results)
+                categories.add(category.getString("category"));
+            return categories;
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
