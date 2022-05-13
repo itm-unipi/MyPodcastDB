@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
@@ -614,10 +615,55 @@ public class PodcastMongo {
     }
 
     public List<Podcast> showPodcastsWithHighestAverageRatingPerCountry(int limit) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson project = project(fields(
+                    computed("name", "$podcastName"),
+                    include("country"),
+                    computed("meanRating", computed("$avg", "$reviews.rating")))
+            );
+            Bson sort = sort(Sorts.descending("meanRating"));
+            Bson group = group("$country",
+                    Accumulators.first("podcastId", "$_id"),
+                    Accumulators.first("podcastName", "$name"),
+                    Accumulators.first("meanRating", "$meanRating")
+            );
+            Bson lim = limit(limit);
+
+            List<Entry<Podcast, Float>> results = new ArrayList<>();
+            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, group, lim))) {
+                System.out.println(result);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 
     public List<Podcast> showPodcastsWithHighestNumberOfReviews(int limit) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson project = project(fields(
+                    excludeId(),
+                    computed("name", "$podcastName"),
+                    computed("numReviews", computed("$size", "$reviews")))
+            );
+            Bson sort = sort(Sorts.descending("numReviews"));
+            Bson lim = limit(limit);
+
+            List<Entry<Podcast, Float>> results = new ArrayList<>();
+            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
+                System.out.println(result);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 

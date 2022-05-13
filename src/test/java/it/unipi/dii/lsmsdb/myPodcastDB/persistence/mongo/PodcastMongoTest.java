@@ -41,14 +41,16 @@ public class PodcastMongoTest {
         test.deleteEpisodeOfPodcastTest();
         test.deleteAllEpisodesTest();
         test.deleteReviewTest();
-        test.deleteAllReviewsTest();*/
+        test.deleteAllReviewsTest();
 
-        test.showPodcastsWithHighestAverageRatingTest();
+        test.showPodcastsWithHighestAverageRatingTest();*/
+        test.showPodcastsWithHighestAverageRatingPerCountryTest();
+        //test.showPodcastsWithHighestNumberOfReviewsTest();
 
         mongoManager.closeConnection();
 
     }
-    
+
     void testEquals(){
         Podcast p1 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         Podcast p2 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
@@ -355,5 +357,13 @@ public class PodcastMongoTest {
 
     void showPodcastsWithHighestAverageRatingTest() {
         this.podcastMongo.showPodcastsWithHighestAverageRating(5);
+    }
+
+    void showPodcastsWithHighestAverageRatingPerCountryTest() {
+        this.podcastMongo.showPodcastsWithHighestAverageRatingPerCountry(5);
+    }
+
+    void showPodcastsWithHighestNumberOfReviewsTest() {
+        this.podcastMongo.showPodcastsWithHighestNumberOfReviews(5);
     }
 }
