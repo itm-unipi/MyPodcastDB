@@ -23,9 +23,9 @@ public class PodcastMongoTest {
         
         MongoManager mongoManager = MongoManager.getInstance();
         mongoManager.openConnection();
-
-        PodcastMongoTest test = new PodcastMongoTest();/*
-        test.testEquals();
+        
+        PodcastMongoTest test = new PodcastMongoTest();
+        /*test.testEquals();
         test.findPodcastByIdTest();
         test.addPodcastTest();
         test.findPodcastsByNameTest();
@@ -48,6 +48,7 @@ public class PodcastMongoTest {
         test.showPodcastsWithHighestAverageRatingTest();
         test.showPodcastsWithHighestAverageRatingPerCountryTest();
         test.showPodcastsWithHighestNumberOfReviewsTest();
+        test.showAuthorWithHighestAverageRatingTest();
 
         mongoManager.closeConnection();
 
@@ -373,5 +374,17 @@ public class PodcastMongoTest {
         System.out.println("showPodcastsWithHighestNumberOfReviewsTest:");
         for (Triplet<String, String, Integer> record : this.podcastMongo.showPodcastsWithHighestNumberOfReviews(3))
             System.out.println(record);
+    }
+
+    void showAuthorWithHighestAverageRatingTest(){
+
+        List<Entry<String, Float>> authors = this.podcastMongo.showAuthorWithHighestAverageRating(10);
+        if(authors == null || authors.isEmpty())
+            System.err.println("[-] showAuthorWithHighestAverageRating");
+        else {
+            System.out.println("[+] showAuthorWithHighestAverageRating");
+            for(Entry<String, Float> author : authors)
+                System.out.println(author);
+        }
     }
 }

@@ -256,7 +256,11 @@ public class UserMongo {
         try {
             Bson group = group("$country", sum("num", 1));
             Bson sort = sort(descending("num"));
-            Bson project = project(fields(excludeId(), computed("country", "$_id"), computed("users", "$num")));
+            Bson project = project(fields(
+                    excludeId(),
+                    computed("country", "$_id"),
+                    computed("users", "$num")
+            ));
             Bson limitRes = limit(limit);
 
             List<Document> results = manager.getCollection("user").aggregate(Arrays.asList(group, sort, project, limitRes)).into(new ArrayList<>());

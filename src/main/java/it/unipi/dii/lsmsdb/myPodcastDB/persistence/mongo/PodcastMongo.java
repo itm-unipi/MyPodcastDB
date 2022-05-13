@@ -10,20 +10,22 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
 import java.util.Arrays;
+import java.util.*;
 import java.util.Map.Entry;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+
 
 import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Accumulators.avg;
+import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.*;
 
 public class PodcastMongo {
@@ -689,8 +691,35 @@ public class PodcastMongo {
         }
     }
 
-    public List<String> showAuthorWithHighestAverageRating(int limit) {
-        return null;
+    public List<Entry<String, Float>> showAuthorWithHighestAverageRating(int limit) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson project = project(fields(
+                    include("_id"),
+                    include("authorName"),
+                    computed("rating", computed("$avg", "$reviews.rating"))
+            ));
+            Bson group = group(
+                    "$authorName",
+                    avg("rating", "$rating")
+            );
+            Bson sort = sort(descending("rating"));
+            Bson limitRes = limit(limit);
+
+            List<Document> results = manager.getCollection("podcast").aggregate(Arrays.asList(project, group, sort, limitRes)).into(new ArrayList<>());
+            if(results.isEmpty())
+                return null;
+
+            List<Entry<String, Float>> authors = new ArrayList<>();
+            for (Document author : results)
+                authors.add(new AbstractMap.SimpleEntry<>(author.getString("_id"), (float)(double)author.getDouble("rating")));
+            return authors;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // ---------------------------------------------------------------------------------- //
