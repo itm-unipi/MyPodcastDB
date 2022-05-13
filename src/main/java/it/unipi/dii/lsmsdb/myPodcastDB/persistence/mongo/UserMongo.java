@@ -9,10 +9,15 @@ import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
-import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Aggregates.*;
+import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.*;
+import static com.mongodb.client.model.Accumulators.*;
+import static com.mongodb.client.model.Sorts.*;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.set;
 
@@ -245,11 +250,27 @@ public class UserMongo {
     }
 
     public List<Entry<String, Integer>> showNumberOfUsersPerCountry(int limit) {
-        return null;
+
+       return null;
     }
 
     public String showFavouriteCategoryForGender(String gender) {
-        return null;
+
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson match = match(eq("gender", gender));
+            Bson group = group("$favouriteGenre", sum("num", 1L));
+            Bson sort = sort(descending("num"));
+            Bson project = project(fields(excludeId(), computed("category", "$_id")));
+            Bson limit = limit(1);
+
+            List<Document> results = manager.getCollection("user").aggregate(Arrays.asList(match, group, sort, project, limit)).into(new ArrayList<>());
+            return results.get(0).toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     // ---------------------------------------------------------------------------------- //
