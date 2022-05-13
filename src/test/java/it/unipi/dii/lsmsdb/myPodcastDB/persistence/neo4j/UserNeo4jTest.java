@@ -14,8 +14,9 @@ public class UserNeo4jTest {
         test.addUserLikesPodcastTest();
         test.addUserWatchLaterPodcastTest();
         test.addUserFollowUserTest();
-        test.addUserFollowAuthorTest();*/
-        test.updateUserTest();
+        test.addUserFollowAuthorTest();
+        test.updateUserTest();*/
+        test.deleteUser();
 
         manager.closeConnection();
 
@@ -75,6 +76,14 @@ public class UserNeo4jTest {
             System.out.println("[+] updateUser");
         else
             System.err.println("[-] updateUser");
+    }
+
+    public void deleteUser(){
+        boolean result = this.userNeo4j.deleteUser("user test");
+        if(result)
+            System.out.println("[+] deleteUser");
+        else
+            System.err.println("[-] deleteUser");
     }
 
 
