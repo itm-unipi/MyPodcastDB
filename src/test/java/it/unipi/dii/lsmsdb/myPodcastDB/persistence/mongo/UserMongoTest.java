@@ -129,6 +129,15 @@ public class UserMongoTest {
             System.err.println("[-] deleteUserByUsername");
     }
 
+    public void showFavouriteCategoryForGender(){
+
+        String category = userMongo.showFavouriteCategoryForGender("male");
+        if(category.isEmpty() || category == null)
+            System.err.println("[-] showFavouriteCategoryForGender");
+        else
+            System.out.println("[+] showFavouriteCategoryForGender");
+    }
+
     public static void main(String[] args) {
         MongoManager manager = MongoManager.getInstance();
         manager.openConnection();
