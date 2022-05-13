@@ -118,8 +118,18 @@ public class UserNeo4j {
 
     // --------- DELETE --------- //
 
-    public boolean deleteUser(User user) {
-        return false;
+    public boolean deleteUser(String username) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username}) DELETE u";
+        Value params = parameters("username", username);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public boolean deleteUserLikesPodcast(String username, String podcastId) {
