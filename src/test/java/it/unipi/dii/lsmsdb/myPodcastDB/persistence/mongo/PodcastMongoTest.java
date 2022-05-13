@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -41,6 +42,8 @@ public class PodcastMongoTest {
         test.deleteAllEpisodesTest();
         test.deleteReviewTest();
         test.deleteAllReviewsTest();
+
+        test.showCountriesWithHighestNumberOfPodcastsTest();
 
         mongoManager.closeConnection();
 
@@ -228,7 +231,6 @@ public class PodcastMongoTest {
     }
  
     void deletePodcastByIdTest() {
-
         Podcast podcast = this.podcastMongo.findPodcastsByName("testPodcastAfterUpdate",1).get(0);
         String id = podcast.getId();
         if (this.podcastMongo.deletePodcastById(id) && this.podcastMongo.findPodcastById(id) == null)
@@ -238,7 +240,6 @@ public class PodcastMongoTest {
     }
  
     void deletePodcastsByNameTest() {
-
         String name = "testPodcast";
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         podcast.setName(name);
@@ -282,7 +283,6 @@ public class PodcastMongoTest {
     }
     
     void deleteEpisodeOfPodcastTest(){
-
         String name = "testPodcast";
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         podcast.setName(name);
@@ -322,5 +322,19 @@ public class PodcastMongoTest {
             System.out.println("[+] deleteAllReviewsOfPodcast");
         else
             System.err.println("[-] deleteAllReviewsOfPodcast");
+    }
+
+    void showCountriesWithHighestNumberOfPodcastsTest() {
+        List<String> countries = new ArrayList<>();
+        countries = this.podcastMongo.showCountriesWithHighestNumberOfPodcasts(4);
+
+        if (countries != null) {
+            System.out.println("[+] showCountriesWithHighestNumberOfPodcasts");
+            //for (String s: countries) {
+                //System.out.println(s);
+            //}
+        } else {
+            System.err.println("[-] showCountriesWithHighestNumberOfPodcasts");
+        }
     }
 }
