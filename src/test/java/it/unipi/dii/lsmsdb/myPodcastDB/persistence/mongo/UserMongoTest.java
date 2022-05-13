@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
 import java.util.List;
+import java.util.Map.Entry;
 
 public class UserMongoTest {
 
@@ -129,13 +130,26 @@ public class UserMongoTest {
             System.err.println("[-] deleteUserByUsername");
     }
 
-    public void showFavouriteCategoryForGender(){
+    public void showFavouriteCategoryForGenderTest(){
 
-        String category = userMongo.showFavouriteCategoryForGender("male");
-        if(category.isEmpty() || category == null)
+        List<String> categories = this.userMongo.showFavouriteCategoryForGender("male", 10);
+        if(categories.isEmpty() || categories == null)
             System.err.println("[-] showFavouriteCategoryForGender");
         else
             System.out.println("[+] showFavouriteCategoryForGender");
+
+        System.out.println(categories);
+    }
+
+    public void showNumberOfUsersPerCountryTest(){
+        List<Entry<String, Integer>> countries = this.userMongo.showNumberOfUsersPerCountry(10);
+        if (countries.isEmpty() || countries == null)
+            System.err.println("[-] showNumberOfUsersPerCountry");
+        else
+            System.out.println("[+] showNumberOfUsersPerCountry");
+
+        System.out.println(countries);
+
     }
 
     public static void main(String[] args) {
@@ -143,11 +157,13 @@ public class UserMongoTest {
         manager.openConnection();
         UserMongoTest test = new UserMongoTest();
 
-        test.findByUsernameTest();
+        /*test.findByUsernameTest();
         test.addTest();
         test.findsTest();
         test.updateTest();
-        test.deleteTest();
+        test.deleteTest();*/
+        test.showFavouriteCategoryForGenderTest();
+        test.showNumberOfUsersPerCountryTest();
 
         manager.closeConnection();
     }
