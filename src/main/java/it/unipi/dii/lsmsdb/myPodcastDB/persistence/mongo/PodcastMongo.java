@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
@@ -8,6 +9,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+
+import java.util.Arrays;
 import java.util.Map.Entry;
 
 import java.text.SimpleDateFormat;
@@ -15,7 +18,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Updates.*;
 
 public class PodcastMongo {
@@ -584,7 +589,27 @@ public class PodcastMongo {
         return null;
     }
 
-    public List<Podcast> showPodcastsWithHighestAverageRating(int limit) {
+    public List<Entry<Podcast, Float>> showPodcastsWithHighestAverageRating(int limit) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try {
+            Bson project = project(fields(
+                    excludeId(),
+                    computed("name", "$podcastName"),
+                    computed("meanRating", computed("$avg", "$reviews.rating")))
+            );
+            Bson sort = sort(Sorts.descending("meanRating"));
+            Bson lim = limit(limit);
+
+            List<Entry<Podcast, Float>> results = new ArrayList<>();
+            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
+                System.out.println(result);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
         return null;
     }
 

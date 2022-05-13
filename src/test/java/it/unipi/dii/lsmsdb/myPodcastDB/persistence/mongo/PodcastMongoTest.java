@@ -22,7 +22,7 @@ public class PodcastMongoTest {
         MongoManager mongoManager = MongoManager.getInstance();
         mongoManager.openConnection();
 
-        PodcastMongoTest test = new PodcastMongoTest();
+        PodcastMongoTest test = new PodcastMongoTest();/*
         test.testEquals();
         test.findPodcastByIdTest();
         test.addPodcastTest();
@@ -41,7 +41,9 @@ public class PodcastMongoTest {
         test.deleteEpisodeOfPodcastTest();
         test.deleteAllEpisodesTest();
         test.deleteReviewTest();
-        test.deleteAllReviewsTest();
+        test.deleteAllReviewsTest();*/
+
+        test.showPodcastsWithHighestAverageRatingTest();
 
         mongoManager.closeConnection();
 
@@ -349,5 +351,9 @@ public class PodcastMongoTest {
             System.err.println("[-] deleteAllReviewsOfPodcast");
 
         this.podcastMongo.deletePodcastById(podcast.getId());
+    }
+
+    void showPodcastsWithHighestAverageRatingTest() {
+        this.podcastMongo.showPodcastsWithHighestAverageRating(5);
     }
 }
