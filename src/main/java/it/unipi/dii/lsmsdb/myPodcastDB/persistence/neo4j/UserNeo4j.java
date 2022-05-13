@@ -1,8 +1,11 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import org.neo4j.driver.Value;
 
 import java.util.List;
+
+import static org.neo4j.driver.Values.parameters;
 
 public class UserNeo4j {
 
@@ -10,24 +13,88 @@ public class UserNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addUser(User user) {
-        return false;
+    public boolean addUser(String username) {
+
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "CREATE (u:User {username: $username})";
+        Value params = parameters("username", username);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public boolean addUserLikesPodcast(String username, String podcastId) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})," +
+                "(p:Podcast{podcastId: $podcastId})"+
+                "CREATE (u)-[:LIKES]->(p)";
+        Value params = parameters("username", username, "podcastId", podcastId);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public boolean addUserWatchLaterPodcast(String username, String podcastId) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})," +
+                "(p:Podcast{podcastId: $podcastId})"+
+                "CREATE (u)-[:WATCH_LATER]->(p)";
+        Value params = parameters("username", username, "podcastId", podcastId);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     public boolean addUserFollowUser(String username, String userToFollow) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u1:User{username: $username})," +
+                "(u2:User{username: $userToFollow})"+
+                "CREATE (u1)-[:FOLLOWS_USER]->(u2)";
+        Value params = parameters("username", username, "userToFollow", userToFollow);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
-    public boolean addUserFollowAuthor(String username, String author) {
-        return false;
+    public boolean addUserFollowAuthor(String username, String authorName) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})," +
+                "(a:Author{name: $authorName})"+
+                "CREATE (u)-[:FOLLOWS]->(a)";
+        Value params = parameters("username", username, "authorName", authorName);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
     }
 
     // ---------- READ ---------- //
