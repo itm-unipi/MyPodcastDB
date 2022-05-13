@@ -591,6 +591,15 @@ public class PodcastMongo {
     // ------------------------------- AGGREGATION QUERY -------------------------------- //
 
     public List<String> showCountriesWithHighestNumberOfPodcasts(int limit) {
+        // TODO
+        /*
+        db.podcasts.aggregate([
+            { $group: { _id: { country: "$country" }, totalPodcasts: { $sum: 1 } } },
+            { $sort: { totalPodcasts: -1 } },
+            { $limit : 1 },
+            { $project: { _id: 0, country: "$_id.country", totalPodcasts: "$totalPodcasts" } }
+        ])
+         */
         return null;
     }
 

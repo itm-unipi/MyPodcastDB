@@ -15,10 +15,11 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import static com.mongodb.client.model.Aggregates.*;
-import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Accumulators.*;
 import static com.mongodb.client.model.Sorts.*;
+import static com.mongodb.client.model.Accumulators.avg;
+import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Updates.set;
 
@@ -242,12 +243,72 @@ public class UserMongo {
 
     // ------------------------------- AGGREGATION QUERY -------------------------------- //
 
-    public List<Entry<String, Float>> showAverageAgeOfUsersPerFavouriteCategory(int limit) {
-        return null;
+    public List<Entry<String, Float>> showAverageAgeOfUsersPerFavouriteCategory(int lim) {
+        MongoManager manager = MongoManager.getInstance();
+
+        /*
+        db.user.aggregate([
+            { $group: { _id: { favouriteGenre: "$favouriteGenre"}, avgAge: { $avg: "$age"} } },
+            { $project: { _id: 0, favouriteGenre: "$_id.favouriteGenre", avgAge: "$avgAge" } }
+        ])
+         */
+
+        try {
+            Bson group = group("$favouriteGenre", avg("avg", "$age"));
+            Bson projectionsFields = fields(excludeId(), computed("FavouriteCategory", "$_id"), computed("avgAge", "$avg"));
+            Bson projection = project(projectionsFields);
+            Bson limit = limit(lim);
+
+            List<Entry<String, Float>> avgList = new ArrayList<>();
+
+            for (Document doc : manager.getCollection("user").aggregate(Arrays.asList(group, projection, limit))) {
+                double avg = doc.getDouble("avgAge");
+                Entry<String, Float> test = new AbstractMap.SimpleEntry<String, Float>(doc.getString("FavouriteCategory"), (float) avg);
+                avgList.add(test);
+            }
+
+            if (avgList.isEmpty())
+                return null;
+
+            return avgList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
-    public List<Entry<String, Float>> showAverageAgeOfUsersPerCountry(int limit) {
-        return null;
+    public List<Entry<String, Float>> showAverageAgeOfUsersPerCountry(int lim) {
+        MongoManager manager = MongoManager.getInstance();
+
+        /*
+        db.user.aggregate([
+            { $group: { _id: { country: "$country"}, avgAge: { $avg: "$age"} } },
+            { $project: { _id: 0, Country: "$_id.country", avgAge: "$avgAge" } }
+        ])
+        */
+
+        try {
+            Bson group = group("$country", avg("avg", "$age"));
+            Bson projectionsFields = fields(excludeId(), computed("Country", "$_id"), computed("avgAge", "$avg"));
+            Bson projection = project(projectionsFields);
+            Bson limit = limit(lim);
+
+            List<Entry<String, Float>> avgList = new ArrayList<>();
+
+            for (Document doc : manager.getCollection("user").aggregate(Arrays.asList(group, projection, limit))) {
+                double avg = doc.getDouble("avgAge");
+                Entry<String, Float> test = new AbstractMap.SimpleEntry<String, Float>(doc.getString("Country"), (float) avg);
+                avgList.add(test);
+            }
+
+            if (avgList.isEmpty())
+                return null;
+
+            return avgList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<Entry<String, Integer>> showNumberOfUsersPerCountry(int limit) {

@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -142,16 +143,43 @@ public class UserMongoTest {
             System.out.println(category);
     }
 
-    public void showNumberOfUsersPerCountryTest(){
+    public void showNumberOfUsersPerCountryTest() {
         List<Entry<String, Integer>> countries = this.userMongo.showNumberOfUsersPerCountry(10);
-        if ( countries == null || countries.isEmpty())
+        if (countries == null || countries.isEmpty())
             System.err.println("[-] showNumberOfUsersPerCountry");
         else
             System.out.println("[+] showNumberOfUsersPerCountry");
 
-        for(Entry<String, Integer> country : countries)
+        for (Entry<String, Integer> country : countries)
             System.out.println(country);
+    }
 
+    public void showAverageAgeOfUsersPerFavouriteCategoryTest() {
+        List<Entry<String, Float>> list = new ArrayList<>();
+        list = this.userMongo.showAverageAgeOfUsersPerFavouriteCategory(20);
+
+        if (list != null) {
+            System.out.println("[+] showAverageAgeOfUsersPerFavouriteCategory");
+            for (Entry<String , Float> e: list) {
+                //System.out.println(e.getKey() + " " + e.getValue());
+            }
+        } else {
+            System.err.println("[-] showAverageAgeOfUsersPerFavouriteCategory");
+        }
+    }
+
+    public void showAverageAgeOfUsersPerCountryTest() {
+        List<Entry<String, Float>> list = new ArrayList<>();
+        list = this.userMongo.showAverageAgeOfUsersPerCountry(20);
+
+        if (list != null) {
+            System.out.println("[+] showAverageAgeOfUsersPerCountry");
+            for (Entry<String , Float> e: list) {
+                //System.out.println(e.getKey() + " " + e.getValue());
+            }
+        } else {
+            System.err.println("[-] showAverageAgeOfUsersPerCountry");
+        }
     }
 
     public static void main(String[] args) {
@@ -160,12 +188,18 @@ public class UserMongoTest {
         UserMongoTest test = new UserMongoTest();
 
         /*test.findByUsernameTest();
+        System.out.println("############# MongoDB CRUD TEST #############");
+        test.findByUsernameTest();
         test.addTest();
         test.findsTest();
         test.updateTest();
         test.deleteTest();*/
         test.showFavouriteCategoryForGenderTest();
         test.showNumberOfUsersPerCountryTest();
+
+        System.out.println("############# MongoDB AGGREGATES TEST #############");
+        test.showAverageAgeOfUsersPerFavouriteCategoryTest();
+        test.showAverageAgeOfUsersPerCountryTest();
 
         manager.closeConnection();
     }
