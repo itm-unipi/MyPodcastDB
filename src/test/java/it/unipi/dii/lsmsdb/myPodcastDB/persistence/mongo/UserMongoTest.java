@@ -2,7 +2,9 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 public class UserMongoTest {
 
@@ -129,16 +131,49 @@ public class UserMongoTest {
             System.err.println("[-] deleteUserByUsername");
     }
 
+    public void showAverageAgeOfUsersPerFavouriteCategoryTest() {
+        List<Entry<String, Float>> list = new ArrayList<>();
+        list = this.userMongo.showAverageAgeOfUsersPerFavouriteCategory(20);
+
+        if (list != null) {
+            System.out.println("[+] showAverageAgeOfUsersPerFavouriteCategory");
+            for (Entry<String , Float> e: list) {
+                //System.out.println(e.getKey() + " " + e.getValue());
+            }
+        } else {
+            System.err.println("[-] showAverageAgeOfUsersPerFavouriteCategory");
+        }
+    }
+
+    public void showAverageAgeOfUsersPerCountryTest() {
+        List<Entry<String, Float>> list = new ArrayList<>();
+        list = this.userMongo.showAverageAgeOfUsersPerCountry(20);
+
+        if (list != null) {
+            System.out.println("[+] showAverageAgeOfUsersPerCountry");
+            for (Entry<String , Float> e: list) {
+                //System.out.println(e.getKey() + " " + e.getValue());
+            }
+        } else {
+            System.err.println("[-] showAverageAgeOfUsersPerCountry");
+        }
+    }
+
     public static void main(String[] args) {
         MongoManager manager = MongoManager.getInstance();
         manager.openConnection();
         UserMongoTest test = new UserMongoTest();
 
+        System.out.println("############# MongoDB CRUD TEST #############");
         test.findByUsernameTest();
         test.addTest();
         test.findsTest();
         test.updateTest();
         test.deleteTest();
+
+        System.out.println("############# MongoDB AGGREGATES TEST #############");
+        test.showAverageAgeOfUsersPerFavouriteCategoryTest();
+        test.showAverageAgeOfUsersPerCountryTest();
 
         manager.closeConnection();
     }
