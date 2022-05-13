@@ -10,11 +10,12 @@ public class UserNeo4jTest {
         manager.openConnection();
         UserNeo4jTest test = new UserNeo4jTest();
 
-        test.addUserTest();
+        /*test.addUserTest();
         test.addUserLikesPodcastTest();
         test.addUserWatchLaterPodcastTest();
         test.addUserFollowUserTest();
-        test.addUserFollowAuthorTest();
+        test.addUserFollowAuthorTest();*/
+        test.updateUserTest();
 
         manager.closeConnection();
 
@@ -66,6 +67,14 @@ public class UserNeo4jTest {
             System.out.println("[+] addUserFollowAuthor");
         else
             System.err.println("[-] addUserFollowAuthor");
+    }
+
+    public void updateUserTest(){
+        boolean result = this.userNeo4j.updateUser("user test", "user test3");
+        if(result)
+            System.out.println("[+] updateUser");
+        else
+            System.err.println("[-] updateUser");
     }
 
 

@@ -101,8 +101,19 @@ public class UserNeo4j {
 
     // --------- UPDATE --------- //
 
-    public boolean updateUser(User user) {
-        return false;
+    public boolean updateUser(String oldUsername, String newUsername) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $old})" +
+                "SET u.username = $new";
+        Value params = parameters("old", oldUsername, "new", newUsername);
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     // --------- DELETE --------- //
