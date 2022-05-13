@@ -50,6 +50,8 @@ public class PodcastMongoTest {
         test.showPodcastsWithHighestNumberOfReviewsTest();
         test.showAuthorWithHighestAverageRatingTest();
 
+        test.showCountriesWithHighestNumberOfPodcastsTest();
+
         mongoManager.closeConnection();
 
     }
@@ -385,6 +387,20 @@ public class PodcastMongoTest {
             System.out.println("[+] showAuthorWithHighestAverageRating");
             for(Entry<String, Float> author : authors)
                 System.out.println(author);
+        }
+    }
+
+    void showCountriesWithHighestNumberOfPodcastsTest() {
+        List<String> countries = new ArrayList<>();
+        countries = this.podcastMongo.showCountriesWithHighestNumberOfPodcasts(4);
+
+        if (countries != null) {
+            System.out.println("[+] showCountriesWithHighestNumberOfPodcasts");
+            //for (String s: countries) {
+                //System.out.println(s);
+            //}
+        } else {
+            System.err.println("[-] showCountriesWithHighestNumberOfPodcasts");
         }
     }
 }

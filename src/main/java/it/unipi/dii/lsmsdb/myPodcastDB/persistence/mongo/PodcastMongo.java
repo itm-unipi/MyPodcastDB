@@ -11,7 +11,6 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
@@ -25,6 +24,8 @@ import static com.mongodb.client.model.Aggregates.*;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Projections.*;
 import static com.mongodb.client.model.Accumulators.avg;
+import static com.mongodb.client.model.Accumulators.sum;
+import static com.mongodb.client.model.Projections.computed;
 import static com.mongodb.client.model.Sorts.descending;
 import static com.mongodb.client.model.Updates.*;
 
@@ -590,17 +591,35 @@ public class PodcastMongo {
 
     // ------------------------------- AGGREGATION QUERY -------------------------------- //
 
-    public List<String> showCountriesWithHighestNumberOfPodcasts(int limit) {
-        // TODO
-        /*
-        db.podcasts.aggregate([
+    public List<String> showCountriesWithHighestNumberOfPodcasts(int lim) {
+        MongoManager manager = MongoManager.getInstance();
+
+        /*db.podcasts.aggregate([
             { $group: { _id: { country: "$country" }, totalPodcasts: { $sum: 1 } } },
             { $sort: { totalPodcasts: -1 } },
             { $limit : 1 },
             { $project: { _id: 0, country: "$_id.country", totalPodcasts: "$totalPodcasts" } }
-        ])
-         */
-        return null;
+        ])*/
+
+        try {
+            Bson group = group("$country", sum("totalPodcasts", 1));
+            Bson projectionsFields = fields(excludeId(), computed("country", "$_id"), computed("totalPodcasts", "$sum"));
+            Bson projection = project(projectionsFields);
+            Bson sort = sort(descending("totalPodcasts"));
+            Bson limit = limit(lim);
+
+            List<String> countries = new ArrayList<String>();
+            for (Document doc :manager.getCollection("podcast").aggregate(Arrays.asList(group, sort, projection, limit)))
+                countries.add(doc.getString("country"));
+
+            if (countries.isEmpty())
+                return null;
+
+            return countries;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<Triplet<String, String, Float>> showPodcastsWithHighestAverageRating(int limit) {
