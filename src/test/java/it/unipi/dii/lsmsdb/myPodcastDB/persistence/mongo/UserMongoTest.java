@@ -133,22 +133,24 @@ public class UserMongoTest {
     public void showFavouriteCategoryForGenderTest(){
 
         List<String> categories = this.userMongo.showFavouriteCategoryForGender("male", 10);
-        if(categories.isEmpty() || categories == null)
+        if(categories == null || categories.isEmpty())
             System.err.println("[-] showFavouriteCategoryForGender");
         else
             System.out.println("[+] showFavouriteCategoryForGender");
 
-        System.out.println(categories);
+        for(String category : categories)
+            System.out.println(category);
     }
 
     public void showNumberOfUsersPerCountryTest(){
         List<Entry<String, Integer>> countries = this.userMongo.showNumberOfUsersPerCountry(10);
-        if (countries.isEmpty() || countries == null)
+        if ( countries == null || countries.isEmpty())
             System.err.println("[-] showNumberOfUsersPerCountry");
         else
             System.out.println("[+] showNumberOfUsersPerCountry");
 
-        System.out.println(countries);
+        for(Entry<String, Integer> country : countries)
+            System.out.println(country);
 
     }
 
