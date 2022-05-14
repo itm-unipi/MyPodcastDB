@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
+
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Record;
+import org.neo4j.driver.Value;
 
 public class PodcastNeo4j {
 
@@ -97,8 +100,33 @@ public class PodcastNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<Entry<String, String>> showPodcastsInWatchlist(String username, int limit) {
-        return null;
+    public List<Entry<String, String>> showPodcastsInWatchlist(User user, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = " MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast) RETURN p";
+        Value params = parameters("username", user.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Entry<String, String>> podcasts = new ArrayList<>();
+        for(Record record : result){
+            String podcastName = record.get(0).get("name").asString();
+            String podcastId = record.get(0).get("podcastId").asString();
+            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
+
     }
 
     public List<Entry<String, String>> showMostLikedPodcasts(int limit) {
@@ -109,20 +137,109 @@ public class PodcastNeo4j {
         return null;
     }
 
-    public List<String> showMostAppreciatedCategories(int limit) {
-        return null;
+    public List<Entry<String, Integer>> showMostAppreciatedCategories(int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = " MATCH (c:Category)<-[:BELONGS_TO]-(p:Podcast)<-[l:LIKES]-(:User)" + "\n" +
+                "WITH c, count(l) as likes" + "\n" +
+                "RETURN c.name as name, likes" + "\n" +
+                "ORDER BY likes desc" + "\n" +
+                "LIMIT $limit";
+        Value params = parameters("limit", limit);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Entry<String, Integer>> categories = new ArrayList<>();
+        for(Record record : result){
+            String categoryName = record.get(0).get("name").asString();
+            int likes = record.get(0).get("likes").asInt();
+            Entry<String, Integer> category = new AbstractMap.SimpleEntry<>(categoryName, likes);
+            categories.add(category);
+        }
+
+        return categories;
     }
 
-    public List<Entry<String, String>> showSuggestedPodcastsLikedByFollowedUsers(String username, int limit) {
-        return null;
+    public List<Entry<String, String>> showSuggestedPodcastsLikedByFollowedUsers(User user, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (source:User{username: $username})-[:FOLLOWS_USER]->(u:User)-[:LIKES]->(p:Podcast)," + "\n" +
+                "(p)<-[l:LIKES]-(:User)" + "\n" +
+                "WHERE NOT EXISTS { match (source)-[:LIKES]->(p) }" + "\n" +
+                "and NOT EXISTS { match (source)-[:WATCH_LATER]->(p) }" + "\n" +
+                "WITH p.name as name, p.podcastId as id, count(l) as likes" + "\n" +
+                "RETURN name, id, likes" + "\n" +
+                "ORDER BY likes desc" + "\n" +
+                "LIMIT $limit" ;
+        Value params = parameters("username", user.getUsername(), "limit", limit);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Entry<String, String>> podcasts = new ArrayList<>();
+        for(Record record : result){
+            String podcastName = record.get(0).get("name").asString();
+            String podcastId = record.get(0).get("id").asString();
+            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
     }
 
     public List<Entry<String, String>> showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(String username, int limit) {
         return null;
     }
 
-    public List<Entry<String, String>> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(String username, int limit) {
-        return null;
+    public List<Entry<String, String>> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(User user, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "match (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
+                "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
+                "WHERE NOT EXISTS { match (s)-[:WATCH_LATER]->(p2) }" + "\n" +
+                "and NOT EXISTS { match (source)-[:WATCH_LATER]->(p) }" + "\n" +
+                "WITH p.name as name, p.podcastId as id, count(l) as likes" + "\n" +
+                "return p2.name " + "\n" +
+                "LIMIT $limit" ;
+        Value params = parameters("username", user.getUsername(), "limit", limit);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Entry<String, String>> podcasts = new ArrayList<>();
+        for(Record record : result){
+            String podcastName = record.get(0).get("name").asString();
+            String podcastId = record.get(0).get("id").asString();
+            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
     }
 
     // ---------------------------------------------------------------------------------- //

@@ -34,6 +34,7 @@ public class UserNeo4jTest {
 
     }
 
+    public UserNeo4jTest(){ this.userNeo4j = new UserNeo4j();}
 
     /*
     CYPHER TO TEST
@@ -52,8 +53,6 @@ public class UserNeo4jTest {
     MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) DELETE p,a;
 
     */
-
-    public UserNeo4jTest(){ this.userNeo4j = new UserNeo4j();}
 
     public void addUserTest(){
 
@@ -309,6 +308,8 @@ public class UserNeo4jTest {
             System.out.println("[+] deleteAllUserFollowAuthor");
         else
             System.err.println("[-] deleteAllUserFollowAuthor");
+
+        this.userNeo4j.deleteUser(user);
 
     }
 
