@@ -10,9 +10,9 @@ public class UserNeo4jTest {
     }
 
     public void showSuggestedUsersByFollowedAuthorsTest() {
-        List<String> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("organicmouse599943", 10);
+        List<String> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("organicmouse599943", 4);
 
-        if (suggestedUsers != null) {
+        if (suggestedUsers != null && suggestedUsers.size() == 4) {
             System.out.println("[+] showSuggestedUsersByFollowedAuthors");
         } else
             System.err.println("[-] showSuggestedUsersByFollowedAuthors");
