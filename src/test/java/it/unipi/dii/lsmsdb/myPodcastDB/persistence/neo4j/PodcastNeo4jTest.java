@@ -205,6 +205,17 @@ public class PodcastNeo4jTest {
             System.out.println(podcast);
     }
 
+    public void showMostLikedPodcastsTest () {
+        List<Entry<String, Integer>> mostLikedPodcasts = podcastNeo4j.showMostLikedPodcasts(5);
+
+        if (mostLikedPodcasts != null && mostLikedPodcasts.size() == 5) {
+            //for (Entry<String, Integer> e : mostLikedPodcasts)
+            //    System.out.println(e);
+            System.out.println("[+] showMostLikedPodcasts");
+        } else
+            System.err.println("[-] showMostLikedPodcasts");
+    }
+
     public static void main(String[] args) {
         System.out.println("Test");
 
@@ -228,6 +239,7 @@ public class PodcastNeo4jTest {
         test.showMostAppreciatedCategoriesTest();
         test.showSuggestedPodcastsLikedByFollowedUsersTest();
         test.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlistTest();
+        test.showMostLikedPodcastsTest();
 
         manager.closeConnection();
     }

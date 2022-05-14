@@ -12,6 +12,8 @@ import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
 
+import static org.neo4j.driver.Values.parameters;
+
 public class AuthorNeo4j {
 
     // ------------------------------- CRUD OPERATION ----------------------------------- //
@@ -168,22 +170,44 @@ public class AuthorNeo4j {
 
         try {
             result = manager.read(query, params);
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        if(result == null || !result.iterator().hasNext())
+        if (result == null || !result.iterator().hasNext())
             return null;
 
         List<String> authors = new ArrayList<>();
-        for(Record record : result){
+        for (Record record : result) {
             authors.add(record.get(0).get("name").asString());
         }
 
         return authors;
+    }
 
+    public List<String> showSuggestedAuthorsFollowedByFollowedUser(String username, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (u:User { username: $username })-[:FOLLOWS_USER]-(:User)-[:FOLLOWS]->(a1:Author) " +
+                    "WHERE NOT EXISTS " +
+                    "{ MATCH (u)-[:FOLLOWS]->(a1) }" +
+                    "RETURN DISTINCT a1.name as AuthorName " +
+                    "LIMIT $limit";
+            List<Record> result = manager.read(query, parameters("username", username, "limit", limit));
+
+            if (result.isEmpty())
+                return null;
+
+            List<String> authors = new ArrayList<String>();
+            for (Record record: result)
+                authors.add(record.get("AuthorName").asString());
+
+            return authors;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<String> showSuggestedAuthorsFollowedByFollowedUser(String username) {

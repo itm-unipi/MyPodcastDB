@@ -2,6 +2,10 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;
+
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import org.neo4j.driver.Record;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -511,22 +515,45 @@ public class UserNeo4j {
 
         try {
             result = manager.read(query, params);
-
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
 
-        if(result == null || !result.iterator().hasNext())
+        if (result == null || !result.iterator().hasNext())
             return null;
 
         List<String> users = new ArrayList<>();
-        for(Record record : result){
+        for (Record record : result) {
             users.add(record.get(0).get("username").asString());
         }
 
         return users;
+    }
 
+    public List<String> showSuggestedUsersByFollowedAuthors(String username, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (u1:User {username: $username })-[:FOLLOWS]->(:Author)<-[:FOLLOWS]-(u2:User) " +
+                    "WHERE NOT EXISTS " +
+                    "{ MATCH (u1)-[:FOLLOWS_USER]->(u2) } " +
+                    "RETURN DISTINCT u2.username as Username " +
+                    "LIMIT $limit";
+            List<Record> result = manager.read(query, parameters("username", username, "limit", limit));
+
+            if (result.isEmpty())
+                return null;
+
+            List<String> suggestedUsers = new ArrayList<String>();
+            for (Record record: result)
+                suggestedUsers.add(record.get("Username").asString());
+
+            return suggestedUsers;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<String> showSuggestedUsersByFollowedAuthors(String username) {

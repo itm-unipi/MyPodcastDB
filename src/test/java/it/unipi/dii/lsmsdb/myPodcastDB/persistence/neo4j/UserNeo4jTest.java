@@ -34,6 +34,7 @@ public class UserNeo4jTest {
         test.deleteAllUserFollowAuthorTest();
         test.showFollowedUserTest();
         test.showSuggestedUsersByLikedPodcastsTest();
+        test.showSuggestedUsersByFollowedAuthorsTest();
 
         manager.closeConnection();
     }
@@ -353,5 +354,14 @@ public class UserNeo4jTest {
             System.out.println("[+] showSuggestedUsersByLikedPodcasts");
         else
             System.err.println("[-] showSuggestedUsersByLikedPodcasts");
+    }
+
+    public void showSuggestedUsersByFollowedAuthorsTest() {
+        List<String> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("organicmouse599943", 10);
+
+        if (suggestedUsers != null) {
+            System.out.println("[+] showSuggestedUsersByFollowedAuthors");
+        } else
+            System.err.println("[-] showSuggestedUsersByFollowedAuthors");
     }
 }

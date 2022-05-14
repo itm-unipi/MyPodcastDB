@@ -129,6 +129,15 @@ public class AuthorNeo4jTest {
             System.err.println("[-] showMostFollowedAuthor");
     }
 
+    public void showSuggestedAuthorsFollowedByFollowedUserTest() {
+        List<String> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10);
+
+        if (authors != null && authors.size() == 10)
+            System.out.println("[+] showSuggestedAuthorsFollowedByFollowedUser");
+        else
+            System.err.println("[-] showSuggestedAuthorsFollowedByFollowedUser");
+    }
+
     public static void main(String[] args) {
         Neo4jManager manager = Neo4jManager.getInstance();
         manager.openConnection();
@@ -141,6 +150,7 @@ public class AuthorNeo4jTest {
         test.deleteAuthorFollowsAuthorTest();
         test.deleteAllAuthorFollowsAuthorTest();
         test.showMostFollowedAuthorTest();
+        test.showSuggestedAuthorsFollowedByFollowedUserTest();
 
         manager.closeConnection();
     }

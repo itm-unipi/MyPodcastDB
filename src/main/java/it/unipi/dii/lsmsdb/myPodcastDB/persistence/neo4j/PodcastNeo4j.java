@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
@@ -251,8 +252,34 @@ public class PodcastNeo4j {
 
     }
 
-    public List<Entry<String, String>> showMostLikedPodcasts(int limit) {
-        return null;
+    public List<Entry<String, Integer>> showMostLikedPodcasts(int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast)-[l:LIKES]-() " +
+                    "WITH p.name as PodcastName, COUNT(l) as Likes " +
+                    "RETURN PodcastName, Likes " +
+                    "ORDER BY Likes DESC " +
+                    "LIMIT $limit";
+            List<Record> result = manager.read(query, parameters("limit", limit));
+
+            if (result.isEmpty())
+                return null;
+
+            List<Entry<String, Integer>> mostLikedPodcasts = new ArrayList<>();
+            for (Record record: result) {
+                String podcastName = record.get("PodcastName").asString();
+                int likes = record.get("Likes").asInt();
+
+                Entry<String, Integer> podcast = new AbstractMap.SimpleEntry<>(podcastName, likes);
+                mostLikedPodcasts.add(podcast);
+            }
+
+            return mostLikedPodcasts;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public List<Entry<String, Integer>> showMostNumerousCategories(int limit) {
