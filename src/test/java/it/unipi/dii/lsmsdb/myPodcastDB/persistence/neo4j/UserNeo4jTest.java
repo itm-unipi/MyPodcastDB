@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class UserNeo4jTest {
@@ -31,6 +32,7 @@ public class UserNeo4jTest {
         test.deleteAllUserFollowUserTest();
         test.deleteUserFollowAuthorTest();
         test.deleteAllUserFollowAuthorTest();
+        test.showFollowedUserTest();
 
 
     }
@@ -51,7 +53,7 @@ public class UserNeo4jTest {
     MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) RETURN p,a;
 
     TO CLEAN
-    MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) DELETE DETACH p,a;
+    MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) DETACH DELETE p,a;
 
     */
 
@@ -313,6 +315,21 @@ public class UserNeo4jTest {
             System.err.println("[-] deleteAllUserFollowAuthor");
 
         this.userNeo4j.deleteUser(user);
+
+    }
+
+    public void showFollowedUserTest(){
+
+        User user = new User();
+        user.setUsername("silverelephant716273");
+        List<String> podcasts = this.userNeo4j.showFollowedUsers(user, 10);
+        if(podcasts != null)
+            System.out.println("[+] showFollowedUserTest");
+        else
+            System.err.println("[-] showFollowedUserTest");
+
+        for(String podcast : podcasts)
+            System.out.println(podcast);
 
     }
 

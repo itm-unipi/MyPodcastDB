@@ -5,7 +5,10 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.neo4j.driver.Values.parameters;
 import org.neo4j.driver.Record;
@@ -447,6 +450,34 @@ public class UserNeo4j {
     // ---------------------------------------------------------------------------------- //
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
+
+    public List<String> showFollowedUsers(User user, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = " MATCH (u1:User { username: $username})-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
+                "RETURN u2" + "\n" +
+                "LIMIT $limit";
+        Value params = parameters("username", user.getUsername(), "limit", limit);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<String> users = new ArrayList<>();
+        for(Record record : result){
+            users.add(record.get(0).get("username").asString());
+        }
+
+        return users;
+
+    }
 
     public List<String> showSuggestedUsersByFollowedAuthors(String username) {
         return null;
