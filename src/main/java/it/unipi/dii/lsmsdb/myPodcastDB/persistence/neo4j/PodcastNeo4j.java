@@ -133,7 +133,7 @@ public class PodcastNeo4j {
 
         try {
             manager.write(
-                    "MATCH (p:Podcast) WHERE id(p) = $id DELETE p",
+                    "MATCH (p:Podcast) WHERE id(p) = $id DETACH DELETE p",
                     parameters("id", id)
             );
             return true;
@@ -148,7 +148,7 @@ public class PodcastNeo4j {
 
         try {
             manager.write(
-                    "MATCH (p:Podcast { podcastId: $podcastId }) DELETE p",
+                    "MATCH (p:Podcast { podcastId: $podcastId }) DETACH DELETE p",
                     parameters("podcastId", id)
             );
             return true;
@@ -163,7 +163,7 @@ public class PodcastNeo4j {
 
         try {
             manager.write(
-                    "MATCH (p:Podcast { name: $name }) DELETE p",
+                    "MATCH (p:Podcast { name: $name }) DETACH DELETE p",
                     parameters("name", name)
             );
             return true;

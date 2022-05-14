@@ -108,7 +108,6 @@ public class PodcastNeo4jTest {
         } else
             System.err.println("[-] deletePodcastBelongsToCategory");
 
-        podcastNeo4j.deleteAllPodcastBelongsToCategory(podcast.getId());
         podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
