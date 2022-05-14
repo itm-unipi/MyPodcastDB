@@ -20,44 +20,78 @@ public class PodcastNeo4j {
     // --------- CREATE --------- //
 
     public boolean addPodcast(Podcast podcast) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            manager.write(
+                    "CREATE (p:Podcast {name: $name, podcastId: $podcastId})",
+                    parameters("name", podcast.getName(), "podcastId", podcast.getId())
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public boolean addPodcastBelongsToCategory(Podcast podcast) {
-        return false;
+    public boolean addPodcastBelongsToCategory(Podcast podcast, String category) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId }) " +
+                           "MATCH (c:Category { name: $name }) " +
+                           "CREATE (p)-[r:BELONGS_TO]->(c)";
+            manager.write(query, parameters("podcastId", podcast.getId(), "name", category));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean addPodcastCreatedByAuthor(Podcast podcast) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId }) " +
+                           "MATCH (a:Author { name: $name }) " +
+                           "CREATE (p)-[r:CREATED_BY]->(a)";
+            manager.write(query, parameters("podcastId", podcast.getId(), "name", podcast.getAuthorName()));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // ---------- READ ---------- //
 
     public List<Entry<String, String>> findPodcastsByName(String name) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        List<Record> result = null;
+
         try {
-            result = manager.read(
+            List<Record> result = manager.read(
                     "MATCH (p:Podcast {name: $name}) RETURN p LIMIT 10",
                     parameters("name", name)
             );
+
+            if (result == null)
+                return null;
+
+            List<Entry<String, String>> podcasts = new ArrayList<>();
+            for (Record record : result) {
+                String podcastId = record.get(0).get("podcastId").asString();
+                String podcastName = record.get(0).get("name").asString();
+
+                Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
+                podcasts.add(podcast);
+            }
+
+            return podcasts;
         } catch (Exception e) {
             e.printStackTrace();
-        }
-
-        if (result == null)
             return null;
-
-        List<Entry<String, String>> podcasts = new ArrayList<>();
-        for (Record record : result) {
-            String podcastId = record.get(0).get("podcastId").asString();
-            String podcastName = record.get(0).get("name").asString();
-
-            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
-            podcasts.add(podcast);
         }
-
-        return podcasts;
     }
 
     // --------- UPDATE --------- //
@@ -69,31 +103,90 @@ public class PodcastNeo4j {
     // --------- DELETE --------- //
 
     public boolean deletePodcastById(int id) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            manager.write(
+                    "MATCH (p:Podcast) WHERE id(p) = $id DELETE p",
+                    parameters("id", id)
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deletePodcastByPodcastId(String id) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            manager.write(
+                    "MATCH (p:Podcast { podcastId: $podcastId }) DELETE p",
+                    parameters("podcastId", id)
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public int deletePodcastsByName(String name) {
-        return -1;
+    public boolean deletePodcastsByName(String name) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            manager.write(
+                    "MATCH (p:Podcast { name: $name }) DELETE p",
+                    parameters("name", name)
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deletePodcastBelongsToCategory(String podcastId, String category) {
-        return false;
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId })-[r:BELONGS_TO]->(c:Category { name: $name })" +
+                            "DELETE r" ;
+            manager.write(query, parameters("podcastId", podcastId, "name", category));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
-    public int deleteAllPodcastBelongsToCategory(String podcastId) {
-        return -1;
+    public boolean deleteAllPodcastBelongsToCategory(String podcastId) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId })-[r:BELONGS_TO]-(c)" +
+                           "DELETE r";
+            manager.write(query, parameters("podcastId", podcastId));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean deletePodcastCreatedByAuthor(String podcastId, String authorName) {
-        return false;
-    }
+        Neo4jManager manager = Neo4jManager.getInstance();
 
-    public int deleteAllPodcastCreatedByAuthor(String podcastId) {
-        return -1;
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId })-[r:CREATED_BY]-> (a:Author { name: $name })" +
+                           "DELETE r" ;
+            manager.write(query, parameters("podcastId", podcastId, "name", authorName));
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // ---------------------------------------------------------------------------------- //
