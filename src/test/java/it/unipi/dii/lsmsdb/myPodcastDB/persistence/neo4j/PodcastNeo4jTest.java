@@ -127,6 +127,17 @@ public class PodcastNeo4jTest {
         podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
+    public void showMostLikedPodcastsTest () {
+        List<Entry<String, Integer>> mostLikedPodcasts = podcastNeo4j.showMostLikedPodcasts(5);
+
+        if (mostLikedPodcasts != null && mostLikedPodcasts.size() == 5) {
+            //for (Entry<String, Integer> e : mostLikedPodcasts)
+            //    System.out.println(e);
+            System.out.println("[+] showMostLikedPodcasts");
+        } else
+            System.err.println("[-] showMostLikedPodcasts");
+    }
+
     public static void main(String[] args) {
         System.out.println("Test");
 
@@ -143,7 +154,9 @@ public class PodcastNeo4jTest {
         test.deletePodcastByPodcastIdTest();
         test.deletePodcastsByNameTest();
         test.deletePodcastBelongsToCategoryTest();
-        test.deleteAllPodcastBelongsToCategoryTest();;
+        test.deleteAllPodcastBelongsToCategoryTest();
+
+        test.showMostLikedPodcastsTest();
 
         manager.closeConnection();
     }
