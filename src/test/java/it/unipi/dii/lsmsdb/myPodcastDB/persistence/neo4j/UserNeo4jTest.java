@@ -4,6 +4,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
+import java.util.Scanner;
+
 public class UserNeo4jTest {
 
     UserNeo4j userNeo4j;
@@ -30,7 +32,6 @@ public class UserNeo4jTest {
         test.deleteUserFollowAuthorTest();
         test.deleteAllUserFollowAuthorTest();
 
-        manager.closeConnection();
 
     }
 
@@ -50,7 +51,7 @@ public class UserNeo4jTest {
     MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) RETURN p,a;
 
     TO CLEAN
-    MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) DELETE p,a;
+    MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) DELETE DETACH p,a;
 
     */
 
@@ -252,10 +253,11 @@ public class UserNeo4jTest {
         User user1 = new User();
         User user2 = new User();
         User user3 = new User();
-        user.setUsername("user test3");
         user.setUsername("user test5");
-        user.setUsername("user test6");
-        user.setUsername("user test7");
+        user1.setUsername("user test6");
+        user2.setUsername("user test7");
+        user3.setUsername("user test8");
+        this.userNeo4j.addUser(user);
         this.userNeo4j.addUser(user1);
         this.userNeo4j.addUser(user2);
         this.userNeo4j.addUser(user3);
@@ -269,6 +271,7 @@ public class UserNeo4jTest {
         else
             System.err.println("[-] deleteAllUserFollowUser");
 
+        this.userNeo4j.deleteUser(user);
         this.userNeo4j.deleteUser(user1);
         this.userNeo4j.deleteUser(user2);
         this.userNeo4j.deleteUser(user3);
@@ -297,8 +300,8 @@ public class UserNeo4jTest {
         Author author3 = new Author();
         user.setUsername("user test3");
         author1.setName("author test1");
-        author1.setName("author test2");
-        author1.setName("author test3");
+        author2.setName("author test2");
+        author3.setName("author test3");
         this.userNeo4j.addUserFollowAuthor(user, author1);
         this.userNeo4j.addUserFollowAuthor(user, author2);
         this.userNeo4j.addUserFollowAuthor(user, author3);

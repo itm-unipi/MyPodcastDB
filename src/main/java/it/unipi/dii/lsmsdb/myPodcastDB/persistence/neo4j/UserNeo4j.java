@@ -302,9 +302,9 @@ public class UserNeo4j {
 
     // --------- DELETE --------- //
 
-    public boolean deleteUser(User user) {
+    public boolean deleteUser(User user) { //use DETACH
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User{username: $username}) DELETE u";
+        String query = "MATCH (u:User{username: $username}) DETACH DELETE u";
         Value params = parameters("username", user.getUsername());
 
         try {
