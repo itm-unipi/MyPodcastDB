@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
 
@@ -13,11 +15,11 @@ public class UserNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addUser(String username) {
+    public boolean addUser(User user) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "CREATE (u:User {username: $username})";
-        Value params = parameters("username", username);
+        Value params = parameters("username", user.getUsername());
 
         try {
             manager.write(query, params);
@@ -29,12 +31,12 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean addUserLikesPodcast(String username, String podcastId) {
+    public boolean addUserLikesPodcast(User user, Podcast podcast) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username})," +
                 "(p:Podcast{podcastId: $podcastId})"+
                 "CREATE (u)-[:LIKES]->(p)";
-        Value params = parameters("username", username, "podcastId", podcastId);
+        Value params = parameters("username", user.getUsername(), "podcastId", podcast.getId());
 
         try {
             manager.write(query, params);
@@ -46,12 +48,12 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean addUserWatchLaterPodcast(String username, String podcastId) {
+    public boolean addUserWatchLaterPodcast(User user, Podcast podcast) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username})," +
                 "(p:Podcast{podcastId: $podcastId})"+
                 "CREATE (u)-[:WATCH_LATER]->(p)";
-        Value params = parameters("username", username, "podcastId", podcastId);
+        Value params = parameters("username", user.getUsername(), "podcastId", podcast.getId());
 
         try {
             manager.write(query, params);
@@ -63,12 +65,12 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean addUserFollowUser(String username, String userToFollow) {
+    public boolean addUserFollowUser(User user, User userToFollow) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u1:User{username: $username})," +
                 "(u2:User{username: $userToFollow})"+
                 "CREATE (u1)-[:FOLLOWS_USER]->(u2)";
-        Value params = parameters("username", username, "userToFollow", userToFollow);
+        Value params = parameters("username", user.getUsername(), "userToFollow", userToFollow.getUsername());
 
         try {
             manager.write(query, params);
@@ -80,12 +82,12 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean addUserFollowAuthor(String username, String authorName) {
+    public boolean addUserFollowAuthor(User user, Author author) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username})," +
                 "(a:Author{name: $authorName})"+
                 "CREATE (u)-[:FOLLOWS]->(a)";
-        Value params = parameters("username", username, "authorName", authorName);
+        Value params = parameters("username", user.getUsername(), "authorName", author.getName());
 
         try {
             manager.write(query, params);
@@ -98,14 +100,15 @@ public class UserNeo4j {
     }
 
     // ---------- READ ---------- //
+    
 
     // --------- UPDATE --------- //
 
-    public boolean updateUser(String oldUsername, String newUsername) {
+    public boolean updateUser(User user, String newUsername) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $old})" +
                 "SET u.username = $new";
-        Value params = parameters("old", oldUsername, "new", newUsername);
+        Value params = parameters("old", user.getUsername(), "new", newUsername);
 
         try {
             manager.write(query, params);
@@ -113,15 +116,16 @@ public class UserNeo4j {
             e.printStackTrace();
             return false;
         }
+        user.setUsername(newUsername);
         return true;
     }
 
     // --------- DELETE --------- //
 
-    public boolean deleteUser(String username) {
+    public boolean deleteUser(User user) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username}) DELETE u";
-        Value params = parameters("username", username);
+        Value params = parameters("username", user.getUsername());
 
         try {
             manager.write(query, params);
@@ -132,36 +136,132 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean deleteUserLikesPodcast(String username, String podcastId) {
-        return false;
+    public boolean deleteUserLikesPodcast(User user, Podcast podcast) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User)-[r:LIKES]->(p:Podcast)" + "\n" +
+                        "WHERE u.username = $username and p.podcastId = $podcastId" + "\n" +
+                        "DELETE r";
+        Value params = parameters("username", user.getUsername(), "podcastId", podcast.getId());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public int deleteAllUserLikesPodcast(String username) {
-        return -1;
+    public boolean deleteAllUserLikesPodcast(User user) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User)-[r:LIKES]->(p:Podcast)" + "\n" +
+                "WHERE u.username = $username" + "\n" +
+                "DELETE r";
+        Value params = parameters("username", user.getUsername());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public boolean deleteUserWatchLaterPodcast(String username, String podcastId) {
-        return false;
+    public boolean deleteUserWatchLaterPodcast(User user, Podcast podcast) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User)-[r:WATCH_LATER]->(p:Podcast)" + "\n" +
+                "WHERE u.username = $username and p.podcastId = $podcastId" + "\n" +
+                "DELETE r";
+        Value params = parameters("username", user.getUsername(), "podcastId", podcast.getId());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public int deleteAllUserWatchLaterPodcast(String username) {
-        return -1;
+    public boolean deleteAllUserWatchLaterPodcast(User user) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User)-[r:WATCH_LATER]->(p:Podcast)" + "\n" +
+                "WHERE u.username = $username" + "\n" +
+                "DELETE r";
+        Value params = parameters("username", user.getUsername());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public boolean deleteUserFollowUser(String username, String userFollowed) {
-        return false;
+    public boolean deleteUserFollowUser(User user1, User user2) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u1:User)-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
+                "WHERE u1.username = $username1 and u2.username = $username2" + "\n" +
+                "DELETE r";
+        Value params = parameters("username1", user1.getUsername(), "username2", user2.getUsername());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public int deleteAllUserFollowUser(String username) {
-        return -1;
+    public boolean deleteAllUserFollowUser(User user) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u1:User)-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
+                "WHERE u1.username = $username" + "\n" +
+                "DELETE r";
+        Value params = parameters("username", user.getUsername());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public boolean deleteUserFollowAuthor(String username, String author) {
-        return false;
+    public boolean deleteUserFollowAuthor(User user, Author author) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User)-[r:FOLLOWS]->(a:Author)" + "\n" +
+                "WHERE u.username = $username and a.name = $authorName" + "\n" +
+                "DELETE r";
+        Value params = parameters("username", user.getUsername(), "authorName", author.getName());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
-    public int deleteAllUserFollowAuthor(String username, String author) {
-        return -1;
+    public boolean deleteAllUserFollowAuthor(User user) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User)-[r:FOLLOWS]->(a:Author)" + "\n" +
+                "WHERE u.username = $username" + "\n" +
+                "DELETE r";
+        Value params = parameters("username", user.getUsername());
+
+        try {
+            manager.write(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     // ---------------------------------------------------------------------------------- //
