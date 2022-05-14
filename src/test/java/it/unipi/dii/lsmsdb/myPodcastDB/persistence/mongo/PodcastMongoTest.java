@@ -151,7 +151,6 @@ public class PodcastMongoTest {
     }
  
     void findPodcastsByCategoryTest(){
-
         String category = "Business";
         List<Podcast> podcasts = this.podcastMongo.findPodcastsByCategory(category, 0);
 
@@ -171,7 +170,6 @@ public class PodcastMongoTest {
     }
 
     void updatePodcastTest(){
-
         String name = "testPodcastAfterUpdate";
         Podcast p1 = this.podcastMongo.findPodcastsByName("testPodcast",1).get(0);
         Podcast p2 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
@@ -213,7 +211,6 @@ public class PodcastMongoTest {
     }
  
     void addReviewToPodcastTest(){
-
         String podcastName = "testPodcastAfterUpdate";
         Podcast podcast = this.podcastMongo.findPodcastsByName(podcastName,1).get(0);
         Entry<String, Integer> newReview = new AbstractMap.SimpleEntry<>("100000000000000001021405", 5) ;
@@ -228,7 +225,6 @@ public class PodcastMongoTest {
     }
  
     void deletePodcastByIdTest() {
-
         Podcast podcast = this.podcastMongo.findPodcastsByName("testPodcastAfterUpdate",1).get(0);
         String id = podcast.getId();
         if (this.podcastMongo.deletePodcastById(id) && this.podcastMongo.findPodcastById(id) == null)
@@ -238,7 +234,6 @@ public class PodcastMongoTest {
     }
  
     void deletePodcastsByNameTest() {
-
         String name = "testPodcast";
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
         podcast.setName(name);

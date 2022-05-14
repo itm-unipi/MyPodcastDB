@@ -20,7 +20,7 @@ public class Neo4jManager implements AutoCloseable {
     public boolean openConnection() {
         String uri = "neo4j://localhost:7687";                      // ConfigManager.GetNeo4JConnectorString();
         String user = "neo4j";                                      // ConfigManager.GetNeo4JUser();
-        String password = "password";                               // ConfigManager.GetNeo4JPassword();
+        String password = "ciambella";                               // ConfigManager.GetNeo4JPassword();
 
         try {
             this.driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));
