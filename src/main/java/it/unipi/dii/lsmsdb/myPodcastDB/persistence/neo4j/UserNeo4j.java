@@ -6,12 +6,17 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
 
 import java.util.AbstractMap;
+import org.neo4j.driver.Record;
+import org.neo4j.driver.Value;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import static org.neo4j.driver.Values.parameters;
 import org.neo4j.driver.Record;
+
+import static org.neo4j.driver.Values.parameters;
 
 public class UserNeo4j {
 
@@ -105,6 +110,68 @@ public class UserNeo4j {
 
     // ---------- READ ---------- //
 
+    public boolean findUserByUsername(String user) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> results = new ArrayList<>();
+        try {
+            String query = "MATCH (u:User {username: $username}) RETURN u";
+            Value params = parameters("username", user);
+            results = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        for (Record record : results)
+            if (record.get(0).get("name").asString().equals(user))
+                return true;
+
+        return false;
+    }
+
+    public boolean findUserFollowsUser(String username, String userFollowed) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> results = new ArrayList<>();
+        try {
+            String query =  "MATCH (u1:User {username: $follower})-[r:FOLLOWS_USER]->(u2:User {username: $followed}) " +
+                    "RETURN r";
+            Value params = parameters("follower", username, "followed", userFollowed);
+            manager.write(query, params);
+            results = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (results.isEmpty())
+            return false;
+
+        return true;
+    }
+
+    public boolean findUserFollowsAuthor(String username, String authorFollowed) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> results = new ArrayList<>();
+        try {
+            String query = "MATCH (u:User {username: $follower})-[r:FOLLOWS]->(a:Author {name: $followed}) " +
+                    "RETURN r";
+            Value params = parameters("follower", username, "followed", authorFollowed);
+            manager.write(query, params);
+            results = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if (results.isEmpty())
+            return false;
+
+        return true;
+    }
+
     public boolean checkUserExists(User user){
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username}) RETURN u";
@@ -113,7 +180,6 @@ public class UserNeo4j {
 
         try {
             result = manager.read(query, params);
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -133,7 +199,6 @@ public class UserNeo4j {
 
         try {
             result = manager.read(query, params);
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -153,7 +218,6 @@ public class UserNeo4j {
 
         try {
             result = manager.read(query, params);
-
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -383,68 +447,65 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean deleteUserFollowUser(User user1, User user2) {
+
+    public boolean deleteUserFollowUser(String username, String userFollowed) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u1:User)-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
-                "WHERE u1.username = $username1 and u2.username = $username2" + "\n" +
-                "DELETE r";
-        Value params = parameters("username1", user1.getUsername(), "username2", user2.getUsername());
 
         try {
+            String query =  "MATCH (u1:User {username: $follower})-[r:FOLLOWS_USER]->(u2:User {username: $followed}) " +
+                            "DELETE r";
+            Value params = parameters("follower", username, "followed", userFollowed);
             manager.write(query, params);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
     }
 
-    public boolean deleteAllUserFollowUser(User user) {
+    public boolean deleteAllUserFollowUser(String username) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u1:User)-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
-                "WHERE u1.username = $username" + "\n" +
-                "DELETE r";
-        Value params = parameters("username", user.getUsername());
 
         try {
+            String query =  "MATCH (u1:User {username: $username})-[r:FOLLOWS_USER]->() " +
+                            "DELETE r";
+            Value params = parameters("username", username);
             manager.write(query, params);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
     }
 
-    public boolean deleteUserFollowAuthor(User user, Author author) {
+    public boolean deleteUserFollowAuthor(String username, String author) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User)-[r:FOLLOWS]->(a:Author)" + "\n" +
-                "WHERE u.username = $username and a.name = $authorName" + "\n" +
-                "DELETE r";
-        Value params = parameters("username", user.getUsername(), "authorName", author.getName());
 
         try {
+            String query =  "MATCH (u:User {username: $follower})-[r:FOLLOWS]->(a:Author {name: $followed}) " +
+                            "DELETE r";
+            Value params = parameters("follower", username, "followed", author);
             manager.write(query, params);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
     }
 
-    public boolean deleteAllUserFollowAuthor(User user) {
+    public boolean deleteAllUserFollowAuthor(String username) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User)-[r:FOLLOWS]->(a:Author)" + "\n" +
-                "WHERE u.username = $username" + "\n" +
-                "DELETE r";
-        Value params = parameters("username", user.getUsername());
 
         try {
+            String query =  "MATCH (u:User {username: $username})-[r:FOLLOWS]->() " +
+                            "DELETE r";
+            Value params = parameters("username", username);
             manager.write(query, params);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-        return true;
     }
 
     // ---------------------------------------------------------------------------------- //
