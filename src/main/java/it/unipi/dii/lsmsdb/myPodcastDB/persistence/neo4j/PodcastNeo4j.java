@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
 import org.neo4j.driver.Record;
+import org.neo4j.driver.Value;
 
 public class PodcastNeo4j {
 
@@ -105,8 +106,34 @@ public class PodcastNeo4j {
         return null;
     }
 
-    public List<String> showMostNumerousCategories(int limit) {
-        return null;
+    public List<Entry<String, Integer>> showMostNumerousCategories(int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> result = null;
+        try {
+            String query =  "MATCH (c:Category)<-[b:BELONGS_TO]-() " +
+                            "WITH c.name as name, COUNT(b) AS belonging " +
+                            "RETURN name, belonging " +
+                            "ORDER BY belonging DESC " +
+                            "LIMIT $limit";
+            Value params = parameters("limit", limit);
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (result == null)
+            return null;
+
+        List<Entry<String, Integer>> categories = new ArrayList<>();
+        for (Record record : result) {
+            String name = record.get("name").asString();
+            int value = record.get("belonging").asInt();
+            Entry<String, Integer> category = new AbstractMap.SimpleEntry<>(name, value);
+            categories.add(category);
+        }
+
+        return categories;
     }
 
     public List<String> showMostAppreciatedCategories(int limit) {
@@ -118,7 +145,33 @@ public class PodcastNeo4j {
     }
 
     public List<Entry<String, String>> showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(String username, int limit) {
-        return null;
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> result = null;
+        try {
+            String query =  "MATCH (u:User {username: $username})-[:LIKES]->(liked:Podcast) " +
+                            "MATCH (liked)-[:BELONGS_TO]->(:Category)<-[:BELONGS_TO]-(p:Podcast) " +
+                            "WHERE NOT EXISTS {MATCH (u)-[:LIKES]->(p)} " +
+                            "RETURN p.name as name, p.podcastId as pid " +
+                            "LIMIT $limit";
+            Value params = parameters("username", username, "limit", limit);
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (result == null)
+            return null;
+
+        List<Entry<String, String>> podcasts = new ArrayList<>();
+        for (Record record : result) {
+            String id = record.get("pid").asString();
+            String name = record.get("name").asString();
+            Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(id, name);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
     }
 
     public List<Entry<String, String>> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(String username, int limit) {

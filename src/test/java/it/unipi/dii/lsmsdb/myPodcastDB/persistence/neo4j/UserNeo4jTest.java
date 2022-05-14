@@ -3,6 +3,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
+import java.util.List;
+
 public class UserNeo4jTest {
     UserNeo4j userNeo4j;
     AuthorNeo4j authorNeo4j;
@@ -100,5 +102,28 @@ public class UserNeo4jTest {
         this.userNeo4j.deleteUser("test1");
         this.authorNeo4j.deleteAuthor("test2");
         this.authorNeo4j.deleteAuthor("test3");
+    }
+
+    void showSuggestedUsersByLikedPodcastsTest() {
+        List<String> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("whiterabbit394794", 25);
+        boolean test = false;
+        for (String username : users)
+            if (username.equals("heavyfish188030"))
+                test = true;
+
+        if (test)
+            System.out.println("[+] showSuggestedUsersByLikedPodcasts");
+        else
+            System.err.println("[-] showSuggestedUsersByLikedPodcasts");
+    }
+
+    public static void main(String[] args) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        manager.openConnection();
+        UserNeo4jTest test = new UserNeo4jTest();
+
+        test.showSuggestedUsersByLikedPodcastsTest();
+
+        manager.closeConnection();
     }
 }
