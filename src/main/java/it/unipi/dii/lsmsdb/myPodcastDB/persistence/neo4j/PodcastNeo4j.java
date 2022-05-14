@@ -160,8 +160,8 @@ public class PodcastNeo4j {
 
         List<Entry<String, Integer>> categories = new ArrayList<>();
         for(Record record : result){
-            String categoryName = record.get(0).get("name").asString();
-            int likes = record.get(0).get("likes").asInt();
+            String categoryName = record.get("name").asString();
+            int likes = record.get("likes").asInt();
             Entry<String, Integer> category = new AbstractMap.SimpleEntry<>(categoryName, likes);
             categories.add(category);
         }
@@ -195,8 +195,8 @@ public class PodcastNeo4j {
 
         List<Entry<String, String>> podcasts = new ArrayList<>();
         for(Record record : result){
-            String podcastName = record.get(0).get("name").asString();
-            String podcastId = record.get(0).get("id").asString();
+            String podcastName = record.get("name").asString();
+            String podcastId = record.get("id").asString();
             Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
             podcasts.add(podcast);
         }
@@ -213,10 +213,8 @@ public class PodcastNeo4j {
         String query = "match (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
                 "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
                 "WHERE NOT EXISTS { match (s)-[:WATCH_LATER]->(p2) }" + "\n" +
-                "and NOT EXISTS { match (source)-[:WATCH_LATER]->(p) }" + "\n" +
-                "WITH p.name as name, p.podcastId as id, count(l) as likes" + "\n" +
-                "return p2.name " + "\n" +
-                "LIMIT $limit" ;
+                "return p2.name as name, p2.podcastId as id" + "\n" +
+                "LIMIT $limit";
         Value params = parameters("username", user.getUsername(), "limit", limit);
         List<Record> result = null;
 
@@ -233,8 +231,8 @@ public class PodcastNeo4j {
 
         List<Entry<String, String>> podcasts = new ArrayList<>();
         for(Record record : result){
-            String podcastName = record.get(0).get("name").asString();
-            String podcastId = record.get(0).get("id").asString();
+            String podcastName = record.get("name").asString();
+            String podcastId = record.get("id").asString();
             Entry<String, String> podcast = new AbstractMap.SimpleEntry<>(podcastId, podcastName);
             podcasts.add(podcast);
         }
