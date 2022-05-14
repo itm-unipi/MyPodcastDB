@@ -71,11 +71,11 @@ public class PodcastNeo4j {
 
         try {
             List<Record> result = manager.read(
-                    "MATCH (p:Podcast {name: $name}) RETURN p LIMIT 10",
+                    "MATCH (p:Podcast { name: $name }) RETURN p LIMIT 10",
                     parameters("name", name)
             );
 
-            if (result == null)
+            if (result.isEmpty())
                 return null;
 
             List<Entry<String, String>> podcasts = new ArrayList<>();
@@ -91,6 +91,32 @@ public class PodcastNeo4j {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public boolean findPodcastCreatedByAuthor(String podcastId, String authorUsername) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId })-[r:CREATED_BY]->(a:Author { name: $authorUsername }) RETURN r";
+            List<Record> result = manager.read(query, parameters("podcastId", podcastId, "authorUsername", authorUsername));
+            return !result.isEmpty();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean findPodcastBelongsToCategory(String podcastId, String category) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            String query = "MATCH (p:Podcast { podcastId: $podcastId })-[r:BELONGS_TO]->(c:Category { name: $category }) RETURN r";
+            List<Record> result = manager.read(query, parameters("podcastId", podcastId, "category", category));
+            return !result.isEmpty();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
     }
 

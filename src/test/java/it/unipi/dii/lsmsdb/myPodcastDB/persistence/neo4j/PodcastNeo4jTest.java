@@ -19,8 +19,10 @@ public class PodcastNeo4jTest {
         List<Entry<String, String>> podcasts = new ArrayList<>();
         podcasts = podcastNeo4j.findPodcastsByName("Scaling Global");
 
-        for (Entry<String, String> e: podcasts)
-            System.out.println(e.getKey() + " " + e.getValue());
+        if(podcasts != null) {
+            System.out.println("[+] findPodcastsByName");
+        } else
+            System.err.println("[-] findPodcastsByName");
     }
 
     public void addPodcastTest() {
@@ -33,44 +35,49 @@ public class PodcastNeo4jTest {
     }
 
     public void addPodcastBelongsToCategoryTest() {
-        Podcast podcast = new Podcast("1", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        String category = "Spirituality";
+        Podcast podcast = new Podcast("111", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
         podcastNeo4j.addPodcast(podcast);
 
-        if (podcastNeo4j.addPodcastBelongsToCategory(podcast, "Spirituality"))
+        if (podcastNeo4j.addPodcastBelongsToCategory(podcast, category) &&
+                podcastNeo4j.findPodcastBelongsToCategory(podcast.getId(), category))
             System.out.println("[+] addPodcastBelongsToCategory");
         else
             System.err.println("[-] addPodcastBelongsToCategory");
 
-        podcastNeo4j.deletePodcastBelongsToCategory("1", "Spirituality");
-        podcastNeo4j.deletePodcastByPodcastId("1");
+        podcastNeo4j.deletePodcastBelongsToCategory(podcast.getId(), category);
+        podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
     public void addPodcastCreatedByAuthorTest() {
         Podcast podcast = new Podcast("2", "Podcast Test Author", "art", "Apple Inc.", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
         podcastNeo4j.addPodcast(podcast);
 
-        if (podcastNeo4j.addPodcastCreatedByAuthor(podcast))
+        if (podcastNeo4j.addPodcastCreatedByAuthor(podcast) &&
+                podcastNeo4j.findPodcastCreatedByAuthor(podcast.getId(), podcast.getAuthorName()))
             System.out.println("[+] addPodcastCreatedByAuthor");
         else
             System.err.println("[-] addPodcastCreatedByAuthor");
 
-        podcastNeo4j.deletePodcastCreatedByAuthor("2", "Apple Inc.");
-        podcastNeo4j.deletePodcastByPodcastId("2");
+        podcastNeo4j.deletePodcastCreatedByAuthor(podcast.getId(), podcast.getAuthorName());
+        podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
     public void deletePodcastByIdTest() {
         // id test 75710
-        if (podcastNeo4j.deletePodcastById(75712)) {
-            if(podcastNeo4j.findPodcastsByName("Podcast Test") != null)
-                System.out.println("[+] deletePodcastById");
-        } else
+        if (podcastNeo4j.deletePodcastById(75712) && podcastNeo4j.findPodcastsByName("Podcast Test") != null)
+            System.out.println("[+] deletePodcastById");
+        else
             System.err.println("[-] deletePodcastById");
     }
 
     public void deletePodcastByPodcastIdTest() {
-        if (podcastNeo4j.deletePodcastByPodcastId("0")) {
-            if(podcastNeo4j.findPodcastsByName("Podcast Test") != null)
-                System.out.println("[+] deletePodcastByPodcastId");
+        Podcast podcast = new Podcast("200", "Podcast Test 200", "art", "Apple Inc.", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        podcastNeo4j.addPodcast(podcast);
+
+        if (podcastNeo4j.deletePodcastByPodcastId(podcast.getId())
+                && podcastNeo4j.findPodcastsByName(podcast.getName()) == null) {
+            System.out.println("[+] deletePodcastByPodcastId");
         } else
             System.err.println("[-] deletePodcastByPodcastId");
     }
@@ -82,10 +89,10 @@ public class PodcastNeo4jTest {
         podcastNeo4j.addPodcast(podcast1);
         podcastNeo4j.addPodcast(podcast2);
 
-        if (podcastNeo4j.deletePodcastsByName(podcast1.getName())) {
-            if(podcastNeo4j.findPodcastsByName(podcast1.getName()) != null)
-                System.out.println("[+] deletePodcastsByName");
-        } else
+        if (podcastNeo4j.deletePodcastsByName(podcast1.getName()) &&
+                podcastNeo4j.findPodcastsByName(podcast1.getName()) == null)
+            System.out.println("[+] deletePodcastsByName");
+        else
             System.err.println("[-] deletePodcastsByName");
     }
 
@@ -96,14 +103,13 @@ public class PodcastNeo4jTest {
         podcastNeo4j.addPodcastBelongsToCategory(podcast, "Spirituality");
         podcastNeo4j.addPodcastBelongsToCategory(podcast, "Business");
 
-
         if (podcastNeo4j.deletePodcastBelongsToCategory(podcast.getId(), "Spirituality")) {
             System.out.println("[+] deletePodcastBelongsToCategory");
         } else
             System.err.println("[-] deletePodcastBelongsToCategory");
 
-        podcastNeo4j.deleteAllPodcastBelongsToCategory("20");
-        podcastNeo4j.deletePodcastByPodcastId("20");
+        podcastNeo4j.deleteAllPodcastBelongsToCategory(podcast.getId());
+        podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
     public void deleteAllPodcastBelongsToCategoryTest() {
@@ -118,7 +124,7 @@ public class PodcastNeo4jTest {
         } else
             System.err.println("[-] deleteAllPodcastBelongsToCategory");
 
-        podcastNeo4j.deletePodcastByPodcastId("15");
+        podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
     public void showMostNumerousCategoriesTest() {
