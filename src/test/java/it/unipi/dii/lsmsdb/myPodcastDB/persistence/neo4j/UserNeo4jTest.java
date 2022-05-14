@@ -60,7 +60,7 @@ public class UserNeo4jTest {
         User user = new User();
         user.setUsername("user test");
         boolean result = this.userNeo4j.addUser(user);
-        if(result)
+        if(result && this.userNeo4j.checkUserExists(user))
             System.out.println("[+] addUser");
         else
             System.err.println("[-] addUser");
@@ -75,7 +75,7 @@ public class UserNeo4jTest {
         podcast.setId("1234567890");
 
         boolean result = this.userNeo4j.addUserLikesPodcast(user, podcast);
-        if(result)
+        if(result && this.userNeo4j.checkUserLikesPodcastExists(user, podcast))
             System.out.println("[+] addUserLikesPodcast");
         else
             System.err.println("[-] addUserLikesPodcast");
@@ -90,7 +90,7 @@ public class UserNeo4jTest {
         podcast.setId("1234567891");
 
         boolean result = this.userNeo4j.addUserWatchLaterPodcast(user, podcast);
-        if(result)
+        if(result && this.userNeo4j.checkUserWatchLaterPodcastExists(user, podcast))
             System.out.println("[+] addUserWatchLaterPodcast");
         else
             System.err.println("[-] addUserWatchLaterPodcast");
@@ -106,7 +106,7 @@ public class UserNeo4jTest {
 
         this.userNeo4j.addUser(user2);
         boolean result = this.userNeo4j.addUserFollowUser(user1,user2);
-        if(result)
+        if(result && this.userNeo4j.checkUserFollowUserExists(user1, user2))
             System.out.println("[+] addUserFollowUser");
         else
             System.err.println("[-] addUserFollowUser");
@@ -120,7 +120,7 @@ public class UserNeo4jTest {
         user.setUsername("user test");
         author.setName("author test");
         boolean result = this.userNeo4j.addUserFollowAuthor(user, author);
-        if(result)
+        if(result && this.userNeo4j.checkUserFollowAuthorExists(user, author))
             System.out.println("[+] addUserFollowAuthor");
         else
             System.err.println("[-] addUserFollowAuthor");
@@ -147,7 +147,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUser(user);
 
         boolean result = this.userNeo4j.deleteUser(user);
-        if(result)
+        if(result && !this.userNeo4j.checkUserExists(user))
             System.out.println("[+] deleteUser");
         else
             System.err.println("[-] deleteUser");
@@ -162,7 +162,7 @@ public class UserNeo4jTest {
         podcast.setId("1234567890");
 
         boolean result = this.userNeo4j.deleteUserLikesPodcast(user, podcast);
-        if(result)
+        if(result && !this.userNeo4j.checkUserLikesPodcastExists(user, podcast))
             System.out.println("[+] deleteUserLikesPodcast");
         else
             System.err.println("[-] deleteUserLikesPodcast");
@@ -184,7 +184,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUserLikesPodcast(user, podcast3);
 
         boolean result = this.userNeo4j.deleteAllUserLikesPodcast(user);
-        if(result)
+        if(result && !this.userNeo4j.checkAllUserLikesPodcastExists(user))
             System.out.println("[+] deleteAllUserLikesPodcast");
         else
             System.err.println("[-] deleteAllUserLikesPodcast");
@@ -199,7 +199,7 @@ public class UserNeo4jTest {
         podcast.setId("1234567891");
 
         boolean result = this.userNeo4j.deleteUserWatchLaterPodcast(user, podcast);
-        if(result)
+        if(result && !this.userNeo4j.checkUserWatchLaterPodcastExists(user, podcast))
             System.out.println("[+] deleteUserWatchLaterPodcast");
         else
             System.err.println("[-] deleteUserWatchLaterPodcast");
@@ -221,7 +221,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUserWatchLaterPodcast(user, podcast3);
 
         boolean result = this.userNeo4j.deleteAllUserWatchLaterPodcast(user);
-        if(result)
+        if(result && !this.userNeo4j.checkAllUserWatchLaterPodcastExists(user))
             System.out.println("[+] deleteAllUserWatchLaterPodcast");
         else
             System.err.println("[-] deleteAllUserWatchLaterPodcast");
@@ -237,7 +237,7 @@ public class UserNeo4jTest {
         user2.setUsername("user test2");
 
         boolean result = this.userNeo4j.deleteUserFollowUser(user1, user2);
-        if(result)
+        if(result && !this.userNeo4j.checkUserFollowUserExists(user1, user2))
             System.out.println("[+] deleteUserFollowUser");
         else
             System.err.println("[-] deleteUserFollowUser");
@@ -265,7 +265,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUserFollowUser(user, user3);
 
         boolean result = this.userNeo4j.deleteAllUserFollowUser(user);
-        if(result)
+        if(result && !this.userNeo4j.checkAllUserFollowUserExists(user))
             System.out.println("[+] deleteAllUserFollowUser");
         else
             System.err.println("[-] deleteAllUserFollowUser");
@@ -283,7 +283,7 @@ public class UserNeo4jTest {
         author.setName("author test");
 
         boolean result = this.userNeo4j.deleteUserFollowAuthor(user, author);
-        if(result)
+        if(result && !this.userNeo4j.checkUserFollowAuthorExists(user, author))
             System.out.println("[+] deleteUserFollowAuthor");
         else
             System.err.println("[-] deleteUserFollowAuthor");
@@ -305,7 +305,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUserFollowAuthor(user, author3);
 
         boolean result = this.userNeo4j.deleteAllUserFollowAuthor(user);
-        if(result)
+        if(result && !this.userNeo4j.checkAllUserFollowAuthorExists(user))
             System.out.println("[+] deleteAllUserFollowAuthor");
         else
             System.err.println("[-] deleteAllUserFollowAuthor");
