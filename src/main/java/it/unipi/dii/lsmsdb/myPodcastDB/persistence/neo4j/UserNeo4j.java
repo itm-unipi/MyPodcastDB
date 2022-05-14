@@ -8,6 +8,7 @@ import org.neo4j.driver.Value;
 import java.util.List;
 
 import static org.neo4j.driver.Values.parameters;
+import org.neo4j.driver.Record;
 
 public class UserNeo4j {
 
@@ -100,7 +101,186 @@ public class UserNeo4j {
     }
 
     // ---------- READ ---------- //
-    
+
+    public boolean checkUserExists(User user){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username}) RETURN u";
+        Value params = parameters("username", user.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkUserLikesPodcastExists(User user, Podcast podcast){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})-[r:LIKES]->(p:Podcast{podcastId: $podcastId}) RETURN r";
+        Value params = parameters("username", user.getUsername(), "podcastId", podcast.getId());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkAllUserLikesPodcastExists(User user){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})-[r:LIKES]->(p:Podcast) RETURN r";
+        Value params = parameters("username", user.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkUserWatchLaterPodcastExists(User user, Podcast podcast){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})-[r:WATCH_LATER]-(p:Podcast{podcastId: $podcastId}) RETURN r";
+        Value params = parameters("username", user.getUsername(), "podcastId", podcast.getId());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkAllUserWatchLaterPodcastExists(User user){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})-[r:WATCH_LATER]-(p:Podcast) RETURN r";
+        Value params = parameters("username", user.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkUserFollowUserExists(User user1, User user2){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u1:User{username: $username1})-[r:FOLLOWS_USER]->(u2:User{username: $username2}) RETURN r";
+        Value params = parameters("username1", user1.getUsername(), "username2", user2.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkAllUserFollowUserExists(User user1){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u1:User{username: $username1})-[r:FOLLOWS_USER]->(u2:User) RETURN r";
+        Value params = parameters("username1", user1.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkUserFollowAuthorExists(User user, Author author){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})-[r:FOLLOWS]->(a:Author{name: $authorName}) RETURN r";
+        Value params = parameters("username", user.getUsername(), "authorName", author.getName());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
+
+    public boolean checkAllUserFollowAuthorExists(User user){
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User{username: $username})-[r:FOLLOWS]->(a:Author) RETURN r";
+        Value params = parameters("username", user.getUsername());
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        if(result != null && result.iterator().hasNext())
+            return true;
+        else
+            return false;
+    }
 
     // --------- UPDATE --------- //
 
