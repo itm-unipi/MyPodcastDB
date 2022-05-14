@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import org.javatuples.Quartet;
+import org.javatuples.Triplet;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -41,11 +43,11 @@ public class PodcastMongoTest {
         test.deleteEpisodeOfPodcastTest();
         test.deleteAllEpisodesTest();
         test.deleteReviewTest();
-        test.deleteAllReviewsTest();
+        test.deleteAllReviewsTest();*/
 
-        test.showPodcastsWithHighestAverageRatingTest();*/
+        test.showPodcastsWithHighestAverageRatingTest();
         test.showPodcastsWithHighestAverageRatingPerCountryTest();
-        //test.showPodcastsWithHighestNumberOfReviewsTest();
+        test.showPodcastsWithHighestNumberOfReviewsTest();
 
         mongoManager.closeConnection();
 
@@ -356,14 +358,20 @@ public class PodcastMongoTest {
     }
 
     void showPodcastsWithHighestAverageRatingTest() {
-        this.podcastMongo.showPodcastsWithHighestAverageRating(5);
+        System.out.println("showPodcastsWithHighestAverageRatingTest:");
+        for (Triplet<String, String, Float> record : this.podcastMongo.showPodcastsWithHighestAverageRating(3))
+            System.out.println(record);
     }
 
     void showPodcastsWithHighestAverageRatingPerCountryTest() {
-        this.podcastMongo.showPodcastsWithHighestAverageRatingPerCountry(5);
+        System.out.println("showPodcastsWithHighestAverageRatingPerCountryTest:");
+        for (Quartet<String, String, String, Float> record : this.podcastMongo.showPodcastsWithHighestAverageRatingPerCountry(3))
+            System.out.println(record);
     }
 
     void showPodcastsWithHighestNumberOfReviewsTest() {
-        this.podcastMongo.showPodcastsWithHighestNumberOfReviews(5);
+        System.out.println("showPodcastsWithHighestNumberOfReviewsTest:");
+        for (Triplet<String, String, Integer> record : this.podcastMongo.showPodcastsWithHighestNumberOfReviews(3))
+            System.out.println(record);
     }
 }

@@ -10,6 +10,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
+import org.javatuples.Quartet;
+import org.javatuples.Triplet;
 
 import java.util.Arrays;
 import java.util.Map.Entry;
@@ -590,31 +592,37 @@ public class PodcastMongo {
         return null;
     }
 
-    public List<Entry<Podcast, Float>> showPodcastsWithHighestAverageRating(int limit) {
+    public List<Triplet<String, String, Float>> showPodcastsWithHighestAverageRating(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
             Bson project = project(fields(
-                    excludeId(),
                     computed("name", "$podcastName"),
                     computed("meanRating", computed("$avg", "$reviews.rating")))
             );
             Bson sort = sort(Sorts.descending("meanRating"));
             Bson lim = limit(limit);
 
-            List<Entry<Podcast, Float>> results = new ArrayList<>();
+            List<Triplet<String, String, Float>> results = new ArrayList<>();
             for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
-                System.out.println(result);
+                String id = result.getObjectId("_id").toString();
+                String name = result.getString("name");
+                double meanRating = result.getDouble("meanRating");
+                Triplet<String, String, Float> record = new Triplet<>(id, name, (float)meanRating);
+                results.add(record);
             }
+
+            if (!results.isEmpty())
+                return results;
+            else
+                return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return null;
     }
 
-    public List<Podcast> showPodcastsWithHighestAverageRatingPerCountry(int limit) {
+    public List<Quartet<String, String, String, Float>> showPodcastsWithHighestAverageRatingPerCountry(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
@@ -631,40 +639,54 @@ public class PodcastMongo {
             );
             Bson lim = limit(limit);
 
-            List<Entry<Podcast, Float>> results = new ArrayList<>();
+            List<Quartet<String, String, String, Float>> results = new ArrayList<>();
             for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, group, lim))) {
-                System.out.println(result);
+                String id = result.getObjectId("podcastId").toString();
+                String name = result.getString("podcastName");
+                String country = result.getString("_id");
+                double meanRating = result.getDouble("meanRating");
+                Quartet<String, String, String, Float> record = new Quartet<>(id, name, country, (float)meanRating);
+                results.add(record);
             }
+
+            if (!results.isEmpty())
+                return results;
+            else
+                return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return null;
     }
 
-    public List<Podcast> showPodcastsWithHighestNumberOfReviews(int limit) {
+    public List<Triplet<String, String, Integer>> showPodcastsWithHighestNumberOfReviews(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
             Bson project = project(fields(
-                    excludeId(),
                     computed("name", "$podcastName"),
                     computed("numReviews", computed("$size", "$reviews")))
             );
             Bson sort = sort(Sorts.descending("numReviews"));
             Bson lim = limit(limit);
 
-            List<Entry<Podcast, Float>> results = new ArrayList<>();
+            List<Triplet<String, String, Integer>> results = new ArrayList<>();
             for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
-                System.out.println(result);
+                String id = result.getObjectId("_id").toString();
+                String name = result.getString("name");
+                int numReviews = result.getInteger("numReviews");
+                Triplet<String, String, Integer> record = new Triplet<>(id, name, numReviews);
+                results.add(record);
             }
+
+            if (!results.isEmpty())
+                return results;
+            else
+                return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-
-        return null;
     }
 
     public List<String> showAuthorWithHighestAverageRating(int limit) {
