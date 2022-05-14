@@ -101,9 +101,12 @@ public class PodcastNeo4j {
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
     public List<Entry<String, String>> showPodcastsInWatchlist(User user, int limit) {
+
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = " MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast) RETURN p";
-        Value params = parameters("username", user.getUsername());
+        String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
+                "RETURN p " + "\n"+
+                "LIMIT $limit";
+        Value params = parameters("username", user.getUsername(), "limit", limit);
         List<Record> result = null;
 
         try {
@@ -210,10 +213,10 @@ public class PodcastNeo4j {
 
     public List<Entry<String, String>> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(User user, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "match (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
+        String query = "MATCH (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
                 "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
                 "WHERE NOT EXISTS { match (s)-[:WATCH_LATER]->(p2) }" + "\n" +
-                "return p2.name as name, p2.podcastId as id" + "\n" +
+                "RETURN p2.name as name, p2.podcastId as id" + "\n" +
                 "LIMIT $limit";
         Value params = parameters("username", user.getUsername(), "limit", limit);
         List<Record> result = null;
