@@ -52,8 +52,8 @@ public class AuthorNeo4j {
 
         List<Record> results = new ArrayList<>();
         try {
-            String query = "MATCH (a:Author {name: $oldName}) RETURN a";
-            Value params = parameters("oldName", author);
+            String query = "MATCH (a:Author {name: $name}) RETURN a";
+            Value params = parameters("name", author);
             results = manager.read(query, params);
         } catch (Exception e) {
             e.printStackTrace();
