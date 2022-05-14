@@ -5,11 +5,12 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class UserNeo4jTest {
 
+    PodcastNeo4j podcastNeo4j;
     UserNeo4j userNeo4j;
+    AuthorNeo4j authorNeo4j;
 
     public static void  main(String[] args){
 
@@ -34,10 +35,14 @@ public class UserNeo4jTest {
         test.deleteAllUserFollowAuthorTest();
         test.showFollowedUserTest();
 
-
+        manager.closeConnection();
     }
 
-    public UserNeo4jTest(){ this.userNeo4j = new UserNeo4j();}
+    public UserNeo4jTest(){
+        this.userNeo4j = new UserNeo4j();
+        this.authorNeo4j = new AuthorNeo4j();
+        this.podcastNeo4j = new PodcastNeo4j();
+    }
 
     /*
     CYPHER TO TEST
@@ -227,99 +232,10 @@ public class UserNeo4jTest {
             System.out.println("[+] deleteAllUserWatchLaterPodcast");
         else
             System.err.println("[-] deleteAllUserWatchLaterPodcast");
-
-
     }
 
-    public void deleteUserFollowUserTest(){
 
-        User user1 = new User();
-        User user2 = new User();
-        user1.setUsername("user test3");
-        user2.setUsername("user test2");
-
-        boolean result = this.userNeo4j.deleteUserFollowUser(user1, user2);
-        if(result && !this.userNeo4j.checkUserFollowUserExists(user1, user2))
-            System.out.println("[+] deleteUserFollowUser");
-        else
-            System.err.println("[-] deleteUserFollowUser");
-
-        this.userNeo4j.deleteUser(user2);
-
-
-    }
-
-    public void deleteAllUserFollowUserTest(){
-
-        User user = new User();
-        User user1 = new User();
-        User user2 = new User();
-        User user3 = new User();
-        user.setUsername("user test5");
-        user1.setUsername("user test6");
-        user2.setUsername("user test7");
-        user3.setUsername("user test8");
-        this.userNeo4j.addUser(user);
-        this.userNeo4j.addUser(user1);
-        this.userNeo4j.addUser(user2);
-        this.userNeo4j.addUser(user3);
-        this.userNeo4j.addUserFollowUser(user, user1);
-        this.userNeo4j.addUserFollowUser(user, user2);
-        this.userNeo4j.addUserFollowUser(user, user3);
-
-        boolean result = this.userNeo4j.deleteAllUserFollowUser(user);
-        if(result && !this.userNeo4j.checkAllUserFollowUserExists(user))
-            System.out.println("[+] deleteAllUserFollowUser");
-        else
-            System.err.println("[-] deleteAllUserFollowUser");
-
-        this.userNeo4j.deleteUser(user);
-        this.userNeo4j.deleteUser(user1);
-        this.userNeo4j.deleteUser(user2);
-        this.userNeo4j.deleteUser(user3);
-    }
-
-    public void deleteUserFollowAuthorTest(){
-
-        User user = new User();
-        Author author = new Author();
-        user.setUsername("user test3");
-        author.setName("author test");
-
-        boolean result = this.userNeo4j.deleteUserFollowAuthor(user, author);
-        if(result && !this.userNeo4j.checkUserFollowAuthorExists(user, author))
-            System.out.println("[+] deleteUserFollowAuthor");
-        else
-            System.err.println("[-] deleteUserFollowAuthor");
-
-    }
-
-    public void deleteAllUserFollowAuthorTest(){
-
-        User user = new User();
-        Author author1 = new Author();
-        Author author2 = new Author();
-        Author author3 = new Author();
-        user.setUsername("user test3");
-        author1.setName("author test1");
-        author2.setName("author test2");
-        author3.setName("author test3");
-        this.userNeo4j.addUserFollowAuthor(user, author1);
-        this.userNeo4j.addUserFollowAuthor(user, author2);
-        this.userNeo4j.addUserFollowAuthor(user, author3);
-
-        boolean result = this.userNeo4j.deleteAllUserFollowAuthor(user);
-        if(result && !this.userNeo4j.checkAllUserFollowAuthorExists(user))
-            System.out.println("[+] deleteAllUserFollowAuthor");
-        else
-            System.err.println("[-] deleteAllUserFollowAuthor");
-
-        this.userNeo4j.deleteUser(user);
-
-    }
-
-    public void showFollowedUserTest(){
-
+    private void showFollowedUserTest() {
         User user = new User();
         user.setUsername("silverelephant716273");
         List<String> podcasts = this.userNeo4j.showFollowedUsers(user, 10);
@@ -330,7 +246,95 @@ public class UserNeo4jTest {
 
         for(String podcast : podcasts)
             System.out.println(podcast);
-
     }
 
+    public void deleteUserFollowUserTest() {
+        User user = new User();
+        user.setUsername("test1");
+        this.userNeo4j.addUser(user);
+        user.setUsername("test2");
+        this.userNeo4j.addUser(user);
+        this.userNeo4j.addUserFollowUser("test1", "test2");
+        this.userNeo4j.deleteUserFollowUser("test1", "test2");
+
+        boolean test = this.userNeo4j.findUserFollowsUser("test1", "test2");
+        if (!test)
+            System.out.println("[+] deleteUserFollowUser");
+        else
+            System.err.println("[-] deleteUserFollowUser");
+
+        this.userNeo4j.deleteUser("test1");
+        this.userNeo4j.deleteUser("test2");
+    }
+
+    public void deleteAllUserFollowUserTest() {
+        User user = new User();
+        user.setUsername("test1");
+        this.userNeo4j.addUser(user);
+        user.setUsername("test2");
+        this.userNeo4j.addUser(user);
+        user.setUsername("test3");
+        this.userNeo4j.addUser(user);
+        this.userNeo4j.addUserFollowUser("test1", "test2");
+        this.userNeo4j.addUserFollowUser("test1", "test3");
+        this.userNeo4j.deleteAllUserFollowUser("test1");
+
+        boolean test1 = this.userNeo4j.findUserFollowsUser("test1", "test2");
+        boolean test2 = this.userNeo4j.findUserFollowsUser("test1", "test3");
+        if (!test1 && !test2)
+            System.out.println("[+] deleteUserFollowUserTest");
+        else
+            System.err.println("[-] deleteUserFollowUserTest");
+
+        this.userNeo4j.deleteUser("test1");
+        this.userNeo4j.deleteUser("test2");
+        this.userNeo4j.deleteUser("test3");
+    }
+
+    public void deleteUserFollowAuthorTest() {
+        User user = new User();
+        user.setUsername("test1");
+        this.userNeo4j.addUser(user);
+        Author author = new Author();
+        author.setName("test2");
+        this.authorNeo4j.addAuthor(author);
+
+        this.userNeo4j.addUserFollowAuthor("test1", "test2");
+        this.userNeo4j.deleteUserFollowAuthor("test1", "test2");
+
+        boolean test = this.userNeo4j.findUserFollowsAuthor("test1", "test2");
+        if (!test)
+            System.out.println("[+] deleteUserFollowAuthor");
+        else
+            System.err.println("[-] deleteUserFollowAuthor");
+
+        this.userNeo4j.deleteUser("test1");
+        this.authorNeo4j.deleteAuthor("test2");
+    }
+
+    public void deleteAllUserFollowAuthorTest() {
+        User user = new User();
+        user.setUsername("test1");
+        this.userNeo4j.addUser(user);
+        Author author = new Author();
+        author.setName("test2");
+        this.authorNeo4j.addAuthor(author);
+        author.setName("test3");
+        this.authorNeo4j.addAuthor(author);
+
+        this.userNeo4j.addUserFollowAuthor("test1", "test2");
+        this.userNeo4j.addUserFollowAuthor("test1", "test3");
+        this.userNeo4j.deleteAllUserFollowAuthor("test1");
+
+        boolean test1 = this.userNeo4j.findUserFollowsAuthor("test1", "test2");
+        boolean test2 = this.userNeo4j.findUserFollowsAuthor("test1", "test3");
+        if (!test1 && !test2)
+            System.out.println("[+] deleteAllUserFollowAuthor");
+        else
+            System.err.println("[-] deleteAllUserFollowAuthor");
+
+        this.userNeo4j.deleteUser("test1");
+        this.authorNeo4j.deleteAuthor("test2");
+        this.authorNeo4j.deleteAuthor("test3");
+    }
 }
