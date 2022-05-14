@@ -5,8 +5,10 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
 
@@ -186,6 +188,36 @@ public class AuthorNeo4j {
 
     public List<String> showSuggestedAuthorsFollowedByFollowedUser(String username) {
         return null;
+    }
+
+    public List<Entry<String, Integer>> showMostFollowedAuthor(int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> result = null;
+        try {
+            String query =  "MATCH (a:Author)<-[f:FOLLOWS]-() " +
+                            "WITH a.name AS name, COUNT(f) AS followers " +
+                            "RETURN name, followers " +
+                            "ORDER BY followers DESC " +
+                            "LIMIT $limit";
+            Value params = parameters("limit", limit);
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (result == null)
+            return null;
+
+        List<Entry<String, Integer>> authors = new ArrayList<>();
+        for (Record record : result) {
+            String name = record.get("name").asString();
+            int value = record.get("followers").asInt();
+            Entry<String, Integer> category = new AbstractMap.SimpleEntry<>(name, value);
+            authors.add(category);
+        }
+
+        return authors;
     }
 
     // ---------------------------------------------------------------------------------- //

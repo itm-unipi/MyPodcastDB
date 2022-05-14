@@ -337,4 +337,27 @@ public class UserNeo4jTest {
         this.authorNeo4j.deleteAuthor("test2");
         this.authorNeo4j.deleteAuthor("test3");
     }
+
+    void showSuggestedUsersByLikedPodcastsTest() {
+        List<String> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("whiterabbit394794", 25);
+        boolean test = false;
+        for (String username : users)
+            if (username.equals("heavyfish188030"))
+                test = true;
+
+        if (test)
+            System.out.println("[+] showSuggestedUsersByLikedPodcasts");
+        else
+            System.err.println("[-] showSuggestedUsersByLikedPodcasts");
+    }
+
+    public static void main(String[] args) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        manager.openConnection();
+        UserNeo4jTest test = new UserNeo4jTest();
+
+        test.showSuggestedUsersByLikedPodcastsTest();
+
+        manager.closeConnection();
+    }
 }

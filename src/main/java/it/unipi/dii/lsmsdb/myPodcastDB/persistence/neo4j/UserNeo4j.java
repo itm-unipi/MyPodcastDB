@@ -1,20 +1,10 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
-
-import java.util.AbstractMap;
 import org.neo4j.driver.Record;
-import org.neo4j.driver.Value;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import static org.neo4j.driver.Values.parameters;
-import org.neo4j.driver.Record;
 
 import static org.neo4j.driver.Values.parameters;
 
@@ -544,8 +534,30 @@ public class UserNeo4j {
         return null;
     }
 
-    public List<String> showSuggestedUsersByLikedPodcasts(String username) {
-        return null;
+    public List<String> showSuggestedUsersByLikedPodcasts(String username, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        List<Record> result = null;
+        try {
+            String query =  "MATCH (u1:User {username: $username})-[:LIKES]->(:Podcast)<-[:LIKES]-(u2) " +
+                            "RETURN u2 " +
+                            "LIMIT $limit";
+            Value params = parameters("username", username, "limit", limit);
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (result == null)
+            return null;
+
+        List<String> users = new ArrayList<>();
+        for (Record record : result) {
+            String user = record.get(0).get("username").asString();
+            users.add(user);
+        }
+
+        return users;
     }
 
     // ---------------------------------------------------------------------------------- //

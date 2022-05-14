@@ -2,6 +2,9 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 
+import java.util.List;
+import java.util.Map;
+
 public class AuthorNeo4jTest {
     AuthorNeo4j authorNeo4j;
 
@@ -118,6 +121,14 @@ public class AuthorNeo4jTest {
         this.authorNeo4j.deleteAuthor("test3");
     }
 
+    public void showMostFollowedAuthorTest() {
+        List<Map.Entry<String, Integer>> results = this.authorNeo4j.showMostFollowedAuthor(10);
+        if (results.get(0).getKey().equals("Sharon Hoffman") && results.get(0).getValue() == 480)
+            System.out.println("[+] showMostFollowedAuthor");
+        else
+            System.err.println("[-] showMostFollowedAuthor");
+    }
+
     public static void main(String[] args) {
         Neo4jManager manager = Neo4jManager.getInstance();
         manager.openConnection();
@@ -129,6 +140,7 @@ public class AuthorNeo4jTest {
         test.deleteAuthorTest();
         test.deleteAuthorFollowsAuthorTest();
         test.deleteAllAuthorFollowsAuthorTest();
+        test.showMostFollowedAuthorTest();
 
         manager.closeConnection();
     }
