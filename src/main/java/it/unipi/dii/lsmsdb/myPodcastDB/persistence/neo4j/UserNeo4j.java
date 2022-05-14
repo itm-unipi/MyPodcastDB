@@ -540,6 +540,7 @@ public class UserNeo4j {
         List<Record> result = null;
         try {
             String query =  "MATCH (u1:User {username: $username})-[:LIKES]->(:Podcast)<-[:LIKES]-(u2) " +
+                            "WHERE NOT EXISTS { (u1)-[:FOLLOWS_USER]->(u2) } " +
                             "RETURN u2 " +
                             "LIMIT $limit";
             Value params = parameters("username", username, "limit", limit);
