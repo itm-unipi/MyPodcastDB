@@ -32,7 +32,7 @@ public class ReviewMongoTest {
     }
 
     public Review addReviewForTest() {
-        Review newReview = new Review("000000000000000000000000", "000000000000000000000000", "testauthorusername", "TestTile", "TestContent", 5, new Date());
+        Review newReview = new Review("100000000000000000000000", "000000000000000000000000", "testauthorusername", "TestTile", "TestContent", 5, new Date());
         reviewMongo.addReview(newReview);
         return newReview;
     }
@@ -71,7 +71,6 @@ public class ReviewMongoTest {
             System.err.println("[-] addReview");
     }
 
-    // TODO: test ordering
     public void findByAuthorUsernameTest() {
         List<Review> reviews = this.reviewMongo.findReviewsByAuthorUsername("Mariorossi123456", 1, "", true);
         if (reviews.size() != 1)
@@ -87,7 +86,6 @@ public class ReviewMongoTest {
             System.out.println("[+] findReviewsByAuthorUsername");
     }
 
-    // TODO: test ordering
     public void findByPodcastIdTest() {
         List<Review> reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 4, "", true);
         if (reviews.size() != 4)
@@ -116,9 +114,10 @@ public class ReviewMongoTest {
     }
 
     public void deleteReviewsByPodcastIdTest() {
-        int deletedCount = reviewMongo.deleteReviewsByPodcastId("000000000000000000000000");
+        Review newReview = addReviewForTest();
+        int deletedCount = reviewMongo.deleteReviewsByPodcastId(newReview.getPodcastId());
 
-        if (deletedCount > 0 && reviewMongo.findReviewById("000000000000000000000000") == null)
+        if (deletedCount > 0 && reviewMongo.findReviewById(newReview.getId()) == null)
             System.out.println("[+] deleteReviewsByPodcastId - Deleted " + deletedCount);
         else
             System.err.println("[-] deleteReviewsByPodcastId");

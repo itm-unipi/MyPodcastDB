@@ -187,21 +187,17 @@ public class UserMongoTest {
         manager.openConnection();
         UserMongoTest test = new UserMongoTest();
 
-        /*test.findByUsernameTest();
+        test.findByUsernameTest();
         System.out.println("############# MongoDB CRUD TEST #############");
         test.findByUsernameTest();
         test.addTest();
         test.findsTest();
         test.updateTest();
-        test.deleteTest();*/
+        test.deleteTest();
+
+        System.out.println("############# MongoDB AGGREGATES TEST #############");
         test.showFavouriteCategoryForGenderTest();
         test.showNumberOfUsersPerCountryTest();
-
-        System.out.println("############# MongoDB AGGREGATES TEST #############");
-        test.showAverageAgeOfUsersPerFavouriteCategoryTest();
-        test.showAverageAgeOfUsersPerCountryTest();
-
-        System.out.println("############# MongoDB AGGREGATES TEST #############");
         test.showAverageAgeOfUsersPerFavouriteCategoryTest();
         test.showAverageAgeOfUsersPerCountryTest();
 

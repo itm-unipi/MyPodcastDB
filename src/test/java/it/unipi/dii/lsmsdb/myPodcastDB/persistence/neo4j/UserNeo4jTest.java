@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class UserNeo4jTest {
     PodcastNeo4j podcastNeo4j;
@@ -48,30 +49,30 @@ public class UserNeo4jTest {
     public void addUserTest(){
         // prerequisites
         Podcast podcast = new Podcast();
-        podcast.setId("podcast test");
-        podcast.setName("1234567890");
+        podcast.setName("podcast test");
+        podcast.setId("1234567890");
         this.podcastNeo4j.addPodcast(podcast);
-        podcast.setId("podcast test1");
-        podcast.setName("1234567891");
+        podcast.setName("podcast test1");
+        podcast.setId("1234567891");
         this.podcastNeo4j.addPodcast(podcast);
-        podcast.setId("podcast test2");
-        podcast.setName("1234567892");
+        podcast.setName("podcast test2");
+        podcast.setId("1234567892");
         this.podcastNeo4j.addPodcast(podcast);
-        podcast.setId("podcast test3");
-        podcast.setName("1234567893");
+        podcast.setName("podcast test3");
+        podcast.setId("1234567893");
         this.podcastNeo4j.addPodcast(podcast);
-        podcast.setId("podcast test4");
-        podcast.setName("1234567894");
+        podcast.setName("podcast test4");
+        podcast.setId("1234567894");
         this.podcastNeo4j.addPodcast(podcast);
         Author author = new Author();
         author.setName("author test");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("author test1");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("author test2");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("author test3");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
 
         User user = new User();
         user.setUsername("user test");
@@ -145,11 +146,10 @@ public class UserNeo4jTest {
 
     public void updateUserTest(){
 
-        User user = new User();
-        user.setUsername("user test");
+        String oldUsername = "user test";
         String newUsername = "user test3";
-        boolean result = this.userNeo4j.updateUser(user.getUsername(), newUsername);
-        if(result && user.getUsername().equals(newUsername))
+        boolean result = this.userNeo4j.updateUser(oldUsername, newUsername);
+        if(result && this.userNeo4j.findUserByUsername(newUsername))
             System.out.println("[+] updateUser");
         else
             System.err.println("[-] updateUser");
@@ -319,7 +319,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUser(user.getUsername());
         Author author = new Author();
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
 
         this.userNeo4j.addUserFollowAuthor("test1", "test2");
         this.userNeo4j.deleteUserFollowAuthor("test1", "test2");
@@ -340,9 +340,9 @@ public class UserNeo4jTest {
         this.userNeo4j.addUser(user.getUsername());
         Author author = new Author();
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("test3");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
 
         this.userNeo4j.addUserFollowAuthor("test1", "test2");
         this.userNeo4j.addUserFollowAuthor("test1", "test3");

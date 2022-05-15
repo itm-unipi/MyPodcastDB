@@ -32,8 +32,8 @@ public class UserNeo4j {
 
     public boolean addUserLikesPodcast(String username, String podcastId) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User{username: $username})," +
-                "(p:Podcast{podcastId: $podcastId})"+
+        String query = "MATCH (u:User{username: $username}), " +
+                "(p:Podcast{podcastId: $podcastId}) "+
                 "CREATE (u)-[:LIKES]->(p)";
         Value params = parameters("username", username, "podcastId", podcastId);
 
@@ -114,7 +114,7 @@ public class UserNeo4j {
         }
 
         for (Record record : results)
-            if (record.get(0).get("name").asString().equals(username))
+            if (record.get(0).get("username").asString().equals(username))
                 return true;
 
         return false;
