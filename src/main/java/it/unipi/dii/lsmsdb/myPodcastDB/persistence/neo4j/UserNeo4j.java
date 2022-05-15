@@ -1,6 +1,5 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;
 import java.util.ArrayList;

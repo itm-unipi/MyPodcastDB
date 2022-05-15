@@ -7,7 +7,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import java.util.List;
 
 public class UserNeo4jTest {
-
     PodcastNeo4j podcastNeo4j;
     UserNeo4j userNeo4j;
     AuthorNeo4j authorNeo4j;

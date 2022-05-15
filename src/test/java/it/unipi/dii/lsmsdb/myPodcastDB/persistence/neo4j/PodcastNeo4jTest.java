@@ -1,15 +1,19 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 
 =======
 >>>>>>> c0d11c1 (Added Graph Queries)
+=======
+>>>>>>> 463092ce9e88689d910a301663b9d9a1008798e2
 import java.util.List;
 import java.util.Map.Entry;
 
 public class PodcastNeo4jTest {
+<<<<<<< HEAD
 <<<<<<< HEAD
 
     PodcastNeo4j podcastNeo4j;
@@ -19,6 +23,8 @@ public class PodcastNeo4jTest {
     public static void main(String[] args){
 
 =======
+=======
+>>>>>>> 463092ce9e88689d910a301663b9d9a1008798e2
     PodcastNeo4j podcastNeo4j;
 
     public PodcastNeo4jTest() {
@@ -42,11 +48,15 @@ public class PodcastNeo4jTest {
     }
 
     public static void main(String[] args) {
+<<<<<<< HEAD
 >>>>>>> c0d11c1 (Added Graph Queries)
+=======
+>>>>>>> 463092ce9e88689d910a301663b9d9a1008798e2
         Neo4jManager manager = Neo4jManager.getInstance();
         manager.openConnection();
         PodcastNeo4jTest test = new PodcastNeo4jTest();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
         test.showPodcastsInWatchlistTest();
         test.showMostAppreciatedCategoriesTest();
@@ -122,10 +132,15 @@ public class PodcastNeo4jTest {
     }
 
 =======
+=======
+>>>>>>> 463092ce9e88689d910a301663b9d9a1008798e2
         test.showMostNumerousCategoriesTest();
         test.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLikedTest();
 
         manager.closeConnection();
     }
+<<<<<<< HEAD
 >>>>>>> c0d11c1 (Added Graph Queries)
+=======
+>>>>>>> 463092ce9e88689d910a301663b9d9a1008798e2
 }
