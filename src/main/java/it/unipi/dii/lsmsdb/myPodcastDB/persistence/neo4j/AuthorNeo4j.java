@@ -12,8 +12,6 @@ import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
 
-import static org.neo4j.driver.Values.parameters;
-
 public class AuthorNeo4j {
 
     // ------------------------------- CRUD OPERATION ----------------------------------- //
@@ -208,10 +206,6 @@ public class AuthorNeo4j {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public List<String> showSuggestedAuthorsFollowedByFollowedUser(String username) {
-        return null;
     }
 
     public List<Entry<String, Integer>> showMostFollowedAuthor(int limit) {

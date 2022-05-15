@@ -3,9 +3,6 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import org.neo4j.driver.Record;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -554,10 +551,6 @@ public class UserNeo4j {
             e.printStackTrace();
             return null;
         }
-    }
-
-    public List<String> showSuggestedUsersByFollowedAuthors(String username) {
-        return null;
     }
 
     public List<String> showSuggestedUsersByLikedPodcasts(String username, int limit) {
