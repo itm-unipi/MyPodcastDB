@@ -44,27 +44,34 @@ public class UserNeo4jTest {
         this.authorNeo4j = new AuthorNeo4j();
         this.podcastNeo4j = new PodcastNeo4j();
     }
-
-    /*
-    CYPHER TO TEST
-    CREATE (p:Podcast{name: "podcast test", podcastId: "1234567890", class: "test"});
-    CREATE (p:Podcast{name: "podcast test1", podcastId: "1234567891", class: "test"});
-    CREATE (p:Podcast{name: "podcast test2", podcastId: "1234567892", class: "test"});
-    CREATE (p:Podcast{name: "podcast test3", podcastId: "1234567893", class: "test"});
-    CREATE (p:Podcast{name: "podcast test4", podcastId: "1234567894", class: "test"});
-    CREATE (a:Author{name: "author test", class: "test"});
-    CREATE (a:Author{name: "author test1", class: "test"});
-    CREATE (a:Author{name: "author test2", class: "test"});
-    CREATE (a:Author{name: "author test3", class: "test"});
-    MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) RETURN p,a;
-
-    TO CLEAN
-    MATCH (p:Podcast{class:"test"}), (a:Author{class:"test"}) DETACH DELETE p,a;
-
-    */
-
+    
     public void addUserTest(){
-        // TODO: prerequisites
+        // prerequisites
+        Podcast podcast = new Podcast();
+        podcast.setId("podcast test");
+        podcast.setName("1234567890");
+        this.podcastNeo4j.addPodcast(podcast);
+        podcast.setId("podcast test1");
+        podcast.setName("1234567891");
+        this.podcastNeo4j.addPodcast(podcast);
+        podcast.setId("podcast test2");
+        podcast.setName("1234567892");
+        this.podcastNeo4j.addPodcast(podcast);
+        podcast.setId("podcast test3");
+        podcast.setName("1234567893");
+        this.podcastNeo4j.addPodcast(podcast);
+        podcast.setId("podcast test4");
+        podcast.setName("1234567894");
+        this.podcastNeo4j.addPodcast(podcast);
+        Author author = new Author();
+        author.setName("author test");
+        this.authorNeo4j.addAuthor(author);
+        author.setName("author test1");
+        this.authorNeo4j.addAuthor(author);
+        author.setName("author test2");
+        this.authorNeo4j.addAuthor(author);
+        author.setName("author test3");
+        this.authorNeo4j.addAuthor(author);
 
         User user = new User();
         user.setUsername("user test");
@@ -249,8 +256,18 @@ public class UserNeo4jTest {
         for(String podcast : podcasts)
             System.out.println(podcast);
 
+        // clean all entities created for tests
         this.userNeo4j.deleteUser("user test2");
         this.userNeo4j.deleteUser("user test3");
+        this.podcastNeo4j.deletePodcastByPodcastId("1234567890");
+        this.podcastNeo4j.deletePodcastByPodcastId("1234567891");
+        this.podcastNeo4j.deletePodcastByPodcastId("1234567892");
+        this.podcastNeo4j.deletePodcastByPodcastId("1234567893");
+        this.podcastNeo4j.deletePodcastByPodcastId("1234567894");
+        this.authorNeo4j.deleteAuthor("author test");
+        this.authorNeo4j.deleteAuthor("author test1");
+        this.authorNeo4j.deleteAuthor("author test2");
+        this.authorNeo4j.deleteAuthor("author test3");
     }
 
     public void deleteUserFollowUserTest() {
