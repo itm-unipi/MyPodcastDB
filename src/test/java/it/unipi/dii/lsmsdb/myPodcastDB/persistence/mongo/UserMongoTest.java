@@ -201,6 +201,10 @@ public class UserMongoTest {
         test.showAverageAgeOfUsersPerFavouriteCategoryTest();
         test.showAverageAgeOfUsersPerCountryTest();
 
+        System.out.println("############# MongoDB AGGREGATES TEST #############");
+        test.showAverageAgeOfUsersPerFavouriteCategoryTest();
+        test.showAverageAgeOfUsersPerCountryTest();
+
         manager.closeConnection();
     }
 }
