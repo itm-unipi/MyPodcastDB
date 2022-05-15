@@ -44,7 +44,7 @@ public class UserNeo4jTest {
         this.authorNeo4j = new AuthorNeo4j();
         this.podcastNeo4j = new PodcastNeo4j();
     }
-    
+
     public void addUserTest(){
         // prerequisites
         Podcast podcast = new Podcast();

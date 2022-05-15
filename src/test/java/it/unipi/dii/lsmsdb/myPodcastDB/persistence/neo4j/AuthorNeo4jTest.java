@@ -15,7 +15,7 @@ public class AuthorNeo4jTest {
     public void addAuthorTest() {
         Author author = new Author();
         author.setName("test");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         boolean test = this.authorNeo4j.findAuthorByName("test");
 
         if (test)
@@ -29,9 +29,9 @@ public class AuthorNeo4jTest {
     public void addAuthorFollowsAuthorTest() {
         Author author = new Author();
         author.setName("test1");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         this.authorNeo4j.addAuthorFollowsAuthor("test1", "test2");
 
         boolean test = this.authorNeo4j.findAuthorFollowsAuthor("test1", "test2");
@@ -48,7 +48,7 @@ public class AuthorNeo4jTest {
     public void updateAuthorTest() {
         Author author = new Author();
         author.setName("test");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         this.authorNeo4j.updateAuthor("test", "newTest");
 
         boolean test1 = this.authorNeo4j.findAuthorByName("test");
@@ -68,7 +68,7 @@ public class AuthorNeo4jTest {
     public void deleteAuthorTest() {
         Author author = new Author();
         author.setName("test");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         this.authorNeo4j.deleteAuthor("test");
         boolean test = this.authorNeo4j.findAuthorByName("test");
 
@@ -81,9 +81,9 @@ public class AuthorNeo4jTest {
     public void deleteAuthorFollowsAuthorTest() {
         Author author = new Author();
         author.setName("test1");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         this.authorNeo4j.addAuthorFollowsAuthor("test1", "test2");
         this.authorNeo4j.deleteAuthorFollowsAuthor("test1", "test2");
 
@@ -100,11 +100,11 @@ public class AuthorNeo4jTest {
     public void deleteAllAuthorFollowsAuthorTest() {
         Author author = new Author();
         author.setName("test1");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         author.setName("test3");
-        this.authorNeo4j.addAuthor(author);
+        this.authorNeo4j.addAuthor(author.getName());
         this.authorNeo4j.addAuthorFollowsAuthor("test1", "test2");
         this.authorNeo4j.addAuthorFollowsAuthor("test1", "test3");
         this.authorNeo4j.deleteAllAuthorFollowsAuthor("test1");

@@ -18,12 +18,12 @@ public class AuthorNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addAuthor(Author author) {
+    public boolean addAuthor(String authorName) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query = "CREATE (a:Author {name: $name})";
-            Value params = parameters("name", author.getName());
+            Value params = parameters("name", authorName);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -32,14 +32,14 @@ public class AuthorNeo4j {
         }
     }
 
-    public boolean addAuthorFollowsAuthor(String author, String authorToFollow) {
+    public boolean addAuthorFollowsAuthor(String authorName, String authorToFollow) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query =  "MATCH (a1:Author {name: $follower}) " +
                             "MATCH (a2:Author {name: $toFollow}) " +
                             "CREATE (a1)-[:FOLLOWS_AUTHOR]->(a2)";
-            Value params = parameters("follower", author, "toFollow", authorToFollow);
+            Value params = parameters("follower", authorName, "toFollow", authorToFollow);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -50,13 +50,13 @@ public class AuthorNeo4j {
 
     // ---------- READ ---------- //
 
-    public boolean findAuthorByName(String author) {
+    public boolean findAuthorByName(String authorName) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> results = new ArrayList<>();
         try {
             String query = "MATCH (a:Author {name: $name}) RETURN a";
-            Value params = parameters("name", author);
+            Value params = parameters("name", authorName);
             results = manager.read(query, params);
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,20 +64,20 @@ public class AuthorNeo4j {
         }
 
         for (Record record : results)
-            if (record.get(0).get("name").asString().equals(author))
+            if (record.get(0).get("name").asString().equals(authorName))
                 return true;
 
         return false;
     }
 
-    public boolean findAuthorFollowsAuthor(String author, String authorFollowed) {
+    public boolean findAuthorFollowsAuthor(String authorName, String authorNameFollowed) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> results = new ArrayList<>();
         try {
             String query =  "MATCH (a1:Author {name: $follower})-[r:FOLLOWS_AUTHOR]->(a2:Author {name: $followed}) " +
                     "RETURN r";
-            Value params = parameters("follower", author, "followed", authorFollowed);
+            Value params = parameters("follower", authorName, "followed", authorNameFollowed);
             manager.write(query, params);
             results = manager.read(query, params);
         } catch (Exception e) {
@@ -110,12 +110,12 @@ public class AuthorNeo4j {
 
     // --------- DELETE --------- //
 
-    public boolean deleteAuthor(String author) {
+    public boolean deleteAuthor(String authorName) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query = "MATCH (a:Author {name: $name}) DETACH DELETE a";
-            Value params = parameters("name", author);
+            Value params = parameters("name", authorName);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -124,13 +124,13 @@ public class AuthorNeo4j {
         }
     }
 
-    public boolean deleteAuthorFollowsAuthor(String author, String authorFollowed) {
+    public boolean deleteAuthorFollowsAuthor(String authorName, String authorNameFollowed) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query =  "MATCH (a1:Author {name: $follower})-[r:FOLLOWS_AUTHOR]->(a2:Author {name: $followed}) " +
                             "DELETE r";
-            Value params = parameters("follower", author, "followed", authorFollowed);
+            Value params = parameters("follower", authorName, "followed", authorNameFollowed);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -139,13 +139,13 @@ public class AuthorNeo4j {
         }
     }
 
-    public boolean deleteAllAuthorFollowsAuthor(String author) {
+    public boolean deleteAllAuthorFollowsAuthor(String authorName) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query =  "MATCH (a1:Author {name: $name})-[r:FOLLOWS_AUTHOR]->() " +
                             "DELETE r";
-            Value params = parameters("name", author);
+            Value params = parameters("name", authorName);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -158,12 +158,12 @@ public class AuthorNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<String> showFollowedAuthors(User user, int limit) {
+    public List<String> showFollowedAuthors(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u:User { username: $username})-[r:FOLLOWS]->(a:Author)" + "\n" +
                 "RETURN a" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", user.getUsername(), "limit", limit);
+        Value params = parameters("username", username, "limit", limit);
         List<Record> result = null;
 
         try {
