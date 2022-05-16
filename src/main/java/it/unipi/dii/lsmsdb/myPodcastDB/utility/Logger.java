@@ -6,10 +6,12 @@ import java.util.Date;
 
 public class Logger {
     static private String fileName;
+    static private String logMode;
 
     public static void initialize() {
 
         fileName = "log.txt";
+        logMode = "verbose";
 
         try {
             FileWriter fw = new FileWriter(fileName);
@@ -23,6 +25,9 @@ public class Logger {
     }
 
     public static void info(String message) {
+        if (!logMode.equals("verbose"))
+            return;
+
         String log = "[!] " + message;
         System.out.println(log);
 
@@ -36,6 +41,9 @@ public class Logger {
     }
 
     public static void success(String message) {
+        if (logMode.equals("deploy"))
+            return;
+
         String log = "[+] " + message;
         System.out.println(log);
 
@@ -59,5 +67,9 @@ public class Logger {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void setLogMode(String newLogMode) {
+        logMode = newLogMode;
     }
 }

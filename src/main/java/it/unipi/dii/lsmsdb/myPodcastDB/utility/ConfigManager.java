@@ -64,6 +64,7 @@ public class ConfigManager {
         }
 
         config = (XMLconfig)xs.fromXML(importedXML);
+        Logger.setLogMode(config.getLogMode());
         Logger.success("Configuration loaded");
         return true;
     }
