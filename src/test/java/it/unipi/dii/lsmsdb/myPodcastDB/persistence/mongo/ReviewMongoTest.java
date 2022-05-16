@@ -1,6 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.Date;
 import java.util.List;
@@ -153,6 +155,9 @@ public class ReviewMongoTest {
     }
 
     public static void main(String[] args) {
+        Logger.initialize();
+        ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
+
         MongoManager manager = MongoManager.getInstance();
         manager.openConnection();
         ReviewMongoTest test = new ReviewMongoTest();

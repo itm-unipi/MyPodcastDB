@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import org.neo4j.driver.*;
 import org.neo4j.driver.Record;
 
@@ -18,9 +19,9 @@ public class Neo4jManager implements AutoCloseable {
     }
 
     public boolean openConnection() {
-        String uri = "neo4j://localhost:7687";                      // ConfigManager.GetNeo4JConnectorString();
-        String user = "neo4j";                                      // ConfigManager.GetNeo4JUser();
-        String password = "password";                               // ConfigManager.GetNeo4JPassword();
+        String uri = ConfigManager.getNeo4JConnectorString();
+        String user = ConfigManager.getNeo4JUser();
+        String password = ConfigManager.getNeo4JPassword();
 
         try {
             this.driver = GraphDatabase.driver(uri, AuthTokens.basic(user, password));

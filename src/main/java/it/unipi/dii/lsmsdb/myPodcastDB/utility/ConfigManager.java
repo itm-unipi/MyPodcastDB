@@ -88,8 +88,8 @@ public class ConfigManager {
 
     public static String getNeo4JConnectorString() {
         String stringConnector = "neo4j://" +
-                config.getNeo4JConfig().getNeo4JUser() + ":" +
-                config.getNeo4JConfig().getNeo4JPassword() + "@" +
+                // config.getNeo4JConfig().getNeo4JUser() + ":" +
+                // config.getNeo4JConfig().getNeo4JPassword() + "@" +
                 config.getNeo4JConfig().getNeo4JIp() + ":" +
                 config.getNeo4JConfig().getNeo4JPort() ;
         return stringConnector;

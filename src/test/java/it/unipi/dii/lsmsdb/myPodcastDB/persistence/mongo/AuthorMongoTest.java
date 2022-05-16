@@ -1,6 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -272,6 +274,9 @@ public class AuthorMongoTest {
     }
 
     public static void main(String[] args) {
+        Logger.initialize();
+        ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
+
         MongoManager mongoManager = MongoManager.getInstance();
         mongoManager.openConnection();
 

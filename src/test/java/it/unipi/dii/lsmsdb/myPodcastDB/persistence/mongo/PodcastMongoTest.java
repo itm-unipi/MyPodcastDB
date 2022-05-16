@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
@@ -19,7 +21,10 @@ public class PodcastMongoTest {
     }
 
     public static void main(String[] args) {
+        Logger.initialize();
         System.out.println("Test CRUD operation for podcasts");
+
+        ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
         
         MongoManager mongoManager = MongoManager.getInstance();
         mongoManager.openConnection();

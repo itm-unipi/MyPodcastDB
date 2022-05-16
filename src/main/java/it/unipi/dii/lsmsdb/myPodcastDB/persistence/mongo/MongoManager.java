@@ -5,6 +5,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import org.bson.Document;
 
 public class MongoManager implements AutoCloseable {
@@ -20,9 +21,9 @@ public class MongoManager implements AutoCloseable {
 
     public boolean openConnection() {
         try {
-            ConnectionString uri = new ConnectionString("mongodb://admin:password@localhost:27017/"); // ConfigManager.GetMongoDBConnectorString()
+            ConnectionString uri = new ConnectionString(ConfigManager.getMongoDBConnectorString());
             this.mongoClient = MongoClients.create(uri);
-            this.database = mongoClient.getDatabase("myPodcastDB"); // ConfigManager.GetMongoDBName()
+            this.database = mongoClient.getDatabase(ConfigManager.getMongoDBName());
         } catch (Exception e) {
             e.printStackTrace();
             return false;

@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -217,7 +219,8 @@ public class PodcastNeo4jTest {
     }
 
     public static void main(String[] args) {
-        System.out.println("Test");
+        Logger.initialize();
+        ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
 
         Neo4jManager manager = Neo4jManager.getInstance();
         manager.openConnection();
