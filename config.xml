@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmlConfig>
+    <mongoDBConfig>
+        <mongoDBIp>localhost</mongoDBIp>
+        <mongoDBPort>27017</mongoDBPort>
+        <mongoDBName>myPodcastDB</mongoDBName>
+        <mongoDBUser>admin</mongoDBUser>
+        <mongoDBPassword>password</mongoDBPassword>
+    </mongoDBConfig>
+    <neo4JConfig>
+        <neo4JIp>localhost</neo4JIp>
+        <neo4JPort>7687</neo4JPort>
+        <neo4JName>myPodcastDB</neo4JName>
+        <neo4JUser>neo4j</neo4JUser>
+        <neo4JPassword>password</neo4JPassword>
+    </neo4JConfig>
+    <logMode>verbose</logMode>
+</xmlConfig>
