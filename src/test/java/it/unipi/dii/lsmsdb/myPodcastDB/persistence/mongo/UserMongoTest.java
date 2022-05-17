@@ -71,7 +71,7 @@ public class UserMongoTest {
         if(compare(newUser, createdUser, false))
             System.out.println("[+] addUser");
         else
-            System.err.println("addUser doesn't works");
+            System.err.println("[-] addUser");
     }
 
     public void findsTest() {
