@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -11,7 +12,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.TestController">
    <children>
@@ -30,7 +30,7 @@
          <left>
             <VBox alignment="TOP_CENTER" prefHeight="620.0" prefWidth="416.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fitHeight="331.0" fitWidth="460.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imageTest" fitHeight="331.0" fitWidth="460.0" onMouseClicked="#onImageClick" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../../../../../../../../../Users/matte/Desktop/test.jpg" />
                      </image>
@@ -51,7 +51,14 @@
          <center>
             <HBox alignment="CENTER" prefHeight="617.0" prefWidth="845.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane prefHeight="620.0" prefWidth="990.0" />
+                  <ScrollPane prefHeight="620.0" prefWidth="990.0">
+                     <content>
+                        <Button fx:id="buttonTest" mnemonicParsing="false" onMouseClicked="#testClick" prefHeight="88.0" prefWidth="194.0" text="OK">
+                           <font>
+                              <Font name="System Bold" size="42.0" />
+                           </font>
+                        </Button>
+                     </content></ScrollPane>
                </children>
             </HBox>
          </center>

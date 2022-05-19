@@ -11,6 +11,7 @@ module myPodcastDB {
 
     opens it.unipi.dii.lsmsdb.myPodcastDB.utility to xstream;
     opens it.unipi.dii.lsmsdb.myPodcastDB to javafx.fxml;
+    opens it.unipi.dii.lsmsdb.myPodcastDB.controller to javafx.fxml;
     exports it.unipi.dii.lsmsdb.myPodcastDB;
     exports it.unipi.dii.lsmsdb.myPodcastDB.controller;
 }
