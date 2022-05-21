@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;
 
@@ -14,11 +16,11 @@ public class UserNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addUser(String username) {
+    public boolean addUser(String username, String pictureMedium) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "CREATE (u:User {username: $username})";
-        Value params = parameters("username", username);
+        String query = "CREATE (u:User {username: $username, pictureMedium: $pictureMedium})";
+        Value params = parameters("username", username, "pictureMedium", pictureMedium);
 
         try {
             manager.write(query, params);
@@ -162,25 +164,6 @@ public class UserNeo4j {
         return true;
     }
 
-    public boolean checkUserExists(String username){
-        Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User{username: $username}) RETURN u";
-        Value params = parameters("username", username);
-        List<Record> result = null;
-
-        try {
-            result = manager.read(query, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if(result != null && result.iterator().hasNext())
-            return true;
-        else
-            return false;
-    }
-
     public boolean checkUserLikesPodcastExists(String username, String podcastId){
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username})-[r:LIKES]->(p:Podcast{podcastId: $podcastId}) RETURN r";
@@ -259,50 +242,10 @@ public class UserNeo4j {
             return false;
     }
 
-    public boolean checkUserFollowUserExists(String username1, String username2){
-        Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u1:User{username: $username1})-[r:FOLLOWS_USER]->(u2:User{username: $username2}) RETURN r";
-        Value params = parameters("username1", username1, "username2", username2);
-        List<Record> result = null;
-
-        try {
-            result = manager.read(query, params);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if(result != null && result.iterator().hasNext())
-            return true;
-        else
-            return false;
-    }
-
     public boolean checkAllUserFollowUserExists(String username1){
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u1:User{username: $username1})-[r:FOLLOWS_USER]->(u2:User) RETURN r";
         Value params = parameters("username1", username1);
-        List<Record> result = null;
-
-        try {
-            result = manager.read(query, params);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        if(result != null && result.iterator().hasNext())
-            return true;
-        else
-            return false;
-    }
-
-    public boolean checkUserFollowAuthorExists(String username, String authorName){
-        Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User{username: $username})-[r:FOLLOWS]->(a:Author{name: $authorName}) RETURN r";
-        Value params = parameters("username", username, "authorName", authorName);
         List<Record> result = null;
 
         try {
@@ -341,11 +284,11 @@ public class UserNeo4j {
 
     // --------- UPDATE --------- //
 
-    public boolean updateUser(String oldUsername, String newUsername) {
+    public boolean updateUser(String oldUsername, String newUsername, String newPicture) {
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User{username: $old})" +
-                "SET u.username = $new";
-        Value params = parameters("old", oldUsername, "new", newUsername);
+        String query = "MATCH (u:User{username: $oldUsername})" +
+                "SET u.username = $newUsername, u.pictureMedium = $newPicture";
+        Value params = parameters("oldUsername", oldUsername, "newUsername", newUsername, "newPicture", newPicture);
 
         try {
             manager.write(query, params);
@@ -359,7 +302,7 @@ public class UserNeo4j {
 
     // --------- DELETE --------- //
 
-    public boolean deleteUser(String username) { //use DETACH
+    public boolean deleteUser(String username) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $username}) DETACH DELETE u";
         Value params = parameters("username", username);
@@ -502,7 +445,7 @@ public class UserNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<String> showFollowedUsers(String username, int limit) {
+    public List<UserPreview> showFollowedUsers(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u1:User { username: $username})-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
                 "RETURN u2" + "\n" +
@@ -520,31 +463,40 @@ public class UserNeo4j {
         if (result == null || !result.iterator().hasNext())
             return null;
 
-        List<String> users = new ArrayList<>();
+        List<UserPreview> users = new ArrayList<>();
         for (Record record : result) {
-            users.add(record.get(0).get("username").asString());
+            String followedUsername = record.get(0).get("username").asString();
+            String pictureMedium = record.get(0).get("pictureMedium").asString();
+
+            UserPreview user = new UserPreview(followedUsername, pictureMedium);
+            users.add(user);
         }
 
         return users;
     }
 
-    public List<String> showSuggestedUsersByFollowedAuthors(String username, int limit) {
+    public List<UserPreview> showSuggestedUsersByFollowedAuthors(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query = "MATCH (u1:User {username: $username })-[:FOLLOWS]->(:Author)<-[:FOLLOWS]-(u2:User) " +
                     "WHERE NOT EXISTS " +
                     "{ MATCH (u1)-[:FOLLOWS_USER]->(u2) } " +
-                    "RETURN DISTINCT u2.username as Username " +
+                    "RETURN u2" +
                     "LIMIT $limit";
             List<Record> result = manager.read(query, parameters("username", username, "limit", limit));
 
             if (result.isEmpty())
                 return null;
 
-            List<String> suggestedUsers = new ArrayList<String>();
-            for (Record record: result)
-                suggestedUsers.add(record.get("Username").asString());
+            List<UserPreview> suggestedUsers = new ArrayList<>();
+            for (Record record: result) {
+                String suggestedUsername = record.get(0).get("username").asString();
+                String pictureMedium = record.get(0).get("pictureMedium").asString();
+
+                UserPreview user = new UserPreview(suggestedUsername, pictureMedium);
+                suggestedUsers.add(user);
+            }
 
             return suggestedUsers;
         } catch (Exception e) {
@@ -553,7 +505,7 @@ public class UserNeo4j {
         }
     }
 
-    public List<String> showSuggestedUsersByLikedPodcasts(String username, int limit) {
+    public List<UserPreview> showSuggestedUsersByLikedPodcasts(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> result = null;
@@ -571,9 +523,12 @@ public class UserNeo4j {
         if (result == null)
             return null;
 
-        List<String> users = new ArrayList<>();
+        List<UserPreview> users = new ArrayList<>();
         for (Record record : result) {
-            String user = record.get(0).get("username").asString();
+            String suggestedUsername = record.get(0).get("username").asString();
+            String pictureMedium = record.get(0).get("pictureMedium").asString();
+
+            UserPreview user = new UserPreview(suggestedUsername, pictureMedium);
             users.add(user);
         }
 
