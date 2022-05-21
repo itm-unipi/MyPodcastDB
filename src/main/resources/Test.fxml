@@ -9,7 +9,9 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -45,6 +47,11 @@
                         <Insets left="44.0" right="44.0" />
                      </VBox.margin>
                   </Separator>
+                  <Button fx:id="buttonTest" mnemonicParsing="false" onMouseClicked="#testClick" prefHeight="88.0" prefWidth="194.0" text="OK">
+                     <font>
+                        <Font name="System Bold" size="42.0" />
+                     </font>
+                  </Button>
                </children>
             </VBox>
          </left>
@@ -53,11 +60,13 @@
                <children>
                   <ScrollPane prefHeight="620.0" prefWidth="990.0">
                      <content>
-                        <Button fx:id="buttonTest" mnemonicParsing="false" onMouseClicked="#testClick" prefHeight="88.0" prefWidth="194.0" text="OK">
-                           <font>
-                              <Font name="System Bold" size="42.0" />
-                           </font>
-                        </Button>
+                        <GridPane fx:id="podcastList" prefHeight="1.0" prefWidth="0.0">
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                        </GridPane>
                      </content></ScrollPane>
                </children>
             </HBox>
