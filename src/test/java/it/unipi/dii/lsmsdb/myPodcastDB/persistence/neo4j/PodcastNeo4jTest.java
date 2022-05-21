@@ -156,10 +156,10 @@ public class PodcastNeo4jTest {
 
     public void showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLikedTest() {
         List<PodcastPreview> results = this.podcastNeo4j.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked("yellowtiger876274", 10);
-        if (results.get(0).getPodcastId().equals("5505c5469d6cf22b9a12fae9") && results.get(0).getPodcastName().equals("Recommended Movie Squad"))
+        if (results.get(0).getPodcastId().equals("a4b4cd635cb78af7c7682dd0") && results.get(0).getPodcastName().equals("In Legal Terms"))
             System.out.println("[+] showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked");
         else
-            System.err.println("[-] showMostNumerousCategories");
+            System.err.println("[-] showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked");
     }
 
     public void showPodcastsInWatchlistTest(){

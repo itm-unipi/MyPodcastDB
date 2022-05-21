@@ -125,7 +125,7 @@ public class AuthorNeo4jTest {
 
     public void showMostFollowedAuthorTest() {
         List<Map.Entry<String, Integer>> results = this.authorNeo4j.showMostFollowedAuthor(10);
-        if (results.get(0).getKey().equals("Sharon Hoffman") && results.get(0).getValue() == 480)
+        if (results.get(0).getKey().equals("Lawrence Amsterdam") && results.get(0).getValue() == 474)
             System.out.println("[+] showMostFollowedAuthor");
         else
             System.err.println("[-] showMostFollowedAuthor");

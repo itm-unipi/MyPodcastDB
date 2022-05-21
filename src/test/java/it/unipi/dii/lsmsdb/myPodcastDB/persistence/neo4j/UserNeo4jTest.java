@@ -381,7 +381,7 @@ public class UserNeo4jTest {
         List<UserPreview> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("whiterabbit394794", 25);
         boolean test = false;
         for (UserPreview user : users)
-            if (user.getUsername().equals("heavyfish188030"))
+            if (user.getUsername().equals("whiteelephant974216"))
                 test = true;
 
         if (test)
@@ -391,7 +391,7 @@ public class UserNeo4jTest {
     }
 
     public void showSuggestedUsersByFollowedAuthorsTest() {
-        List<UserPreview> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("organicmouse599943", 4);
+        List<UserPreview> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("whiterabbit394794", 4);
 
         if (suggestedUsers != null && suggestedUsers.size() == 4) {
             System.out.println("[+] showSuggestedUsersByFollowedAuthors");
