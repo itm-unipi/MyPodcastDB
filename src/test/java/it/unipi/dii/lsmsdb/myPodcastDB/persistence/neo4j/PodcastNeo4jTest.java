@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -18,13 +19,22 @@ public class PodcastNeo4jTest {
     }
 
     public void findPodcastsByNameTest() {
-        List<Entry<String, String>> podcasts = new ArrayList<>();
-        podcasts = podcastNeo4j.findPodcastsByName("Scaling Global");
+        List<PodcastPreview> podcasts = new ArrayList<>();
+        podcasts = podcastNeo4j.findPodcastsByName("Scaling Global", 10);
 
         if(podcasts != null) {
             System.out.println("[+] findPodcastsByName");
         } else
             System.err.println("[-] findPodcastsByName");
+    }
+
+    public void findPodcastsByPodcastIdTest() {
+        PodcastPreview podcast = podcastNeo4j.findPodcastByPodcastId("54eb342567c94dacfb2a3e50");
+
+        if(podcast != null && podcast.getPodcastName().equals("Scaling Global")) {
+            System.out.println("[+] findPodcastByPodcastId");
+        } else
+            System.err.println("[-] findPodcastByPodcastId");
     }
 
     public void addPodcastTest() {
@@ -65,20 +75,28 @@ public class PodcastNeo4jTest {
         podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
     }
 
+    public void updatePodcastTest() {
+        boolean result = podcastNeo4j.updatePodcast("0", "Podcast Test Updated", "18");
+        PodcastPreview podcast = podcastNeo4j.findPodcastByPodcastId("0");
+
+        if (podcast.getPodcastName().equals("Podcast Test Updated") && podcast.getArtworkUrl600().equals("18"))
+            System.out.println("[+] updatePodcast");
+        else
+            System.err.println("[-] updatePodcast");
+    }
     public void deletePodcastByIdTest() {
         // id test 75710
-        if (podcastNeo4j.deletePodcastById(75712) && podcastNeo4j.findPodcastsByName("Podcast Test") != null)
+        if (podcastNeo4j.deletePodcastById(75712) && podcastNeo4j.findPodcastsByName("Podcast Test", 10) != null)
             System.out.println("[+] deletePodcastById");
         else
             System.err.println("[-] deletePodcastById");
     }
 
     public void deletePodcastByPodcastIdTest() {
-        Podcast podcast = new Podcast("200", "Podcast Test 200", "art", "Apple Inc.", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
-        podcastNeo4j.addPodcast(podcast);
+        PodcastPreview podcast = podcastNeo4j.findPodcastByPodcastId("0");
 
-        if (podcastNeo4j.deletePodcastByPodcastId(podcast.getId())
-                && podcastNeo4j.findPodcastsByName(podcast.getName()) == null) {
+        if (podcastNeo4j.deletePodcastByPodcastId(podcast.getPodcastId())
+                && podcastNeo4j.findPodcastsByName(podcast.getPodcastName(), 10) == null) {
             System.out.println("[+] deletePodcastByPodcastId");
         } else
             System.err.println("[-] deletePodcastByPodcastId");
@@ -92,7 +110,7 @@ public class PodcastNeo4jTest {
         podcastNeo4j.addPodcast(podcast2);
 
         if (podcastNeo4j.deletePodcastsByName(podcast1.getName()) &&
-                podcastNeo4j.findPodcastsByName(podcast1.getName()) == null)
+                podcastNeo4j.findPodcastsByName(podcast1.getName(), 10) == null)
             System.out.println("[+] deletePodcastsByName");
         else
             System.err.println("[-] deletePodcastsByName");
@@ -137,8 +155,8 @@ public class PodcastNeo4jTest {
     }
 
     public void showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLikedTest() {
-        List<Entry<String, String>> results = this.podcastNeo4j.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked("yellowtiger876274", 10);
-        if (results.get(0).getKey().equals("5505c5469d6cf22b9a12fae9") && results.get(0).getValue().equals("Recommended Movie Squad"))
+        List<PodcastPreview> results = this.podcastNeo4j.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked("yellowtiger876274", 10);
+        if (results.get(0).getPodcastId().equals("5505c5469d6cf22b9a12fae9") && results.get(0).getPodcastName().equals("Recommended Movie Squad"))
             System.out.println("[+] showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked");
         else
             System.err.println("[-] showMostNumerousCategories");
@@ -147,16 +165,16 @@ public class PodcastNeo4jTest {
     public void showPodcastsInWatchlistTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Entry<String, String>> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user, 10);
+        List<PodcastPreview> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user, 10);
 
         if(podcasts == null) {
-            System.err.println("showPodcastsInWatchlist");
+            System.err.println("[-] showPodcastsInWatchlist");
             return;
         }
         else
-            System.out.println("showPodcastsInWatchlist");
+            System.out.println("[+] showPodcastsInWatchlist");
 
-        for(Entry<String, String> podcast : podcasts)
+        for(PodcastPreview podcast : podcasts)
             System.out.println(podcast);
     }
 
@@ -165,11 +183,11 @@ public class PodcastNeo4jTest {
         List<Entry<String, Integer>> categories = this.podcastNeo4j.showMostAppreciatedCategories(10);
 
         if(categories == null || categories.isEmpty()) {
-            System.err.println("showMostAppreciatedCategories");
+            System.err.println("[-] showMostAppreciatedCategories");
             return;
         }
         else
-            System.out.println("showMostAppreciatedCategories");
+            System.out.println("[+] showMostAppreciatedCategories");
 
         for(Entry<String, Integer> category : categories)
             System.out.println(category);
@@ -178,37 +196,37 @@ public class PodcastNeo4jTest {
     public void showSuggestedPodcastsLikedByFollowedUsersTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Entry<String, String>> podcasts = this.podcastNeo4j.showSuggestedPodcastsLikedByFollowedUsers(user, 10);
+        List<PodcastPreview> podcasts = this.podcastNeo4j.showSuggestedPodcastsLikedByFollowedUsers(user, 10);
 
         if(podcasts == null) {
-            System.err.println("showSuggestedPodcastsLikedByFollowedUsers");
+            System.err.println("[-] showSuggestedPodcastsLikedByFollowedUsers");
             return;
         }
         else
-            System.out.println("showSuggestedPodcastsLikedByFollowedUsers");
+            System.out.println("[+] showSuggestedPodcastsLikedByFollowedUsers");
 
-        for(Entry<String, String> podcast : podcasts)
+        for(PodcastPreview podcast : podcasts)
             System.out.println(podcast);
     }
 
     public void showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlistTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Entry<String, String>> podcasts = this.podcastNeo4j.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(user, 10);
+        List<PodcastPreview> podcasts = this.podcastNeo4j.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(user, 10);
 
         if(podcasts == null) {
-            System.err.println("showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist");
+            System.err.println("[-] showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist");
             return;
         }
         else
-            System.out.println("showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist");
+            System.out.println("[+] showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist");
 
-        for(Entry<String, String> podcast : podcasts)
+        for(PodcastPreview podcast : podcasts)
             System.out.println(podcast);
     }
 
     public void showMostLikedPodcastsTest () {
-        List<Entry<String, Integer>> mostLikedPodcasts = podcastNeo4j.showMostLikedPodcasts(5);
+        List<Entry<PodcastPreview, Integer>> mostLikedPodcasts = podcastNeo4j.showMostLikedPodcasts(5);
 
         if (mostLikedPodcasts != null && mostLikedPodcasts.size() == 5) {
             //for (Entry<String, Integer> e : mostLikedPodcasts)
@@ -228,9 +246,11 @@ public class PodcastNeo4jTest {
         PodcastNeo4jTest test = new PodcastNeo4jTest();
 
         test.findPodcastsByNameTest();
+        test.findPodcastsByPodcastIdTest();
         test.addPodcastTest();
         test.addPodcastBelongsToCategoryTest();
         test.addPodcastCreatedByAuthorTest();
+        test.updatePodcastTest();
         //test.deletePodcastByIdTest();
         test.deletePodcastByPodcastIdTest();
         test.deletePodcastsByNameTest();

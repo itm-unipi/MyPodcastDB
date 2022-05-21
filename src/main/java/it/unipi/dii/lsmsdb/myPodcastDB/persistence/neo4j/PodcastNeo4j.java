@@ -68,13 +68,13 @@ public class PodcastNeo4j {
 
     // ---------- READ ---------- //
 
-    public List<PodcastPreview> findPodcastsByName(String name) {
+    public List<PodcastPreview> findPodcastsByName(String name, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             List<Record> result = manager.read(
-                    "MATCH (p:Podcast { name: $name }) RETURN p LIMIT 10",
-                    parameters("name", name)
+                    "MATCH (p:Podcast { name: $name }) RETURN p LIMIT $limit",
+                    parameters("name", name, "limit", limit)
             );
 
             if (result.isEmpty())
@@ -95,6 +95,33 @@ public class PodcastNeo4j {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public PodcastPreview findPodcastByPodcastId(String podcastId) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            List<Record> result = manager.read(
+                    "MATCH (p:Podcast { podcastId: $podcastId }) RETURN p",
+                    parameters("podcastId", podcastId)
+            );
+
+            if (result.isEmpty())
+                return null;
+
+            for (Record record : result) {
+                String podcastName = record.get(0).get("name").asString();
+                String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
+
+                PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
+                return podcast;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
     }
 
     public boolean findPodcastCreatedByAuthor(String podcastId, String authorUsername) {
