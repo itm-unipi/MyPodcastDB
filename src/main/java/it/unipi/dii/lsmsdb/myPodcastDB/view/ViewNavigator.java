@@ -32,6 +32,11 @@ public enum ViewNavigator {
         public String getPage() {
             return "Search.fxml";
         }
+    },
+
+    PODCASTPAGE {
+        @Override
+        public String getPage() { return "PodcastPage.fxml"; }
     };
 
     public abstract String getPage();
