@@ -56,9 +56,9 @@ public class SignUpController {
     public void initialize() throws IOException {
 
         ObservableList<String> genderList = FXCollections.observableArrayList(
-                "Male",
-                "Famale",
-                "Other"
+                "male",
+                "famale",
+                "other"
         );
         ObservableList<String> countryList = FXCollections.observableArrayList(
                 "Italy",
@@ -79,7 +79,7 @@ public class SignUpController {
         signUpCoutryChoiceBox.setItems(countryList);
         signUpFavGenreChoiceBox.setItems(FavGenreList);
 
-        signUpGenderChoiceBox.setValue("Unknown");
+        signUpGenderChoiceBox.setValue("unknown");
         signUpCoutryChoiceBox.setValue("Unknown");
         signUpFavGenreChoiceBox.setValue("Unknown");
         signUpAgeDatePicker.setValue(LocalDate.now());

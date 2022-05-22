@@ -3,12 +3,15 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -30,7 +33,7 @@
                                 <Pane prefHeight="117.0" prefWidth="390.0" />
                                 <Pane prefHeight="117.0" prefWidth="48.0">
                                     <children>
-                                        <ImageView fx:id="loginHomeButton" fitHeight="29.0" fitWidth="43.0" layoutX="6.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="homeButton" fitHeight="29.0" fitWidth="43.0" layoutX="6.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@home.png" />
                                             </image>
@@ -39,8 +42,8 @@
                                 </Pane>
                                 <Pane prefHeight="117.0" prefWidth="194.0">
                                     <children>
-                                        <TextField fx:id="loginSearchTextField" layoutY="90.0" prefHeight="25.0" prefWidth="193.0" />
-                                        <ImageView fx:id="loginSearchButton" fitHeight="23.0" fitWidth="17.0" layoutX="172.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+                                        <TextField fx:id="searchTextField" layoutY="90.0" prefHeight="25.0" prefWidth="193.0" />
+                                        <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="17.0" layoutX="172.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@search.png" />
                                             </image>
@@ -56,35 +59,99 @@
                     </padding>
                 </VBox>
             </top>
-            <center>
-                <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-                    <children>
-                        <Pane prefHeight="101.0" prefWidth="920.0" />
-                        <Pane prefHeight="26.0" prefWidth="348.0" />
-                        <Pane prefHeight="44.0" prefWidth="280.0" />
-                        <Pane prefHeight="23.0" prefWidth="348.0" />
-                        <HBox prefHeight="103.0" prefWidth="280.0">
-                            <children>
-                                <Pane prefHeight="103.0" prefWidth="41.0" />
-                                <Pane prefHeight="103.0" prefWidth="60.0" />
-                                <Pane prefHeight="103.0" prefWidth="70.0" />
-                                <Pane prefHeight="103.0" prefWidth="73.0" />
-                        <Button fx:id="userPageLogoutButton" mnemonicParsing="false" onMouseClicked="#logoutButtonClick" text="LOGOUT">
-                           <font>
-                              <Font size="35.0" />
-                           </font>
-                        </Button>
-                            </children>
-                        </HBox>
-                    </children>
-                </VBox>
-            </center>
             <left>
                 <Pane prefHeight="600.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
             </left>
             <right>
                 <Pane prefHeight="600.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
             </right>
+         <center>
+            <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Pane prefHeight="50.0" prefWidth="920.0">
+                     <children>
+                        <Button fx:id="userPageFollowButton" layoutX="683.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" text="FOLLOW" />
+                     </children>
+                  </Pane>
+                  <HBox prefHeight="189.0" prefWidth="920.0">
+                     <children>
+                        <ImageView fx:id="userPageImage" fitHeight="152.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../../../../temporanei/Immagine%202022-05-22%20155932.png" />
+                           </image>
+                        </ImageView>
+                        <Pane prefHeight="230.0" prefWidth="58.0" />
+                        <VBox prefHeight="191.0" prefWidth="313.0">
+                           <children>
+                              <Pane prefHeight="0.0" prefWidth="313.0" />
+                              <Label prefHeight="17.0" prefWidth="313.0" text="Username ">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="userPageUsernameTextField" editable="false" text="Paolo" />
+                              <Label prefHeight="17.0" prefWidth="313.0" text="Country">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="userPageCountryTextField" editable="false" text="Altamura" />
+                              <Label prefHeight="17.0" prefWidth="313.0" text="Favourite Genre">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="userPageFavGenreTextField" editable="false" text="Crime" />
+                              <Label prefHeight="17.0" prefWidth="313.0" text="Gender">
+                                 <font>
+                                    <Font size="15.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="userPageGenderTextField" editable="false" text="Male" />
+                           </children>
+                        </VBox>
+                        <VBox prefHeight="230.0" prefWidth="248.0" />
+                     </children>
+                  </HBox>
+                  <VBox prefHeight="159.0" prefWidth="920.0">
+                     <children>
+                        <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold;" text="Watchlist">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <ScrollPane prefHeight="158.0" prefWidth="920.0" vbarPolicy="NEVER">
+                           <content>
+                              <GridPane fx:id="userPageWatchlistGrid">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <VBox prefHeight="159.0" prefWidth="920.0">
+                     <children>
+                        <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold;" text="Liked">
+                           <font>
+                              <Font size="20.0" />
+                           </font>
+                        </Label>
+                        <ScrollPane prefHeight="158.0" prefWidth="920.0" vbarPolicy="NEVER">
+                           <content>
+                              <GridPane fx:id="userPageLikedGrid">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+               </children>
+            </VBox>
+         </center>
         </BorderPane>
     </children>
 </AnchorPane>
