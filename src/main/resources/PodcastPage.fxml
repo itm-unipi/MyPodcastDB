@@ -14,14 +14,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPageController">
    <children>
       <BorderPane layoutX="100.0" layoutY="100.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <VBox maxWidth="-Infinity" prefWidth="920.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefHeight="180.0" prefWidth="920.0">
+                  <VBox alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefHeight="100.0" prefWidth="920.0">
                      <children>
                         <Label text="MyPodcastDB">
                            <font>
@@ -34,7 +33,7 @@
                         <Separator maxWidth="-Infinity" prefWidth="920.0" valignment="TOP" />
                      </children>
                   </VBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefWidth="200.0">
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
@@ -51,7 +50,7 @@
                               </Separator>
                            </children>
                         </VBox>
-                        <VBox maxWidth="-Infinity" prefHeight="334.0" prefWidth="620.0">
+                        <VBox maxWidth="-Infinity" prefWidth="600.0">
                            <children>
                               <HBox prefHeight="100.0" prefWidth="200.0">
                                  <children>
@@ -136,7 +135,7 @@
                                     <Insets top="10.0" />
                                  </VBox.margin>
                               </Separator>
-                              <ScrollPane prefHeight="201.0" prefWidth="620.0">
+                              <ScrollPane prefHeight="380.0" prefWidth="600.0">
                                 <content>
                                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                                        <children>
@@ -150,6 +149,9 @@
                                 </content>
                               </ScrollPane>
                            </children>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
                         </VBox>
                      </children>
                   </HBox>
