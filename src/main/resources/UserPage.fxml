@@ -33,7 +33,7 @@
                                 <Pane prefHeight="117.0" prefWidth="390.0" />
                                 <Pane prefHeight="117.0" prefWidth="48.0">
                                     <children>
-                                        <ImageView fx:id="homeButton" fitHeight="29.0" fitWidth="43.0" layoutX="6.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="homeButton" fitHeight="29.0" fitWidth="43.0" layoutX="6.0" layoutY="85.0" onMouseClicked="#homeButtonClick" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@home.png" />
                                             </image>
@@ -43,7 +43,7 @@
                                 <Pane prefHeight="117.0" prefWidth="194.0">
                                     <children>
                                         <TextField fx:id="searchTextField" layoutY="90.0" prefHeight="25.0" prefWidth="193.0" />
-                                        <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="17.0" layoutX="172.0" layoutY="94.0" pickOnBounds="true" preserveRatio="true">
+                                        <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="17.0" layoutX="172.0" layoutY="94.0" onMouseClicked="#searchButtonClick" pickOnBounds="true" preserveRatio="true">
                                             <image>
                                                 <Image url="@search.png" />
                                             </image>
@@ -70,7 +70,7 @@
                <children>
                   <Pane prefHeight="50.0" prefWidth="920.0">
                      <children>
-                        <Button fx:id="userPageFollowButton" layoutX="683.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" text="FOLLOW" />
+                        <Button fx:id="userPageFollowButton" layoutX="593.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" text="FOLLOW" />
                      </children>
                   </Pane>
                   <HBox prefHeight="189.0" prefWidth="920.0">
@@ -110,45 +110,80 @@
                               <TextField fx:id="userPageGenderTextField" editable="false" text="Male" />
                            </children>
                         </VBox>
-                        <VBox prefHeight="230.0" prefWidth="248.0" />
+                        <VBox prefHeight="189.0" prefWidth="153.0" />
+                        <ScrollPane hbarPolicy="NEVER" prefHeight="189.0" prefWidth="230.0">
+                           <content>
+                              <GridPane fx:id="userPageAuthorGrid">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
                      </children>
                   </HBox>
-                  <VBox prefHeight="159.0" prefWidth="920.0">
+                  <HBox prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold;" text="Watchlist">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane prefHeight="158.0" prefWidth="920.0" vbarPolicy="NEVER">
-                           <content>
-                              <GridPane fx:id="userPageWatchlistGrid">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                              </GridPane>
-                           </content>
-                        </ScrollPane>
+                        <VBox prefHeight="159.0" prefWidth="920.0">
+                           <children>
+                              <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold;" text="Watchlist">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" prefHeight="150.0" prefWidth="920.0" vbarPolicy="NEVER">
+                                 <content>
+                                    <GridPane fx:id="userPageWatchlistGrid">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                        <Pane prefHeight="150.0" prefWidth="59.0">
+                           <children>
+                              <ImageView fx:id="userPageWatchlistButton" fitHeight="30.0" fitWidth="30.0" layoutY="75.0" onMouseClicked="#scrollWatchlistButtonClick" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@next.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
                      </children>
-                  </VBox>
-                  <VBox prefHeight="159.0" prefWidth="920.0">
+                  </HBox>
+                  <HBox prefHeight="150.0" prefWidth="200.0">
                      <children>
-                        <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold;" text="Liked">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Label>
-                        <ScrollPane prefHeight="158.0" prefWidth="920.0" vbarPolicy="NEVER">
-                           <content>
-                              <GridPane fx:id="userPageLikedGrid">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                              </GridPane>
-                           </content>
-                        </ScrollPane>
+                        <VBox prefHeight="150.0" prefWidth="894.0">
+                           <children>
+                              <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold;" text="Liked">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fx:id="userPageLikedScrollPane" hbarPolicy="NEVER" prefHeight="150.0" prefWidth="898.0" vbarPolicy="NEVER">
+                                 <content>
+                                    <GridPane fx:id="userPageLikedGrid">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
+                        <Pane prefHeight="150.0" prefWidth="31.0">
+                           <children>
+                              <ImageView fx:id="userPageLikedButton" fitHeight="30.0" fitWidth="30.0" layoutX="-1.0" layoutY="75.0" onMouseClicked="#scrollLikedButtonClick" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@next.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </Pane>
                      </children>
-                  </VBox>
+                  </HBox>
                </children>
             </VBox>
          </center>

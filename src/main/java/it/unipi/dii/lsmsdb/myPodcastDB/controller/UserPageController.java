@@ -1,16 +1,25 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,6 +46,12 @@ public class UserPageController {
     private Button userPageFollowButton;
 
     @FXML
+    private ImageView  userPageWatchlistButton;
+
+    @FXML
+    private ImageView  userPageLikedButton;
+
+    @FXML
     private TextField userPageGenderTextField;
 
     @FXML
@@ -49,7 +64,16 @@ public class UserPageController {
     private GridPane userPageWatchlistGrid;
 
     @FXML
+    private ScrollPane userPageWatchlistScrollPane;
+
+    @FXML
+    private ScrollPane userPageLikedScrollPane;
+
+    @FXML
     private ImageView userPageImage;
+
+    @FXML
+    private GridPane userPageAuthorGrid;
 
     public void initialize() throws IOException {
 
@@ -64,9 +88,16 @@ public class UserPageController {
         List<PodcastPreview> test = new ArrayList<>();
         PodcastPreview p1 = new PodcastPreview("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
         PodcastPreview p2 = new PodcastPreview("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
+        PodcastPreview p3 = new PodcastPreview("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/60x60bb.jpg");
+        List<String> authors = new ArrayList<>();
+
         for(int i = 0; i < 5; i++){
             test.add(p1);
             test.add(p2);
+            test.add(p3);
+            authors.add("Michael Colosi");
+            authors.add("Preface Podcast");
+            authors.add("Apple Inc.");
         }
 
         //fill textefileds and image
@@ -77,7 +108,7 @@ public class UserPageController {
         Image image = new Image(user.getPictureMedium());
         userPageImage.setImage(image);
 
-        // fill the grid
+        // fill the watchlist and liked grids
         int row = 0;
         int column = 0;
         for (PodcastPreview podcast : test) {
@@ -99,6 +130,31 @@ public class UserPageController {
             this.userPageLikedGrid.add(newPodcast2, column, row);
             column++;
         }
+
+        // fill the watchlist and liked grids
+        int row2 = 0;
+        int column2 = 0;
+        for (String author : authors) {
+
+            Label authorLabel = new Label();
+            authorLabel.setText(author);
+            authorLabel.setPrefWidth(230);
+            authorLabel.setPrefHeight(20);
+            authorLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    getAuthorCliked(author);
+                }
+            });
+
+            // add new podcast to grid
+            this.userPageAuthorGrid.add(authorLabel, column2, row2);
+            row2++;
+        }
+    }
+
+    void getAuthorCliked(String author){
+        Logger.info("Author " + author + " pressed");
     }
 
     @FXML
@@ -108,4 +164,36 @@ public class UserPageController {
         else
             userPageFollowButton.setText("FOLLOW");
     }
+
+
+    @FXML
+    void scrollWatchlistButtonClick(MouseEvent event) {
+        Logger.info("watchlist button pressed");
+        double scrollValue = 0.16;
+        if(userPageWatchlistScrollPane.getHvalue() == 1.0)
+            scrollValue = -1;
+        userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() + scrollValue);
+        //Logger.info(((Double)(userPageWatchlistScrollPane.getHvalue())).toString());
+    }
+
+    @FXML
+    void scrollLikedButtonClick(MouseEvent event) {
+        Logger.info("liked button pressed");
+        double scrollValue = 0.16;
+        if(userPageLikedScrollPane.getHvalue() == 1.0)
+            scrollValue = -1;
+        userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() + scrollValue);
+    }
+
+    @FXML
+    void homeButtonClick(MouseEvent event) throws IOException {
+        Logger.info("home button pressed");
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
+    @FXML
+    void searchButtonClick(MouseEvent event) {
+        Logger.info("Search: " + searchTextField.getText());
+    }
+
 }
