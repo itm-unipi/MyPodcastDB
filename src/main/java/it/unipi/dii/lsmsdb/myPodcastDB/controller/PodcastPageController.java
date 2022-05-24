@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,7 +37,7 @@ public class PodcastPageController {
     private GridPane episodesGrid;
 
     @FXML
-    private Button like;
+    private ImageView like;
 
     @FXML
     private Label numEpisodes;
@@ -57,9 +58,26 @@ public class PodcastPageController {
     private Label title;
 
     @FXML
-    private Button watchlater;
+    private ImageView watchlater;
+
+    @FXML
+    private ProgressBar fiveStars;
+
+    @FXML
+    private ProgressBar fourStars;
+
+    @FXML
+    private ProgressBar threeStars;
+
+    @FXML
+    private ProgressBar twoStars;
+
+    @FXML
+    private ProgressBar oneStar;
 
     private Podcast podcast;
+    private boolean liked;
+    private boolean watchLatered;
 
     public void initialize() throws IOException {
         // Podcast Test
@@ -74,6 +92,16 @@ public class PodcastPageController {
             podcast.addReview("" + i, 5);
         }
 
+        // status test
+        this.liked = false;
+        this.watchLatered = false;
+
+        // image setup
+        Image likeIcon = new Image(getClass().getResourceAsStream("/img/hearts.png"));
+        this.like.setImage(likeIcon);
+        Image watchlaterIcon = new Image(getClass().getResourceAsStream("/img/pin.png"));
+        this.watchlater.setImage(watchlaterIcon);
+
         // podcast initialization
         this.title.setText(podcast.getName());
         this.author.setText(podcast.getAuthorName());
@@ -81,8 +109,8 @@ public class PodcastPageController {
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
         this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-        this.numReviews.setText(podcast.getReviews().size() + " reviews");
-        this.rating.setText("Rating: " + podcast.getRating());
+        this.rating.setText("" + podcast.getRating());
+        this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
 
         // insert episodes in grid
         int row = 0;
@@ -99,19 +127,9 @@ public class PodcastPageController {
             // add new podcast to grid
             this.episodesGrid.add(newEpisode, column, row++);
         }
-    }
 
-    public void setData(Podcast podcast) {
-        this.podcast = podcast;
-
-        this.title.setText(podcast.getName());
-        this.author.setText(podcast.getAuthorName());
-        Image image = new Image(podcast.getArtworkUrl600());
-        this.podcastImage.setImage(image);
-        this.category.setText(podcast.getPrimaryCategory());
-        this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-        this.numReviews.setText(this.podcast.getReviews().size() + " reviews");
-        this.rating.setText("Rating: " + this.podcast.getRating());
+        // calculate the progress bar for ratings
+        this.fiveStars.setProgress(0.5);
     }
 
     @FXML
@@ -132,5 +150,55 @@ public class PodcastPageController {
     @FXML
     void mouseOutReview(MouseEvent event) {
         this.showReviews.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
+
+    @FXML
+    void clickOnAuthor(MouseEvent event) {
+        Logger.info("Show author");
+    }
+
+    @FXML
+    void clickOnReviews(MouseEvent event) {
+        Logger.info("Show reviews");
+    }
+
+    @FXML
+    void clickOnLike(MouseEvent event) {
+        this.liked = !this.liked;
+
+        if (this.liked)
+            Logger.info("Like");
+        else
+            Logger.info("Dislike");
+    }
+
+    @FXML
+    void clickOnWatchlater(MouseEvent event) {
+        this.watchLatered = !this.watchLatered;
+
+        if (this.watchLatered)
+            Logger.info("Added to watchlater");
+        else
+            Logger.info("Removed from watchlater");
+    }
+
+    @FXML
+    void mouseOnLike(MouseEvent event) {
+        Logger.info("On like");
+    }
+
+    @FXML
+    void mouseOnWatchlater(MouseEvent event) {
+        Logger.info("On watchlater");
+    }
+
+    @FXML
+    void mouseOutLike(MouseEvent event) {
+        Logger.info("Out of like");
+    }
+
+    @FXML
+    void mouseOutWatchlater(MouseEvent event) {
+        Logger.info("Out of watchlater");
     }
 }
