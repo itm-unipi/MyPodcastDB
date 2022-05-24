@@ -15,7 +15,7 @@
          <children>
             <ImageView fx:id="podcastImage" fitHeight="185.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                <image>
-                  <Image url="@img/testImg1Podcast.jpg" />
+                  <Image url="@img/test.jpg" />
                </image>
             </ImageView>
             <Label fx:id="podcastName" minHeight="35.0" prefHeight="35.0" prefWidth="165.0" style="-fx-scale-y: 1.06;" text="SermonAudio" textFill="#434343de">

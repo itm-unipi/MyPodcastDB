@@ -1,16 +1,16 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.view;
 
 public enum ViewNavigator {
-    TEST {
+    USERHOME {
         @Override
         public String getPage() {
-            return "Test.fxml";
+            return "UserHome.fxml";
         }
     },
-    TEST2 {
+    AUTHORPROFILE {
         @Override
         public String getPage() {
-            return "Test2.fxml";
+            return "AuthorProfile.fxml";
         }
     },
     LOGIN{

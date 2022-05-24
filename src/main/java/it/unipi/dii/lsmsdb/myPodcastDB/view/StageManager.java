@@ -19,7 +19,7 @@ public class StageManager {
     public static void initialize(Stage stage, String title, Application main) throws IOException {
         primaryStage = stage;
         application = main;
-        Parent root = FXMLLoader.load(application.getClass().getClassLoader().getResource(ViewNavigator.HOMEUSER.getPage()));
+        Parent root = FXMLLoader.load(application.getClass().getClassLoader().getResource(ViewNavigator.USERHOME.getPage()));
         primaryStage.setTitle(title);
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);

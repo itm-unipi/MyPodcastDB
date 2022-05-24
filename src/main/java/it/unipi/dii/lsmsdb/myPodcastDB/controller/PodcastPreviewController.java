@@ -72,5 +72,4 @@ public class PodcastPreviewController {
         podcastImage.setImage(image);
         podcastName.setText(podcast.getPodcastName());
     }
-
 }

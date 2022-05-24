@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
+import org.javatuples.Triplet;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -101,6 +103,21 @@ public class Author {
     public void addPodcast(String id, String name, Date releaseDate) {
         ReducedPodcast podcast = new ReducedPodcast(id, name, releaseDate);
         this.ownPodcasts.add(podcast);
+    }
+
+    public List<Triplet<String, String, Date>>getPodcasts() {
+        List<ReducedPodcast> reducedPodcasts = getOwnPodcasts();
+        List<Triplet<String, String, Date>> podcasts = new ArrayList<>();
+
+        for (ReducedPodcast rd: reducedPodcasts) {
+            String id = rd.getId();
+            String name = rd.getName();
+            Date releaseDate = rd.getReleaseDate();
+
+            podcasts.add(new Triplet<String, String, Date>(id, name, releaseDate));
+        }
+
+        return podcasts;
     }
 
     @Override

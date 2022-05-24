@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -17,7 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeUserController {
+public class UserHomeController {
 
     private UserPreview userPreview;
 
@@ -26,6 +25,9 @@ public class HomeUserController {
 
     @FXML
     private ImageView userPicture;
+
+    @FXML
+    private GridPane gridMostLikedPodcasts;
 
     @FXML
     private GridPane gridSuggestedForAuthor;
@@ -38,6 +40,9 @@ public class HomeUserController {
 
     @FXML
     private GridPane gridWatchlist;
+
+    @FXML
+    private ScrollPane scrollMostLikedPodcasts;
 
     @FXML
     private ScrollPane scrollSuggestedForAuthor;
@@ -55,6 +60,25 @@ public class HomeUserController {
     void userProfile(MouseEvent event) {
         Logger.info("User profile clicked");
         //StageManager.showPage(ViewNavigator.USERPROFILE.getPage());
+    }
+
+    @FXML
+    void nextMostLikedPodcasts(MouseEvent event) {
+        Logger.info("next podcast in mostLikedPodcasts");
+        double scrollValue = 1;
+        if (scrollMostLikedPodcasts.getHvalue() == 1.0)
+            scrollValue = -1;
+        scrollMostLikedPodcasts.setHvalue(scrollMostLikedPodcasts.getHvalue() + scrollValue);
+    }
+
+    @FXML
+    void backMostLikedPodcasts(MouseEvent event) {
+        Logger.info("back podcast in mostLikedPodcasts");
+        double scrollValue = 1;
+        if (scrollMostLikedPodcasts.getHvalue() == 0.0)
+            scrollMostLikedPodcasts.setHvalue(1.0);
+        else
+            scrollMostLikedPodcasts.setHvalue(scrollMostLikedPodcasts.getHvalue() - scrollValue);
     }
 
     @FXML
@@ -269,6 +293,37 @@ public class HomeUserController {
             // add new podcast to grid
 
             gridSuggestedForUser.add(newPodcast, column++, row);
+        }
+
+        /************************************************************************************/
+
+        previewList.clear();
+        p1 = new PodcastPreview("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
+        p2 = new PodcastPreview("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
+        p3 = new PodcastPreview("061a68eb754c400eae8027d7", "Average O Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/54/e4/84/54e48471-6971-03c8-83f4-4f973dc2a8cb/mza_8686729233410161200.jpg/600x600bb.jpg");
+        p4 = new PodcastPreview("34e734b09246d17dc5d56f63", "Getting Smart Podcast", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts115/v4/52/e3/25/52e325bd-e6ba-3899-b7b4-71e512a48472/mza_18046006527881111713.png/600x600bb.jpg");
+        p5 = new PodcastPreview("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
+        p6 = new PodcastPreview("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
+        previewList.add(p1);
+        previewList.add(p2);
+        previewList.add(p3);
+        previewList.add(p4);
+        previewList.add(p5);
+        previewList.add(p6);
+
+        row = 0;
+        column = 0;
+        for (PodcastPreview podcast : previewList){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            // create new podcast element
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            controller.setData(podcast);
+
+            // add new podcast to grid
+            gridMostLikedPodcasts.add(newPodcast, column++, row);
         }
     }
 }
