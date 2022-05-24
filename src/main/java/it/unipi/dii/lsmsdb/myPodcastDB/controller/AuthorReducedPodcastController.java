@@ -4,6 +4,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import org.javatuples.Triplet;
 
 import java.util.Date;
@@ -22,11 +24,23 @@ public class AuthorReducedPodcastController {
     @FXML
     private Label podcastName;
 
+    @FXML
+    private HBox reducedPodcast;
+
+    @FXML
+    void OnMouseHover(MouseEvent event) {
+        reducedPodcast.setStyle("-fx-background-color: #eeeeee");
+    }
+
+    @FXML
+    void onMouseExited(MouseEvent event) {
+        reducedPodcast.setStyle("-fx-background-color: transparent");
+    }
+
     public void setData(Author author) {
         this.author = author;
         List<Triplet<String, String, Date>> reducedPodcasts = author.getPodcasts();
 
-        // BOH
         /*
         Image image = new Image(podcast.getArtworkUrl600());
         podcastImage.setImage(image);

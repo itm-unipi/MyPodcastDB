@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,12 +12,15 @@
 
 <AnchorPane prefHeight="70.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorReducedPodcastController">
    <children>
-      <HBox prefHeight="70.0" prefWidth="500.0">
+      <HBox fx:id="reducedPodcast" onMouseEntered="#OnMouseHover" onMouseExited="#onMouseExited" prefHeight="70.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fx:id="podcastImage" fitHeight="70.0" fitWidth="80.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="podcastImage" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/test.jpg" />
                </image>
+               <HBox.margin>
+                  <Insets right="3.0" />
+               </HBox.margin>
             </ImageView>
             <VBox alignment="CENTER_LEFT" prefHeight="70.0">
                <children>
@@ -24,6 +28,9 @@
                      <font>
                         <Font name="Corbel Light" size="20.0" />
                      </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Label>
                   <Label fx:id="podcastReleaseDate" prefHeight="18.0" prefWidth="415.0" text="2018-07-06">
                      <font>
@@ -36,9 +43,6 @@
                </padding>
             </VBox>
          </children>
-         <padding>
-            <Insets bottom="3.0" top="4.0" />
-         </padding>
       </HBox>
    </children>
 </AnchorPane>

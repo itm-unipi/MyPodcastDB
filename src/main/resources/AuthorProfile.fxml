@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -82,18 +83,18 @@
             </VBox>
          </top>
          <center>
-            <VBox prefHeight="640.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="0.0" BorderPane.alignment="CENTER">
                <children>
-                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="620.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                      <content>
-                        <VBox alignment="TOP_CENTER" prefHeight="1180.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="630.0" prefWidth="1278.0">
                            <children>
                               <HBox prefHeight="36.0" prefWidth="1050.0">
                                  <VBox.margin>
                                     <Insets bottom="10.0" left="120.0" right="120.0" top="18.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label fx:id="authorName" prefHeight="36.0" prefWidth="1039.0" text="Apple Inc.">
+                                    <Label fx:id="authorName" prefHeight="36.0" prefWidth="1039.0" text="AuthorName">
                                        <font>
                                           <Font name="Corbel Light" size="30.0" />
                                        </font>
@@ -107,7 +108,7 @@
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
-                                    <GridPane fx:id="gridAuthorPodcasts" prefHeight="170.0" prefWidth="0.0">
+                                    <GridPane fx:id="gridAuthorPodcasts" prefHeight="170.0" prefWidth="0.0" vgap="10.0">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
@@ -120,31 +121,45 @@
                                     </GridPane>
                                  </children>
                               </VBox>
-                              <Label prefHeight="56.0" prefWidth="1045.0" text="Suggested for Author">
+                              <Label prefHeight="31.0" prefWidth="1046.0" text="Following">
                                  <font>
                                     <Font name="Corbel Light" size="22.0" />
                                  </font>
                               </Label>
-                              <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
+                              <Label fx:id="authorFollowing" prefHeight="27.0" prefWidth="1046.0" text="Authors followed by AuthorName">
+                                 <font>
+                                    <Font name="Corbel Light" size="16.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="97.0" prefWidth="1278.0">
                                  <children>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedCategory" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backFollowedAuthor" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/backArrow.png" />
                                        </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </ImageView>
-                                    <ScrollPane fx:id="scrollSuggestedForCategory" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="130.0" prefHeight="110.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                        <content>
-                                          <GridPane fx:id="gridSuggestedForCategory" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                          <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" hgap="7.0" prefHeight="130.0" prefWidth="0.0">
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                              </rowConstraints>
+                                             <columnConstraints>
+                                                <ColumnConstraints />
+                                             </columnConstraints>
                                           </GridPane>
                                        </content>
                                     </ScrollPane>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedCategory" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextFollowedAuthor" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/forwardArrow.png" />
                                        </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </ImageView>
                                  </children>
                                  <VBox.margin>
