@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.UserPageController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.UserPageController">
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
@@ -111,15 +111,24 @@
                            </children>
                         </VBox>
                         <VBox prefHeight="189.0" prefWidth="153.0" />
-                        <ScrollPane hbarPolicy="NEVER" prefHeight="189.0" prefWidth="230.0">
-                           <content>
-                              <GridPane fx:id="userPageAuthorGrid">
-                                <columnConstraints>
-                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                </columnConstraints>
-                              </GridPane>
-                           </content>
-                        </ScrollPane>
+                        <VBox prefHeight="189.0" prefWidth="228.0">
+                           <children>
+                              <Label prefHeight="23.0" prefWidth="134.0" text="Followed Authors">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="189.0" prefWidth="230.0">
+                                 <content>
+                                    <GridPane fx:id="userPageAuthorGrid">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
+                           </children>
+                        </VBox>
                      </children>
                   </HBox>
                   <HBox prefHeight="150.0" prefWidth="200.0">
