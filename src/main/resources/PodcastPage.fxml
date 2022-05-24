@@ -43,14 +43,15 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin></ImageView>
-                              <Label fx:id="category" text="Category">
-                                 <font>
-                                    <Font name="Corbel Light" size="18.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets top="5.0" />
-                                 </VBox.margin>
-                              </Label>
+                              <HBox prefWidth="200.0">
+                                 <children>
+                                    <Label fx:id="category" prefHeight="22.0" prefWidth="146.0" text="Category">
+                                       <font>
+                                          <Font name="Corbel Light" size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </HBox>
                               <Separator prefWidth="200.0">
                                  <VBox.margin>
                                     <Insets top="5.0" />
@@ -256,33 +257,44 @@
                                                 <Font name="Corbel Light" size="25.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="numEpisodes" text="# Episodes">
+                                          <Label fx:id="country" text="Country">
                                              <font>
-                                                <Font name="Corbel" size="18.0" />
+                                                <Font name="Corbel Light" size="18.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets bottom="5.0" top="6.0" />
                                              </VBox.margin>
                                           </Label>
+                                          <Label fx:id="numEpisodes" layoutX="10.0" layoutY="83.0" text="# Episodes">
+                                             <font>
+                                                <Font name="Corbel" size="18.0" />
+                                             </font>
+                                          </Label>
                                        </children>
                                     </VBox>
-                                    <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
+                                    <VBox alignment="TOP_RIGHT" prefHeight="122.0" prefWidth="190.0">
                                        <children>
-                                          <ImageView fx:id="like" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnLike" onMouseEntered="#mouseOnLike" onMouseExited="#mouseOutLike" pickOnBounds="true" preserveRatio="true">
-                                             <HBox.margin>
-                                                <Insets top="5.0" />
-                                             </HBox.margin>
-                                          </ImageView>
-                                          <ImageView fx:id="watchlater" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnWatchlater" onMouseEntered="#mouseOnWatchlater" onMouseExited="#mouseOutWatchlater" pickOnBounds="true" preserveRatio="true">
-                                             <HBox.margin>
-                                                <Insets left="5.0" top="5.0" />
-                                             </HBox.margin>
-                                          </ImageView>
+                                          <HBox alignment="TOP_RIGHT">
+                                             <children>
+                                                <ImageView fx:id="like" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnLike" onMouseEntered="#mouseOnLike" onMouseExited="#mouseOutLike" pickOnBounds="true" preserveRatio="true">
+                                                   <HBox.margin>
+                                                      <Insets top="5.0" />
+                                                   </HBox.margin>
+                                                </ImageView>
+                                                <ImageView fx:id="watchlater" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnWatchlater" onMouseEntered="#mouseOnWatchlater" onMouseExited="#mouseOutWatchlater" pickOnBounds="true" preserveRatio="true">
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ImageView>
+                                             </children>
+                                          </HBox>
+                                          <Label fx:id="content" alignment="BOTTOM_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="59.0" prefWidth="190.0" text="Content" textAlignment="RIGHT">
+                                             <font>
+                                                <Font name="Corbel Light" size="18.0" />
+                                             </font>
+                                          </Label>
                                        </children>
-                                       <HBox.margin>
-                                          <Insets top="5.0" />
-                                       </HBox.margin>
-                                    </HBox>
+                                    </VBox>
                                  </children>
                               </HBox>
                               <Separator prefWidth="200.0" />

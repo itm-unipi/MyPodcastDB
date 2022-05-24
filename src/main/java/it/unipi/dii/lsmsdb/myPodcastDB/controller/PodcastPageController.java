@@ -34,6 +34,12 @@ public class PodcastPageController {
     private Label category;
 
     @FXML
+    private Label content;
+
+    @FXML
+    private Label country;
+
+    @FXML
     private GridPane episodesGrid;
 
     @FXML
@@ -105,6 +111,8 @@ public class PodcastPageController {
         // podcast initialization
         this.title.setText(podcast.getName());
         this.author.setText(podcast.getAuthorName());
+        this.country.setText(podcast.getCountry());
+        this.content.setText("Content: " + podcast.getContentAdvisoryRating());
         Image image = new Image(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
