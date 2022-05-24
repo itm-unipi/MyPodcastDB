@@ -21,9 +21,17 @@ public enum ViewNavigator {
         @Override
         public String getPage(){ return "SignUP.fxml";}
     },
-    USERPAGE{
+    USERPAGE {
         @Override
-        public String getPage(){ return "UserPage.fxml";}
+        public String getPage() {
+            return "UserPage.fxml";
+        }
+    },
+    HOMEUSER {
+        @Override
+        public String getPage() {
+            return "HomeUser.fxml";
+        }
     };
 
     public abstract String getPage();

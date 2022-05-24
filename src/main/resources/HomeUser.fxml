@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.HomeUserController">
+   <children>
+      <BorderPane layoutX="50.0" layoutY="58.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <top>
+            <VBox prefHeight="80.0" prefWidth="920.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+               <BorderPane.margin>
+                  <Insets left="120.0" right="120.0" />
+               </BorderPane.margin>
+               <children>
+                  <HBox alignment="CENTER" prefHeight="80.0">
+                     <children>
+                        <ImageView fx:id="userPicture1" fitHeight="40.0" fitWidth="52.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/logo.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="30.0" prefWidth="199.0" text="MyPodcastDB">
+                           <font>
+                              <Font name="Corbel Light" size="24.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <HBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="920.0">
+                           <children>
+                              <ImageView fx:id="userPicture" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/userPicture.png" />
+                                 </image>
+                              </ImageView>
+                              <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
+                                 <children>
+                                    <TextField prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
+                                       <HBox.margin>
+                                          <Insets />
+                                       </HBox.margin>
+                                       <font>
+                                          <Font name="Corbel Light" size="16.0" />
+                                       </font>
+                                    </TextField>
+                                    <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/search.png" />
+                                       </image>
+                                       <HBox.margin>
+                                          <Insets left="5.0" />
+                                       </HBox.margin>
+                                    </ImageView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets bottom="23.0" left="5.0" top="23.0" />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets left="2.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+                  <Separator />
+               </children>
+            </VBox>
+         </top>
+         <center>
+            <VBox prefHeight="640.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                     <content>
+                        <VBox alignment="CENTER" prefHeight="1180.0">
+                           <children>
+                              <Label fx:id="userName" prefHeight="36.0" prefWidth="1050.0">
+                                 <font>
+                                    <Font name="Corbel Light" size="30.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" top="18.0" />
+                                 </VBox.margin>
+                              </Label>
+                              <Label prefHeight="27.0" prefWidth="1045.0" text="Watchlist">
+                                 <font>
+                                    <Font name="Corbel Light" size="22.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="250.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backWatchlist" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/backArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ScrollPane fx:id="scrollWatchlist" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                       <content>
+                                          <GridPane fx:id="gridWatchlist" alignment="CENTER_LEFT" hgap="7.0" prefHeight="230.0" prefWidth="1054.0">
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             </rowConstraints>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextWatchlist" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/forwardArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="-5.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Label prefHeight="56.0" prefWidth="1045.0" text="Suggested for Author">
+                                 <font>
+                                    <Font name="Corbel Light" size="22.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="250.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedAuthor" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/backArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ScrollPane fx:id="scrollSuggestedForAuthor" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                       <content>
+                                          <GridPane fx:id="gridSuggestedForAuthor" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             </rowConstraints>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedAuthor" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/forwardArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Label prefHeight="56.0" prefWidth="1045.0" text="Suggested for Category">
+                                 <font>
+                                    <Font name="Corbel Light" size="22.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedCategory" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/backArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ScrollPane fx:id="scrollSuggestedForCategory" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                       <content>
+                                          <GridPane fx:id="gridSuggestedForCategory" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             </rowConstraints>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedCategory" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/forwardArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </HBox>
+                              <Label prefHeight="56.0" prefWidth="1045.0" text="Suggested for User">
+                                 <font>
+                                    <Font size="22.0" />
+                                 </font>
+                              </Label>
+                              <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
+                                 <children>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedUser" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/backArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                    <ScrollPane fx:id="scrollSuggestedForUser" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                       <content>
+                                          <GridPane fx:id="gridSuggestedForUser" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                             </rowConstraints>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
+                                    <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedUser" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/forwardArrow.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </content>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </ScrollPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
+</AnchorPane>

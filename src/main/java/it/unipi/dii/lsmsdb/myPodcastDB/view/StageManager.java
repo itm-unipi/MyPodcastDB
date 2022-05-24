@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,9 +19,10 @@ public class StageManager {
     public static void initialize(Stage stage, String title, Application main) throws IOException {
         primaryStage = stage;
         application = main;
-        Parent root = FXMLLoader.load(application.getClass().getClassLoader().getResource(ViewNavigator.SIGNUP.getPage()));
+        Parent root = FXMLLoader.load(application.getClass().getClassLoader().getResource(ViewNavigator.HOMEUSER.getPage()));
         primaryStage.setTitle(title);
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

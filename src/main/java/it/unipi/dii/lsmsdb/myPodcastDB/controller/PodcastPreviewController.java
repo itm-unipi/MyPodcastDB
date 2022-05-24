@@ -8,7 +8,6 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
 public class PodcastPreviewController {
@@ -17,7 +16,10 @@ public class PodcastPreviewController {
     private ImageView podcastImage;
 
     @FXML
-    private Label PodcastName;
+    private Label podcastName;
+
+    @FXML
+    private VBox podcastPreviewBox;
 
     private PodcastPreview podcastPreview;
 
@@ -33,15 +35,30 @@ public class PodcastPreviewController {
     }
 
     @FXML
+    void onFocus(MouseEvent event) {
+        podcastPreviewBox.setStyle("-fx-border-color: #DBDBDB; -fx-background-color: #E5E5E5; -fx-background-radius: 7px; -fx-border-radius: 7px;");
+    }
+
+    @FXML
+    void onExit(MouseEvent event) {
+        podcastPreviewBox.setStyle("-fx-border-color: transparent;");
+    }
+
+    @FXML
+    void podcastInfo(MouseEvent event) {
+        Logger.info(podcastPreview.getPodcastId() + " : " + podcastPreview.getPodcastName());
+    }
+
+    @FXML
     void podcastIn(MouseEvent event) {
         podcastContainer.setStyle("-fx-background-color: f2f2f2; -fx-background-radius: 10;");
-        PodcastName.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+        podcastName.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
     }
 
     @FXML
     void podcastOut(MouseEvent event) {
         podcastContainer.setStyle("-fx-background-color: white");
-        PodcastName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
+        podcastName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
     }
 
 
@@ -50,8 +67,10 @@ public class PodcastPreviewController {
 
         Image image = new Image(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
-        this.PodcastName.setText(podcast.getPodcastName());
+        this.podcastName.setText(podcast.getPodcastName());
         this.podcastToolTip.setText(podcast.getPodcastName());
+        podcastImage.setImage(image);
+        podcastName.setText(podcast.getPodcastName());
     }
 
 }
