@@ -165,9 +165,22 @@ public class Podcast {
         this.episodes.add(episode);
     }
 
+    public void addEpisode(Episode newEpisode) {
+        this.episodes.add(newEpisode);
+    }
+
     public void addReview(String id, int rating) {
         ReducedReview review = new ReducedReview(id, rating);
         this.reviews.add(review);
+    }
+
+    public float getRating() {
+        float average = 0.0f;
+
+        for (ReducedReview review : this.reviews)
+            average += review.getRating();
+
+        return average / this.reviews.size();
     }
 
     @Override

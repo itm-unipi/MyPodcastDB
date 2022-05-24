@@ -7,10 +7,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseDragEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,11 +71,9 @@ public class PodcastPageController {
         Episode episode = new Episode(name, description, releaseDate, time);
         for (int i = 0; i < 10; i++) {
             episode.setName(episode.getName() + i);
-            podcast.addEpisode(episode.getName(), episode.getDescription(), episode.getReleaseDate(), episode.getTimeMillis());
+            podcast.addEpisode(episode);
             podcast.addReview("" + i, 5);
         }
-
-        // TODO: addEpisode(Episode), via la list dal costruttore?
 
         // podcast initialization
         this.title.setText(podcast.getName());
@@ -79,16 +81,11 @@ public class PodcastPageController {
         Image image = new Image(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
-        this.numEpisodes.setText(podcast.getEpisodes().size() + " Episodes");
-        float average = 0.0f;
-        int count = 0;
-        for (Entry<String, Integer> review : podcast.getReviews()) {
-            average += review.getValue();
-            count += 1;
-        }
-        this.numReviews.setText(count + " reviews");
-        this.rating.setText("Rating: " + floor(average / count));
+        this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
+        this.numReviews.setText(podcast.getReviews().size() + " reviews");
+        this.rating.setText("Rating: " + podcast.getRating());
 
+        // insert episodes in grid
         int row = 0;
         int column = 0;
         for (Episode ep : podcast.getEpisodes()) {
@@ -113,13 +110,28 @@ public class PodcastPageController {
         Image image = new Image(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
-        this.numEpisodes.setText(podcast.getEpisodes().size() + " Episodes");
-        float average = 0.0f;
-        int count = 0;
-        for (Entry<String, Integer> review : podcast.getReviews()) {
-            average += review.getValue();
-            count += 1;
-        }
-        this.rating.setText("Rating: " + floor(average / count));
+        this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
+        this.numReviews.setText(this.podcast.getReviews().size() + " reviews");
+        this.rating.setText("Rating: " + this.podcast.getRating());
+    }
+
+    @FXML
+    void mouseOnAuthor(MouseEvent event) {
+        this.author.setTextFill(Color.color(1.0, 1.0, 1.0));
+    }
+
+    @FXML
+    void mouseOutAuthor(MouseEvent event) {
+        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
+
+    @FXML
+    void mouseOnReview(MouseEvent event) {
+        this.showReviews.setTextFill(Color.color(1.0, 1.0, 1.0));
+    }
+
+    @FXML
+    void mouseOutReview(MouseEvent event) {
+        this.showReviews.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 }
