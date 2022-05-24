@@ -70,7 +70,6 @@ public class PodcastPageController {
         int time = 1450000;
         Episode episode = new Episode(name, description, releaseDate, time);
         for (int i = 0; i < 10; i++) {
-            episode.setName(episode.getName() + i);
             podcast.addEpisode(episode);
             podcast.addReview("" + i, 5);
         }
@@ -117,7 +116,7 @@ public class PodcastPageController {
 
     @FXML
     void mouseOnAuthor(MouseEvent event) {
-        this.author.setTextFill(Color.color(1.0, 1.0, 1.0));
+        this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
     }
 
     @FXML
@@ -127,7 +126,7 @@ public class PodcastPageController {
 
     @FXML
     void mouseOnReview(MouseEvent event) {
-        this.showReviews.setTextFill(Color.color(1.0, 1.0, 1.0));
+        this.showReviews.setTextFill(Color.color(0.6, 0.6, 0.6));
     }
 
     @FXML

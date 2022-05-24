@@ -9,20 +9,35 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefWidth="620.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.EpisodeController">
+<AnchorPane prefWidth="590.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.EpisodeController">
    <children>
       <BorderPane prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <VBox prefWidth="100.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="112.0" prefWidth="580.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="releaseDate" layoutX="10.0" layoutY="10.0" text="# Month, Year" />
-                  <Label fx:id="title" text="Title">
+                  <Label fx:id="releaseDate" layoutX="10.0" layoutY="10.0" text="# Month, Year">
                      <font>
-                        <Font name="System Bold" size="25.0" />
+                        <Font size="14.0" />
                      </font>
                   </Label>
-                  <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="620.0" />
-                  <Label fx:id="time" layoutX="10.0" layoutY="10.0" text="# Min" />
+                  <Label fx:id="title" text="Title">
+                     <font>
+                        <Font size="25.0" />
+                     </font>
+                  </Label>
+                  <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="580.0">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Text>
+                  <Label fx:id="time" layoutX="10.0" layoutY="10.0" text="# Min">
+                     <padding>
+                        <Insets bottom="3.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
                   <Separator prefWidth="200.0">
                      <VBox.margin>
                         <Insets bottom="5.0" />
@@ -33,4 +48,7 @@
          </center>
       </BorderPane>
    </children>
+   <padding>
+      <Insets right="5.0" />
+   </padding>
 </AnchorPane>
