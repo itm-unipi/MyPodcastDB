@@ -17,17 +17,17 @@
                <children>
                   <Label fx:id="releaseDate" layoutX="10.0" layoutY="10.0" text="# Month, Year">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="Corbel Light" size="14.0" />
                      </font>
                   </Label>
                   <Label fx:id="title" text="Title">
                      <font>
-                        <Font size="25.0" />
+                        <Font name="Corbel Light" size="25.0" />
                      </font>
                   </Label>
                   <Text fx:id="description" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="580.0">
                      <font>
-                        <Font size="15.0" />
+                        <Font name="Corbel Light" size="16.0" />
                      </font>
                   </Text>
                   <Label fx:id="time" layoutX="10.0" layoutY="10.0" text="# Min">
@@ -35,7 +35,7 @@
                         <Insets bottom="3.0" top="5.0" />
                      </padding>
                      <font>
-                        <Font size="14.0" />
+                        <Font name="Corbel Light" size="15.0" />
                      </font>
                   </Label>
                   <Separator prefWidth="200.0">

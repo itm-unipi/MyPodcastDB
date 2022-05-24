@@ -21,16 +21,17 @@
          <top>
             <VBox maxWidth="-Infinity" prefWidth="920.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefHeight="100.0" prefWidth="920.0">
+                  <VBox alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefHeight="80.0" prefWidth="920.0">
                      <children>
-                        <Label text="MyPodcastDB">
-                           <font>
-                              <Font name="System Bold" size="40.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </Label>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label prefWidth="135.0" text="MyPodcastDB">
+                                 <font>
+                                    <Font name="Calibri Light" size="24.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
                         <Separator maxWidth="-Infinity" prefWidth="920.0" valignment="TOP" />
                      </children>
                   </VBox>
@@ -44,7 +45,7 @@
                                  </VBox.margin></ImageView>
                               <Label fx:id="category" text="Category">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font name="Corbel Light" size="18.0" />
                                  </font>
                                  <VBox.margin>
                                     <Insets top="5.0" />
@@ -57,9 +58,9 @@
                               </Separator>
                               <HBox alignment="BOTTOM_LEFT" prefWidth="200.0">
                                  <children>
-                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" prefHeight="53.0" prefWidth="54.0" text="#.#">
+                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" prefHeight="47.0" prefWidth="54.0" text="#.#">
                                        <font>
-                                          <Font size="36.0" />
+                                          <Font name="Corbel Light" size="38.0" />
                                        </font>
                                        <opaqueInsets>
                                           <Insets />
@@ -67,7 +68,7 @@
                                     </Label>
                                     <Label fx:id="numReviews" text=" out of 5.0 on # reviews">
                                        <font>
-                                          <Font size="18.0" />
+                                          <Font name="Corbel Light" size="19.0" />
                                        </font>
                                        <opaqueInsets>
                                           <Insets />
@@ -77,6 +78,12 @@
                                        </HBox.margin>
                                     </Label>
                                  </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <padding>
+                                    <Insets bottom="5.0" />
+                                 </padding>
                               </HBox>
                               <HBox prefWidth="200.0">
                                  <children>
@@ -241,17 +248,17 @@
                                        <children>
                                           <Label fx:id="title" text="Title">
                                              <font>
-                                                <Font name="System Bold" size="30.0" />
+                                                <Font name="Corbel Bold" size="30.0" />
                                              </font>
                                           </Label>
                                           <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
                                              <font>
-                                                <Font size="25.0" />
+                                                <Font name="Corbel Light" size="25.0" />
                                              </font>
                                           </Label>
                                           <Label fx:id="numEpisodes" text="# Episodes">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font name="Corbel" size="18.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets bottom="5.0" top="6.0" />
@@ -279,7 +286,7 @@
                                  </children>
                               </HBox>
                               <Separator prefWidth="200.0" />
-                              <ScrollPane hbarPolicy="NEVER" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="ALWAYS">
+                              <ScrollPane hbarPolicy="NEVER" prefHeight="486.0" prefWidth="600.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="ALWAYS">
                                  <content>
                                     <GridPane fx:id="episodesGrid" style="-fx-background-color: white;">
                                        <columnConstraints>
