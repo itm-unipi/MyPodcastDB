@@ -14,7 +14,7 @@ import javafx.scene.layout.VBox;
 public class PodcastPreviewController {
 
     @FXML
-    private ImageView PodcastImage;
+    private ImageView podcastImage;
 
     @FXML
     private Label PodcastName;
@@ -34,8 +34,8 @@ public class PodcastPreviewController {
 
     @FXML
     void podcastIn(MouseEvent event) {
-        podcastContainer.setStyle("-fx-background-color: f2f2f2");
-        PodcastName.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
+        podcastContainer.setStyle("-fx-background-color: f2f2f2; -fx-background-radius: 10;");
+        PodcastName.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
     }
 
     @FXML
@@ -48,7 +48,7 @@ public class PodcastPreviewController {
         this.podcastPreview = podcast;
 
         Image image = new Image(podcast.getArtworkUrl600());
-        this.PodcastImage.setImage(image);
+        this.podcastImage.setImage(image);
         this.PodcastName.setText(podcast.getPodcastName());
         this.podcastToolTip.setText(podcast.getPodcastName());
     }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -36,7 +35,7 @@
                                     <children>
                                         <ImageView fx:id="homeButton" fitHeight="30.0" fitWidth="30.0" layoutX="-1.0" layoutY="20.0" onMouseClicked="#homeButtonClick" onMouseEntered="#homeIn" onMouseExited="#homeOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                             <image>
-                                                <Image url="@home.png" />
+                                                <Image url="@images/home_32px.png" />
                                             </image>
                                         </ImageView>
                                     </children>
@@ -46,7 +45,7 @@
                                         <TextField fx:id="searchTextField" layoutX="1.0" layoutY="26.0" prefHeight="20.0" prefWidth="193.0" promptText="Search..." style="-fx-backgroun-color: transparent;" />
                                         <ImageView fx:id="searchButton" fitHeight="20.0" fitWidth="20.0" layoutX="170.0" layoutY="29.0" onMouseClicked="#searchButtonClick" onMouseEntered="#searchIn" onMouseExited="#searchOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                             <image>
-                                                <Image url="@search.png" />
+                                                <Image url="@images/search_50px.png" />
                                             </image>
                                         </ImageView>
                                     </children>
@@ -61,10 +60,10 @@
                 </VBox>
             </top>
             <left>
-                <Pane prefHeight="600.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
+                <Pane prefHeight="640.0" prefWidth="95.0" BorderPane.alignment="CENTER" />
             </left>
             <right>
-                <Pane prefHeight="640.0" prefWidth="64.0" BorderPane.alignment="CENTER" />
+                <Pane prefHeight="640.0" prefWidth="95.0" BorderPane.alignment="CENTER" />
             </right>
          <center>
             <ScrollPane hbarPolicy="NEVER" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
@@ -76,8 +75,11 @@
                            <children>
                               <ImageView fx:id="userPageImage" fitHeight="152.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@../../../../../../temporanei/Immagine%202022-05-22%20155932.png" />
+                                    <Image url="@images/user_100px.png" />
                                  </image>
+                                 <HBox.margin>
+                                    <Insets left="85.0" />
+                                 </HBox.margin>
                               </ImageView>
                               <Pane prefHeight="230.0" prefWidth="58.0" />
                               <VBox prefHeight="191.0" prefWidth="313.0">
@@ -136,58 +138,52 @@
                               </VBox>
                               <Pane prefHeight="203.0" prefWidth="151.0">
                                  <children>
-                                    <Button fx:id="userPageFollowButton" layoutX="54.0" layoutY="5.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" onMouseEntered="#followIn" onMouseExited="#followOut" style="-fx-cursor: pointer;" text="FOLLOW" />
+                                    <ImageView fx:id="userPageFollowButton" fitHeight="39.0" fitWidth="36.0" layoutX="58.0" layoutY="6.0" onMouseClicked="#followButtonClick" onMouseEntered="#followIn" onMouseExited="#followOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                       <image>
+                                          <Image url="@images/following_30px.png" />
+                                       </image>
+                                    </ImageView>
                                  </children>
                               </Pane>
-                              <VBox prefHeight="189.0" prefWidth="228.0" style="-fx-background-color: white;">
-                                 <children>
-                                    <Label prefHeight="23.0" prefWidth="134.0" style="-fx-font-family: Corbel;" text="Followed Authors">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <ScrollPane hbarPolicy="NEVER" prefHeight="180.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: white;">
-                                       <content>
-                                          <GridPane fx:id="userPageAuthorGrid" style="-fx-background-color: white;">
-                                            <columnConstraints>
-                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                            </columnConstraints>
-                                          </GridPane>
-                                       </content>
-                                    </ScrollPane>
-                                 </children>
-                              </VBox>
                            </children>
                         </HBox>
-                        <VBox prefWidth="918.0">
+                        <VBox>
                            <children>
-                              <VBox prefHeight="290.0" prefWidth="932.0">
+                              <VBox>
                                  <children>
-                                    <Label prefHeight="60.0" prefWidth="918.0" text="Watchlist">
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Watchlist">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" left="85.0" />
+                                       </VBox.margin>
                                     </Label>
-                                    <HBox prefHeight="230.0" prefWidth="978.0">
+                                    <HBox minWidth="-Infinity" prefHeight="230.0" prefWidth="1090.0" style="-fx-background-color: white;">
                                        <children>
-                                          <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="230.0" prefWidth="917.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
+                                          <ImageView fx:id="userPageWatchlistLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonRightClick" onMouseEntered="#scrollWatchlistLeftIn" onMouseExited="#scrollWatchlistLeftOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@images/back_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="20.0" top="100.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="230.0" prefWidth="980.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageWatchlistGrid" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                <GridPane fx:id="userPageWatchlistGrid" hgap="10.0" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                   <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="185.0" />
                                                    </columnConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fx:id="userPageWatchlistButton" fitHeight="30.0" fitWidth="28.0" onMouseEntered="#scrollWatchlistIn" onMouseExited="#scrollWatchlistOut" onMousePressed="#scrollWatchlistButtonClick" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="userPageWatchlistRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonLeftClick" onMouseEntered="#scrollWatchlistRightIn" onMouseExited="#scrollWatchlistRightOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
-                                                <Image url="@next.png" />
+                                                <Image url="@images/forward_32px.png" />
                                              </image>
                                              <HBox.margin>
                                                 <Insets left="20.0" top="100.0" />
@@ -199,19 +195,30 @@
                               </VBox>
                               <VBox prefHeight="290.0" prefWidth="918.0">
                                  <children>
-                                    <Label minHeight="-Infinity" prefHeight="60.0" prefWidth="918.0" text="Liked">
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets top="20.0" />
+                                          <Insets left="85.0" top="10.0" />
                                        </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
                                     </Label>
                                     <HBox prefHeight="230.0" prefWidth="200.0">
                                        <children>
-                                          <ScrollPane fx:id="userPageLikedScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="230.0" prefWidth="917.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                          <ImageView fx:id="userPageLikedLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonLeftClick" onMouseEntered="#scrollLikedLeftIn" onMouseExited="#scrollLikedLeftOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@images/back_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="20.0" top="100.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ScrollPane fx:id="userPageLikedScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="230.0" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageLikedGrid" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                <GridPane fx:id="userPageLikedGrid" hgap="10.0" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
@@ -221,9 +228,9 @@
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fx:id="userPageLikedButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonClick" onMouseEntered="#scrollLikedIn" onMouseExited="#scrollLikedOut" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="userPageLikedRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonRightClick" onMouseEntered="#scrollLikedRightIn" onMouseExited="#scrollLikedRightOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
-                                                <Image url="@next.png" />
+                                                <Image url="@images/forward_32px.png" />
                                              </image>
                                              <HBox.margin>
                                                 <Insets left="20.0" top="100.0" />
@@ -233,9 +240,56 @@
                                     </HBox>
                                  </children>
                               </VBox>
+                              <VBox prefHeight="290.0" prefWidth="918.0">
+                                 <children>
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Authors">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="85.0" top="10.0" />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox prefHeight="130.0" prefWidth="200.0">
+                                       <children>
+                                          <ImageView fx:id="userPageAuthorsLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollAuthorsButtonLeftClick" onMouseEntered="#scrollAuthorsLeftIn" onMouseExited="#scrollAuthorsLeftOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@images/back_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="20.0" top="50.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ScrollPane fx:id="userPageAuthorsScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="130.0" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                             <content>
+                                                <GridPane fx:id="userPageAuthorsGrid" hgap="20.0" minHeight="130.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="105.0" />
+                                                   </columnConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                          <ImageView fx:id="userPageAuthorsRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollAuthorsButtonRightClick" onMouseEntered="#scrollAuthorsRightIn" onMouseExited="#scrollAuthorsRightOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@images/forward_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="20.0" top="50.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
                            <VBox.margin>
-                              <Insets top="40.0" />
+                              <Insets bottom="50.0" top="30.0" />
                            </VBox.margin>
                         </VBox>
                      </children>
