@@ -100,24 +100,37 @@ public class Author {
         this.ownPodcasts = ownPodcasts;
     }
 
-    public void addPodcast(String id, String name, Date releaseDate) {
-        ReducedPodcast podcast = new ReducedPodcast(id, name, releaseDate);
-        this.ownPodcasts.add(podcast);
-    }
+    public void setOwnPodcasts(List<String>podcastIds, List<String>podcastNames, List<Date>podcastReleaseDates) {
+        List<ReducedPodcast> ownPodcasts = new ArrayList<>();
 
-    public List<Triplet<String, String, Date>>getPodcasts() {
-        List<ReducedPodcast> reducedPodcasts = getOwnPodcasts();
+        for (int i = 0; i < podcastIds.size(); i++) {
+            ReducedPodcast reducedPodcast = new ReducedPodcast();
+
+            reducedPodcast.setId(podcastIds.get(i));
+            reducedPodcast.setName(podcastNames.get(i));
+            reducedPodcast.setReleaseDate(podcastReleaseDates.get(i));
+
+            ownPodcasts.add(reducedPodcast);
+        }
+
+        this.ownPodcasts = ownPodcasts;
+    }
+    public List<Triplet<String, String, Date>>getReducedPodcasts() {
         List<Triplet<String, String, Date>> podcasts = new ArrayList<>();
 
-        for (ReducedPodcast rd: reducedPodcasts) {
+        for (ReducedPodcast rd: this.ownPodcasts) {
             String id = rd.getId();
             String name = rd.getName();
             Date releaseDate = rd.getReleaseDate();
 
             podcasts.add(new Triplet<String, String, Date>(id, name, releaseDate));
         }
-
         return podcasts;
+    }
+
+    public void addPodcast(String id, String name, Date releaseDate) {
+        ReducedPodcast podcast = new ReducedPodcast(id, name, releaseDate);
+        this.ownPodcasts.add(podcast);
     }
 
     @Override

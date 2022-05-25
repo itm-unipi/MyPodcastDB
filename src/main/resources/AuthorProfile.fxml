@@ -103,12 +103,12 @@
                               </HBox>
                               <VBox alignment="TOP_CENTER">
                                  <children>
-                                    <Label prefHeight="27.0" prefWidth="1040.0" text="Podcasts">
+                                    <Label prefWidth="1040.0" text="Podcasts">
                                        <font>
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
-                                    <GridPane fx:id="gridAuthorPodcasts" prefHeight="170.0" prefWidth="0.0" vgap="10.0">
+                                    <GridPane fx:id="gridAuthorPodcasts" vgap="8.0">
                                       <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                       </columnConstraints>
@@ -116,17 +116,17 @@
                                           <RowConstraints />
                                        </rowConstraints>
                                        <VBox.margin>
-                                          <Insets left="120.0" right="120.0" />
+                                          <Insets bottom="18.0" left="120.0" right="120.0" top="10.0" />
                                        </VBox.margin>
                                     </GridPane>
                                  </children>
                               </VBox>
-                              <Label prefHeight="31.0" prefWidth="1046.0" text="Following">
+                              <Label prefWidth="1040.0" text="Following">
                                  <font>
                                     <Font name="Corbel Light" size="22.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="authorFollowing" prefHeight="27.0" prefWidth="1046.0" text="Authors followed by AuthorName">
+                              <Label fx:id="authorFollowing" prefWidth="1040.0" text="Authors followed by AuthorName">
                                  <font>
                                     <Font name="Corbel Light" size="16.0" />
                                  </font>
@@ -143,7 +143,7 @@
                                     </ImageView>
                                     <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="130.0" prefHeight="110.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                        <content>
-                                          <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" hgap="7.0" prefHeight="130.0" prefWidth="0.0">
+                                          <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" hgap="6.0" prefWidth="0.0">
                                              <rowConstraints>
                                                 <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                              </rowConstraints>
@@ -152,6 +152,9 @@
                                              </columnConstraints>
                                           </GridPane>
                                        </content>
+                                       <HBox.margin>
+                                          <Insets top="5.0" />
+                                       </HBox.margin>
                                     </ScrollPane>
                                     <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextFollowedAuthor" pickOnBounds="true" preserveRatio="true">
                                        <image>

@@ -11,9 +11,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import org.javatuples.Triplet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class AuthorProfileController {
@@ -91,22 +93,34 @@ public class AuthorProfileController {
         }
 
         // Author Podcasts
-        List<PodcastPreview> mostLikedPodcast = new ArrayList<>();
-        PodcastPreview p1 = new PodcastPreview("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        PodcastPreview p2 = new PodcastPreview("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
-        mostLikedPodcast.add(p1);
-        mostLikedPodcast.add(p2);
+        Author author = new Author();
+        author.setName("Robespierre Janjaq");
+
+        List<String> podcastIds = new ArrayList<>();
+        List<String> podcastNames = new ArrayList<>();
+        List<Date> podcastReleaseDates = new ArrayList<>();
+
+        podcastIds.add("54eb342567c94dacfb2a3e50");
+        podcastIds.add("34e734b09246d17dc5d56f63");
+        podcastNames.add("Scaling Global");
+        podcastNames.add("Cornerstone Baptist Church of Orlando");
+        podcastReleaseDates.add(new Date());
+        podcastReleaseDates.add(new Date());
+
+        author.setOwnPodcasts(podcastIds, podcastNames, podcastReleaseDates);
+
+        List<Triplet<String, String, Date>>  reducedPod = author.getReducedPodcasts();
 
         row = 0;
         column = 0;
-        for (PodcastPreview podcast : mostLikedPodcast){
+        for (Triplet<String, String, Date> entry: reducedPod){
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
             // create new podcast element
             AnchorPane newPodcast = fxmlLoader.load();
             AuthorReducedPodcastController controller = fxmlLoader.getController();
-            //controller.setData(podcast);
+            controller.setData(entry.getValue0(), entry.getValue1(), entry.getValue2());
 
             // add new podcast to grid
             gridAuthorPodcasts.add(newPodcast, column, row++);

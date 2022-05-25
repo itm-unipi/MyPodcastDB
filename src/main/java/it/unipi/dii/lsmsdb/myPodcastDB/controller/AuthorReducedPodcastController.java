@@ -1,19 +1,24 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import org.javatuples.Triplet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import java.util.Date;
 import java.util.List;
 
 public class AuthorReducedPodcastController {
+    private String podcastId;
 
-    private Author author;
+    @FXML
+    private Label podcastCategory;
 
     @FXML
     private Label podcastReleaseDate;
@@ -28,6 +33,11 @@ public class AuthorReducedPodcastController {
     private HBox reducedPodcast;
 
     @FXML
+    void onClick(MouseEvent event) {
+        Logger.info(podcastId + " | " + podcastName.getText() + " | " + podcastReleaseDate.getText()); // + " | " + podcastCategory.getText());
+    }
+
+    @FXML
     void OnMouseHover(MouseEvent event) {
         reducedPodcast.setStyle("-fx-background-color: #eeeeee");
     }
@@ -37,15 +47,19 @@ public class AuthorReducedPodcastController {
         reducedPodcast.setStyle("-fx-background-color: transparent");
     }
 
-    public void setData(Author author) {
-        this.author = author;
-        List<Triplet<String, String, Date>> reducedPodcasts = author.getPodcasts();
+    public void setData(String podcastId, String podcastName, Date podcastReleaseDate) { // String Category, String getArtworkUrl600 ) {
+        this.podcastId = podcastId;
+        this.podcastName.setText(podcastName);
+        //this.podcastCategory.setText(podcastCategory);
 
-        /*
-        Image image = new Image(podcast.getArtworkUrl600());
-        podcastImage.setImage(image);
-        podcastName.setText(podcast.getPodcastName());
-         */
+        // Setting release date
+        String[] tokens = podcastReleaseDate.toString().split(" ");
+        String date = tokens[2] + " " + tokens[1] + " " + tokens[5];
+        this.podcastReleaseDate.setText(date);
+
+        // Setting image preview
+        //Image image = new Image(podcastArtworkUrl600());
+        //podcastImage.setImage(image);
     }
 
 }

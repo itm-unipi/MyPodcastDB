@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="70.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorReducedPodcastController">
+<AnchorPane prefHeight="70.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorReducedPodcastController">
    <children>
-      <HBox fx:id="reducedPodcast" onMouseEntered="#OnMouseHover" onMouseExited="#onMouseExited" prefHeight="70.0" prefWidth="500.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <HBox fx:id="reducedPodcast" onMouseClicked="#onClick" onMouseEntered="#OnMouseHover" onMouseExited="#onMouseExited" prefHeight="70.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="podcastImage" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -22,7 +22,7 @@
                   <Insets right="3.0" />
                </HBox.margin>
             </ImageView>
-            <VBox alignment="CENTER_LEFT" prefHeight="70.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="860.0">
                <children>
                   <Label fx:id="podcastName" prefHeight="25.0" prefWidth="418.0" text="FootNotes">
                      <font>
@@ -32,7 +32,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Label>
-                  <Label fx:id="podcastReleaseDate" prefHeight="18.0" prefWidth="415.0" text="2018-07-06">
+                  <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="Business">
                      <font>
                         <Font name="Corbel Light" size="14.0" />
                      </font>
@@ -42,6 +42,11 @@
                   <Insets left="5.0" />
                </padding>
             </VBox>
+            <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="88.0" text="2018-08-10">
+               <font>
+                  <Font name="Corbel Light" size="14.0" />
+               </font>
+            </Label>
          </children>
       </HBox>
    </children>
