@@ -3,16 +3,17 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +53,30 @@ public class ReviewPageController {
     private GridPane reviewGrid;
 
     @FXML
+    private ScrollPane scroll;
+
+    @FXML
+    private ImageView star1;
+
+    @FXML
+    private ImageView star2;
+
+    @FXML
+    private ImageView star3;
+
+    @FXML
+    private ImageView star4;
+
+    @FXML
+    private ImageView star5;
+
+    @FXML
+    private TextArea textContent;
+
+    @FXML
+    private TextField textTitle;
+
+    @FXML
     private ProgressBar threeStars;
 
     @FXML
@@ -60,19 +85,125 @@ public class ReviewPageController {
     @FXML
     private ProgressBar twoStars;
 
+    private Review ownReview;
+
     @FXML
     void clickOnAuthor(MouseEvent event) {
+        Logger.info("Click on author");
+    }
 
+    @FXML
+    void clickOnFifthStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(star);
+        this.star5.setImage(star);
+        this.ownReview.setRating(5);
+
+        Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnFirstStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(outlineStar);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+        this.ownReview.setRating(1);
+
+        Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnFourthStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(star);
+        this.star5.setImage(outlineStar);
+        this.ownReview.setRating(4);
+
+        Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnSecondStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+        this.ownReview.setRating(2);
+
+        Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnThirdStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+        this.ownReview.setRating(3);
+
+        Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnTitle(MouseEvent event) {
+        Logger.info("Click on podcast");
     }
 
     @FXML
     void mouseOnAuthor(MouseEvent event) {
+        this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
 
+    @FXML
+    void mouseOnTitle(MouseEvent event) {
+        this.title.setTextFill(Color.color(0.6, 0.6, 0.6));
     }
 
     @FXML
     void mouseOutAuthor(MouseEvent event) {
+        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
 
+    @FXML
+    void mouseOutTitle(MouseEvent event) {
+        this.title.setTextFill(Color.color(0.0, 0.0, 0.0));
+    }
+
+    @FXML
+    void onSubmit(MouseEvent event) {
+        // get the text
+        String title = this.textTitle.getText();
+        String content = this.textContent.getText();
+
+        // fill the review
+        this.ownReview.setTitle(title);
+        this.ownReview.setContent(content);
+        this.ownReview.setCreatedAt(new Date());
+
+        // send the review
+        Logger.info(this.ownReview.toString());
     }
 
     public void initialize() throws IOException {
@@ -91,7 +222,7 @@ public class ReviewPageController {
         // review test
         Review review = new Review("", "", "frank", "Yes, I like it", "Duis ut molestie justo, non mattis arcu. Donec ac arcu eget sapien dignissim pretium eu a mi. Nullam consectetur mauris id maximus vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla mi leo, pulvinar nec blandit a, dictum semper nibh. Proin ut mauris turpis. Duis vehicula volutpat dolor, sodales varius ipsum venenatis sed.", 5, new Date());
         List<Review> reviews = new ArrayList<>();
-        for (int i = 10; i < 10; i++)
+        for (int i = 0; i < 10; i++)
             reviews.add(review);
 
         // no reviews message
@@ -109,6 +240,13 @@ public class ReviewPageController {
         this.rating.setText("" + podcast.getRating());
         this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
 
+        // progress bars
+        this.oneStar.setProgress(0.1);
+        this.twoStars.setProgress(0.1);
+        this.threeStars.setProgress(0.2);
+        this.fourStars.setProgress(0.3);
+        this.fiveStars.setProgress(0.3);
+
         // insert reviews in grid
         int row = 0;
         int column = 0;
@@ -124,5 +262,9 @@ public class ReviewPageController {
             // add new podcast to grid
             this.reviewGrid.add(newReview, column, row++);
         }
+
+        // initialize own review
+        this.ownReview = new Review();
+        this.ownReview.setPodcastId(podcast.getId());
     }
 }
