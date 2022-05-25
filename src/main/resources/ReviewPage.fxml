@@ -1,14 +1,281 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.ReviewPageController"
-            prefHeight="400.0" prefWidth="600.0">
 
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.ReviewPageController">
+   <children>
+      <BorderPane layoutX="33.0" layoutY="33.0" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="720.0" prefWidth="920.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+               <children>
+                  <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0">
+                     <children>
+                        <Label text="MyPodcastDB">
+                           <font>
+                              <Font name="Corbel Light" size="24.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Separator prefWidth="200.0" />
+                  <ScrollPane fitToHeight="true" hbarPolicy="NEVER" maxHeight="633.0" maxWidth="-Infinity" prefHeight="633.0" prefWidth="920.0" style="-fx-background-color: white;" vbarPolicy="NEVER">
+                     <content>
+                        <VBox maxHeight="-Infinity" prefHeight="633.0" prefWidth="920.0" style="-fx-background-color: white;">
+                           <children>
+                              <HBox>
+                                 <children>
+                                    <ImageView fx:id="podcastImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                    <VBox maxWidth="-Infinity" prefHeight="150.0" prefWidth="453.0">
+                                       <children>
+                                          <Label fx:id="title" text="Title">
+                                             <font>
+                                                <Font name="Corbel Bold" size="30.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
+                                             <font>
+                                                <Font name="Corbel Light" size="25.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="category" prefHeight="22.0" prefWidth="146.0" text="Category">
+                                             <font>
+                                                <Font name="Corbel Light" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets left="10.0" />
+                                       </HBox.margin>
+                                    </VBox>
+                                    <VBox maxWidth="1.7976931348623157E308">
+                                       <children>
+                                          <HBox alignment="BOTTOM_LEFT">
+                                             <children>
+                                                <Label fx:id="rating" alignment="BOTTOM_LEFT" prefHeight="47.0" prefWidth="57.0" text="#.#">
+                                                   <font>
+                                                      <Font name="Corbel Light" size="38.0" />
+                                                   </font>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                </Label>
+                                                <Label fx:id="numReviews" scaleY="1.06" text=" out of 5.0 on # reviews">
+                                                   <font>
+                                                      <Font name="Corbel Light" size="19.0" />
+                                                   </font>
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets bottom="8.0" />
+                                                   </HBox.margin>
+                                                </Label>
+                                             </children>
+                                             <opaqueInsets>
+                                                <Insets />
+                                             </opaqueInsets>
+                                             <padding>
+                                                <Insets bottom="5.0" />
+                                             </padding>
+                                          </HBox>
+                                          <HBox>
+                                             <children>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ProgressBar fx:id="fiveStars" prefHeight="7.0" prefWidth="220.0" progress="0.0" style="-fx-accent: black; -fx-padding: 0;">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ProgressBar>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ProgressBar fx:id="fourStars" prefHeight="7.0" prefWidth="220.0" progress="0.0">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ProgressBar>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ProgressBar fx:id="threeStars" prefHeight="7.0" prefWidth="220.0" progress="0.0">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ProgressBar>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ProgressBar fx:id="twoStars" prefHeight="7.0" prefWidth="220.0" progress="0.0">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ProgressBar>
+                                             </children>
+                                          </HBox>
+                                          <HBox prefWidth="200.0">
+                                             <children>
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
+                                                <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ProgressBar fx:id="oneStar" prefHeight="7.0" prefWidth="220.0" progress="0.0">
+                                                   <opaqueInsets>
+                                                      <Insets />
+                                                   </opaqueInsets>
+                                                   <HBox.margin>
+                                                      <Insets left="5.0" top="5.0" />
+                                                   </HBox.margin>
+                                                </ProgressBar>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                 </children>
+                                 <opaqueInsets>
+                                    <Insets />
+                                 </opaqueInsets>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </VBox.margin>
+                              </HBox>
+                              <Separator prefWidth="200.0" />
+                              <GridPane fx:id="reviewGrid" style="-fx-background-color: white;">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                              </GridPane>
+                              <Label fx:id="noReviewsMessage" text="There are no reviews yet.">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </Label>
+                              <Separator prefWidth="200.0">
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" top="20.0" />
+                                 </VBox.margin>
+                              </Separator>
+                           </children>
+                        </VBox>
+                     </content>
+                  </ScrollPane>
+               </children>
+            </VBox>
+         </center>
+      </BorderPane>
+   </children>
 </AnchorPane>
