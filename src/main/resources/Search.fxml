@@ -10,12 +10,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.SearchController">
    <children>
@@ -51,7 +51,7 @@
                                     <Insets right="7.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="userPicture" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/userPicture.png" />
                                  </image>
@@ -97,82 +97,68 @@
             </VBox>
          </top>
          <center>
-            <VBox prefHeight="640.0" BorderPane.alignment="TOP_CENTER">
+            <VBox BorderPane.alignment="TOP_CENTER">
                <children>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                      <content>
-                        <VBox alignment="CENTER" prefHeight="1180.0">
+                        <VBox alignment="TOP_CENTER">
                            <children>
-                              <Label fx:id="searchingForText" prefHeight="47.0" prefWidth="1046.0" text="Searching for &quot;author, podcast, user...&quot;">
+                              <Label fx:id="searchingForText" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="1038.0" text="Searching for &quot;author, podcast, user...&quot;">
                                  <font>
                                     <Font name="Corbel Light" size="22.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets top="10.0" />
+                                    <Insets bottom="8.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <HBox alignment="CENTER" prefHeight="250.0">
-                                 <children>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/backArrow.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-                                       <content>
-                                          <GridPane alignment="CENTER_LEFT" hgap="7.0" prefHeight="230.0" prefWidth="1054.0">
-                                             <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                             </rowConstraints>
-                                          </GridPane>
-                                       </content>
-                                    </ScrollPane>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/forwardArrow.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets top="-5.0" />
-                                 </VBox.margin>
-                              </HBox>
-                              <Label prefWidth="1046.0" text="Your top genres">
+                              <Label prefHeight="36.0" prefWidth="1040.0" text="Podcasts (46)">
                                  <font>
-                                    <Font name="Corbel Light" size="22.0" />
+                                    <Font name="Corbel Light" size="20.0" />
                                  </font>
                               </Label>
-                              <Label prefWidth="1046.0" text="Podcasts based on your podcast's categories.">
+                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="240.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                 <content>
+                                    <GridPane fx:id="gridFoundPodcasts" vgap="8.0">
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
+                                       </columnConstraints>
+                                       <rowConstraints>
+                                          <RowConstraints fillHeight="false" minHeight="0.0" vgrow="SOMETIMES" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </content>
+                                 <VBox.margin>
+                                    <Insets bottom="10.0" left="120.0" right="120.0" top="10.0" />
+                                 </VBox.margin>
+                              </ScrollPane>
+                              <Label prefHeight="36.0" prefWidth="1040.0" text="Authors (4)">
                                  <font>
-                                    <Font name="Corbel Light" size="16.0" />
+                                    <Font name="Corbel Light" size="20.0" />
                                  </font>
                               </Label>
-                              <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
-                                 <children>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/backArrow.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ScrollPane fx:id="scrollSuggestedForCategory" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-                                       <content>
-                                          <GridPane alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
-                                             <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                             </rowConstraints>
-                                          </GridPane>
-                                       </content>
-                                    </ScrollPane>
-                                    <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/forwardArrow.png" />
-                                       </image>
-                                    </ImageView>
-                                 </children>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </HBox>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                 <content>
+                                    <GridPane fx:id="gridFoundAuthors" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
+                              <Label prefHeight="36.0" prefWidth="1040.0" text="Users (22)">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                              </Label>
+                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                 <content>
+                                    <GridPane fx:id="gridFoundUsers" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                       <rowConstraints>
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                       </rowConstraints>
+                                    </GridPane>
+                                 </content>
+                              </ScrollPane>
                            </children>
                         </VBox>
                      </content>

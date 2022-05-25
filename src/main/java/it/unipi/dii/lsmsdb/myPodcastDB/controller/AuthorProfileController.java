@@ -131,8 +131,20 @@ public class AuthorProfileController {
 
         podcastIds.add("54eb342567c94dacfb2a3e50");
         podcastIds.add("34e734b09246d17dc5d56f63");
+        podcastIds.add("34e734b09246d17dc5d56f63");
+        podcastIds.add("34e734b09246d17dc5d56f63");
+        podcastIds.add("34e734b09246d17dc5d56f63");
+        podcastIds.add("34e734b09246d17dc5d56f63");
         podcastNames.add("Scaling Global");
         podcastNames.add("Cornerstone Baptist Church of Orlando");
+        podcastNames.add("Jianluca");
+        podcastNames.add("Crunch");
+        podcastNames.add("Jianluca");
+        podcastNames.add("Crunch");
+        podcastReleaseDates.add(new Date());
+        podcastReleaseDates.add(new Date());
+        podcastReleaseDates.add(new Date());
+        podcastReleaseDates.add(new Date());
         podcastReleaseDates.add(new Date());
         podcastReleaseDates.add(new Date());
 
@@ -154,8 +166,6 @@ public class AuthorProfileController {
             // add new podcast to grid
             gridAuthorPodcasts.add(newPodcast, column, row++);
         }
-
     }
-
 }
 
