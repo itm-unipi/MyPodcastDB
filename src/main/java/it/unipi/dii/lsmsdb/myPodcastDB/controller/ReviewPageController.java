@@ -11,6 +11,7 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -205,6 +206,26 @@ public class ReviewPageController {
 
         // send the review
         Logger.info(this.ownReview.toString());
+    }
+
+    @FXML
+    void onClickHome(MouseEvent event) {
+        Logger.info("Click on home");
+    }
+
+    @FXML
+    void onClickSearch(MouseEvent event) {
+        Logger.info("Click on search");
+    }
+
+    @FXML
+    void onEnterPressed(KeyEvent event) {
+        Logger.info("Enter on search");
+    }
+
+    @FXML
+    void userProfile(MouseEvent event) {
+        Logger.info("Click on user");
     }
 
     public void initialize() throws IOException {

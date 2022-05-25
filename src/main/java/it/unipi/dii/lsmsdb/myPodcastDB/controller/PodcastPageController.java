@@ -12,6 +12,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -86,65 +87,6 @@ public class PodcastPageController {
     private boolean liked;
     private boolean watchLatered;
 
-    public void initialize() throws IOException {
-        // Podcast Test
-        Podcast podcast = new Podcast("00000000", "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
-        String name = "Greener Pastures";
-        String description = "Hear Greiner USA President, David Kirkland, talk about developing new competitive advantages and how going “green” was the key to his company unlocking new international business.";
-        Date releaseDate = new Date();
-        int time = 1450000;
-        Episode episode = new Episode(name, description, releaseDate, time);
-        for (int i = 0; i < 10; i++) {
-            podcast.addEpisode(episode);
-            podcast.addReview("" + i, 5);
-        }
-
-        // status test
-        this.liked = false;
-        this.watchLatered = false;
-
-        // image setup
-        Image likeIcon = new Image(getClass().getResourceAsStream("/img/hearts.png"));
-        this.like.setImage(likeIcon);
-        Image watchlaterIcon = new Image(getClass().getResourceAsStream("/img/pin.png"));
-        this.watchlater.setImage(watchlaterIcon);
-
-        // podcast initialization
-        this.title.setText(podcast.getName());
-        this.author.setText(podcast.getAuthorName());
-        this.country.setText(podcast.getCountry());
-        this.content.setText("Content: " + podcast.getContentAdvisoryRating());
-        Image image = new Image(podcast.getArtworkUrl600());
-        this.podcastImage.setImage(image);
-        this.category.setText(podcast.getPrimaryCategory());
-        this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-        this.rating.setText("" + podcast.getRating());
-        this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
-
-        // insert episodes in grid
-        int row = 0;
-        int column = 0;
-        for (Episode ep : podcast.getEpisodes()) {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
-
-            // create new podcast element
-            AnchorPane newEpisode = fxmlLoader.load();
-            EpisodeController controller = fxmlLoader.getController();
-            controller.setData(ep);
-
-            // add new podcast to grid
-            this.episodesGrid.add(newEpisode, column, row++);
-        }
-
-        // calculate the progress bar for ratings
-        this.oneStar.setProgress(0.1);
-        this.twoStars.setProgress(0.1);
-        this.threeStars.setProgress(0.2);
-        this.fourStars.setProgress(0.3);
-        this.fiveStars.setProgress(0.3);
-    }
-
     @FXML
     void mouseOnAuthor(MouseEvent event) {
         this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
@@ -213,5 +155,84 @@ public class PodcastPageController {
     @FXML
     void mouseOutWatchlater(MouseEvent event) {
         Logger.info("Out of watchlater");
+    }
+
+    @FXML
+    void onClickHome(MouseEvent event) {
+        Logger.info("Click on home");
+    }
+
+    @FXML
+    void onClickSearch(MouseEvent event) {
+        Logger.info("Click on search");
+    }
+
+    @FXML
+    void onEnterPressed(KeyEvent event) {
+        Logger.info("Enter on search");
+    }
+
+    @FXML
+    void userProfile(MouseEvent event) {
+        Logger.info("Click on user");
+    }
+
+    public void initialize() throws IOException {
+        // Podcast Test
+        Podcast podcast = new Podcast("00000000", "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
+        String name = "Greener Pastures";
+        String description = "Hear Greiner USA President, David Kirkland, talk about developing new competitive advantages and how going “green” was the key to his company unlocking new international business.";
+        Date releaseDate = new Date();
+        int time = 1450000;
+        Episode episode = new Episode(name, description, releaseDate, time);
+        for (int i = 0; i < 10; i++) {
+            podcast.addEpisode(episode);
+            podcast.addReview("" + i, 5);
+        }
+
+        // status test
+        this.liked = false;
+        this.watchLatered = false;
+
+        // image setup
+        Image likeIcon = new Image(getClass().getResourceAsStream("/img/hearts.png"));
+        this.like.setImage(likeIcon);
+        Image watchlaterIcon = new Image(getClass().getResourceAsStream("/img/pin.png"));
+        this.watchlater.setImage(watchlaterIcon);
+
+        // podcast initialization
+        this.title.setText(podcast.getName());
+        this.author.setText(podcast.getAuthorName());
+        this.country.setText(podcast.getCountry());
+        this.content.setText("Content: " + podcast.getContentAdvisoryRating());
+        Image image = new Image(podcast.getArtworkUrl600());
+        this.podcastImage.setImage(image);
+        this.category.setText(podcast.getPrimaryCategory());
+        this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
+        this.rating.setText("" + podcast.getRating());
+        this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+
+        // insert episodes in grid
+        int row = 0;
+        int column = 0;
+        for (Episode ep : podcast.getEpisodes()) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
+
+            // create new podcast element
+            AnchorPane newEpisode = fxmlLoader.load();
+            EpisodeController controller = fxmlLoader.getController();
+            controller.setData(ep);
+
+            // add new podcast to grid
+            this.episodesGrid.add(newEpisode, column, row++);
+        }
+
+        // calculate the progress bar for ratings
+        this.oneStar.setProgress(0.1);
+        this.twoStars.setProgress(0.1);
+        this.threeStars.setProgress(0.2);
+        this.fourStars.setProgress(0.3);
+        this.fiveStars.setProgress(0.3);
     }
 }
