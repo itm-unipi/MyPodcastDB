@@ -19,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -150,13 +151,13 @@ public class UserPageController {
             authorLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    authorLabel.setStyle("-fx-font-weight: bold; -fx-cursor: hand");
+                    authorLabel.setStyle("-fx-font-weight: bold; -fx-cursor: hand;");
                 }
             });
             authorLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    authorLabel.setStyle("-fx-font-weight: regular; -fx-cursor: hand");
+                    authorLabel.setStyle("-fx-font-weight: regular; -fx-cursor: hand;");
                 }
             });
 
@@ -250,12 +251,12 @@ public class UserPageController {
 
     @FXML
     void followIn(MouseEvent event) {
-        userPageFollowButton.setStyle("-fx-font-weight: bold");
+        userPageFollowButton.setStyle("-fx-font-weight: bold;");
     }
 
     @FXML
     void followOut(MouseEvent event) {
-        userPageFollowButton.setStyle("-fx-font-weight: regular");
+        userPageFollowButton.setStyle("-fx-font-weight: regular;");
     }
 
 

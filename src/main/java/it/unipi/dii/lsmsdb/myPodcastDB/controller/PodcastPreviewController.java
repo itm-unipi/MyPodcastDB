@@ -9,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 public class PodcastPreviewController {
 
@@ -24,7 +25,7 @@ public class PodcastPreviewController {
     private Tooltip podcastToolTip;
 
     @FXML
-    private BorderPane podcastBorderPane;
+    private VBox podcastContainer;
 
     @FXML
     void onClick(MouseEvent event) {
@@ -33,13 +34,13 @@ public class PodcastPreviewController {
 
     @FXML
     void podcastIn(MouseEvent event) {
-        podcastBorderPane.setStyle("-fx-background-color: f2f2f2");
+        podcastContainer.setStyle("-fx-background-color: f2f2f2");
         PodcastName.setStyle("-fx-font-size: 12; -fx-font-weight: bold");
     }
 
     @FXML
     void podcastOut(MouseEvent event) {
-        podcastBorderPane.setStyle("-fx-background-color: white");
+        podcastContainer.setStyle("-fx-background-color: white");
         PodcastName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
     }
 

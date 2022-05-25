@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -42,7 +43,7 @@
                                 </Pane>
                                 <Pane prefHeight="117.0" prefWidth="194.0">
                                     <children>
-                                        <TextField fx:id="searchTextField" layoutX="1.0" layoutY="26.0" prefHeight="20.0" prefWidth="193.0" promptText="Search..." />
+                                        <TextField fx:id="searchTextField" layoutX="1.0" layoutY="26.0" prefHeight="20.0" prefWidth="193.0" promptText="Search..." style="-fx-backgroun-color: transparent;" />
                                         <ImageView fx:id="searchButton" fitHeight="20.0" fitWidth="20.0" layoutX="170.0" layoutY="29.0" onMouseClicked="#searchButtonClick" onMouseEntered="#searchIn" onMouseExited="#searchOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                             <image>
                                                 <Image url="@search.png" />
@@ -63,162 +64,184 @@
                 <Pane prefHeight="600.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
             </left>
             <right>
-                <Pane prefHeight="600.0" prefWidth="180.0" BorderPane.alignment="CENTER" />
+                <Pane prefHeight="640.0" prefWidth="64.0" BorderPane.alignment="CENTER" />
             </right>
          <center>
-            <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
-               <children>
-                  <Pane prefHeight="40.0" prefWidth="920.0" />
-                  <HBox prefHeight="205.0" prefWidth="920.0">
+            <ScrollPane hbarPolicy="NEVER" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+               <content>
+                  <VBox prefHeight="767.0" prefWidth="1032.0" style="-fx-background-color: white; -fx-border-color: white;">
                      <children>
-                        <ImageView fx:id="userPageImage" fitHeight="152.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../../../../../../temporanei/Immagine%202022-05-22%20155932.png" />
-                           </image>
-                        </ImageView>
-                        <Pane prefHeight="230.0" prefWidth="58.0" />
-                        <VBox prefHeight="191.0" prefWidth="313.0">
+                        <Pane minHeight="-Infinity" prefHeight="40.0" prefWidth="920.0" />
+                        <HBox prefHeight="205.0" prefWidth="920.0" style="-fx-background-color: white; -fx-border-color: white;">
                            <children>
-                              <Pane prefHeight="0.0" prefWidth="313.0" />
-                              <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Username ">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="userPageUsernameTextField" editable="false" text="Paolo">
-                                 <font>
-                                    <Font name="Corbel Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin></TextField>
-                              <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Country">
-                                 <font>
-                                    <Font name="Corbel" size="15.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="userPageCountryTextField" editable="false" text="Altamura">
-                                 <font>
-                                    <Font name="Corbel Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin></TextField>
-                              <Label prefHeight="17.0" prefWidth="313.0" text="Favourite Genre">
-                                 <font>
-                                    <Font name="Corbel Bold" size="15.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="userPageFavGenreTextField" editable="false" text="Crime">
-                                 <font>
-                                    <Font name="Corbel Light" size="12.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="10.0" />
-                                 </VBox.margin></TextField>
-                              <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Gender">
-                                 <font>
-                                    <Font name="Corbel" size="15.0" />
-                                 </font>
-                              </Label>
-                              <TextField fx:id="userPageGenderTextField" editable="false" text="Male">
-                                 <font>
-                                    <Font name="Corbel Light" size="12.0" />
-                                 </font></TextField>
-                           </children>
-                        </VBox>
-                        <Pane prefHeight="200.0" prefWidth="200.0">
-                           <children>
-                              <Button fx:id="userPageFollowButton" layoutX="54.0" layoutY="5.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" onMouseEntered="#followIn" onMouseExited="#followOut" style="-fx-cursor: pointer;" text="FOLLOW" />
-                           </children>
-                        </Pane>
-                        <VBox prefHeight="189.0" prefWidth="228.0" style="-fx-background-color: white;">
-                           <children>
-                              <Label prefHeight="23.0" prefWidth="134.0" style="-fx-font-family: Corbel;" text="Followed Authors">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                                 <VBox.margin>
-                                    <Insets bottom="5.0" />
-                                 </VBox.margin>
-                              </Label>
-                              <ScrollPane hbarPolicy="NEVER" prefHeight="180.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: white;">
-                                 <content>
-                                    <GridPane fx:id="userPageAuthorGrid" style="-fx-background-color: white;">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                    </GridPane>
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-                  <HBox style="-fx-background-color: white;">
-                     <children>
-                        <VBox prefHeight="180.0" prefWidth="900.0" style="-fx-background-color: white;">
-                           <children>
-                              <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold; -fx-font-family: Corbel;" text="Watchlist">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Label>
-                              <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" pannable="true" prefHeight="130.0" prefWidth="900.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
-                                 <content>
-                                    <GridPane fx:id="userPageWatchlistGrid" style="-fx-background-color: white;">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                    </GridPane>
-                                 </content>
-                              </ScrollPane>
-                           </children>
-                        </VBox>
-                        <Pane prefHeight="150.0" prefWidth="59.0">
-                           <children>
-                              <ImageView fx:id="userPageWatchlistButton" fitHeight="30.0" fitWidth="30.0" layoutY="95.0" onMouseClicked="#scrollWatchlistButtonClick" onMouseEntered="#scrollWatchlistIn" onMouseExited="#scrollWatchlistOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                              <ImageView fx:id="userPageImage" fitHeight="152.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@next.png" />
+                                    <Image url="@../../../../../../temporanei/Immagine%202022-05-22%20155932.png" />
                                  </image>
                               </ImageView>
+                              <Pane prefHeight="230.0" prefWidth="58.0" />
+                              <VBox prefHeight="191.0" prefWidth="313.0">
+                                 <children>
+                                    <Pane prefHeight="0.0" prefWidth="313.0" />
+                                    <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Username ">
+                                       <font>
+                                          <Font size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userPageUsernameTextField" editable="false" text="Biajo">
+                                       <font>
+                                          <Font name="Corbel Light" size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Country">
+                                       <font>
+                                          <Font name="Corbel" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userPageCountryTextField" editable="false" text="Altamura">
+                                       <font>
+                                          <Font name="Corbel Light" size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <Label prefHeight="17.0" prefWidth="313.0" text="Favourite Genre">
+                                       <font>
+                                          <Font name="Corbel Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userPageFavGenreTextField" editable="false" text="Crime">
+                                       <font>
+                                          <Font name="Corbel Light" size="12.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </TextField>
+                                    <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Gender">
+                                       <font>
+                                          <Font name="Corbel" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userPageGenderTextField" editable="false" text="Male">
+                                       <font>
+                                          <Font name="Corbel Light" size="12.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </VBox>
+                              <Pane prefHeight="203.0" prefWidth="151.0">
+                                 <children>
+                                    <Button fx:id="userPageFollowButton" layoutX="54.0" layoutY="5.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" onMouseEntered="#followIn" onMouseExited="#followOut" style="-fx-cursor: pointer;" text="FOLLOW" />
+                                 </children>
+                              </Pane>
+                              <VBox prefHeight="189.0" prefWidth="228.0" style="-fx-background-color: white;">
+                                 <children>
+                                    <Label prefHeight="23.0" prefWidth="134.0" style="-fx-font-family: Corbel;" text="Followed Authors">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <ScrollPane hbarPolicy="NEVER" prefHeight="180.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                       <content>
+                                          <GridPane fx:id="userPageAuthorGrid" style="-fx-background-color: white;">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                            </columnConstraints>
+                                          </GridPane>
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </VBox>
                            </children>
-                        </Pane>
-                     </children>
-                  </HBox>
-                  <HBox style="-fx-background-color: white;">
-                     <children>
-                        <VBox prefWidth="900.0" style="-fx-background-color: white;">
+                        </HBox>
+                        <VBox prefWidth="918.0">
                            <children>
-                              <Label prefHeight="57.0" prefWidth="920.0" style="-fx-font-weight: bold; -fx-font-family: Corbel;" text="Liked">
-                                 <font>
-                                    <Font size="20.0" />
-                                 </font>
-                              </Label>
-                              <ScrollPane fx:id="userPageLikedScrollPane" hbarPolicy="NEVER" prefHeight="130.0" prefWidth="898.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
-                                 <content>
-                                    <GridPane fx:id="userPageLikedGrid" style="-fx-background-color: white;">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                    </GridPane>
-                                 </content>
-                              </ScrollPane>
+                              <VBox prefHeight="290.0" prefWidth="932.0">
+                                 <children>
+                                    <Label prefHeight="60.0" prefWidth="918.0" text="Watchlist">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox prefHeight="230.0" prefWidth="978.0">
+                                       <children>
+                                          <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="230.0" prefWidth="917.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
+                                             <content>
+                                                <GridPane fx:id="userPageWatchlistGrid" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                  <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                  </rowConstraints>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                                   </columnConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                          <ImageView fx:id="userPageWatchlistButton" fitHeight="30.0" fitWidth="28.0" onMouseEntered="#scrollWatchlistIn" onMouseExited="#scrollWatchlistOut" onMousePressed="#scrollWatchlistButtonClick" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@next.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="20.0" top="100.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="290.0" prefWidth="918.0">
+                                 <children>
+                                    <Label minHeight="-Infinity" prefHeight="60.0" prefWidth="918.0" text="Liked">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets top="20.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <HBox prefHeight="230.0" prefWidth="200.0">
+                                       <children>
+                                          <ScrollPane fx:id="userPageLikedScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="230.0" prefWidth="917.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                             <content>
+                                                <GridPane fx:id="userPageLikedGrid" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                                   </columnConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                          <ImageView fx:id="userPageLikedButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonClick" onMouseEntered="#scrollLikedIn" onMouseExited="#scrollLikedOut" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@next.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="20.0" top="100.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets top="40.0" />
+                           </VBox.margin>
                         </VBox>
-                        <Pane prefHeight="150.0" prefWidth="64.0">
-                           <children>
-                              <ImageView fx:id="userPageLikedButton" fitHeight="30.0" fitWidth="30.0" layoutY="95.0" onMouseClicked="#scrollLikedButtonClick" onMouseEntered="#scrollLikedIn" onMouseExited="#scrollLikedOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                 <image>
-                                    <Image url="@next.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </Pane>
                      </children>
-                  </HBox>
-               </children>
-            </VBox>
+                  </VBox>
+               </content>
+            </ScrollPane>
          </center>
         </BorderPane>
     </children>

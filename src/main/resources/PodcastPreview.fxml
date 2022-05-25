@@ -5,35 +5,30 @@
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane onMouseClicked="#onClick" prefHeight="130.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController">
+<AnchorPane maxWidth="230.0" minWidth="185.0" onMouseClicked="#onClick" prefHeight="185.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController">
    <children>
-      <BorderPane fx:id="podcastBorderPane" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <center>
-            <VBox prefHeight="130.0" prefWidth="100.0" BorderPane.alignment="CENTER">
-               <children>
-                  <ImageView fx:id="PodcastImage" fitHeight="80.0" fitWidth="80.0" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </ImageView>
-                  <Label fx:id="PodcastName" alignment="CENTER" prefHeight="30.0" prefWidth="100.0" text="Label">
-                     <font>
-                        <Font name="Corbel Bold" size="12.0" />
-                     </font>
-                     <tooltip>
-                        <Tooltip fx:id="podcastToolTip" text="Empty Tooltip" />
-                     </tooltip>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </VBox>
-         </center>
-      </BorderPane>
+      <VBox fx:id="podcastContainer" prefHeight="230.0" prefWidth="185.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ImageView fx:id="PodcastImage" fitHeight="185.0" fitWidth="166.0" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </ImageView>
+            <Label fx:id="PodcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
+               <font>
+                  <Font name="Corbel Bold" size="15.0" />
+               </font>
+               <tooltip>
+                  <Tooltip fx:id="podcastToolTip" text="Empty Tooltip" />
+               </tooltip>
+            </Label>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="9.0" right="9.0" top="10.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>
