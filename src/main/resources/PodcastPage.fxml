@@ -296,7 +296,7 @@
                               </HBox>
                               <Label fx:id="showReviews" onMouseClicked="#clickOnReviews" onMouseEntered="#mouseOnReview" onMouseExited="#mouseOutReview" text="See all reviews" textFill="BLUE">
                                  <font>
-                                    <Font name="Corbel Light" size="24.0" />
+                                    <Font name="Corbel Light" size="21.0" />
                                  </font>
                                  <VBox.margin>
                                     <Insets top="10.0" />

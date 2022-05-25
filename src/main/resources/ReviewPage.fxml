@@ -394,7 +394,7 @@
                                     <TextArea fx:id="textContent" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="916.0" promptText="Insert content" />
                                     <Button mnemonicParsing="false" onMouseClicked="#onSubmit" text="Submit">
                                        <VBox.margin>
-                                          <Insets bottom="20.0" top="10.0" />
+                                          <Insets bottom="20.0" top="20.0" />
                                        </VBox.margin>
                                     </Button>
                                  </children>

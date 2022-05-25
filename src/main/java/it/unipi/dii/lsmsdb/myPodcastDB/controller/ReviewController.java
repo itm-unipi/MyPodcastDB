@@ -51,7 +51,7 @@ public class ReviewController {
             this.star4.setImage(star);
         if (rating >= 5)
             this.star5.setImage(star);
-        this.authorNameAndDate.setText(review.getAuthorUsername() + ", " + review.getCreatedAtAsString());
+        this.authorNameAndDate.setText(review.getAuthorUsername() + ", " + review.getCreatedAtAsString().replace("T", " ").replace("Z", ""));
         this.title.setText(review.getTitle());
         this.text.setText(review.getContent());
     }
