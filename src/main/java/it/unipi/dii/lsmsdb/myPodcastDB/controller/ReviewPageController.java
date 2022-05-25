@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -167,8 +168,8 @@ public class ReviewPageController {
     }
 
     @FXML
-    void clickOnTitle(MouseEvent event) {
-        Logger.info("Click on podcast");
+    void clickOnTitle(MouseEvent event) throws IOException {
+        StageManager.showPage("PodcastPage.fxml");
     }
 
     @FXML

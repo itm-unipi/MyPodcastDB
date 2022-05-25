@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -137,7 +138,11 @@ public class PodcastPageController {
         }
 
         // calculate the progress bar for ratings
-        this.fiveStars.setProgress(0.5);
+        this.oneStar.setProgress(0.1);
+        this.twoStars.setProgress(0.1);
+        this.threeStars.setProgress(0.2);
+        this.fourStars.setProgress(0.3);
+        this.fiveStars.setProgress(0.3);
     }
 
     @FXML
@@ -166,8 +171,8 @@ public class PodcastPageController {
     }
 
     @FXML
-    void clickOnReviews(MouseEvent event) {
-        Logger.info("Show reviews");
+    void clickOnReviews(MouseEvent event) throws IOException {
+        StageManager.showPage("ReviewPage.fxml");
     }
 
     @FXML
