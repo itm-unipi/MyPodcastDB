@@ -140,10 +140,23 @@ public class UserPageController {
             authorLabel.setText(author);
             authorLabel.setPrefWidth(230);
             authorLabel.setPrefHeight(20);
+            authorLabel.setStyle("-fx-cursor: hand");
             authorLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent mouseEvent) {
-                    getAuthorCliked(author);
+                    getAuthorClick(author);
+                }
+            });
+            authorLabel.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    authorLabel.setStyle("-fx-font-weight: bold; -fx-cursor: hand");
+                }
+            });
+            authorLabel.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent mouseEvent) {
+                    authorLabel.setStyle("-fx-font-weight: regular; -fx-cursor: hand");
                 }
             });
 
@@ -153,7 +166,8 @@ public class UserPageController {
         }
     }
 
-    void getAuthorCliked(String author){
+    //click event
+    void getAuthorClick(String author){
         Logger.info("Author " + author + " pressed");
     }
 
@@ -196,4 +210,64 @@ public class UserPageController {
         Logger.info("Search: " + searchTextField.getText());
     }
 
+
+    //hover
+    @FXML
+    void homeIn(MouseEvent event) {
+        homeButton.setFitHeight(31);
+        homeButton.setFitWidth(31);
+    }
+
+    @FXML
+    void homeOut(MouseEvent event) {
+        homeButton.setFitHeight(30);
+        homeButton.setFitWidth(30);
+    }
+
+    @FXML
+    void scrollLikedIn(MouseEvent event) {
+        userPageLikedButton.setFitHeight(31);
+        userPageLikedButton.setFitWidth(31);
+    }
+
+    @FXML
+    void scrollLikedOut(MouseEvent event) {
+        userPageLikedButton.setFitHeight(30);
+        userPageLikedButton.setFitWidth(30);
+    }
+
+    @FXML
+    void scrollWatchlistIn(MouseEvent event) {
+        userPageWatchlistButton.setFitHeight(31);
+        userPageWatchlistButton.setFitWidth(31);
+    }
+
+    @FXML
+    void scrollWatchlistOut(MouseEvent event) {
+        userPageWatchlistButton.setFitHeight(30);
+        userPageWatchlistButton.setFitWidth(30);
+    }
+
+    @FXML
+    void followIn(MouseEvent event) {
+        userPageFollowButton.setStyle("-fx-font-weight: bold");
+    }
+
+    @FXML
+    void followOut(MouseEvent event) {
+        userPageFollowButton.setStyle("-fx-font-weight: regular");
+    }
+
+
+    @FXML
+    void searchIn(MouseEvent event) {
+        searchButton.setFitHeight(21);
+        searchButton.setFitWidth(21);
+    }
+
+    @FXML
+    void searchOut(MouseEvent event) {
+        searchButton.setFitHeight(20);
+        searchButton.setFitWidth(20);
+    }
 }
