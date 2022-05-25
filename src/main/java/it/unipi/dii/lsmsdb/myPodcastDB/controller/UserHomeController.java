@@ -3,11 +3,15 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -25,6 +29,9 @@ public class UserHomeController {
 
     @FXML
     private ImageView userPicture;
+
+    @FXML
+    private ImageView home;
 
     @FXML
     private GridPane gridMostLikedPodcasts;
@@ -57,9 +64,31 @@ public class UserHomeController {
     private ScrollPane scrollWatchlist;
 
     @FXML
+    private ImageView searchButton;
+
+    @FXML
+    void onClickSearch(MouseEvent event) throws IOException {
+        // TODO: E' NECESSARIO PASSARE IL PARAMETRO DI RICERCA
+        StageManager.showPage(ViewNavigator.SEARCH.getPage());
+    }
+
+    @FXML
+    void onEnterPressed(KeyEvent event) throws IOException {
+        // TODO: E' NECESSARIO PASSARE IL PARAMETRO DI RICERCA
+        if (event.getCode() == KeyCode.ENTER)
+            StageManager.showPage(ViewNavigator.SEARCH.getPage());
+    }
+
+    @FXML
     void userProfile(MouseEvent event) {
         Logger.info("User profile clicked");
         //StageManager.showPage(ViewNavigator.USERPROFILE.getPage());
+    }
+
+    @FXML
+    void onClickHome(MouseEvent event) throws IOException {
+        Logger.info("Home clicked");
+        StageManager.showPage(ViewNavigator.USERHOME.getPage());
     }
 
     @FXML

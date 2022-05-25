@@ -27,10 +27,10 @@ public enum ViewNavigator {
             return "UserPage.fxml";
         }
     },
-    HOMEUSER {
+    SEARCH {
         @Override
         public String getPage() {
-            return "HomeUser.fxml";
+            return "Search.fxml";
         }
     };
 
