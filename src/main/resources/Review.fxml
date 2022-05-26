@@ -10,7 +10,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="920.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.ReviewController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -28,13 +27,13 @@
                   </HBox>
                   <Label fx:id="authorNameAndDate" text="Author Name, Date" textFill="#636366">
                      <font>
-                        <Font name="Corbel" size="18.0" />
+                        <Font name="Dubai Regular" size="18.0" />
                      </font>
                      <VBox.margin>
                         <Insets />
                      </VBox.margin>
                      <padding>
-                        <Insets top="5.0" />
+                        <Insets bottom="-3.0" top="5.0" />
                      </padding>
                   </Label>
                   <Label fx:id="title" text="Title">
@@ -45,9 +44,9 @@
                         <Insets top="5.0" />
                      </VBox.margin>
                   </Label>
-                  <Text fx:id="text" fill="#636366" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="889.0">
+                  <Text fx:id="text" fill="#636366" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-line-spacing: -10;" text="Text" wrappingWidth="889.0">
                      <font>
-                        <Font name="Corbel Light" size="18.0" />
+                        <Font name="Dubai Light" size="18.0" />
                      </font>
                      <VBox.margin>
                         <Insets top="5.0" />

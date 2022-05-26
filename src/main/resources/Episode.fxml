@@ -17,7 +17,7 @@
                <children>
                   <Label fx:id="releaseDate" layoutX="10.0" layoutY="10.0" scaleY="1.06" text="# Month, Year" textFill="#636366">
                      <font>
-                        <Font name="Corbel" size="14.0" />
+                        <Font name="Dubai Regular" size="14.0" />
                      </font>
                   </Label>
                   <Label fx:id="title" text="Title">
@@ -25,9 +25,9 @@
                         <Font name="Corbel" size="22.0" />
                      </font>
                   </Label>
-                  <Text fx:id="description" fill="#636366" scaleY="1.0600000000000005" strokeType="OUTSIDE" strokeWidth="0.0" text="Description" wrappingWidth="580.0">
+                  <Text fx:id="description" fill="#636366" scaleY="1.0600000000000005" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-line-spacing: -8;" text="Description" wrappingWidth="580.0">
                      <font>
-                        <Font name="Corbel Light" size="16.0" />
+                        <Font name="Dubai Light" size="16.0" />
                      </font>
                      <VBox.margin>
                         <Insets top="4.0" />
@@ -35,10 +35,10 @@
                   </Text>
                   <Label fx:id="time" layoutX="10.0" layoutY="10.0" scaleY="1.06" text="# Min" textFill="#636366">
                      <font>
-                        <Font name="Corbel" size="15.0" />
+                        <Font name="Dubai Regular" size="15.0" />
                      </font>
                      <VBox.margin>
-                        <Insets bottom="5.0" top="5.0" />
+                        <Insets bottom="5.0" />
                      </VBox.margin>
                   </Label>
                   <Separator prefWidth="200.0">

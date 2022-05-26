@@ -122,9 +122,9 @@
                               </Separator>
                               <HBox alignment="BOTTOM_LEFT" prefWidth="200.0">
                                  <children>
-                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" prefHeight="47.0" prefWidth="54.0" text="#.#">
+                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" prefHeight="67.0" prefWidth="48.0" text="#.#">
                                        <font>
-                                          <Font name="Corbel Light" size="38.0" />
+                                          <Font name="Dubai Light" size="38.0" />
                                        </font>
                                        <opaqueInsets>
                                           <Insets />
@@ -132,13 +132,13 @@
                                     </Label>
                                     <Label fx:id="numReviews" scaleY="1.06" text=" out of 5.0 on # reviews">
                                        <font>
-                                          <Font name="Corbel Light" size="19.0" />
+                                          <Font name="Dubai Light" size="19.0" />
                                        </font>
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
                                        <HBox.margin>
-                                          <Insets bottom="8.0" />
+                                          <Insets bottom="10.0" />
                                        </HBox.margin>
                                     </Label>
                                  </children>
