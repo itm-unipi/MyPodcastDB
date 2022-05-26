@@ -6,6 +6,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -54,10 +55,16 @@ public class PodcastPageController {
     private Label numReviews;
 
     @FXML
+    private Label noEpisodeMessage;
+
+    @FXML
     private ImageView podcastImage;
 
     @FXML
     private Label rating;
+
+    @FXML
+    private ScrollPane scroll;
 
     @FXML
     private Label showReviews;
@@ -188,6 +195,14 @@ public class PodcastPageController {
         for (int i = 0; i < 10; i++) {
             podcast.addEpisode(episode);
             podcast.addReview("" + i, 5);
+        }
+
+        // no reviews message
+        if (!podcast.getEpisodes().isEmpty()) {
+            this.noEpisodeMessage.setVisible(false);
+            this.noEpisodeMessage.setPadding(new Insets(-20, 0, 0, 0));
+        } else {
+            this.scroll.setVisible(false);
         }
 
         // status test

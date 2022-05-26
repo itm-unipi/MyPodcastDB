@@ -90,7 +90,7 @@
                      </children>
                   </HBox>
                   <Separator prefWidth="200.0" />
-                  <ScrollPane fx:id="scroll" fitToHeight="true" hbarPolicy="NEVER" maxHeight="633.0" maxWidth="-Infinity" prefHeight="633.0" prefWidth="920.0" style="-fx-background-color: white;" vbarPolicy="NEVER">
+                  <ScrollPane fx:id="scroll" fitToWidth="true" hbarPolicy="NEVER" maxHeight="633.0" maxWidth="-Infinity" prefHeight="633.0" prefWidth="920.0" style="-fx-background-color: white;" vbarPolicy="NEVER">
                      <content>
                         <VBox maxHeight="-Infinity" prefHeight="633.0" prefWidth="920.0" style="-fx-background-color: white;">
                            <children>

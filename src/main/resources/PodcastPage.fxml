@@ -367,7 +367,15 @@
                                  </children>
                               </HBox>
                               <Separator prefWidth="200.0" />
-                              <ScrollPane hbarPolicy="NEVER" prefHeight="451.0" prefWidth="600.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
+                              <Label fx:id="noEpisodeMessage" text="There are no episodes yet.">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets top="20.0" />
+                                 </padding>
+                              </Label>
+                              <ScrollPane fx:id="scroll" hbarPolicy="NEVER" prefHeight="451.0" prefWidth="600.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
                                  <content>
                                     <GridPane fx:id="episodesGrid" style="-fx-background-color: transparent;">
                                        <columnConstraints>
