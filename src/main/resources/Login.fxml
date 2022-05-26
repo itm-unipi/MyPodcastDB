@@ -13,24 +13,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.LoginController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.LoginController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox prefHeight="120.0" prefWidth="720.0" BorderPane.alignment="CENTER">
+            <VBox BorderPane.alignment="CENTER">
                <children>
-                  <HBox prefHeight="120.0" prefWidth="720.0">
-                     <children>
-                        <Label alignment="BOTTOM_LEFT" prefHeight="117.0" prefWidth="287.0" style="-fx-font-weight: bold;" text="MyPodcastDB">
-                           <font>
-                              <Font name="Calibri" size="30.0" />
-                           </font>
-                        </Label>
-                        <Pane prefHeight="117.0" prefWidth="390.0" />
-                        <Pane prefHeight="117.0" prefWidth="48.0" />
-                        <Pane prefHeight="117.0" prefWidth="194.0" />
-                     </children>
-                  </HBox>
+                  <Label prefHeight="80.0" prefWidth="920.0" text="MyPodcastDB">
+                     <font>
+                        <Font name="Corbel Light" size="24.0" />
+                     </font>
+                  </Label>
                   <Separator prefWidth="0.0" style="-fx-background-color: black;" />
                </children>
                <padding>
@@ -44,43 +37,39 @@
                   <Pane prefHeight="101.0" prefWidth="920.0" />
                   <Label alignment="CENTER" prefHeight="17.0" prefWidth="921.0" text="Username">
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Corbel Bold" size="20.0" />
                      </font>
                   </Label>
                   <Pane prefHeight="26.0" prefWidth="348.0" />
-                  <TextField fx:id="loginUsernameTextField" />
+                  <TextField fx:id="loginUsernameTextField" alignment="CENTER" />
                   <Pane prefHeight="44.0" prefWidth="280.0" />
-                  <Label alignment="CENTER" prefHeight="30.0" prefWidth="381.0" text="Password">
+                  <Label alignment="CENTER" prefHeight="17.0" prefWidth="921.0" text="Password">
                      <font>
-                        <Font size="20.0" />
+                        <Font name="Corbel Bold" size="20.0" />
                      </font>
                   </Label>
                   <Pane prefHeight="23.0" prefWidth="348.0" />
-                  <PasswordField fx:id="loginPasswordTextField" />
-                  <HBox prefHeight="103.0" prefWidth="280.0">
+                  <PasswordField fx:id="loginPasswordTextField" alignment="CENTER" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Pane prefHeight="103.0" prefWidth="41.0" />
-                        <Pane prefHeight="103.0" prefWidth="60.0">
+                        <Pane prefHeight="74.0" prefWidth="280.0" />
+                        <HBox prefHeight="103.0" prefWidth="280.0">
                            <children>
-                              <Button fx:id="loginLoginButton" alignment="BOTTOM_RIGHT" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#loginLoginButtonClick" prefHeight="31.0" prefWidth="59.0" text="Login">
+                              <Button fx:id="loginLoginButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#loginLoginButtonClick" onMousePressed="#loginLoginButtonPressed" onMouseReleased="#loginLoginButtonReleased" prefHeight="34.0" prefWidth="87.0" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc; -fx-cursor: hand;" text="LOGIN">
                                  <font>
-                                    <Font size="15.0" />
+                                    <Font name="Corbel" size="18.0" />
+                                 </font>
+                              </Button>
+                              <Pane prefHeight="103.0" prefWidth="102.0" />
+                              <Button fx:id="loginSignUpButton" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#loginSignUpButtonClick" onMousePressed="#loginSignUpButtonPressed" onMouseReleased="#loginSgnUpButtonReleased" prefHeight="34.0" prefWidth="99.0" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc; -fx-cursor: hand;" text="SIGN UP">
+                                 <font>
+                                    <Font name="Corbel" size="18.0" />
                                  </font>
                               </Button>
                            </children>
-                        </Pane>
-                        <Pane prefHeight="103.0" prefWidth="70.0" />
-                        <Pane prefHeight="103.0" prefWidth="73.0">
-                           <children>
-                              <Button fx:id="loginSignUpButton" layoutX="1.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#loginSignUpButtonClick" text="Sign Up">
-                                 <font>
-                                    <Font size="15.0" />
-                                 </font>
-                              </Button>
-                           </children>
-                        </Pane>
+                        </HBox>
                      </children>
-                  </HBox>
+                  </VBox>
                </children>
             </VBox>
          </center>

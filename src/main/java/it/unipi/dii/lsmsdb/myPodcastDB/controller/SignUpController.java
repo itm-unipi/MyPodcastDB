@@ -89,7 +89,7 @@ public class SignUpController {
     @FXML
     void signUpSignUpButtonClick(MouseEvent event) throws IOException {
 
-        Logger.info("Signup Button Pressed");
+        Logger.info("Signup Button Clicked");
         String username = signUpUsernameTextField.getText();
         String name = signupNameTextField.getText();
         String surname = signupSurnameTextField.getText();
@@ -110,6 +110,30 @@ public class SignUpController {
         User user = new User("", username, password, name, surname, email, country, "", "", favGenre, age, gender);
         Logger.info(user.toString());
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
+    @FXML
+    void signUpSignUpButtonPressed(MouseEvent event){
+        Logger.info("sugnup button pressed");
+        signUpSignUpButton.setStyle(
+                "-fx-background-color: #bcbcbc;" +
+                        "-fx-border-color:  #e0e0e0;" +
+                        "-fx-border-radius: 25;" +
+                        "-fx-background-radius: 25;" +
+                        "-fx-cursor: hand;"
+        );
+    }
+
+    @FXML
+    void signUpSignUpButtonReleased(MouseEvent event){
+        Logger.info("signup button released");
+        signUpSignUpButton.setStyle(
+                "-fx-background-color: #e0e0e0;" +
+                        "-fx-border-color:  #bcbcbc;" +
+                        "-fx-border-radius: 25;" +
+                        "-fx-background-radius: 25;" +
+                        "-fx-cursor: hand;"
+        );
     }
 
 }
