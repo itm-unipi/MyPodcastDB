@@ -1,8 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.AuthorPreview;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -14,8 +12,8 @@ import javafx.scene.layout.VBox;
 
 public class ActorPreviewController {
 
-    private AuthorPreview authorPreview;
-    private UserPreview userPreview;
+    private Author authorPreview;
+    private User userPreview;
 
     @FXML
     private VBox actorContainer;
@@ -34,16 +32,16 @@ public class ActorPreviewController {
         userPreview = null;
     }
 
-    public void setData(AuthorPreview author) {
+    public void setData(Author author) {
         this.authorPreview = author;
 
-        Image image = new Image(author.getImage());
+        Image image = new Image(author.getPicturePath());
         this.actorImage.setImage(image);
         this.actorName.setText(author.getName());
         this.actorToolTip.setText(author.getName());
     }
 
-    public void setData(UserPreview user) {
+    public void setData(User user) {
         this.userPreview = user;
 
         Image image = new Image(user.getPictureMedium());

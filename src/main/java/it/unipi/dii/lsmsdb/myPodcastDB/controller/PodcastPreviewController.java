@@ -44,6 +44,7 @@ public class PodcastPreviewController {
         PodcastName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
     }
 
+
     public void setData(PodcastPreview podcast) {
         this.podcastPreview = podcast;
 
@@ -52,4 +53,5 @@ public class PodcastPreviewController {
         this.PodcastName.setText(podcast.getPodcastName());
         this.podcastToolTip.setText(podcast.getPodcastName());
     }
+
 }

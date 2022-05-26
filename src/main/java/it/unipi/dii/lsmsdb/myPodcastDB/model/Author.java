@@ -12,10 +12,28 @@ public class Author {
     private String password;
     private String email;
     private List<ReducedPodcast> ownPodcasts;
+    private String picturePath;
+
 
     public Author() {
     }
 
+    public Author(String id, String name, String picturePath){
+        this.id = id;
+        this.name = name;
+        this.picturePath = picturePath;
+    }
+
+    public Author(String id, String name, String password, String email, String picturePath) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.ownPodcasts = new ArrayList<>();
+        this.picturePath = picturePath;
+    }
+
+    //TODO delete after rebase
     public Author(String id, String name, String password, String email) {
         this.id = id;
         this.name = name;
@@ -23,6 +41,7 @@ public class Author {
         this.email = email;
         this.ownPodcasts = new ArrayList<>();
     }
+
 
     public Author(Author other) {
         this.id = other.getId();
@@ -68,6 +87,13 @@ public class Author {
         return ownPodcasts;
     }
 
+    public String getPicturePath() {
+        return picturePath;
+    }
+
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
+    }
     public void setOwnPodcasts(List<ReducedPodcast> ownPodcasts) {
         this.ownPodcasts = ownPodcasts;
     }
@@ -85,6 +111,7 @@ public class Author {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", ownPodcasts=" + ownPodcasts +
+                ", picturePath=" + picturePath +
                 '}';
     }
 }

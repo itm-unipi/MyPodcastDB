@@ -3,7 +3,6 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
@@ -257,13 +256,13 @@ public class UserNeo4jTest {
     private void showFollowedUserTest() {
         User user = new User();
         user.setUsername("silverelephant716273");
-        List<UserPreview> users = this.userNeo4j.showFollowedUsers(user.getUsername(), 10);
+        List<User> users = this.userNeo4j.showFollowedUsers(user.getUsername(), 10);
         if(users != null)
             System.out.println("[+] showFollowedUserTest");
         else
             System.err.println("[-] showFollowedUserTest");
 
-        for(UserPreview u : users)
+        for(User u : users)
             System.out.println(u);
 
         // clean all entities created for tests
@@ -378,9 +377,9 @@ public class UserNeo4jTest {
     }
 
     void showSuggestedUsersByLikedPodcastsTest() {
-        List<UserPreview> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("whiterabbit394794", 25);
+        List<User> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("whiterabbit394794", 25);
         boolean test = false;
-        for (UserPreview user : users)
+        for (User user : users)
             if (user.getUsername().equals("whiteelephant974216"))
                 test = true;
 
@@ -391,7 +390,7 @@ public class UserNeo4jTest {
     }
 
     public void showSuggestedUsersByFollowedAuthorsTest() {
-        List<UserPreview> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("whiterabbit394794", 4);
+        List<User> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("whiterabbit394794", 4);
 
         if (suggestedUsers != null && suggestedUsers.size() == 4) {
             System.out.println("[+] showSuggestedUsersByFollowedAuthors");

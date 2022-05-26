@@ -8,6 +8,8 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
@@ -21,11 +23,23 @@
             <top>
                 <VBox BorderPane.alignment="CENTER">
                     <children>
-                          <Label prefHeight="80.0" prefWidth="287.0" text="MyPodcastDB">
-                              <font>
-                                  <Font name="Corbel" size="24.0" />
-                              </font>
-                          </Label>
+                  <HBox>
+                     <children>
+                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                           <HBox.margin>
+                              <Insets top="15.0" />
+                           </HBox.margin>
+                           <image>
+                              <Image url="@images/browse_podcasts_64px.png" />
+                           </image>
+                        </ImageView>
+                                <Label prefHeight="80.0" prefWidth="287.0" text="MyPodcastDB">
+                                    <font>
+                                        <Font name="Corbel" size="24.0" />
+                                    </font>
+                                </Label>
+                     </children>
+                  </HBox>
                         <Separator prefWidth="0.0" style="-fx-background-color: black;" />
                     </children>
                     <padding>
@@ -36,9 +50,46 @@
             <center>
                 <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                     <children>
-                  <Pane prefHeight="133.0" prefWidth="920.0">
+                  <HBox prefHeight="84.0" prefWidth="920.0">
                      <children>
-                        <Label layoutY="102.0" prefHeight="34.0" prefWidth="175.0" text="Your Account">
+                        <Label fx:id="signUpLabelUser" alignment="CENTER" prefHeight="44.0" prefWidth="51.0" text="User">
+                           <font>
+                              <Font name="Corbel Bold" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ImageView fx:id="signUpSwitchButton" fitHeight="49.0" fitWidth="83.0" onMouseClicked="#signUpSwitchClicked" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@images/switch_off_80px.png" />
+                           </image>
+                        </ImageView>
+                        <Label fx:id="signUpLabelAuthor" alignment="CENTER" prefHeight="48.0" prefWidth="58.0" text="Author">
+                           <font>
+                              <Font name="Corbel" size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Pane prefHeight="84.0" prefWidth="476.0" />
+                        <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#signUpBackButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@images/Close_40px.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                     <VBox.margin>
+                        <Insets top="40.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <Pane prefHeight="38.0" prefWidth="920.0">
+                     <children>
+                        <Label fx:id="signUpLabelTitle" prefHeight="34.0" prefWidth="307.0" text="Your User Account">
                            <font>
                               <Font name="Corbel Bold" size="20.0" />
                            </font>
@@ -47,14 +98,18 @@
                   </Pane>
                   <HBox prefHeight="50.0" prefWidth="200.0">
                      <children>
-                        <Label prefHeight="50.0" prefWidth="93.0" text="Username">
+                        <Label fx:id="signUpUsernameLabel" prefHeight="50.0" prefWidth="93.0" text="Username">
                            <font>
                               <Font name="Corbel light" size="15.0" />
                            </font>
                         </Label>
                         <Pane prefHeight="50.0" prefWidth="173.0">
                            <children>
-                              <TextField fx:id="signUpUsernameTextField" layoutY="13.0" prefHeight="25.0" prefWidth="171.0" />
+                              <TextField fx:id="signUpUsernameTextField" layoutY="13.0" prefHeight="25.0" prefWidth="171.0">
+                                 <font>
+                                    <Font name="Corbel" size="12.0" />
+                                 </font>
+                              </TextField>
                            </children>
                         </Pane>
                         <Pane prefHeight="50.0" prefWidth="41.0" />
@@ -98,7 +153,7 @@
                         </Pane>
                      </children>
                   </HBox>
-                  <HBox prefHeight="50.0" prefWidth="920.0">
+                  <HBox fx:id="thirdLineInput" prefHeight="50.0" prefWidth="920.0">
                      <children>
                         <Label prefHeight="50.0" prefWidth="90.0" text="Name">
                            <font>
@@ -123,7 +178,7 @@
                         </Pane>
                      </children>
                   </HBox>
-                  <HBox prefHeight="50.0" prefWidth="920.0">
+                  <HBox fx:id="fourthLineInput" prefHeight="50.0" prefWidth="920.0">
                      <children>
                         <Label prefHeight="50.0" prefWidth="90.0" text="Age">
                            <font>
@@ -136,7 +191,7 @@
                            </children>
                         </Pane>
                         <Pane prefHeight="50.0" prefWidth="43.0" />
-                        <Label prefHeight="50.0" prefWidth="135.0" text="Gender">
+                        <Label prefHeight="50.0" prefWidth="139.0" text="Gender">
                            <font>
                               <Font name="Corbel light" size="15.0" />
                            </font>
@@ -148,7 +203,7 @@
                         </Pane>
                      </children>
                   </HBox>
-                  <HBox prefHeight="50.0" prefWidth="920.0">
+                  <HBox fx:id="fifthLineInput" prefHeight="50.0" prefWidth="920.0">
                      <children>
                         <Label prefHeight="50.0" prefWidth="90.0" text="Country">
                            <font>
@@ -161,7 +216,7 @@
                            </children>
                         </Pane>
                         <Pane prefHeight="50.0" prefWidth="43.0" />
-                        <Label prefHeight="50.0" prefWidth="135.0" text="Favourite Genre">
+                        <Label prefHeight="50.0" prefWidth="138.0" text="Favourite Genre">
                            <font>
                               <Font name="Corbel light" size="15.0" />
                            </font>

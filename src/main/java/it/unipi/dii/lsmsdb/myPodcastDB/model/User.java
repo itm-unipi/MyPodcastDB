@@ -17,6 +17,11 @@ public class User {
     public User() {
     }
 
+    public User(String username, String pictureMedium){
+        this.username = username;
+        this.pictureMedium = pictureMedium;
+    }
+
     public User(String id, String username, String password, String name, String surname, String email, String country, String pictureSmall, String pictureMedium, String favouriteGenre, int age, String gender) {
         this.id = id;
         this.username = username;

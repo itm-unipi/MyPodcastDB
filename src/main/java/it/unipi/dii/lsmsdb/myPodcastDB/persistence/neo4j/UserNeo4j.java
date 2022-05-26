@@ -1,7 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;
 
@@ -445,7 +445,7 @@ public class UserNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<UserPreview> showFollowedUsers(String username, int limit) {
+    public List<User> showFollowedUsers(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u1:User { username: $username})-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
                 "RETURN u2" + "\n" +
@@ -463,19 +463,19 @@ public class UserNeo4j {
         if (result == null || !result.iterator().hasNext())
             return null;
 
-        List<UserPreview> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         for (Record record : result) {
             String followedUsername = record.get(0).get("username").asString();
             String pictureMedium = record.get(0).get("pictureMedium").asString();
 
-            UserPreview user = new UserPreview(followedUsername, pictureMedium);
+            User user = new User(followedUsername, pictureMedium);
             users.add(user);
         }
 
         return users;
     }
 
-    public List<UserPreview> showSuggestedUsersByFollowedAuthors(String username, int limit) {
+    public List<User> showSuggestedUsersByFollowedAuthors(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
@@ -489,12 +489,12 @@ public class UserNeo4j {
             if (result.isEmpty())
                 return null;
 
-            List<UserPreview> suggestedUsers = new ArrayList<>();
+            List<User> suggestedUsers = new ArrayList<>();
             for (Record record: result) {
                 String suggestedUsername = record.get(0).get("username").asString();
                 String pictureMedium = record.get(0).get("pictureMedium").asString();
 
-                UserPreview user = new UserPreview(suggestedUsername, pictureMedium);
+                User user = new User(suggestedUsername, pictureMedium);
                 suggestedUsers.add(user);
             }
 
@@ -505,7 +505,7 @@ public class UserNeo4j {
         }
     }
 
-    public List<UserPreview> showSuggestedUsersByLikedPodcasts(String username, int limit) {
+    public List<User> showSuggestedUsersByLikedPodcasts(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> result = null;
@@ -523,12 +523,12 @@ public class UserNeo4j {
         if (result == null)
             return null;
 
-        List<UserPreview> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         for (Record record : result) {
             String suggestedUsername = record.get(0).get("username").asString();
             String pictureMedium = record.get(0).get("pictureMedium").asString();
 
-            UserPreview user = new UserPreview(suggestedUsername, pictureMedium);
+            User user = new User(suggestedUsername, pictureMedium);
             users.add(user);
         }
 
