@@ -146,7 +146,7 @@ public class SearchController {
             authorsFound.add(a);
         }
 
-        authorsFound.clear();
+        //authorsFound.clear();
         if (authorsFound.isEmpty()) {
             this.gridFoundAuthors.setVisible(false);
             this.noAuthorsText.setVisible(true);

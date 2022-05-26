@@ -32,13 +32,16 @@
                            <image>
                               <Image url="@img/logo.png" />
                            </image>
+                           <HBox.margin>
+                              <Insets top="4.0" />
+                           </HBox.margin>
                         </ImageView>
                         <Label prefHeight="30.0" prefWidth="199.0" text="MyPodcastDB">
                            <font>
                               <Font name="Corbel Light" size="24.0" />
                            </font>
                            <HBox.margin>
-                              <Insets left="5.0" />
+                              <Insets left="3.0" />
                            </HBox.margin>
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="920.0">

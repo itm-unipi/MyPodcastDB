@@ -11,7 +11,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        StageManager.initialize(stage, "myPodcastDB", this);
+        StageManager.initialize(stage, "MyPodcastDB", this);
     }
 
     public static void main(String[] args) {

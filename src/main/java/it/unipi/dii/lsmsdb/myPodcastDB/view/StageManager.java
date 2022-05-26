@@ -23,6 +23,7 @@ public class StageManager {
         primaryStage.setTitle(title);
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
+        primaryStage.getIcons().add(new Image(application.getClass().getResourceAsStream( "/img/logo.png" )));
         primaryStage.show();
     }
 
