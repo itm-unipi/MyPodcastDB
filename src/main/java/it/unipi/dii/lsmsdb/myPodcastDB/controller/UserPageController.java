@@ -34,10 +34,10 @@ public class UserPageController {
     private TextField searchTextField;
 
     @FXML
-    private Label userPageCountryTextField;
+    private TextField userPageCountryTextField;
 
     @FXML
-    private Label userPageFavGenreTextField;
+    private TextField userPageFavGenreTextField;
 
     @FXML
     private ImageView userPageFollowButton;
@@ -55,13 +55,13 @@ public class UserPageController {
     private ImageView  userPageLikedLeftButton;
 
     @FXML
-    private Label userPageGenderTextField;
+    private TextField userPageGenderTextField;
 
     @FXML
     private GridPane userPageLikedGrid;
 
     @FXML
-    private Label userPageUsernameTextField;
+    private TextField userPageUsernameTextField;
 
     @FXML
     private GridPane userPageWatchlistGrid;
