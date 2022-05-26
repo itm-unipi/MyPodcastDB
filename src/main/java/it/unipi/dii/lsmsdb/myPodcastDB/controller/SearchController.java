@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -42,6 +43,18 @@ public class SearchController {
 
     @FXML
     private ImageView userPicture;
+
+    @FXML
+    private ScrollPane scrollFoundPodcasts;
+
+    @FXML
+    private Label noPodcastsText;
+
+    @FXML
+    private Label noAuthorsText;
+
+    @FXML
+    private Label noUsersFound;
 
     @FXML
     void onClickSearch(MouseEvent event) throws IOException {
@@ -99,12 +112,21 @@ public class SearchController {
         podcastReleaseDates.add(new Date());
 
         author.setOwnPodcasts(podcastIds, podcastNames, podcastReleaseDates);
+        List<Triplet<String, String, Date>> reducedPod = author.getReducedPodcasts();
 
-        List<Triplet<String, String, Date>>  reducedPod = author.getReducedPodcasts();
+
+        //reducedPod.clear();
+        if (reducedPod.isEmpty()) {
+            this.gridFoundPodcasts.setVisible(false);
+            this.noPodcastsText.setVisible(true);
+        } else {
+            this.noPodcastsText.setVisible(false);
+            this.noPodcastsText.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+        }
 
         int row = 0;
         int column = 0;
-        for (Triplet<String, String, Date> entry: reducedPod){
+        for (Triplet<String, String, Date> entry : reducedPod) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
@@ -114,5 +136,81 @@ public class SearchController {
 
             gridFoundPodcasts.add(newPodcast, column, row++);
         }
+
+        /********************************************************************************/
+        // Authors Followed
+        List<Author> authorsFound = new ArrayList<>();
+        for (int j = 0; j < 20; j++){
+            Author a = new Author();
+            a.setName("Apple Inc. " + j);
+            authorsFound.add(a);
+        }
+
+        authorsFound.clear();
+        if (authorsFound.isEmpty()) {
+            this.gridFoundAuthors.setVisible(false);
+            this.noAuthorsText.setVisible(true);
+        } else {
+            this.noAuthorsText.setVisible(false);
+            this.noAuthorsText.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+        }
+
+        row = 0;
+        column = 0;
+        for (Author a : authorsFound){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+
+            AnchorPane newAuthor = fxmlLoader.load();
+            AuthorPreviewController controller = fxmlLoader.getController();
+            controller.setData(a);
+
+            if (column == 7) {
+                row++;
+                column = 0;
+            }
+
+            gridFoundAuthors.add(newAuthor, column++, row);
+        }
+
+        /********************************************************************************/
+
+        // User found
+        List<User> usersFound = new ArrayList<>();
+        /*for (int j = 0; j < 20; j++){
+            User a = new Author();
+            a.setName("Apple Inc. " + j);
+            authorsFound.add(a);
+        }   */
+
+        usersFound.clear();
+        if (usersFound.isEmpty()) {
+            this.gridFoundUsers.setVisible(false);
+            this.noUsersFound.setVisible(true);
+        } else {
+            this.noUsersFound.setVisible(false);
+            this.noUsersFound.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+        }
+
+        row = 0;
+        column = 0;
+        for (User u : usersFound){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserPreview.fxml"));
+
+            AnchorPane newUser = fxmlLoader.load();
+            // TODO
+            //UserPreviewController controller = fxmlLoader.getController();
+            //controller.setData(u);
+
+            if (column == 7) {
+                row++;
+                column = 0;
+            }
+
+            //gridFoundUsers.add(newUser, column++, row);
+        }
+
+        /********************************************************************************/
     }
 }

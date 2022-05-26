@@ -112,10 +112,10 @@ public class AuthorProfileController {
         int column = 0;
         for (Author author : authorsFollowed){
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorFollowed.fxml"));
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
             AnchorPane newAuthor = fxmlLoader.load();
-            AuthorFollowedController controller = fxmlLoader.getController();
+            AuthorPreviewController controller = fxmlLoader.getController();
             controller.setData(author);
 
             gridAuthorsFollowed.add(newAuthor, column++, row);

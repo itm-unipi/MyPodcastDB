@@ -97,11 +97,11 @@
             </VBox>
          </top>
          <center>
-            <VBox BorderPane.alignment="TOP_CENTER">
+            <VBox prefHeight="640.0" BorderPane.alignment="CENTER">
                <children>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                      <content>
-                        <VBox alignment="TOP_CENTER">
+                        <VBox alignment="TOP_CENTER" prefHeight="1180.0">
                            <children>
                               <Label fx:id="searchingForText" alignment="TOP_LEFT" prefHeight="27.0" prefWidth="1038.0" text="Searching for &quot;author, podcast, user...&quot;">
                                  <font>
@@ -116,9 +116,9 @@
                                     <Font name="Corbel Light" size="20.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="240.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                              <ScrollPane fx:id="scrollFoundPodcasts" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                  <content>
-                                    <GridPane fx:id="gridFoundPodcasts" vgap="8.0">
+                                    <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" vgap="8.0">
                                        <columnConstraints>
                                           <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
                                        </columnConstraints>
@@ -128,23 +128,39 @@
                                     </GridPane>
                                  </content>
                                  <VBox.margin>
-                                    <Insets bottom="10.0" left="120.0" right="120.0" top="10.0" />
+                                    <Insets left="120.0" right="120.0" />
                                  </VBox.margin>
                               </ScrollPane>
+                              <Label fx:id="noPodcastsText" alignment="CENTER" text="There are no podcasts found.">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                              </Label>
                               <Label prefHeight="36.0" prefWidth="1040.0" text="Authors (4)">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />
                                  </font>
                               </Label>
-                              <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                              <ScrollPane fitToHeight="true" hbarPolicy="NEVER" maxHeight="300.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
                                  <content>
-                                    <GridPane fx:id="gridFoundAuthors" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                    <GridPane fx:id="gridFoundAuthors" hgap="7.0" vgap="7.0">
                                        <rowConstraints>
-                                          <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                          <RowConstraints fillHeight="false" minHeight="0.0" vgrow="ALWAYS" />
                                        </rowConstraints>
+                                       <columnConstraints>
+                                          <ColumnConstraints hgrow="SOMETIMES" minWidth="0.0" />
+                                       </columnConstraints>
                                     </GridPane>
                                  </content>
+                                 <VBox.margin>
+                                    <Insets left="100.0" right="120.0" />
+                                 </VBox.margin>
                               </ScrollPane>
+                              <Label fx:id="noAuthorsText" alignment="CENTER" text="There are no authors found.">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                              </Label>
                               <Label prefHeight="36.0" prefWidth="1040.0" text="Users (22)">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />
@@ -159,6 +175,11 @@
                                     </GridPane>
                                  </content>
                               </ScrollPane>
+                              <Label fx:id="noUsersFound" alignment="CENTER" text="There are no users found.">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </VBox>
                      </content>

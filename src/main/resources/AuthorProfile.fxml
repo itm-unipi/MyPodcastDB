@@ -114,7 +114,7 @@
                                     <Insets bottom="10.0" left="120.0" right="120.0" top="18.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label fx:id="authorName" prefHeight="36.0" prefWidth="1039.0" text="AuthorName">
+                                    <Label fx:id="authorName" prefHeight="36.0" prefWidth="1040.0" text="AuthorName">
                                        <font>
                                           <Font name="Corbel Light" size="30.0" />
                                        </font>
@@ -177,7 +177,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="130.0" prefHeight="110.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                        <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="145.0" prefHeight="110.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                            <content>
                               <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" hgap="6.0" prefWidth="0.0">
                                  <rowConstraints>
@@ -207,7 +207,7 @@
                   </HBox>
                </children>
                <BorderPane.margin>
-                  <Insets bottom="16.0" left="120.0" right="120.0" />
+                  <Insets bottom="10.0" left="120.0" right="120.0" />
                </BorderPane.margin>
             </VBox>
          </bottom>
