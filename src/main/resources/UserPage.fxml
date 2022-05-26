@@ -23,7 +23,7 @@
             <top>
                 <VBox prefHeight="80.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
                     <children>
-                        <HBox prefHeight="80.0" prefWidth="920.0">
+                        <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="920.0">
                             <children>
                                 <Label prefHeight="80.0" prefWidth="286.0" style="-fx-font-weight: bold;" text="MyPodcastDB">
                                     <font>
@@ -52,7 +52,7 @@
                                 </Pane>
                             </children>
                         </HBox>
-                        <Separator prefWidth="0.0" style="-fx-background-color: black;" />
+                        <Separator maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1.0" prefWidth="920.0" />
                     </children>
                     <padding>
                         <Insets left="180.0" right="180.0" />
@@ -63,15 +63,15 @@
                 <Pane prefHeight="640.0" prefWidth="95.0" BorderPane.alignment="CENTER" />
             </left>
             <right>
-                <Pane prefHeight="640.0" prefWidth="95.0" BorderPane.alignment="CENTER" />
+                <Pane BorderPane.alignment="CENTER" />
             </right>
          <center>
             <ScrollPane hbarPolicy="NEVER" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
                <content>
                   <VBox prefHeight="767.0" prefWidth="1032.0" style="-fx-background-color: white; -fx-border-color: white;">
                      <children>
-                        <Pane minHeight="-Infinity" prefHeight="40.0" prefWidth="920.0" />
-                        <HBox prefHeight="205.0" prefWidth="920.0" style="-fx-background-color: white; -fx-border-color: white;">
+                        <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="920.0" />
+                        <HBox style="-fx-background-color: white; -fx-border-color: white;">
                            <children>
                               <ImageView fx:id="userPageImage" fitHeight="152.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -82,63 +82,59 @@
                                  </HBox.margin>
                               </ImageView>
                               <Pane prefHeight="230.0" prefWidth="58.0" />
-                              <VBox prefHeight="191.0" prefWidth="313.0">
+                              <VBox>
                                  <children>
-                                    <Pane prefHeight="0.0" prefWidth="313.0" />
-                                    <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Username ">
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Label" textFill="#434343">
                                        <font>
-                                          <Font size="15.0" />
+                                          <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageUsernameTextField" editable="false" text="Biajo">
+                                    <Label fx:id="userPageUsernameTextField" prefHeight="17.0" prefWidth="314.0" text="Biajo">
                                        <font>
-                                          <Font name="Corbel Light" size="12.0" />
+                                          <Font name="Corbel" size="12.0" />
+                                       </font>
+                                       <padding>
+                                          <Insets bottom="10.0" top="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="313.0" text="Country" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Label fx:id="userPageCountryTextField" prefHeight="17.0" prefWidth="312.0" text="Altamura">
+                                       <font>
+                                          <Font name="Corbel" size="12.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="10.0" />
+                                          <Insets bottom="10.0" top="10.0" />
                                        </VBox.margin>
-                                    </TextField>
-                                    <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Country">
+                                    </Label>
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="313.0" text="Favourite Genre" textFill="#434343">
                                        <font>
-                                          <Font name="Corbel" size="15.0" />
+                                          <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageCountryTextField" editable="false" text="Altamura">
-                                       <font>
-                                          <Font name="Corbel Light" size="12.0" />
-                                       </font>
+                                    <Label fx:id="userPageFavGenreTextField" prefHeight="17.0" prefWidth="313.0" text="Crime">
                                        <VBox.margin>
-                                          <Insets bottom="10.0" />
+                                          <Insets bottom="10.0" top="10.0" />
                                        </VBox.margin>
-                                    </TextField>
-                                    <Label prefHeight="17.0" prefWidth="313.0" text="Favourite Genre">
+                                    </Label>
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="313.0" text="Gender" textFill="#434343">
                                        <font>
-                                          <Font name="Corbel Bold" size="15.0" />
+                                          <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageFavGenreTextField" editable="false" text="Crime">
-                                       <font>
-                                          <Font name="Corbel Light" size="12.0" />
-                                       </font>
+                                    <Label fx:id="userPageGenderTextField" prefHeight="17.0" prefWidth="312.0" text="Famale">
                                        <VBox.margin>
-                                          <Insets bottom="10.0" />
+                                          <Insets bottom="10.0" top="10.0" />
                                        </VBox.margin>
-                                    </TextField>
-                                    <Label prefHeight="17.0" prefWidth="313.0" style="-fx-font-weight: bold;" text="Gender">
-                                       <font>
-                                          <Font name="Corbel" size="15.0" />
-                                       </font>
                                     </Label>
-                                    <TextField fx:id="userPageGenderTextField" editable="false" text="Male">
-                                       <font>
-                                          <Font name="Corbel Light" size="12.0" />
-                                       </font>
-                                    </TextField>
                                  </children>
                               </VBox>
-                              <Pane prefHeight="203.0" prefWidth="151.0">
+                              <Pane prefHeight="262.0" prefWidth="396.0">
                                  <children>
-                                    <ImageView fx:id="userPageFollowButton" fitHeight="39.0" fitWidth="36.0" layoutX="58.0" layoutY="6.0" onMouseClicked="#followButtonClick" onMouseEntered="#followIn" onMouseExited="#followOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                    <ImageView fx:id="userPageFollowButton" fitHeight="40.0" fitWidth="40.0" layoutX="58.0" layoutY="6.0" onMouseClicked="#followButtonClick" onMouseEntered="#followIn" onMouseExited="#followOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                        <image>
                                           <Image url="@images/following_30px.png" />
                                        </image>
@@ -151,7 +147,7 @@
                            <children>
                               <VBox>
                                  <children>
-                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Watchlist">
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Watchlist" textFill="#434343">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
@@ -169,7 +165,7 @@
                                                 <Insets right="20.0" top="100.0" />
                                              </HBox.margin>
                                           </ImageView>
-                                          <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="230.0" prefWidth="980.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
+                                          <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="980.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
                                              <content>
                                                 <GridPane fx:id="userPageWatchlistGrid" hgap="10.0" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                   <rowConstraints>
@@ -195,7 +191,7 @@
                               </VBox>
                               <VBox prefHeight="290.0" prefWidth="918.0">
                                  <children>
-                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts">
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts" textFill="#434343">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
@@ -242,7 +238,7 @@
                               </VBox>
                               <VBox prefHeight="290.0" prefWidth="918.0">
                                  <children>
-                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Authors">
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Authors" textFill="#434343">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
@@ -276,6 +272,53 @@
                                              </content>
                                           </ScrollPane>
                                           <ImageView fx:id="userPageAuthorsRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollAuthorsButtonRightClick" onMouseEntered="#scrollAuthorsRightIn" onMouseExited="#scrollAuthorsRightOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@images/forward_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="20.0" top="50.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox prefHeight="290.0" prefWidth="918.0">
+                                 <children>
+                                    <Label minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Users" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="85.0" top="10.0" />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox prefHeight="130.0" prefWidth="200.0">
+                                       <children>
+                                          <ImageView fx:id="userPageUsersLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollUsersButtonLeftClick" onMouseEntered="#scrollUsersLeftIn" onMouseExited="#scrollUsersLeftOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@images/back_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="20.0" top="50.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ScrollPane fx:id="userPageUsersScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="130.0" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                             <content>
+                                                <GridPane fx:id="userPageUsersGrid" hgap="20.0" minHeight="130.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="105.0" />
+                                                   </columnConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                          <ImageView fx:id="userPageUsersRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollUsersButtonRightClick" onMouseEntered="#scrollUsersRightIn" onMouseExited="#scrollUsersRightOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
                                                 <Image url="@images/forward_32px.png" />
                                              </image>

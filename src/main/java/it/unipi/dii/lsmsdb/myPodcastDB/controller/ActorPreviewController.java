@@ -1,0 +1,76 @@
+package it.unipi.dii.lsmsdb.myPodcastDB.controller;
+
+import it.unipi.dii.lsmsdb.myPodcastDB.model.AuthorPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
+
+public class ActorPreviewController {
+
+    private AuthorPreview authorPreview;
+    private UserPreview userPreview;
+
+    @FXML
+    private VBox actorContainer;
+
+    @FXML
+    private ImageView actorImage;
+
+    @FXML
+    private Tooltip actorToolTip;
+
+    @FXML
+    private Label actorName;
+
+    public ActorPreviewController() {
+        authorPreview = null;
+        userPreview = null;
+    }
+
+    public void setData(AuthorPreview author) {
+        this.authorPreview = author;
+
+        Image image = new Image(author.getImage());
+        this.actorImage.setImage(image);
+        this.actorName.setText(author.getName());
+        this.actorToolTip.setText(author.getName());
+    }
+
+    public void setData(UserPreview user) {
+        this.userPreview = user;
+
+        Image image = new Image(user.getPictureMedium());
+        this.actorImage.setImage(image);
+        this.actorName.setText(user.getUsername());
+        this.actorToolTip.setText(user.getUsername());
+    }
+
+    @FXML
+    void actorIn(MouseEvent event) {
+        actorContainer.setStyle("-fx-background-color: f2f2f2; -fx-background-radius: 10;");
+        actorName.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
+    }
+
+    @FXML
+    void actorOut(MouseEvent event) {
+        actorContainer.setStyle("-fx-background-color: white");
+        actorName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
+    }
+
+    @FXML
+    void onClick(MouseEvent event) {
+
+        if(authorPreview != null)
+            Logger.info(authorPreview.getId() + " : " + this.authorPreview.getName() + " selected");
+        else
+            Logger.info(userPreview.getUsername() + " selected");
+    }
+
+}

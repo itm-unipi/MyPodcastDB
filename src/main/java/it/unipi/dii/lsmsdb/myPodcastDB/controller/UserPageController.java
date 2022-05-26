@@ -1,17 +1,14 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.AuthorPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -20,8 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -39,10 +34,10 @@ public class UserPageController {
     private TextField searchTextField;
 
     @FXML
-    private TextField userPageCountryTextField;
+    private Label userPageCountryTextField;
 
     @FXML
-    private TextField userPageFavGenreTextField;
+    private Label userPageFavGenreTextField;
 
     @FXML
     private ImageView userPageFollowButton;
@@ -60,13 +55,13 @@ public class UserPageController {
     private ImageView  userPageLikedLeftButton;
 
     @FXML
-    private TextField userPageGenderTextField;
+    private Label userPageGenderTextField;
 
     @FXML
     private GridPane userPageLikedGrid;
 
     @FXML
-    private TextField userPageUsernameTextField;
+    private Label userPageUsernameTextField;
 
     @FXML
     private GridPane userPageWatchlistGrid;
@@ -92,35 +87,26 @@ public class UserPageController {
     @FXML
     private ImageView userPageAuthorsRightButton;
 
+    @FXML
+    private GridPane userPageUsersGrid;
+
+    @FXML
+    private ImageView userPageUsersLeftButton;
+
+    @FXML
+    private ImageView userPageUsersRightButton;
+
+    @FXML
+    private ScrollPane userPageUsersScrollPane;
+
     public void initialize() throws IOException {
 
-        // service simulation
         User user = new User();
-        user.setUsername("whitegoose14611");
-        user.setAge(65);
-        user.setGender("male");
-        user.setPictureMedium("File:src/main/resources/images/user_100px.png");
-        user.setFavouriteGenre("Music History");
-        user.setCountry("Spain");
-        List<PodcastPreview> test = new ArrayList<>();
-        PodcastPreview p1 = new PodcastPreview("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        PodcastPreview p2 = new PodcastPreview("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
-        PodcastPreview p3 = new PodcastPreview("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/60x60bb.jpg");
+        List<PodcastPreview> podcasts = new ArrayList<>();
         List<AuthorPreview> authors = new ArrayList<>();
-        AuthorPreview a1 = new AuthorPreview("ahy2bs89ha5c4f5eb9cddaaa", "Michael Colosi", "File:src/main/resources/images/user_male_96px.png" );
-        AuthorPreview a2 = new AuthorPreview("ufsdfrt445efsge5srfsdffa", "Preface Podcast", "File:src/main/resources/images/User Female Skin Type 6_160px.png" );
-        AuthorPreview a3 = new AuthorPreview("6sffgty6wefy742eerwetttt", "Apple Inc.", "File:src/main/resources/images/user_male_skin_type_3_80px.png" );
+        List<UserPreview> users = new ArrayList<>();
 
-
-
-        for(int i = 0; i < 5; i++){
-            test.add(p1);
-            test.add(p2);
-            test.add(p3);
-            authors.add(a1);
-            authors.add(a2);
-            authors.add(a3);
-        }
+        this.simulateServiceLayer(user, podcasts, authors, users);
 
         //fill textfields and image
         userPageUsernameTextField.setText(user.getUsername());
@@ -133,7 +119,7 @@ public class UserPageController {
         // fill the watchlist and liked grids
         int row = 0;
         int column = 0;
-        for (PodcastPreview podcast : test) {
+        for (PodcastPreview podcast : podcasts) {
             FXMLLoader watchListfxmlLoader = new FXMLLoader();
             FXMLLoader likedfxmlLoader = new FXMLLoader();
             watchListfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
@@ -155,20 +141,69 @@ public class UserPageController {
 
         row = 0;
         column = 0;
-
         for(AuthorPreview author : authors){
             FXMLLoader authorfxmlLoader = new FXMLLoader();
-            authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+            authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
             AnchorPane newAuthor = authorfxmlLoader.load();
-            AuthorPreviewController authorController = authorfxmlLoader.getController();
+            ActorPreviewController authorController = authorfxmlLoader.getController();
             authorController.setData(author);
             this.userPageAuthorsGrid.add(newAuthor, column, row);
+            column++;
+        }
+
+        row = 0;
+        column = 0;
+        for(UserPreview u : users){
+            FXMLLoader userfxmlLoader = new FXMLLoader();
+            userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+            AnchorPane newUser = userfxmlLoader.load();
+            ActorPreviewController actorController = userfxmlLoader.getController();
+            actorController.setData(u);
+            this.userPageUsersGrid.add(newUser, column, row);
             column++;
         }
 
         userPageWatchlistScrollPane.setHvalue(0.0);
         userPageLikedScrollPane.setHvalue(0.0);
         userPageAuthorsScrollPane.setHvalue(0.0);
+        userPageUsersScrollPane.setHvalue(0.0);
+    }
+
+    void simulateServiceLayer(User user, List<PodcastPreview> podcasts, List<AuthorPreview> authors, List<UserPreview> users){
+
+        // service simulation
+        user.setUsername("whitegoose14611");
+        user.setAge(65);
+        user.setGender("male");
+        user.setPictureMedium("File:src/main/resources/images/user_100px.png");
+        user.setFavouriteGenre("Music History");
+        user.setCountry("Spain");
+
+        PodcastPreview p1 = new PodcastPreview("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
+        PodcastPreview p2 = new PodcastPreview("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
+        PodcastPreview p3 = new PodcastPreview("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/60x60bb.jpg");
+
+        AuthorPreview a1 = new AuthorPreview("ahy2bs89ha5c4f5eb9cddaaa", "Michael Colosi", "File:src/main/resources/images/user_male_96px.png" );
+        AuthorPreview a2 = new AuthorPreview("ufsdfrt445efsge5srfsdffa", "Preface Podcast", "File:src/main/resources/images/User Female Skin Type 6_160px.png" );
+        AuthorPreview a3 = new AuthorPreview("6sffgty6wefy742eerwetttt", "Apple Inc.", "File:src/main/resources/images/user_male_skin_type_3_80px.png" );
+
+        UserPreview u1 = new UserPreview("Paolo Lupini", "File:src/main/resources/images/account_50px.png");
+        UserPreview u2 = new UserPreview("Chiara Proietti", "File:src/main/resources/images/clever_woman_50px.png");
+        UserPreview u3 = new UserPreview("Claudio Giuseppe", "File:src/main/resources/images/business_man_with_beard_50px.png");
+
+
+        for(int i = 0; i < 5; i++){
+            podcasts.add(p1);
+            podcasts.add(p2);
+            podcasts.add(p3);
+            authors.add(a1);
+            authors.add(a2);
+            authors.add(a3);
+            users.add(u1);
+            users.add(u2);
+            users.add(u3);
+        }
+
     }
 
     //click event
@@ -234,6 +269,25 @@ public class UserPageController {
             return;
         userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() - scrollValue);
     }
+
+    @FXML
+    void scrollUsersButtonRightClick(MouseEvent event) {
+        Logger.info("users right button pressed");
+        double scrollValue = 0.13;
+        if(userPageUsersScrollPane.getHvalue() == 1.0)
+            return;
+        userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() + scrollValue);
+    }
+
+    @FXML
+    void scrollUsersButtonLeftClick(MouseEvent event) {
+        Logger.info("users left button pressed");
+        double scrollValue = 0.13;
+        if(userPageUsersScrollPane.getHvalue() == 0.0)
+            return;
+        userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
+    }
+
 
     @FXML
     void homeButtonClick(MouseEvent event) throws IOException {
@@ -333,13 +387,39 @@ public class UserPageController {
     }
 
     @FXML
+    void scrollUsersLeftIn(MouseEvent event) {
+        userPageUsersLeftButton.setFitHeight(31);
+        userPageUsersLeftButton.setFitWidth(31);
+    }
+
+    @FXML
+    void scrollUsersLeftOut(MouseEvent event) {
+        userPageUsersLeftButton.setFitHeight(30);
+        userPageUsersLeftButton.setFitWidth(30);
+    }
+
+    @FXML
+    void scrollUsersRightIn(MouseEvent event) {
+        userPageUsersRightButton.setFitHeight(31);
+        userPageUsersRightButton.setFitWidth(31);
+    }
+
+    @FXML
+    void scrollUsersRightOut(MouseEvent event) {
+        userPageUsersRightButton.setFitHeight(30);
+        userPageUsersRightButton.setFitWidth(30);
+    }
+
+    @FXML
     void followIn(MouseEvent event) {
-        userPageFollowButton.setStyle("-fx-font-weight: bold; -fx-cursor: hand;");
+        userPageFollowButton.setFitHeight(41);
+        userPageFollowButton.setFitWidth(41);
     }
 
     @FXML
     void followOut(MouseEvent event) {
-        userPageFollowButton.setStyle("-fx-font-weight: normal; -fx-cursor: hand;");
+        userPageFollowButton.setFitHeight(40);
+        userPageFollowButton.setFitWidth(40);
     }
 
 

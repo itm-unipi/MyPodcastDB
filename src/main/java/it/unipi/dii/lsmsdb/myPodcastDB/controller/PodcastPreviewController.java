@@ -29,7 +29,7 @@ public class PodcastPreviewController {
 
     @FXML
     void onClick(MouseEvent event) {
-        Logger.info(podcastPreview.getPodcastId() + " : " + this.podcastPreview.getPodcastName());
+        Logger.info(podcastPreview.getPodcastId() + " : " + this.podcastPreview.getPodcastName() + " selected");
     }
 
     @FXML
