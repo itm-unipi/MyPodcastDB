@@ -140,7 +140,7 @@ public class SearchController {
         /********************************************************************************/
         // Authors Followed
         List<Author> authorsFound = new ArrayList<>();
-        for (int j = 0; j < 12; j++){
+        for (int j = 0; j < 2; j++){
             Author a = new Author();
             a.setName("Apple Inc. " + j);
             authorsFound.add(a);

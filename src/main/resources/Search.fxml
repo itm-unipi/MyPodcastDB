@@ -179,17 +179,17 @@
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="280.0" minHeight="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fx:id="scrollFoundUsers" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
-                                          <GridPane fx:id="gridFoundUsers">
+                                          <GridPane fx:id="gridFoundUsers" minHeight="0.0" vgap="8.0">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
+                                             </columnConstraints>
                                              <rowConstraints>
-                                                <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
+                                                <RowConstraints fillHeight="false" minHeight="0.0" vgrow="SOMETIMES" />
                                              </rowConstraints>
                                           </GridPane>
                                        </content>
-                                       <padding>
-                                          <Insets left="-20.0" />
-                                       </padding>
                                     </ScrollPane>
                                     <Label fx:id="noUsersFound" alignment="CENTER" text="There are no users found.">
                                        <font>
