@@ -140,7 +140,7 @@ public class SearchController {
         /********************************************************************************/
         // Authors Followed
         List<Author> authorsFound = new ArrayList<>();
-        for (int j = 0; j < 20; j++){
+        for (int j = 0; j < 12; j++){
             Author a = new Author();
             a.setName("Apple Inc. " + j);
             authorsFound.add(a);
@@ -159,18 +159,13 @@ public class SearchController {
         column = 0;
         for (Author a : authorsFound){
             FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSearchPreview.fxml"));
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
             controller.setData(a);
 
-            if (column == 7) {
-                row++;
-                column = 0;
-            }
-
-            gridFoundAuthors.add(newAuthor, column++, row);
+            gridFoundAuthors.add(newAuthor, column, row++);
         }
 
         /********************************************************************************/
@@ -203,12 +198,7 @@ public class SearchController {
             //UserPreviewController controller = fxmlLoader.getController();
             //controller.setData(u);
 
-            if (column == 7) {
-                row++;
-                column = 0;
-            }
-
-            //gridFoundUsers.add(newUser, column++, row);
+            //gridFoundUsers.add(newUser, column, row++);
         }
 
         /********************************************************************************/

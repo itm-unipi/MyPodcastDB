@@ -124,7 +124,7 @@
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fx:id="scrollFoundPodcasts" fitToWidth="true" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
+                                    <ScrollPane fx:id="scrollFoundPodcasts" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
                                           <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" vgap="8.0">
                                              <columnConstraints>
@@ -150,15 +150,18 @@
                                  <children>
                                     <Label prefWidth="1040.0" text="Authors (4)">
                                        <font>
-                                          <Font name="Corbel Light" size="20.0" />
+                                          <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="280.0" minHeight="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
+                                    <ScrollPane fx:id="scrollFoundAuthors" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
-                                          <GridPane fx:id="gridFoundAuthors">
-                                            <rowConstraints>
-                                              <RowConstraints minHeight="0.0" vgrow="SOMETIMES" />
-                                            </rowConstraints>
+                                          <GridPane fx:id="gridFoundAuthors" minHeight="0.0" vgap="8.0">
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints fillHeight="false" minHeight="0.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
                                           </GridPane>
                                        </content>
                                     </ScrollPane>
@@ -171,12 +174,12 @@
                               </VBox>
                               <VBox prefHeight="95.0" prefWidth="1040.0">
                                  <children>
-                                    <Label prefHeight="36.0" prefWidth="1063.0" text="Users (22)">
+                                    <Label prefWidth="1063.0" text="Users (22)">
                                        <font>
-                                          <Font name="Corbel Light" size="20.0" />
+                                          <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
-                                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minHeight="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxHeight="280.0" minHeight="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                        <content>
                                           <GridPane fx:id="gridFoundUsers">
                                              <rowConstraints>
@@ -184,6 +187,9 @@
                                              </rowConstraints>
                                           </GridPane>
                                        </content>
+                                       <padding>
+                                          <Insets left="-20.0" />
+                                       </padding>
                                     </ScrollPane>
                                     <Label fx:id="noUsersFound" alignment="CENTER" text="There are no users found.">
                                        <font>
