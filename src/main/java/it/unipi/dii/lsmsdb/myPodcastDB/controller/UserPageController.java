@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -205,7 +206,7 @@ public class UserPageController {
     @FXML
     void homeButtonClick(MouseEvent event) throws IOException {
         Logger.info("home button pressed");
-        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
     @FXML
@@ -293,6 +294,9 @@ public class UserPageController {
     /***********************/
 
     public void initialize() throws IOException {
+        // TODO: prendo l'user dallo state manager
+        User sessionUser = (User)MyPodcastDB.getInstance().getSessionActor();
+        Logger.info(sessionUser.getUsername());
 
         User user = new User();
         List<Podcast> podcasts = new ArrayList<>();

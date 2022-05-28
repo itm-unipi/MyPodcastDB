@@ -1,5 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -39,9 +42,17 @@ public class LoginController {
             return;
         }
 
+        // TODO: inizializzare l'oggetto sessione
+        // User user = new User();
+        // user.setUsername("Luca");
+        // MyPodcastDB.getInstance().setSession(user, "User");
+        Author author = new Author();
+        author.setName("Marco");
+        MyPodcastDB.getInstance().setSession(author, "Author");
+
         String log = "Login clicked: (" + username + ", " + password +")";
         Logger.info(log);
-        StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
 
     }
 

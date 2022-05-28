@@ -1,9 +1,11 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -115,8 +117,9 @@ public class PodcastPageController {
     }
 
     @FXML
-    void clickOnAuthor(MouseEvent event) {
+    void clickOnAuthor(MouseEvent event) throws IOException {
         Logger.info("Show author");
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorId());
     }
 
     @FXML
@@ -165,8 +168,9 @@ public class PodcastPageController {
     }
 
     @FXML
-    void onClickHome(MouseEvent event) {
+    void onClickHome(MouseEvent event) throws IOException {
         Logger.info("Click on home");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
     @FXML
@@ -180,11 +184,21 @@ public class PodcastPageController {
     }
 
     @FXML
-    void userProfile(MouseEvent event) {
-        Logger.info("Click on user");
+    void userProfile(MouseEvent event) throws IOException {
+        Logger.info("Click on user ");
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+
+        if (actorType.equals("Author"))
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+        else if (actorType.equals("User"))
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        else
+            Logger.error("Unidentified Actor Type");
     }
 
     public void initialize() throws IOException {
+        Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
+
         // Podcast Test
         Podcast podcast = new Podcast("00000000", "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
         String name = "Greener Pastures";
@@ -196,6 +210,7 @@ public class PodcastPageController {
             podcast.addEpisode(episode);
             podcast.addReview("" + i, 5);
         }
+        this.podcast = podcast;
 
         // no reviews message
         if (!podcast.getEpisodes().isEmpty()) {

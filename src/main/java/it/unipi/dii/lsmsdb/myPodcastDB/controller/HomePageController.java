@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -80,9 +81,16 @@ public class HomePageController {
     }
 
     @FXML
-    void userProfile(MouseEvent event) {
+    void userProfile(MouseEvent event) throws IOException {
         Logger.info("User profile clicked");
-        //StageManager.showPage(ViewNavigator.USERPROFILE.getPage());
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+
+        if (actorType.equals("Author"))
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+        else if (actorType.equals("User"))
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        else
+            Logger.error("Unidentified Actor Type");
     }
 
     @FXML

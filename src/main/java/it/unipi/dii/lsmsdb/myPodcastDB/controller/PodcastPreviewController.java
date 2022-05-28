@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -9,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+
+import java.io.IOException;
 
 public class PodcastPreviewController {
 
@@ -45,8 +49,9 @@ public class PodcastPreviewController {
     }
 
     @FXML
-    void podcastInfo(MouseEvent event) {
+    void podcastInfo(MouseEvent event) throws IOException {
         Logger.info(podcastPreview.getId() + " : " + podcastPreview.getName());
+        StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcastPreview.getId());
     }
 
     @FXML

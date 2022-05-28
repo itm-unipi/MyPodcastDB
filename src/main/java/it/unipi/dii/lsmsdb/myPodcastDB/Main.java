@@ -15,7 +15,7 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-        MyPodcastDB myPodcastDB = new MyPodcastDB();
+        MyPodcastDB myPodcastDB = MyPodcastDB.getInstance();
         myPodcastDB.run();
         launch();
     }

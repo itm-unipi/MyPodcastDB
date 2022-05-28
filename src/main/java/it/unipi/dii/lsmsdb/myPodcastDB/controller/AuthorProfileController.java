@@ -94,6 +94,8 @@ public class AuthorProfileController {
     }
 
     public void initialize() throws IOException {
+        Logger.info("Author ID : " + StageManager.getObjectIdentifier());
+
         // Temp author (profile)
         Author a = new Author();
         a.setName("Robespierre");
