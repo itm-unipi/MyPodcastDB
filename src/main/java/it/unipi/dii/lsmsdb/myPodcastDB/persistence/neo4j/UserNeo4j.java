@@ -15,11 +15,11 @@ public class UserNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addUser(String username, String pictureMedium) {
+    public boolean addUser(String username, String picturePath) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "CREATE (u:User {username: $username, pictureMedium: $pictureMedium})";
-        Value params = parameters("username", username, "pictureMedium", pictureMedium);
+        String query = "CREATE (u:User {username: $username, picturePath: $picturePath})";
+        Value params = parameters("username", username, "picturePath", picturePath);
 
         try {
             manager.write(query, params);
@@ -286,7 +286,7 @@ public class UserNeo4j {
     public boolean updateUser(String oldUsername, String newUsername, String newPicture) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User{username: $oldUsername})" +
-                "SET u.username = $newUsername, u.pictureMedium = $newPicture";
+                "SET u.username = $newUsername, u.picturePath = $newPicture";
         Value params = parameters("oldUsername", oldUsername, "newUsername", newUsername, "newPicture", newPicture);
 
         try {
@@ -465,9 +465,9 @@ public class UserNeo4j {
         List<User> users = new ArrayList<>();
         for (Record record : result) {
             String followedUsername = record.get(0).get("username").asString();
-            String pictureMedium = record.get(0).get("pictureMedium").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
 
-            User user = new User(followedUsername, pictureMedium);
+            User user = new User(followedUsername, picturePath);
             users.add(user);
         }
 
@@ -491,9 +491,9 @@ public class UserNeo4j {
             List<User> suggestedUsers = new ArrayList<>();
             for (Record record: result) {
                 String suggestedUsername = record.get(0).get("username").asString();
-                String pictureMedium = record.get(0).get("pictureMedium").asString();
+                String picturePath = record.get(0).get("picturePath").asString();
 
-                User user = new User(suggestedUsername, pictureMedium);
+                User user = new User(suggestedUsername, picturePath);
                 suggestedUsers.add(user);
             }
 
@@ -525,9 +525,9 @@ public class UserNeo4j {
         List<User> users = new ArrayList<>();
         for (Record record : result) {
             String suggestedUsername = record.get(0).get("username").asString();
-            String pictureMedium = record.get(0).get("pictureMedium").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
 
-            User user = new User(suggestedUsername, pictureMedium);
+            User user = new User(suggestedUsername, picturePath);
             users.add(user);
         }
 

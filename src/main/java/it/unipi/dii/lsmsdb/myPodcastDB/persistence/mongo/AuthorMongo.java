@@ -59,8 +59,9 @@ public class AuthorMongo {
                 String authorName = author.getString("name");
                 String authorPassword = author.getString("password");
                 String authorEmail = author.getString("email");
+                String authorPicture = author.getString("picturePath");
 
-                Author newAuthor = new Author(id, authorName, authorPassword, authorEmail);
+                Author newAuthor = new Author(id, authorName, authorPassword, authorEmail, authorPicture);
 
                 // retrieve author's podcasts
                 List<Document> podcasts = author.getList("podcasts", Document.class);
@@ -69,8 +70,10 @@ public class AuthorMongo {
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    String podcastArtwork = podcast.getString("artworkUrl600");
+                    String podcastCategory = podcast.getString("primaryCategory");
 
-                    newAuthor.addPodcast(podcastId, podcastName, podcastReleaseDate);
+                    newAuthor.addPodcast(new Podcast(podcastId, podcastName, podcastReleaseDate, podcastArtwork, podcastCategory));
                 }
 
                 return newAuthor;
@@ -96,8 +99,9 @@ public class AuthorMongo {
                 String authorId = author.getObjectId("_id").toString();
                 String authorPassword = author.getString("password");
                 String authorEmail = author.getString("email");
+                String authorPicture = author.getString("picturePath");
 
-                Author newAuthor = new Author(authorId, name, authorPassword, authorEmail);
+                Author newAuthor = new Author(authorId, name, authorPassword, authorEmail, authorPicture);
 
                 // retrieve author's podcasts
                 List<Document> podcasts = author.getList("podcasts", Document.class);
@@ -106,8 +110,10 @@ public class AuthorMongo {
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    String podcastArtwork = podcast.getString("artworkUrl600");
+                    String podcastCategory = podcast.getString("primaryCategory");
 
-                    newAuthor.addPodcast(podcastId, podcastName, podcastReleaseDate);
+                    newAuthor.addPodcast(new Podcast(podcastId, podcastName, podcastReleaseDate, podcastArtwork, podcastCategory));
                 }
 
                 return newAuthor;
@@ -133,8 +139,9 @@ public class AuthorMongo {
                 String authorId = author.getObjectId("_id").toString();
                 String authorName = author.getString("name");
                 String authorPassword = author.getString("password");
+                String authorPicture = author.getString("picturePath");
 
-                Author newAuthor = new Author(authorId, authorName, authorPassword, email);
+                Author newAuthor = new Author(authorId, authorName, authorPassword, email, authorPicture);
 
                 // retrieve author's podcasts
                 List<Document> podcasts = author.getList("podcasts", Document.class);
@@ -143,8 +150,10 @@ public class AuthorMongo {
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    String podcastArtwork = podcast.getString("artworkUrl600");
+                    String podcastCategory = podcast.getString("primaryCategory");
 
-                    newAuthor.addPodcast(podcastId, podcastName, podcastReleaseDate);
+                    newAuthor.addPodcast(new Podcast(podcastId, podcastName, podcastReleaseDate, podcastArtwork, podcastCategory));
                 }
 
                 return newAuthor;
@@ -171,8 +180,9 @@ public class AuthorMongo {
                 String authorName = author.getString("name");
                 String authorPassword = author.getString("password");
                 String authorEmail = author.getString("email");
+                String authorPicture = author.getString("picturePath");
 
-                Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail);
+                Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail, authorPicture);
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for(Document podcast : podcasts) {
@@ -180,8 +190,10 @@ public class AuthorMongo {
                     String podcastName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    String podcastArtwork = podcast.getString("artworkUrl600");
+                    String podcastCategory = podcast.getString("primaryCategory");
 
-                    newAuthor.addPodcast(podId, podcastName, podcastReleaseDate);
+                    newAuthor.addPodcast(new Podcast(podId, podcastName, podcastReleaseDate, podcastArtwork, podcastCategory));
                 }
 
                 return newAuthor;
@@ -210,8 +222,9 @@ public class AuthorMongo {
                 String authorName = author.getString("name");
                 String authorPassword = author.getString("password");
                 String authorEmail = author.getString("email");
+                String authorPicture = author.getString("picturePath");
 
-                Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail);
+                Author newAuthor = new Author(authorId, authorName, authorPassword, authorEmail, authorPicture);
 
                 List<Document> podcasts = author.getList("podcasts", Document.class);
                 for (Document podcast : podcasts) {
@@ -219,8 +232,10 @@ public class AuthorMongo {
                     String podName = podcast.getString("podcastName");
                     String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
                     Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    String podcastArtwork = podcast.getString("artworkUrl600");
+                    String podcastCategory = podcast.getString("primaryCategory");
 
-                    newAuthor.addPodcast(podId, podName, podcastReleaseDate);
+                    newAuthor.addPodcast(new Podcast(podId, podName, podcastReleaseDate, podcastArtwork, podcastCategory));
                 }
 
                 authors.add(newAuthor);

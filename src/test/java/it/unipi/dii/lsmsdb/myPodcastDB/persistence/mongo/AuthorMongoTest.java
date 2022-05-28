@@ -18,7 +18,7 @@ public class AuthorMongoTest {
     }
 
     public Author addAuthorForTest() {
-        Author newAuthor = new Author("0", "Matteo", "testPassword", "test@example.com");
+        Author newAuthor = new Author("0", "Matteo", "testPassword", "test@example.com", "");
         am.addAuthor(newAuthor);
         return newAuthor;
     }
@@ -55,13 +55,13 @@ public class AuthorMongoTest {
 
     public void findAuthorByIdTest() {
         // Author already present in Mongo
-        Author testAuthor = new Author("000000000000000000000000", "Michael Colosi", "cfcd208495d565ef66e7dff9f98764da", "michaelcolosi@example.com");
+        Author testAuthor = new Author("000000000000000000000000", "Michael Colosi", "cfcd208495d565ef66e7dff9f98764da", "michaelcolosi@example.com", "");
         String date = "2012-01-15 12:47:00";
         Date podDate;
 
         try {
             podDate = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").parse(date);
-            testAuthor.addPodcast("6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit", podDate);
+            testAuthor.addPodcast(new Podcast("6a70d8d5ffcc27889ba41086", "Salon and Spa Marketing Toolkit", podDate, "", ""));
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -260,7 +260,7 @@ public class AuthorMongoTest {
         String authorId = newAuthor.getId();
 
         Author oldAuthor = am.findAuthorById(authorId);
-        Author updatedAuthor = new Author(authorId, "Matteo", "modifiedPassword", "test@example.com");
+        Author updatedAuthor = new Author(authorId, "Matteo", "modifiedPassword", "test@example.com", "");
 
         if(am.updateAuthor(updatedAuthor)) {
             if (am.findAuthorById(authorId) != null && !compare(oldAuthor, updatedAuthor))

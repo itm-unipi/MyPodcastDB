@@ -133,7 +133,7 @@ public class SignUpController {
             }
 
             int age = LocalDate.now().getYear() - birthDate.getYear();
-            User user = new User("", username, password, name, surname, email, country, "", "", favGenre, age, gender);
+            User user = new User("", username, password, name, surname, email, country, "", favGenre, age, gender);
             Logger.info(user.toString());
         }
         else{

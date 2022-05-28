@@ -6,7 +6,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -17,7 +16,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -308,7 +306,7 @@ public class UserPageController {
         userPageCountryTextField.setText(user.getCountry());
         userPageFavGenreTextField.setText(user.getFavouriteGenre());
         userPageGenderTextField.setText(user.getGender());
-        Image image = new Image(user.getPictureMedium());
+        Image image = new Image(user.getPicturePath());
         userPageImage.setImage(image);
         userPageNameTextField.setText(user.getName());
         userPageSurnameTextField.setText(user.getSurname());
@@ -380,7 +378,7 @@ public class UserPageController {
         user.setUsername("whitegoose14611");
         user.setAge(65);
         user.setGender("male");
-        user.setPictureMedium("File:src/main/resources/images/user_100px.png");
+        user.setPicturePath("File:src/main/resources/images/user_100px.png");
         user.setFavouriteGenre("Music History");
         user.setCountry("Spain");
         user.setEmail("whitegoose14611@example.com");

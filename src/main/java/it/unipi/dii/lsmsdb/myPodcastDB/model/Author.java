@@ -1,7 +1,5 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
-import org.javatuples.Triplet;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,6 +16,7 @@ public class Author {
 
 
     public Author() {
+        this.ownPodcasts = new ArrayList<>();
     }
 
     public Author(String id, String name, String picturePath){
@@ -33,24 +32,6 @@ public class Author {
         this.email = email;
         this.ownPodcasts = new ArrayList<>();
         this.picturePath = picturePath;
-    }
-
-    //TODO delete after rebase
-    public Author(String id, String name, String password, String email) {
-        this.id = id;
-        this.name = name;
-        this.password = password;
-        this.email = email;
-        this.ownPodcasts = new ArrayList<>();
-    }
-
-
-    public Author(Author other) {
-        this.id = other.getId();
-        this.name = other.getName();
-        this.password = other.getPassword();
-        this.email = other.getEmail();
-        this.ownPodcasts = new ArrayList<>(other.getOwnPodcasts());
     }
 
     public String getId() {
@@ -85,8 +66,29 @@ public class Author {
         this.email = email;
     }
 
-    public List<ReducedPodcast> getOwnPodcasts() {
-        return ownPodcasts;
+    public List<Podcast> getOwnPodcasts() {
+        List<Podcast> podcasts = new ArrayList<>();
+
+        for (ReducedPodcast rd: this.ownPodcasts) {
+            podcasts.add(rd.getAsPodcast());
+        }
+
+        return podcasts;
+    }
+
+    public void setOwnPodcasts(List<Podcast> ownPodcasts) {
+        if (this.ownPodcasts != null && !this.ownPodcasts.isEmpty())
+            this.ownPodcasts.clear();
+
+        for (Podcast podcast: ownPodcasts) {
+            ReducedPodcast newRD = new ReducedPodcast(podcast);
+            this.ownPodcasts.add(newRD);
+        }
+    }
+
+    public void addPodcast(Podcast podcast) {
+        ReducedPodcast reducedPodcast = new ReducedPodcast(podcast);
+        this.ownPodcasts.add(reducedPodcast);
     }
 
     public String getPicturePath() {
@@ -95,42 +97,6 @@ public class Author {
 
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
-    }
-    public void setOwnPodcasts(List<ReducedPodcast> ownPodcasts) {
-        this.ownPodcasts = ownPodcasts;
-    }
-
-    public void setOwnPodcasts(List<String>podcastIds, List<String>podcastNames, List<Date>podcastReleaseDates) {
-        List<ReducedPodcast> ownPodcasts = new ArrayList<>();
-
-        for (int i = 0; i < podcastIds.size(); i++) {
-            ReducedPodcast reducedPodcast = new ReducedPodcast();
-
-            reducedPodcast.setId(podcastIds.get(i));
-            reducedPodcast.setName(podcastNames.get(i));
-            reducedPodcast.setReleaseDate(podcastReleaseDates.get(i));
-
-            ownPodcasts.add(reducedPodcast);
-        }
-
-        this.ownPodcasts = ownPodcasts;
-    }
-    public List<Triplet<String, String, Date>>getReducedPodcasts() {
-        List<Triplet<String, String, Date>> podcasts = new ArrayList<>();
-
-        for (ReducedPodcast rd: this.ownPodcasts) {
-            String id = rd.getId();
-            String name = rd.getName();
-            Date releaseDate = rd.getReleaseDate();
-
-            podcasts.add(new Triplet<String, String, Date>(id, name, releaseDate));
-        }
-        return podcasts;
-    }
-
-    public void addPodcast(String id, String name, Date releaseDate) {
-        ReducedPodcast podcast = new ReducedPodcast(id, name, releaseDate);
-        this.ownPodcasts.add(podcast);
     }
 
     @Override
@@ -150,14 +116,26 @@ class ReducedPodcast {
     private String id;
     private String name;
     private Date releaseDate;
+    private String category;
+    private String artworkUrl600;
 
     public ReducedPodcast() {
     }
 
-    public ReducedPodcast(String id, String name, Date releaseDate) {
+    public ReducedPodcast(Podcast podcast) {
+        this.id = podcast.getId();
+        this.name = podcast.getName();
+        this.releaseDate = podcast.getReleaseDate();
+        this.category = podcast.getPrimaryCategory();
+        this.artworkUrl600 = podcast.getArtworkUrl600();
+    }
+
+    public ReducedPodcast(String id, String name, Date releaseDate, String category, String artworkUrl600) {
         this.id = id;
         this.name = name;
         this.releaseDate = releaseDate;
+        this.category = category;
+        this.artworkUrl600 = artworkUrl600;
     }
 
     public String getId() {
@@ -170,6 +148,22 @@ class ReducedPodcast {
 
     public String getName() {
         return name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getArtworkUrl600() {
+        return artworkUrl600;
+    }
+
+    public void setArtworkUrl600(String artworkUrl600) {
+        this.artworkUrl600 = artworkUrl600;
     }
 
     public void setName(String name) {
@@ -190,12 +184,19 @@ class ReducedPodcast {
         this.releaseDate = releaseDate;
     }
 
+    public Podcast getAsPodcast() {
+        Podcast podcast = new Podcast(this.id, this.name, this.releaseDate, this.artworkUrl600, this.category);
+        return podcast;
+    }
+
     @Override
     public String toString() {
         return "ReducedPodcast{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", releaseDate='" + releaseDate + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", category='" + category + '\'' +
+                ", artworkUrl600='" + artworkUrl600 + '\'' +
                 '}';
     }
 }

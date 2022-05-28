@@ -39,8 +39,7 @@ public class UserMongo {
                 .append("surname", user.getSurname())
                 .append("email", user.getEmail())
                 .append("country", user.getCountry())
-                .append("pictureSmall", user.getPictureSmall())
-                .append("pictureMedium", user.getPictureMedium())
+                .append("picturePath", user.getPicturePath())
                 .append("favouriteGenre", user.getFavouriteGenre())
                 .append("age", user.getAge())
                 .append("gender", user.getGender());
@@ -72,13 +71,12 @@ public class UserMongo {
                 String surname = user.getString("surname");
                 String email = user.getString("email");
                 String country = user.getString("country");
-                String pictureSmall = user.getString("pictureSmall");
-                String pictureMedium = user.getString("pictureMedium");
+                String picturePath = user.getString("picturePath");
                 String favouriteGenre = user.getString("favouriteGenre");
                 int age = user.getInteger("age");
                 String gender = user.getString("gender");
 
-                User newUser = new User(id, username, password, name, surname, email, country, pictureSmall, pictureMedium, favouriteGenre, age, gender);
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
                 return newUser;
             }
         } catch (Exception e) {
@@ -103,13 +101,12 @@ public class UserMongo {
                 String surname = user.getString("surname");
                 String email = user.getString("email");
                 String country = user.getString("country");
-                String pictureSmall = user.getString("pictureSmall");
-                String pictureMedium = user.getString("pictureMedium");
+                String picturePath = user.getString("picturePath");
                 String favouriteGenre = user.getString("favouriteGenre");
                 int age = user.getInteger("age");
                 String gender = user.getString("gender");
 
-                User newUser = new User(id, username, password, name, surname, email, country, pictureSmall, pictureMedium, favouriteGenre, age, gender);
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
                 return newUser;
             }
         } catch (Exception e) {
@@ -134,13 +131,12 @@ public class UserMongo {
                 String name = user.getString("name");
                 String surname = user.getString("surname");
                 String country = user.getString("country");
-                String pictureSmall = user.getString("pictureSmall");
-                String pictureMedium = user.getString("pictureMedium");
+                String picturePath = user.getString("picturePath");
                 String favouriteGenre = user.getString("favouriteGenre");
                 int age = user.getInteger("age");
                 String gender = user.getString("gender");
 
-                User newUser = new User(id, username, password, name, surname, email, country, pictureSmall, pictureMedium, favouriteGenre, age, gender);
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
                 return newUser;
             }
         } catch (Exception e) {
@@ -167,13 +163,12 @@ public class UserMongo {
                 String name = user.getString("name");
                 String surname = user.getString("surname");
                 String email = user.getString("email");
-                String pictureSmall = user.getString("pictureSmall");
-                String pictureMedium = user.getString("pictureMedium");
+                String picturePath = user.getString("picturePath");
                 String favouriteGenre = user.getString("favouriteGenre");
                 int age = user.getInteger("age");
                 String gender = user.getString("gender");
 
-                User newUser = new User(id, username, password, name, surname, email, country, pictureSmall, pictureMedium, favouriteGenre, age, gender);
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
                 users.add(newUser);
             }
 
@@ -198,8 +193,7 @@ public class UserMongo {
                     set("surname", user.getSurname()),
                     set("email", user.getEmail()),
                     set("country", user.getCountry()),
-                    set("pictureSmall", user.getPictureSmall()),
-                    set("pictureMedium", user.getPictureMedium()),
+                    set("picturePath", user.getPicturePath()),
                     set("favouriteGenre", user.getFavouriteGenre()),
                     set("age", user.getAge()),
                     set("gender", user.getGender())

@@ -30,7 +30,7 @@ public class PodcastMongoTest {
         mongoManager.openConnection();
         
         PodcastMongoTest test = new PodcastMongoTest();
-        /*test.testEquals();
+        test.testEquals();
         test.findPodcastByIdTest();
         test.addPodcastTest();
         test.findPodcastsByNameTest();
@@ -48,7 +48,7 @@ public class PodcastMongoTest {
         test.deleteEpisodeOfPodcastTest();
         test.deleteAllEpisodesTest();
         test.deleteReviewTest();
-        test.deleteAllReviewsTest();*/
+        test.deleteAllReviewsTest();
 
         test.showPodcastsWithHighestAverageRatingTest();
         test.showPodcastsWithHighestAverageRatingPerCountryTest();

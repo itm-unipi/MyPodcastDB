@@ -7,7 +7,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class UserNeo4jTest {
     PodcastNeo4j podcastNeo4j;
@@ -80,8 +79,8 @@ public class UserNeo4jTest {
 
         User user = new User();
         user.setUsername("user test");
-        user.setPictureMedium("picture");
-        boolean result = this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture");
+        boolean result = this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         if(result && this.userNeo4j.findUserByUsername(user.getUsername()))
             System.out.println("[+] addUser");
         else
@@ -124,11 +123,11 @@ public class UserNeo4jTest {
         User user1 = new User();
         User user2 = new User();
         user1.setUsername("user test");
-        user1.setPictureMedium("picture");
+        user1.setPicturePath("picture");
         user2.setUsername("user test2");
-        user2.setPictureMedium("picture2");
+        user2.setPicturePath("picture2");
 
-        this.userNeo4j.addUser(user2.getUsername(), user2.getPictureMedium());
+        this.userNeo4j.addUser(user2.getUsername(), user2.getPicturePath());
         boolean result = this.userNeo4j.addUserFollowUser(user1.getUsername(), user2.getUsername());
         if(result && this.userNeo4j.findUserFollowsUser(user1.getUsername(), user2.getUsername()))
             System.out.println("[+] addUserFollowUser");
@@ -169,8 +168,8 @@ public class UserNeo4jTest {
 
         User user = new User();
         user.setUsername("user test4");
-        user.setPictureMedium("picture4");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture4");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
 
         boolean result = this.userNeo4j.deleteUser(user.getUsername());
         if(result && !this.userNeo4j.findUserByUsername(user.getUsername()))
@@ -282,11 +281,11 @@ public class UserNeo4jTest {
     public void deleteUserFollowUserTest() {
         User user = new User();
         user.setUsername("test1");
-        user.setPictureMedium("picture1");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture1");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         user.setUsername("test2");
-        user.setPictureMedium("picture2");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture2");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         this.userNeo4j.addUserFollowUser("test1", "test2");
         this.userNeo4j.deleteUserFollowUser("test1", "test2");
 
@@ -303,14 +302,14 @@ public class UserNeo4jTest {
     public void deleteAllUserFollowUserTest() {
         User user = new User();
         user.setUsername("test1");
-        user.setPictureMedium("picture1");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture1");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         user.setUsername("test2");
-        user.setPictureMedium("picture2");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture2");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         user.setUsername("test3");
-        user.setPictureMedium("picture3");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture3");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         this.userNeo4j.addUserFollowUser("test1", "test2");
         this.userNeo4j.addUserFollowUser("test1", "test3");
         this.userNeo4j.deleteAllUserFollowUser("test1");
@@ -330,8 +329,8 @@ public class UserNeo4jTest {
     public void deleteUserFollowAuthorTest() {
         User user = new User();
         user.setUsername("test1");
-        user.setPictureMedium("picture1");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture1");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         Author author = new Author();
         author.setName("test2");
         this.authorNeo4j.addAuthor(author.getName());
@@ -352,8 +351,8 @@ public class UserNeo4jTest {
     public void deleteAllUserFollowAuthorTest() {
         User user = new User();
         user.setUsername("test1");
-        user.setPictureMedium("picture1");
-        this.userNeo4j.addUser(user.getUsername(), user.getPictureMedium());
+        user.setPicturePath("picture1");
+        this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         Author author = new Author();
         author.setName("test2");
         this.authorNeo4j.addAuthor(author.getName());

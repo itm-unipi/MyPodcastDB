@@ -31,9 +31,7 @@ public class UserMongoTest {
             return false;
         if (!a.getCountry().equals(b.getCountry()))
             return false;
-        if (!a.getPictureSmall().equals(b.getPictureSmall()))
-            return false;
-        if (!a.getPictureMedium().equals(b.getPictureMedium()))
+        if (!a.getPicturePath().equals(b.getPicturePath()))
             return false;
         if (a.getAge() != b.getAge())
             return false;
@@ -58,13 +56,12 @@ public class UserMongoTest {
         String surname = "Rossi";
         String email = "mariorossi123456@example.com";
         String country = "Ireland";
-        String pictureSmall = "https://randomuser.me/api/portraits/thumb/men/45.jpg";
-        String pictureMedium = "https://randomuser.me/api/portraits/med/men/45.jpg";
+        String picturePath = "https://randomuser.me/api/portraits/med/men/45.jpg";
         String favouriteGenre = "Documentary";
         int age = 23;
         String gender = "Male";
 
-        User newUser = new User("", username, password, name, surname, email, country, pictureSmall, pictureMedium, favouriteGenre, age, gender);
+        User newUser = new User("", username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
         this.userMongo.addUser(newUser);
 
         User createdUser = this.userMongo.findUserById(newUser.getId());

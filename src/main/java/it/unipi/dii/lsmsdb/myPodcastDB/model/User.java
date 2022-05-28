@@ -8,8 +8,7 @@ public class User {
     private String surname;
     private String email;
     private String country;
-    private String pictureSmall;
-    private String pictureMedium;
+    private String picturePath;
     private String favouriteGenre;
     private int age;
     private String gender;
@@ -17,12 +16,12 @@ public class User {
     public User() {
     }
 
-    public User(String username, String pictureMedium){
+    public User(String username, String picturePath){
         this.username = username;
-        this.pictureMedium = pictureMedium;
+        this.picturePath = picturePath;
     }
 
-    public User(String id, String username, String password, String name, String surname, String email, String country, String pictureSmall, String pictureMedium, String favouriteGenre, int age, String gender) {
+    public User(String id, String username, String password, String name, String surname, String email, String country, String picturePath, String favouriteGenre, int age, String gender) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -30,8 +29,7 @@ public class User {
         this.surname = surname;
         this.email = email;
         this.country = country;
-        this.pictureSmall = pictureSmall;
-        this.pictureMedium = pictureMedium;
+        this.picturePath = picturePath;
         this.favouriteGenre = favouriteGenre;
         this.age = age;
         this.gender = gender;
@@ -93,20 +91,12 @@ public class User {
         this.country = country;
     }
 
-    public String getPictureSmall() {
-        return pictureSmall;
+    public String getPicturePath() {
+        return picturePath;
     }
 
-    public void setPictureSmall(String pictureSmall) {
-        this.pictureSmall = pictureSmall;
-    }
-
-    public String getPictureMedium() {
-        return pictureMedium;
-    }
-
-    public void setPictureMedium(String pictureMedium) {
-        this.pictureMedium = pictureMedium;
+    public void setPicturePath(String picturePath) {
+        this.picturePath = picturePath;
     }
 
     public String getFavouriteGenre() {
@@ -143,8 +133,7 @@ public class User {
                 ", surname='" + surname + '\'' +
                 ", email='" + email + '\'' +
                 ", country='" + country + '\'' +
-                ", pictureSmall='" + pictureSmall + '\'' +
-                ", pictureMedium='" + pictureMedium + '\'' +
+                ", picturePath='" + picturePath + '\'' +
                 ", favouriteGenre='" + favouriteGenre + '\'' +
                 ", age=" + age +
                 ", gender='" + gender + '\'' +

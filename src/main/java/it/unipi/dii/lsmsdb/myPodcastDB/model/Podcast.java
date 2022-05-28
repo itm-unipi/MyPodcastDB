@@ -28,9 +28,10 @@ public class Podcast {
         this.artworkUrl600 = artworkUrl600;
     }
 
-    public Podcast(String podcastId, String podcastName, String artworkUrl600, String category) {
+    public Podcast(String podcastId, String podcastName, Date releaseDate, String artworkUrl600, String category) {
         this.id = podcastId;
         this.name= podcastName;
+        this.releaseDate = releaseDate;
         this.artworkUrl600 = artworkUrl600;
         this.primaryCategory = category;
     }

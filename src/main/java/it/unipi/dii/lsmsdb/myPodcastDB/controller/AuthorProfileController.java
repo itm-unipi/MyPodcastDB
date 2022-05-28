@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -125,43 +126,32 @@ public class AuthorProfileController {
         Author author = new Author();
         author.setName("Robespierre Janjaq");
 
-        List<String> podcastIds = new ArrayList<>();
-        List<String> podcastNames = new ArrayList<>();
-        List<Date> podcastReleaseDates = new ArrayList<>();
+        List<Podcast> previewList = new ArrayList<>();
+        Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", new Date(), "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "");
+        Podcast p2 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", new Date(), "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg", "");
+        Podcast p3 = new Podcast("061a68eb754c400eae8027d7", "Average O Podcast", new Date(), "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/54/e4/84/54e48471-6971-03c8-83f4-4f973dc2a8cb/mza_8686729233410161200.jpg/600x600bb.jpg", "");
+        Podcast p4 = new Podcast("34e734b09246d17dc5d56f63", "Getting Smart Podcast", new Date(), "https://is5-ssl.mzstatic.com/image/thumb/Podcasts115/v4/52/e3/25/52e325bd-e6ba-3899-b7b4-71e512a48472/mza_18046006527881111713.png/600x600bb.jpg", "");
+        Podcast p5 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", new Date(), "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg", "");
+        Podcast p6 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", new Date(), "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg", "");
+        previewList.add(p1);
+        previewList.add(p2);
+        previewList.add(p3);
+        previewList.add(p4);
+        previewList.add(p5);
+        previewList.add(p6);
 
-        podcastIds.add("54eb342567c94dacfb2a3e50");
-        podcastIds.add("34e734b09246d17dc5d56f63");
-        podcastIds.add("34e734b09246d17dc5d56f63");
-        podcastIds.add("34e734b09246d17dc5d56f63");
-        podcastIds.add("34e734b09246d17dc5d56f63");
-        podcastIds.add("34e734b09246d17dc5d56f63");
-        podcastNames.add("Scaling Global");
-        podcastNames.add("Cornerstone Baptist Church of Orlando");
-        podcastNames.add("Jianluca");
-        podcastNames.add("Crunch");
-        podcastNames.add("Jianluca");
-        podcastNames.add("Crunch");
-        podcastReleaseDates.add(new Date());
-        podcastReleaseDates.add(new Date());
-        podcastReleaseDates.add(new Date());
-        podcastReleaseDates.add(new Date());
-        podcastReleaseDates.add(new Date());
-        podcastReleaseDates.add(new Date());
-
-        author.setOwnPodcasts(podcastIds, podcastNames, podcastReleaseDates);
-
-        List<Triplet<String, String, Date>>  reducedPod = author.getReducedPodcasts();
+        author.setOwnPodcasts(previewList);
 
         row = 0;
         column = 0;
-        for (Triplet<String, String, Date> entry: reducedPod){
+        for (Podcast entry: author.getOwnPodcasts()){
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
             // create new podcast element
             AnchorPane newPodcast = fxmlLoader.load();
             AuthorReducedPodcastController controller = fxmlLoader.getController();
-            controller.setData(entry.getValue0(), entry.getValue1(), entry.getValue2());
+            controller.setData(entry.getId(), entry.getName(), entry.getReleaseDate());
 
             // add new podcast to grid
             gridAuthorPodcasts.add(newPodcast, column, row++);

@@ -44,7 +44,7 @@ public class ActorPreviewController {
     public void setData(User user) {
         this.userPreview = user;
 
-        Image image = new Image(user.getPictureMedium());
+        Image image = new Image(user.getPicturePath());
         this.actorImage.setImage(image);
         this.actorName.setText(user.getUsername());
         this.actorToolTip.setText(user.getUsername());
