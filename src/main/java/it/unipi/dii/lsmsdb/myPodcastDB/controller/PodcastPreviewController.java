@@ -1,6 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -21,7 +21,7 @@ public class PodcastPreviewController {
     @FXML
     private VBox podcastPreviewBox;
 
-    private PodcastPreview podcastPreview;
+    private Podcast podcastPreview;
 
     @FXML
     private Tooltip podcastToolTip;
@@ -31,7 +31,7 @@ public class PodcastPreviewController {
 
     @FXML
     void onClick(MouseEvent event) {
-        Logger.info(podcastPreview.getPodcastId() + " : " + this.podcastPreview.getPodcastName() + " selected");
+        Logger.info(podcastPreview.getId() + " : " + this.podcastPreview.getName() + " selected");
     }
 
     @FXML
@@ -46,7 +46,7 @@ public class PodcastPreviewController {
 
     @FXML
     void podcastInfo(MouseEvent event) {
-        Logger.info(podcastPreview.getPodcastId() + " : " + podcastPreview.getPodcastName());
+        Logger.info(podcastPreview.getId() + " : " + podcastPreview.getName());
     }
 
     @FXML
@@ -62,14 +62,14 @@ public class PodcastPreviewController {
     }
 
 
-    public void setData(PodcastPreview podcast) {
+    public void setData(Podcast podcast) {
         this.podcastPreview = podcast;
 
         Image image = new Image(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
-        this.podcastName.setText(podcast.getPodcastName());
-        this.podcastToolTip.setText(podcast.getPodcastName());
+        this.podcastName.setText(podcast.getName());
+        this.podcastToolTip.setText(podcast.getName());
         podcastImage.setImage(image);
-        podcastName.setText(podcast.getPodcastName());
+        podcastName.setText(podcast.getName());
     }
 }

@@ -1,6 +1,5 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;

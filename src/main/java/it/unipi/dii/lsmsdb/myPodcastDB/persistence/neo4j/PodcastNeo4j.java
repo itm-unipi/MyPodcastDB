@@ -5,12 +5,10 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
@@ -68,7 +66,7 @@ public class PodcastNeo4j {
 
     // ---------- READ ---------- //
 
-    public List<PodcastPreview> findPodcastsByName(String name, int limit) {
+    public List<Podcast> findPodcastsByName(String name, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
@@ -80,13 +78,13 @@ public class PodcastNeo4j {
             if (result.isEmpty())
                 return null;
 
-            List<PodcastPreview> podcasts = new ArrayList<>();
+            List<Podcast> podcasts = new ArrayList<>();
             for (Record record : result) {
                 String podcastId = record.get(0).get("podcastId").asString();
                 String podcastName = record.get(0).get("name").asString();
                 String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
 
-                PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
+                Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
                 podcasts.add(podcast);
             }
 
@@ -97,7 +95,7 @@ public class PodcastNeo4j {
         }
     }
 
-    public PodcastPreview findPodcastByPodcastId(String podcastId) {
+    public Podcast findPodcastByPodcastId(String podcastId) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
@@ -113,7 +111,7 @@ public class PodcastNeo4j {
                 String podcastName = record.get(0).get("name").asString();
                 String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
 
-                PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
+                Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
                 return podcast;
             }
         } catch (Exception e) {
@@ -261,7 +259,7 @@ public class PodcastNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<PodcastPreview> showPodcastsInWatchlist(User user, int limit) {
+    public List<Podcast> showPodcastsInWatchlist(User user, int limit) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
@@ -281,20 +279,20 @@ public class PodcastNeo4j {
         if(result == null || !result.iterator().hasNext())
             return null;
 
-        List<PodcastPreview> podcasts = new ArrayList<>();
+        List<Podcast> podcasts = new ArrayList<>();
         for(Record record : result){
             String podcastName = record.get(0).get("name").asString();
             String podcastId = record.get(0).get("podcastId").asString();
             String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
 
-            PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
+            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
             podcasts.add(podcast);
         }
 
         return podcasts;
     }
 
-    public List<Entry<PodcastPreview, Integer>> showMostLikedPodcasts(int limit) {
+    public List<Entry<Podcast, Integer>> showMostLikedPodcasts(int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
@@ -309,15 +307,15 @@ public class PodcastNeo4j {
             if (result.isEmpty())
                 return null;
 
-            List<Entry<PodcastPreview, Integer>> mostLikedPodcasts = new ArrayList<>();
+            List<Entry<Podcast, Integer>> mostLikedPodcasts = new ArrayList<>();
             for (Record record: result) {
                 String podcastId = record.get("PodcastId").asString();
                 String podcastName = record.get("PodcastName").asString();
                 String artworkUrl600 = record.get("Artwork").asString();
                 int likes = record.get("Likes").asInt();
 
-                PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
-                Entry<PodcastPreview, Integer> newPodcast = new AbstractMap.SimpleEntry<>(podcast, likes);
+                Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
+                Entry<Podcast, Integer> newPodcast = new AbstractMap.SimpleEntry<>(podcast, likes);
                 mostLikedPodcasts.add(newPodcast);
             }
 
@@ -390,7 +388,7 @@ public class PodcastNeo4j {
         return categories;
     }
 
-    public List<PodcastPreview> showSuggestedPodcastsLikedByFollowedUsers(User user, int limit) {
+    public List<Podcast> showSuggestedPodcastsLikedByFollowedUsers(User user, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (source:User{username: $username})-[:FOLLOWS_USER]->(u:User)-[:LIKES]->(p:Podcast)," + "\n" +
                 "(p)<-[l:LIKES]-(:User)" + "\n" +
@@ -414,20 +412,20 @@ public class PodcastNeo4j {
         if(result == null || !result.iterator().hasNext())
             return null;
 
-        List<PodcastPreview> podcasts = new ArrayList<>();
+        List<Podcast> podcasts = new ArrayList<>();
         for(Record record : result){
             String podcastName = record.get("name").asString();
             String podcastId = record.get("id").asString();
             String artworkUrl600 = record.get("artwork").asString();
 
-            PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
+            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
             podcasts.add(podcast);
         }
 
         return podcasts;
     }
 
-    public List<PodcastPreview> showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(String username, int limit) {
+    public List<Podcast> showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> result = null;
@@ -446,20 +444,20 @@ public class PodcastNeo4j {
         if (result == null)
             return null;
 
-        List<PodcastPreview> podcasts = new ArrayList<>();
+        List<Podcast> podcasts = new ArrayList<>();
         for (Record record : result) {
             String id = record.get("pid").asString();
             String name = record.get("name").asString();
             String artworkUrl600 = record.get("artwork").asString();
 
-            PodcastPreview podcast = new PodcastPreview(id, name, artworkUrl600);
+            Podcast podcast = new Podcast(id, name, artworkUrl600);
             podcasts.add(podcast);
         }
 
         return podcasts;
     }
 
-    public List<PodcastPreview> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(User user, int limit) {
+    public List<Podcast> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(User user, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
                 "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
@@ -480,13 +478,13 @@ public class PodcastNeo4j {
         if(result == null || !result.iterator().hasNext())
             return null;
 
-        List<PodcastPreview> podcasts = new ArrayList<>();
+        List<Podcast> podcasts = new ArrayList<>();
         for(Record record : result){
             String podcastName = record.get("name").asString();
             String podcastId = record.get("id").asString();
             String artworkUrl600 = record.get("artwork").asString();
 
-            PodcastPreview podcast = new PodcastPreview(podcastId, podcastName, artworkUrl600);
+            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
             podcasts.add(podcast);
         }
 

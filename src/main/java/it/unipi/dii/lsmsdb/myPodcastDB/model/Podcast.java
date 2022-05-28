@@ -22,6 +22,19 @@ public class Podcast {
     public Podcast() {
     }
 
+    public Podcast(String podcastId, String podcastName, String artworkUrl600) {
+        this.id = podcastId;
+        this.name= podcastName;
+        this.artworkUrl600 = artworkUrl600;
+    }
+
+    public Podcast(String podcastId, String podcastName, String artworkUrl600, String category) {
+        this.id = podcastId;
+        this.name= podcastName;
+        this.artworkUrl600 = artworkUrl600;
+        this.primaryCategory = category;
+    }
+
     public Podcast(String id, String name, String authorId, String authorName, String artworkUrl60, String artworkUrl600, String contentAdvisoryRating, String country, String primaryCategory, List<String> categories, Date releaseDate) {
         this.id = id;
         this.name = name;

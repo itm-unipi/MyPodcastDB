@@ -297,7 +297,7 @@ public class UserPageController {
     public void initialize() throws IOException {
 
         User user = new User();
-        List<PodcastPreview> podcasts = new ArrayList<>();
+        List<Podcast> podcasts = new ArrayList<>();
         List<Author> authors = new ArrayList<>();
         List<User> users = new ArrayList<>();
 
@@ -318,7 +318,7 @@ public class UserPageController {
         // fill the watchlist and liked grids
         int row = 0;
         int column = 0;
-        for (PodcastPreview podcast : podcasts) {
+        for (Podcast podcast : podcasts) {
             FXMLLoader watchListfxmlLoader = new FXMLLoader();
             FXMLLoader likedfxmlLoader = new FXMLLoader();
             watchListfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
@@ -374,7 +374,7 @@ public class UserPageController {
         userPageCrossButton.setVisible(false);
     }
 
-    void simulateServiceLayer(User user, List<PodcastPreview> podcasts, List<Author> authors, List<User> users){
+    void simulateServiceLayer(User user, List<Podcast> podcasts, List<Author> authors, List<User> users){
 
         // service simulation
         user.setUsername("whitegoose14611");
@@ -387,9 +387,9 @@ public class UserPageController {
         user.setName("Paolo");
         user.setSurname("Giacomini");
 
-        PodcastPreview p1 = new PodcastPreview("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        PodcastPreview p2 = new PodcastPreview("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
-        PodcastPreview p3 = new PodcastPreview("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+        Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
+        Podcast p2 = new Podcast("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
+        Podcast p3 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
 
         Author a1 = new Author("ahy2bs89ha5c4f5eb9cddaaa", "Michael Colosi", "File:src/main/resources/images/user_male_96px.png" );
         Author a2 = new Author("ufsdfrt445efsge5srfsdffa", "Preface Podcast", "File:src/main/resources/images/User Female Skin Type 6_160px.png" );

@@ -74,7 +74,7 @@ public class AuthorProfileController {
 
     @FXML
     void onClickHome(MouseEvent event) throws IOException {
-        StageManager.showPage(ViewNavigator.USERHOME.getPage());
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
         Logger.info("User Home Clicked");
     }
 
