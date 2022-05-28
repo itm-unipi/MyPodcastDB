@@ -1,7 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.PodcastPreview;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.UserPreview;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -22,7 +22,7 @@ import java.util.List;
 
 public class UserHomeController {
 
-    private UserPreview userPreview;
+    private User userPreview;
 
     @FXML
     private Label userName;
@@ -188,7 +188,7 @@ public class UserHomeController {
 
     public void initialize() throws IOException {
 
-        UserPreview userTest = new UserPreview("JuanLaZapp", "userPicture.png");
+        User userTest = new User("JuanLaZapp", "userPicture.png");
 
         // Setting user stuff
         //Image image = new Image(userTest.getPictureMedium());
