@@ -172,7 +172,7 @@ public class AuthorProfileController {
         a1.setPicturePath("/img/authorAnonymousePicture.png");
         Author a2 = new Author();
         a2.setName("Gino Paolino");
-        a2.setPicturePath("/img/test.png");
+        a2.setPicturePath("/img/test.jpg");
         authorsFollowed.add(a1);
         authorsFollowed.add(a2);
 
