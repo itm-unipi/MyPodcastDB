@@ -1,16 +1,26 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+
+import java.io.IOException;
 
 public class ReviewController {
 
     @FXML
-    private Label authorNameAndDate;
+    private Label authorName;
+
+    @FXML
+    private Label reviewDate;
 
     @FXML
     private ImageView star1;
@@ -51,9 +61,25 @@ public class ReviewController {
             this.star4.setImage(star);
         if (rating >= 5)
             this.star5.setImage(star);
-        this.authorNameAndDate.setText(review.getAuthorUsername() + ", " + review.getCreatedAtAsString().replace("T", " ").replace("Z", ""));
+        this.authorName.setText(review.getAuthorUsername());
+        this.reviewDate.setText(review.getCreatedAtAsString().replace("T", " ").replace("Z", ""));
         this.title.setText(review.getTitle());
         this.text.setText(review.getContent());
     }
 
+    @FXML
+    void clickOnReviewAuthor(MouseEvent event) throws IOException {
+        Logger.info("Click on Review Author : " + this.review.getAuthorUsername());
+        StageManager.showPage(ViewNavigator.USERPAGE.getPage(), this.review.getAuthorUsername());
+    }
+
+    @FXML
+    void mouseOnReviewAuthor(MouseEvent event) {
+        this.authorName.setTextFill(Color.color(0.388, 0.388, 0.4));
+    }
+
+    @FXML
+    void mouseOutReviewAuthor(MouseEvent event) {
+        this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
 }

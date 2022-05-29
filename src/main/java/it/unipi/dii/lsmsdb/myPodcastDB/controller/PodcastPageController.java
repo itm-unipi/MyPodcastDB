@@ -9,12 +9,10 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
@@ -69,6 +67,9 @@ public class PodcastPageController {
     private ScrollPane scroll;
 
     @FXML
+    private TextField searchBarText;
+
+    @FXML
     private Label showReviews;
 
     @FXML
@@ -119,12 +120,12 @@ public class PodcastPageController {
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
         Logger.info("Show author");
-        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorId());
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorName());
     }
 
     @FXML
     void clickOnReviews(MouseEvent event) throws IOException {
-        StageManager.showPage("ReviewPage.fxml");
+        StageManager.showPage("ReviewPage.fxml", this.podcast.getId());
     }
 
     @FXML
@@ -174,13 +175,21 @@ public class PodcastPageController {
     }
 
     @FXML
-    void onClickSearch(MouseEvent event) {
+    void onClickSearch(MouseEvent event) throws IOException {
         Logger.info("Click on search");
+
+        String searchString = this.searchBarText.getText();
+        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
     }
 
     @FXML
-    void onEnterPressed(KeyEvent event) {
+    void onEnterPressed(KeyEvent event) throws IOException {
         Logger.info("Enter on search");
+
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
     }
 
     @FXML
@@ -200,7 +209,7 @@ public class PodcastPageController {
         Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
 
         // Podcast Test
-        Podcast podcast = new Podcast("00000000", "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
+        Podcast podcast = new Podcast(StageManager.getObjectIdentifier(), "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
         String name = "Greener Pastures";
         String description = "Hear Greiner USA President, David Kirkland, talk about developing new competitive advantages and how going “green” was the key to his company unlocking new international business.";
         Date releaseDate = new Date();

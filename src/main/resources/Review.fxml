@@ -25,17 +25,29 @@
                         <ImageView fx:id="star5" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                      </children>
                   </HBox>
-                  <Label fx:id="authorNameAndDate" text="Author Name, Date" textFill="#636366">
-                     <font>
-                        <Font name="Dubai Regular" size="18.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <padding>
-                        <Insets bottom="-3.0" top="5.0" />
-                     </padding>
-                  </Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="authorName" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Author Name" textFill="BLUE">
+                           <font>
+                              <Font name="Dubai Regular" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="-3.0" top="5.0" />
+                           </padding>
+                        </Label>
+                        <Label fx:id="reviewDate" layoutX="10.0" layoutY="10.0" text="Date" textFill="#636366">
+                           <font>
+                              <Font name="Dubai Regular" size="18.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="-3.0" top="5.0" />
+                           </padding>
+                           <HBox.margin>
+                              <Insets left="6.0" />
+                           </HBox.margin>
+                        </Label>
+                     </children>
+                  </HBox>
                   <Label fx:id="title" text="Title">
                      <font>
                         <Font name="Corbel" size="22.0" />

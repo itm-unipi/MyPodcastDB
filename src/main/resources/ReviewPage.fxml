@@ -58,7 +58,7 @@
                               </ImageView>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: #f2f2f2; -fx-background-radius: 40;">
                                  <children>
-                                    <TextField onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
+                                    <TextField fx:id="searchBarText" onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>

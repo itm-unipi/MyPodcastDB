@@ -1,16 +1,19 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -58,6 +61,9 @@ public class ReviewPageController {
     private ScrollPane scroll;
 
     @FXML
+    private TextField searchBarText;
+
+    @FXML
     private ImageView star1;
 
     @FXML
@@ -88,10 +94,12 @@ public class ReviewPageController {
     private ProgressBar twoStars;
 
     private Review ownReview;
+    private Podcast podcast;
 
     @FXML
-    void clickOnAuthor(MouseEvent event) {
-        Logger.info("Click on author");
+    void clickOnAuthor(MouseEvent event) throws IOException {
+        Logger.info("Click on author : " + this.podcast.getAuthorId());
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getId());
     }
 
     @FXML
@@ -170,7 +178,8 @@ public class ReviewPageController {
 
     @FXML
     void clickOnTitle(MouseEvent event) throws IOException {
-        StageManager.showPage("PodcastPage.fxml");
+        Logger.info("Podcast ID to load : " + this.podcast.getId());
+        StageManager.showPage("PodcastPage.fxml", this.podcast.getId());
     }
 
     @FXML
@@ -209,27 +218,46 @@ public class ReviewPageController {
     }
 
     @FXML
-    void onClickHome(MouseEvent event) {
+    void onClickHome(MouseEvent event) throws IOException {
         Logger.info("Click on home");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
     @FXML
-    void onClickSearch(MouseEvent event) {
+    void onClickSearch(MouseEvent event) throws IOException {
         Logger.info("Click on search");
+
+        String searchString = this.searchBarText.getText();
+        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
     }
 
     @FXML
-    void onEnterPressed(KeyEvent event) {
+    void onEnterPressed(KeyEvent event) throws IOException {
         Logger.info("Enter on search");
+
+        if (event.getCode().equals(KeyCode.ENTER)) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
     }
 
     @FXML
-    void userProfile(MouseEvent event) {
+    void userProfile(MouseEvent event) throws IOException {
         Logger.info("Click on user");
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+
+        if (actorType.equals("Author"))
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+        else if (actorType.equals("User"))
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        else
+            Logger.error("Unidentified Actor Type");
     }
-    
+
     // TODO rendere cliccabile l'autore della review
     public void initialize() throws IOException {
+        Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
+
         // podcast test
         Podcast podcast = new Podcast("00000000", "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
         String name = "Greener Pastures";
@@ -241,6 +269,7 @@ public class ReviewPageController {
             podcast.addEpisode(episode);
             podcast.addReview("" + i, 5);
         }
+        this.podcast = podcast;
 
         // review test
         Review review = new Review("", "", "frank", "Yes, I like it", "Duis ut molestie justo, non mattis arcu. Donec ac arcu eget sapien dignissim pretium eu a mi. Nullam consectetur mauris id maximus vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla mi leo, pulvinar nec blandit a, dictum semper nibh. Proin ut mauris turpis. Duis vehicula volutpat dolor, sodales varius ipsum venenatis sed.", 5, new Date());
