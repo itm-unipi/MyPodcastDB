@@ -452,7 +452,9 @@ public class UserPageController {
         }
         else{
             userPageWatchlistLabel.setText("Watchlist is empty");
-            userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
+            // userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
+            userPageWatchlistScrollPane.setVisible(false);
+            userPageWatchlistScrollPane.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
         }
 
         // fill the watchlist and liked grids
@@ -565,7 +567,7 @@ public class UserPageController {
         }
 
         //test empty lists
-        //wPodcasts.clear();
+        wPodcasts.clear();
         //lPodcasts.clear();
         //authors.clear();
         //users.clear();
