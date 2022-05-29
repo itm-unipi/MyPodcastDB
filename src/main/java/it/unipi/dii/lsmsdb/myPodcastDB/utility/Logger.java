@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.utility;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
@@ -28,7 +30,12 @@ public class Logger {
         if (!logMode.equals("verbose"))
             return;
 
-        String log = "[!] " + message;
+        String page = "INIT";
+        if(ConfigManager.isInitialized())
+            page = MyPodcastDB.getInstance().getSessionPage();
+
+        String log = "[!] {" + page + "} " + message;
+
         System.out.println(log);
 
         try {

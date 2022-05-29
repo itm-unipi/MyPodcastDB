@@ -95,6 +95,12 @@ public class ConfigManager {
         return stringConnector;
     }
 
+    public static boolean isInitialized(){
+        if(config == null)
+            return false;
+        else return true;
+    }
+
     public static String getNeo4JName() { return config.getNeo4JConfig().getNeo4JName(); }
 
     public static String getNeo4JUser() { return config.getNeo4JConfig().getNeo4JUser(); }

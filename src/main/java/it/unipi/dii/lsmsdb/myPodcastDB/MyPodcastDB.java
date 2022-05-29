@@ -8,10 +8,12 @@ public class MyPodcastDB {
 
     private Object sessionActor;
     private String sessionType;
+    private String sessionPage;
 
     public MyPodcastDB() {
         Logger.initialize();
         ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
+        sessionPage = "INIT";
     }
 
     public void run() {
@@ -26,11 +28,19 @@ public class MyPodcastDB {
 
     public void setSession(Object sessionActor, String type) {
         this.sessionActor = sessionActor;
-        this.sessionType = type;                                // User, Author, Admin
+        this.sessionType = type;                                // User, Author, Admin, Unregistered
     }
 
     public String getSessionType() {
         return sessionType;
+    }
+
+    public String getSessionPage() {
+        return sessionPage;
+    }
+
+    public void setSessionPage(String sessionPage) {
+        this.sessionPage = sessionPage;
     }
 
     public static MyPodcastDB getInstance() {

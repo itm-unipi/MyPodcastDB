@@ -218,14 +218,14 @@ public class UserPageController {
     void followButtonClick(MouseEvent event) {
         Logger.info("follow button pressed");
         if(!userPagePrivateArea.visibleProperty().getValue()) {
-            userPageFollowButton.setImage(new Image("File:src/main/resources/images/heart_24px.png"));
+            userPageFollowButton.setImage(new Image("File:src/main/resources/img/heart_24px.png"));
             userPagePrivateArea.setVisible(true);
             userPageSettingsButton.setVisible(true);
             userPageConfirmButton.setVisible(false);
             userPageCrossButton.setVisible(false);
         }
         else {
-            userPageFollowButton.setImage(new Image("File:src/main/resources/images/following_30px.png"));
+            userPageFollowButton.setImage(new Image("File:src/main/resources/img/following_30px.png"));
             userPagePrivateArea.setVisible(false);
             userPageSettingsButton.setVisible(false);
             userPageConfirmButton.setVisible(false);
@@ -382,7 +382,7 @@ public class UserPageController {
         user.setUsername("whitegoose14611");
         user.setAge(65);
         user.setGender("male");
-        user.setPicturePath("File:src/main/resources/images/user_100px.png");
+        user.setPicturePath("File:src/main/resources/img/user_100px.png");
         user.setFavouriteGenre("Music History");
         user.setCountry("Spain");
         user.setEmail("whitegoose14611@example.com");
@@ -393,13 +393,13 @@ public class UserPageController {
         Podcast p2 = new Podcast("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
         Podcast p3 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
 
-        Author a1 = new Author("ahy2bs89ha5c4f5eb9cddaaa", "Michael Colosi", "File:src/main/resources/images/user_male_96px.png" );
-        Author a2 = new Author("ufsdfrt445efsge5srfsdffa", "Preface Podcast", "File:src/main/resources/images/User Female Skin Type 6_160px.png" );
-        Author a3 = new Author("6sffgty6wefy742eerwetttt", "Apple Inc.", "File:src/main/resources/images/user_male_skin_type_3_80px.png" );
+        Author a1 = new Author("ahy2bs89ha5c4f5eb9cddaaa", "Michael Colosi", "File:src/main/resources/img/user_male_96px.png" );
+        Author a2 = new Author("ufsdfrt445efsge5srfsdffa", "Preface Podcast", "File:src/main/resources/img/User Female Skin Type 6_160px.png" );
+        Author a3 = new Author("6sffgty6wefy742eerwetttt", "Apple Inc.", "File:src/main/resources/img/user_male_skin_type_3_80px.png" );
 
-        User u1 = new User("Paolo Lupini", "File:src/main/resources/images/account_50px.png");
-        User u2 = new User("Chiara Proietti", "File:src/main/resources/images/clever_woman_50px.png");
-        User u3 = new User("Claudio Giuseppe", "File:src/main/resources/images/business_man_with_beard_50px.png");
+        User u1 = new User("Paolo Lupini", "File:src/main/resources/img/account_50px.png");
+        User u2 = new User("Chiara Proietti", "File:src/main/resources/img/clever_woman_50px.png");
+        User u3 = new User("Claudio Giuseppe", "File:src/main/resources/img/business_man_with_beard_50px.png");
 
 
         for(int i = 0; i < 5; i++){

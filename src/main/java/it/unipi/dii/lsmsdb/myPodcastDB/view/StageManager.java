@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.view;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.Main;
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPageController;
 import it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
@@ -30,9 +31,11 @@ public class StageManager {
         primaryStage.setResizable(false);
         primaryStage.getIcons().add(new Image(application.getClass().getResourceAsStream( "/img/logo.png" )));
         primaryStage.show();
+        MyPodcastDB.getInstance().setSessionPage(ViewNavigator.LOGIN.getPage());
     }
 
     public static void showPage(String newPage) throws IOException {
+        MyPodcastDB.getInstance().setSessionPage(newPage);
         Parent root = FXMLLoader.load(application.getClass().getClassLoader().getResource(newPage));
         primaryStage.getScene().setRoot(root);
         primaryStage.show();
