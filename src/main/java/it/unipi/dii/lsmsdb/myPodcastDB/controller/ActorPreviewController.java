@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -10,10 +12,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.io.IOException;
+
 public class ActorPreviewController {
 
     private Author authorPreview;
+
     private User userPreview;
+
+    private String actorType;
 
     @FXML
     private VBox actorContainer;
@@ -28,11 +35,10 @@ public class ActorPreviewController {
     private Label actorName;
 
     public ActorPreviewController() {
-        authorPreview = null;
-        userPreview = null;
     }
 
     public void setData(Author author) {
+        actorType = "Author";
         this.authorPreview = author;
 
         Image image = new Image(author.getPicturePath());
@@ -42,6 +48,7 @@ public class ActorPreviewController {
     }
 
     public void setData(User user) {
+        actorType = "User";
         this.userPreview = user;
 
         Image image = new Image(user.getPicturePath());
@@ -53,22 +60,24 @@ public class ActorPreviewController {
     @FXML
     void actorIn(MouseEvent event) {
         actorContainer.setStyle("-fx-background-color: f2f2f2; -fx-background-radius: 10;");
-        actorName.setStyle("-fx-font-size: 12; -fx-font-weight: bold;");
     }
 
     @FXML
     void actorOut(MouseEvent event) {
         actorContainer.setStyle("-fx-background-color: white");
-        actorName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
     }
 
     @FXML
-    void onClick(MouseEvent event) {
+    void onClick(MouseEvent event) throws IOException {
 
-        if(authorPreview != null)
+        if(actorType.equals("Author")) {
             Logger.info(authorPreview.getId() + " : " + this.authorPreview.getName() + " selected");
-        else
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), authorPreview.getId());
+        }
+        else {
             Logger.info(userPreview.getUsername() + " selected");
+            StageManager.showPage((ViewNavigator.USERPAGE.getPage()), userPreview.getUsername());
+        }
     }
 
 }

@@ -7,6 +7,9 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,10 +18,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 public class UserPageController {
@@ -26,8 +29,15 @@ public class UserPageController {
     private User pageOwner;
 
     private boolean isFollowed;
+
     @FXML
     private ImageView homeButton;
+
+    @FXML
+    private ImageView actorPageButton;
+
+    @FXML
+    private ImageView logoutPageButton;
 
     @FXML
     private ImageView searchButton;
@@ -125,6 +135,27 @@ public class UserPageController {
     @FXML
     private ImageView userPageSettingsButton;
 
+    @FXML
+    private Button userPageDeleteButton;
+
+    @FXML
+    private Label userPageWatchlistLabel;
+
+    @FXML
+    private Label userPageLikedLabel;
+
+    @FXML
+    private Label userPageAuthorsLabel;
+
+    @FXML
+    private Label userPageUsersLabel;
+
+    @FXML
+    private VBox userPageWatchlistAreaVBox;
+
+    @FXML
+    private VBox userPageVBox;
+
 
     /**************/
 
@@ -204,7 +235,6 @@ public class UserPageController {
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
     }
 
-
     @FXML
     void homeButtonClick(MouseEvent event) throws IOException {
         Logger.info("home button pressed");
@@ -212,17 +242,23 @@ public class UserPageController {
     }
 
     @FXML
-    void searchButtonClick(MouseEvent event) {
+    void searchButtonClick(MouseEvent event) throws IOException {
+
         Logger.info("Search: " + searchTextField.getText());
+        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchTextField.getText());
     }
 
     @FXML
     void followButtonClick(MouseEvent event) {
         Logger.info("follow button pressed");
-        if(isFollowed)
-            userPageFollowButton.setImage(new Image("File:src/main/resources/img/heart_24px.png"));
-        else
-            userPageFollowButton.setImage(new Image("File:src/main/resources/img/following_30px.png"));
+        if(isFollowed) {
+            userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_50px.png"));
+            isFollowed = false;
+        }
+        else {
+            userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_52px.png"));
+            isFollowed = true;
+        }
 
     }
 
@@ -233,6 +269,7 @@ public class UserPageController {
         userPageSettingsButton.setVisible(false);
         userPageConfirmButton.setVisible(true);
         userPageCrossButton.setVisible(true);
+        userPageDeleteButton.setVisible(true);
         userPageUsernameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
         userPageNameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
         userPageSurnameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
@@ -251,6 +288,7 @@ public class UserPageController {
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
+        userPageDeleteButton.setVisible(false);
         userPageUsernameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageNameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageSurnameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
@@ -271,6 +309,7 @@ public class UserPageController {
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
+        userPageDeleteButton.setVisible(false);
         userPageUsernameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageNameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageSurnameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
@@ -282,10 +321,56 @@ public class UserPageController {
 
     }
 
+    @FXML
+    void actorPageButtonClick(MouseEvent event) throws IOException {
+        Logger.info("actor page button clicked");
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+        if(actorType.equals("User"))
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        else if(actorType.equals("Author"))
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getId());
+        else
+            Logger.error("Unidentified Actor Type");
+    }
+
+    @FXML
+    void logoutButtonClick(MouseEvent event) throws IOException{
+        Logger.info("logout button clicked");
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
+    @FXML
+    void deleteButtonClick(MouseEvent event) throws  IOException{
+        Logger.info("delete button clicked");
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
+    @FXML
+    private void deleteButtonPressed(MouseEvent event){
+        userPageDeleteButton.setStyle(
+                "-fx-background-color: #bcbcbc;" +
+                        "-fx-border-color:  #e0e0e0;" +
+                        "-fx-border-radius: 25;" +
+                        "-fx-background-radius: 25;" +
+                        "-fx-cursor: hand;"
+        );
+    }
+
+    @FXML
+    private void deleteButtonReleased(MouseEvent event){
+        userPageDeleteButton.setStyle(
+                "-fx-background-color: #e0e0e0;" +
+                        "-fx-border-color:  #bcbcbc;" +
+                        "-fx-border-radius: 25;" +
+                        "-fx-background-radius: 25;" +
+                        "-fx-cursor: hand;"
+        );
+    }
 
     /***********************/
 
     public void initialize() throws IOException {
+
 
         String sessionActorName = "";
         String actorType = MyPodcastDB.getInstance().getSessionType();
@@ -296,29 +381,43 @@ public class UserPageController {
 
         String pageUsername = StageManager.getObjectIdentifier();
 
-        List<Podcast> podcasts = new ArrayList<>();
+        List<Podcast> wPodcasts = new ArrayList<>();
+        List<Podcast> lPodcasts = new ArrayList<>();
         List<Author> authors = new ArrayList<>();
         List<User> users = new ArrayList<>();
         pageOwner = new User();
-        this.simulateServiceLayer(pageUsername, podcasts, authors, users);
+        this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
 
-        if(pageOwner.getUsername().equals(sessionActorName)) {
+        if(actorType.equals("User") && pageOwner.getUsername().equals(sessionActorName)) {
 
             Logger.info("owner mode");
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(true);
             userPageSettingsButton.setVisible(true);
-            userPageConfirmButton.setVisible(false);
-            userPageCrossButton.setVisible(false);
         }
-        else {
+        else if(!actorType.equals("Admin")){
             Logger.info("visitor mode");
+            isFollowed = false; //take it by service
+            if(isFollowed)
+                userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_52px.png"));
+            else
+                userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_50px.png"));
+
             userPageFollowButton.setVisible(true);
             userPagePrivateArea.setVisible(false);
             userPageSettingsButton.setVisible(false);
-            userPageConfirmButton.setVisible(false);
-            userPageCrossButton.setVisible(false);
+            userPageDeleteButton.setVisible(false);
         }
+        else{
+            Logger.info("admin mode");
+            userPageFollowButton.setVisible(false);
+            userPagePrivateArea.setVisible(true);
+            userPageSettingsButton.setVisible(false);
+            userPageDeleteButton.setVisible(true);
+        }
+
+        userPageConfirmButton.setVisible(false);
+        userPageCrossButton.setVisible(false);
 
         //fill textfields and image
         userPageUsernameTextField.setText(pageOwner.getUsername());
@@ -333,52 +432,88 @@ public class UserPageController {
         userPageEmailTextField.setText(pageOwner.getEmail());
 
         // fill the watchlist and liked grids
-        int row = 0;
-        int column = 0;
-        for (Podcast podcast : podcasts) {
-            FXMLLoader watchListfxmlLoader = new FXMLLoader();
-            FXMLLoader likedfxmlLoader = new FXMLLoader();
-            watchListfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-            likedfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+        if(!wPodcasts.isEmpty()) {
+            int row = 0;
+            int column = 0;
+            for (Podcast podcast : wPodcasts) {
+                FXMLLoader watchListfxmlLoader = new FXMLLoader();
+                watchListfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreviewInUserPage.fxml"));
 
-            // create new podcast element
-            AnchorPane newPodcast1 = watchListfxmlLoader.load();
-            AnchorPane newPodcast2 = likedfxmlLoader.load();
-            PodcastPreviewController watchListController = watchListfxmlLoader.getController();
-            PodcastPreviewController likedController = likedfxmlLoader.getController();
-            watchListController.setData(podcast);
-            likedController.setData(podcast);
+                // create new podcast element
+                AnchorPane newPodcast = watchListfxmlLoader.load();
+                PodcastPreviewInUserPageController watchListController = watchListfxmlLoader.getController();
+                watchListController.setData(podcast);
 
-            // add new podcast to grid
-            this.userPageWatchlistGrid.add(newPodcast1, column, row);
-            this.userPageLikedGrid.add(newPodcast2, column, row);
-            column++;
+                // add new podcast to grid
+                this.userPageWatchlistGrid.add(newPodcast, column, row);
+                column++;
+            }
+        }
+        else{
+            userPageWatchlistLabel.setText("Watchlist is empty");
+            userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
+        }
+
+        // fill the watchlist and liked grids
+
+        if(!lPodcasts.isEmpty()){
+            int row = 0;
+            int column = 0;
+            for (Podcast podcast : lPodcasts) {
+                FXMLLoader likedfxmlLoader = new FXMLLoader();
+                likedfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreviewInUserPage.fxml"));
+
+                // create new podcast element
+                AnchorPane newPodcast = likedfxmlLoader.load();
+                PodcastPreviewInUserPageController likedController = likedfxmlLoader.getController();
+                likedController.setData(podcast);
+
+                // add new podcast to grid
+                this.userPageLikedGrid.add(newPodcast, column, row);
+                column++;
+            }
+        }
+        else{
+            userPageLikedLabel.setText("There are no liked podcasts");
+            //userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
         }
 
         //fill the authors grid
-        row = 0;
-        column = 0;
-        for(Author author : authors){
-            FXMLLoader authorfxmlLoader = new FXMLLoader();
-            authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
-            AnchorPane newAuthor = authorfxmlLoader.load();
-            ActorPreviewController authorController = authorfxmlLoader.getController();
-            authorController.setData(author);
-            this.userPageAuthorsGrid.add(newAuthor, column, row);
-            column++;
+        if(!authors.isEmpty()) {
+            int row = 0;
+            int column = 0;
+            for (Author author : authors) {
+                FXMLLoader authorfxmlLoader = new FXMLLoader();
+                authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+                AnchorPane newAuthor = authorfxmlLoader.load();
+                ActorPreviewController authorController = authorfxmlLoader.getController();
+                authorController.setData(author);
+                this.userPageAuthorsGrid.add(newAuthor, column, row);
+                column++;
+            }
+        }
+        else{
+            userPageAuthorsLabel.setText("There are no followed authors");
+            //userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
         }
 
         //fill the users grid
-        row = 0;
-        column = 0;
-        for(User u : users){
-            FXMLLoader userfxmlLoader = new FXMLLoader();
-            userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
-            AnchorPane newUser = userfxmlLoader.load();
-            ActorPreviewController actorController = userfxmlLoader.getController();
-            actorController.setData(u);
-            this.userPageUsersGrid.add(newUser, column, row);
-            column++;
+        if(!users.isEmpty()) {
+            int row = 0;
+            int column = 0;
+            for (User u : users) {
+                FXMLLoader userfxmlLoader = new FXMLLoader();
+                userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+                AnchorPane newUser = userfxmlLoader.load();
+                ActorPreviewController actorController = userfxmlLoader.getController();
+                actorController.setData(u);
+                this.userPageUsersGrid.add(newUser, column, row);
+                column++;
+            }
+        }
+        else{
+            userPageUsersLabel.setText("There are no followed users");
+            //userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
         }
 
         userPageWatchlistScrollPane.setHvalue(0.0);
@@ -387,7 +522,7 @@ public class UserPageController {
         userPageUsersScrollPane.setHvalue(0.0);
     }
 
-    void simulateServiceLayer(String usernamePage, List<Podcast> podcasts, List<Author> authors, List<User> users){
+    void simulateServiceLayer(String usernamePage, List<Podcast> wPodcasts, List<Podcast> lPodcasts, List<Author> authors, List<User> users){
 
         // service simulation
         pageOwner.setUsername(usernamePage);
@@ -414,9 +549,12 @@ public class UserPageController {
 
 
         for(int i = 0; i < 5; i++){
-            podcasts.add(p1);
-            podcasts.add(p2);
-            podcasts.add(p3);
+            wPodcasts.add(p1);
+            wPodcasts.add(p2);
+            wPodcasts.add(p3);
+            lPodcasts.add(p1);
+            lPodcasts.add(p2);
+            lPodcasts.add(p3);
             authors.add(a1);
             authors.add(a2);
             authors.add(a3);
@@ -425,9 +563,21 @@ public class UserPageController {
             users.add(u3);
         }
 
+        //test empty lists
+        //wPodcasts.clear();
+        //lPodcasts.clear();
+        //authors.clear();
+        //users.clear();
+
+
     }
 
     void enableTextFields(boolean value){
+        int padding;
+        if(value)
+            padding = 1;
+        else
+            padding = 0;
         userPageUsernameTextField.setEditable(value);
         userPageNameTextField.setEditable(value);
         userPageCountryTextField.setEditable(value);
@@ -436,6 +586,15 @@ public class UserPageController {
         userPageEmailTextField.setEditable(value);
         userPageAgeTextField.setEditable(value);
         userPageGenderTextField.setEditable(value);
+        userPageUsernameTextField.setPadding(new Insets(0,0,0,padding));
+        userPageNameTextField.setPadding(new Insets(0,0,0,padding));
+        userPageCountryTextField.setPadding(new Insets(0,0,0,padding));
+        userPageSurnameTextField.setPadding(new Insets(0,0,0,padding));
+        userPageFavGenreTextField.setPadding(new Insets(0,0,0,padding));
+        userPageEmailTextField.setPadding(new Insets(0,0,0,padding));
+        userPageAgeTextField.setPadding(new Insets(0,0,0,padding));
+        userPageGenderTextField.setPadding(new Insets(0,0,0,padding));
+
 
     }
 

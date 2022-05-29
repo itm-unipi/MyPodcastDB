@@ -8,12 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.ActorPreviewController">
    <children>
-      <VBox fx:id="actorContainer" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClick" onMouseEntered="#actorIn" onMouseExited="#actorOut" prefHeight="130.0" prefWidth="105.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="actorContainer" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClick" onMouseEntered="#actorIn" onMouseExited="#actorOut" prefHeight="130.0" prefWidth="105.0" style="-fx-cursor: hand;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="actorImage" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="actorImage" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" />
             <Label fx:id="actorName" prefHeight="35.0" prefWidth="204.0" text="Label" textFill="#434343">
                <font>
                   <Font name="Corbel Bold" size="15.0" />
