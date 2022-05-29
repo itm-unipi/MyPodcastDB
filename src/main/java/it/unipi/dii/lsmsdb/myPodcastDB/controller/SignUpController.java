@@ -187,7 +187,7 @@ public class SignUpController {
     void signUpSwitchClicked(MouseEvent event) throws IOException{
         Logger.info("switch button clicked");
         if(signUpLabelTitle.getText().equals("Your User Account")){
-            signUpSwitchButton.setImage(new Image("File:src/main/resources/images/switch_on_80px.png"));
+            signUpSwitchButton.setImage(new Image("File:src/main/resources/img/switch_on_80px.png"));
             signUpLabelAuthor.setStyle("-fx-font-weight: bold;");
             signUpLabelUser.setStyle("-fx-font-weight: normal;");
             signUpLabelTitle.setText("Your Author Account");
@@ -198,7 +198,7 @@ public class SignUpController {
 
         }
         else{
-            signUpSwitchButton.setImage(new Image("File:src/main/resources/images/switch_off_80px.png"));
+            signUpSwitchButton.setImage(new Image("File:src/main/resources/img/switch_off_80px.png"));
             signUpLabelAuthor.setStyle("-fx-font-weight: normal;");
             signUpLabelUser.setStyle("-fx-font-weight: bold;");
             signUpLabelTitle.setText("Your User Account");
