@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -66,7 +67,7 @@ public class AuthorReducedPodcastController {
         this.podcastReleaseDate.setText(date);
 
         // Setting image preview
-        Image image = new Image(getArtworkUrl600);
+        Image image = ImageCache.getImageFromURL(getArtworkUrl600);
         podcastImage.setImage(image);
     }
 

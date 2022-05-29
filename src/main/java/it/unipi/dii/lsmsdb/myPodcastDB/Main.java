@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 
 import javafx.application.Application;
@@ -11,6 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        ImageCache.initializeCache(this);
         StageManager.initialize(stage, "MyPodcastDB", this);
     }
 

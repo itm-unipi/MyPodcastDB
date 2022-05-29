@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -223,7 +224,7 @@ public class HomePageController {
             Logger.info("I'm an actor: " + sessionActor.getName());
 
             this.username.setText("Welcome " + sessionActor.getName() + "!");
-            Image image = new Image(getClass().getResourceAsStream(sessionActor.getPicturePath()));
+            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
 
         } else if (actorType.equals("User")) {
@@ -231,7 +232,7 @@ public class HomePageController {
             Logger.info("I'm an user: " + sessionActor.getUsername());
 
             this.username.setText("Welcome " + sessionActor.getUsername() + "!");
-            Image image = new Image(getClass().getResourceAsStream(sessionActor.getPicturePath()));
+            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
         } else
             Logger.error("Unidentified Actor Type");

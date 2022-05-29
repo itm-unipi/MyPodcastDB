@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -64,7 +65,7 @@ public class AuthorSearchPreviewController {
         this.author = author;
         authorFollowed.setText(author.getName());
 
-        Image image = new Image(getClass().getResourceAsStream(author.getPicturePath()));
+        Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
         authorPicture.setImage(image);
     }
 }

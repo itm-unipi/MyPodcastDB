@@ -71,7 +71,7 @@ public class AuthorPreviewController {
         this.author = author;
         nameAuthorFollowed.setText(author.getName());
 
-        //Image image = new Image(getClass().getResourceAsStream(author.getPicturePath()));
+        //Image image = ImageCache.getImageFromLocalPath(author.getPicturePath()));
         //authorPicture.setImage(image);
     }
 }

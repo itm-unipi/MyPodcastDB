@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -41,7 +42,7 @@ public class ActorPreviewController {
         actorType = "Author";
         this.authorPreview = author;
 
-        Image image = new Image(author.getPicturePath());
+        Image image = ImageCache.getImageFromURL(author.getPicturePath());
         this.actorImage.setImage(image);
         this.actorName.setText(author.getName());
         this.actorToolTip.setText(author.getName());
@@ -51,7 +52,7 @@ public class ActorPreviewController {
         actorType = "User";
         this.userPreview = user;
 
-        Image image = new Image(user.getPicturePath());
+        Image image = ImageCache.getImageFromURL(user.getPicturePath());
         this.actorImage.setImage(image);
         this.actorName.setText(user.getUsername());
         this.actorToolTip.setText(user.getUsername());

@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -252,11 +253,11 @@ public class UserPageController {
     void followButtonClick(MouseEvent event) {
         Logger.info("follow button pressed");
         if(isFollowed) {
-            userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_50px.png"));
+            userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_50px.png"));
             isFollowed = false;
         }
         else {
-            userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_52px.png"));
+            userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_52px.png"));
             isFollowed = true;
         }
 
@@ -399,9 +400,9 @@ public class UserPageController {
             Logger.info("visitor mode");
             isFollowed = false; //take it by service
             if(isFollowed)
-                userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_52px.png"));
+                userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_52px.png"));
             else
-                userPageFollowButton.setImage(new Image("File:src/main/resources/img/favourite_50px.png"));
+                userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_50px.png"));
 
             userPageFollowButton.setVisible(true);
             userPagePrivateArea.setVisible(false);
@@ -424,7 +425,7 @@ public class UserPageController {
         userPageCountryTextField.setText(pageOwner.getCountry());
         userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
         userPageGenderTextField.setText(pageOwner.getGender());
-        Image image = new Image(pageOwner.getPicturePath());
+        Image image = ImageCache.getImageFromURL(pageOwner.getPicturePath());
         userPageImage.setImage(image);
         userPageNameTextField.setText(pageOwner.getName());
         userPageSurnameTextField.setText(pageOwner.getSurname());

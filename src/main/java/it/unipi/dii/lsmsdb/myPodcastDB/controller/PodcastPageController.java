@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -234,9 +235,9 @@ public class PodcastPageController {
         this.watchLatered = false;
 
         // image setup
-        Image likeIcon = new Image(getClass().getResourceAsStream("/img/hearts.png"));
+        Image likeIcon = ImageCache.getImageFromLocalPath("/img/hearts.png");
         this.like.setImage(likeIcon);
-        Image watchlaterIcon = new Image(getClass().getResourceAsStream("/img/pin.png"));
+        Image watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
         this.watchlater.setImage(watchlaterIcon);
 
         // podcast initialization
@@ -244,7 +245,7 @@ public class PodcastPageController {
         this.author.setText(podcast.getAuthorName());
         this.country.setText(podcast.getCountry());
         this.content.setText("Content: " + podcast.getContentAdvisoryRating());
-        Image image = new Image(podcast.getArtworkUrl600());
+        Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
         this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");

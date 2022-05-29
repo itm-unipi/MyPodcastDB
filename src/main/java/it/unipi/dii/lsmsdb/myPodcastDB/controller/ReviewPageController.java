@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -104,7 +105,7 @@ public class ReviewPageController {
 
     @FXML
     void clickOnFifthStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -118,8 +119,8 @@ public class ReviewPageController {
 
     @FXML
     void clickOnFirstStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(outlineStar);
@@ -133,8 +134,8 @@ public class ReviewPageController {
 
     @FXML
     void clickOnFourthStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -148,8 +149,8 @@ public class ReviewPageController {
 
     @FXML
     void clickOnSecondStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -163,8 +164,8 @@ public class ReviewPageController {
 
     @FXML
     void clickOnThirdStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -256,8 +257,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnFirstStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(outlineStar);
@@ -268,8 +269,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnSecondStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -280,8 +281,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnThirdStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -292,8 +293,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnFourthStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -304,7 +305,7 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnFifthStar(MouseEvent event) {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
@@ -314,8 +315,8 @@ public class ReviewPageController {
     }
 
     private void readRating() {
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
-        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         if (this.ownReview.getRating() == 5) {
             this.star1.setImage(star);
@@ -413,7 +414,7 @@ public class ReviewPageController {
         this.title.setText(podcast.getName());
         this.author.setText(podcast.getAuthorName());
         this.category.setText(podcast.getPrimaryCategory());
-        Image podcastImage = new Image(podcast.getArtworkUrl600());
+        Image podcastImage = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
         this.podcastImage.setImage(podcastImage);
         this.rating.setText("" + podcast.getRating());
         this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");

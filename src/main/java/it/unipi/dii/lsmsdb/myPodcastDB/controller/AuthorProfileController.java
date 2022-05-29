@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -130,7 +131,7 @@ public class AuthorProfileController {
             Logger.info("I'm an actor: " + sessionActor.getName());
 
             // Setting actor personal info
-            Image image = new Image(getClass().getResourceAsStream(sessionActor.getPicturePath()));
+            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
 
             if (StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName())) {
@@ -151,7 +152,7 @@ public class AuthorProfileController {
             Logger.info("I'm an user: " + sessionActor.getUsername());
 
             // Setting actor stuff
-            Image image = new Image(getClass().getResourceAsStream(sessionActor.getPicturePath()));
+            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
 
             Author a = new Author(); // Find using ObjectIdentifier

@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPageController;
 import it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +29,7 @@ public class StageManager {
         primaryStage.setTitle(title);
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
-        primaryStage.getIcons().add(new Image(application.getClass().getResourceAsStream( "/img/logo.png" )));
+        primaryStage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png" ));
         primaryStage.show();
         MyPodcastDB.getInstance().setSessionPage(ViewNavigator.LOGIN.getPage());
     }

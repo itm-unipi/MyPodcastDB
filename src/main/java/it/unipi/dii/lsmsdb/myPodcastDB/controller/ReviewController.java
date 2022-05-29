@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -50,7 +51,7 @@ public class ReviewController {
 
         // review fields
         int rating = review.getRating();
-        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
         if (rating >= 1)
             this.star1.setImage(star);
         if (rating >= 2)
