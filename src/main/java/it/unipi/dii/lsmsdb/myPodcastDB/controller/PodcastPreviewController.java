@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
@@ -71,11 +72,16 @@ public class PodcastPreviewController {
     public void setData(Podcast podcast) {
         this.podcastPreview = podcast;
 
-        Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
+        Image image = ImageCache.getImageFromLocalPath("/img/loading.jpg");
         this.podcastImage.setImage(image);
         this.podcastName.setText(podcast.getName());
         this.podcastToolTip.setText(podcast.getName());
         podcastImage.setImage(image);
         podcastName.setText(podcast.getName());
+
+        Platform.runLater(() -> {
+            Image imageLoaded = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
+            this.podcastImage.setImage(imageLoaded);
+        });
     }
 }

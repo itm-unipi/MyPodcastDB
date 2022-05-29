@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -67,8 +68,13 @@ public class AuthorReducedPodcastController {
         this.podcastReleaseDate.setText(date);
 
         // Setting image preview
-        Image image = ImageCache.getImageFromURL(getArtworkUrl600);
+        Image image = ImageCache.getImageFromLocalPath("/img/logo.png");
         podcastImage.setImage(image);
+
+        Platform.runLater(() -> {
+            Image imageLoaded = ImageCache.getImageFromURL(getArtworkUrl600);
+            this.podcastImage.setImage(imageLoaded);
+        });
     }
 
 }
