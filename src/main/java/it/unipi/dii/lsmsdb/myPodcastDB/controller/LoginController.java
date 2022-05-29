@@ -65,7 +65,7 @@ public class LoginController {
             Logger.error("Login clicked: invalid values");
             return;
         }
-
+        
         if(loginUserRadioButton.isSelected()) {
             Logger.info("User actor selected");
             String actorType = "User";
@@ -86,7 +86,6 @@ public class LoginController {
         }
         else
             Logger.error("No actor selected");
-
 
         String log = "Login clicked: (" + actorname + ", " + password +")";
         Logger.info(log);

@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -10,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -26,13 +29,19 @@ public class HomePageController {
     private User userPreview;
 
     @FXML
-    private Label userName;
-
-    @FXML
-    private ImageView userPicture;
-
-    @FXML
     private ImageView home;
+
+    @FXML
+    private ImageView actorPicture;
+
+    @FXML
+    private Label username;
+
+    @FXML
+    private ImageView searchButton;
+
+    @FXML
+    private TextField searchText;
 
     @FXML
     private GridPane gridMostLikedPodcasts;
@@ -64,40 +73,50 @@ public class HomePageController {
     @FXML
     private ScrollPane scrollWatchlist;
 
+    /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
-    private ImageView searchButton;
-
-    @FXML
-    void onClickSearch(MouseEvent event) throws IOException {
-        // TODO: E' NECESSARIO PASSARE IL PARAMETRO DI RICERCA
-        StageManager.showPage(ViewNavigator.SEARCH.getPage());
-    }
-
-    @FXML
-    void onEnterPressed(KeyEvent event) throws IOException {
-        // TODO: E' NECESSARIO PASSARE IL PARAMETRO DI RICERCA
-        if (event.getCode() == KeyCode.ENTER)
-            StageManager.showPage(ViewNavigator.SEARCH.getPage());
-    }
-
-    @FXML
-    void userProfile(MouseEvent event) throws IOException {
-        Logger.info("User profile clicked");
+    void onClickActorProfile(MouseEvent event) throws IOException {
+        Logger.info("Actor profile clicked");
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
         else if (actorType.equals("User"))
             StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         else
-            Logger.error("Unidentified Actor Type");
+            Logger.error("Unidentified Actor Type!");
+    }
+    @FXML
+    void onClickSearch(MouseEvent event) throws IOException {
+        if (!searchText.getText().isEmpty()) {
+            String text = searchText.getText();
+            Logger.info("Searching for " + text);
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
+        } else {
+            Logger.error("Field cannot be empty!");
+        }
+    }
+
+    @FXML
+    void onEnterPressedSearch(KeyEvent event) throws IOException {
+        if (event.getCode() == KeyCode.ENTER) {
+            if (!searchText.getText().isEmpty()) {
+                String text = searchText.getText();
+                Logger.info("Searching for " + text);
+                StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
+            } else {
+                Logger.error("Field cannot be empty!");
+            }
+        }
     }
 
     @FXML
     void onClickHome(MouseEvent event) throws IOException {
-        Logger.info("Home clicked");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+        Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
     }
+
+    /**********************************************************/
 
     @FXML
     void nextMostLikedPodcasts(MouseEvent event) {
@@ -196,12 +215,26 @@ public class HomePageController {
 
     public void initialize() throws IOException {
 
-        User userTest = new User("JuanLaZapp", "userPicture.png");
+        // Load information about the actor of the session
+        String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        // Setting user stuff
-        //Image image = new Image(userTest.getPictureMedium());
-        userName.setText("Welcome " + userTest.getUsername() + "!");
-        //userPicture.setImage(image);
+        if (actorType.equals("Author")) {
+            Author sessionActor = (Author)MyPodcastDB.getInstance().getSessionActor();
+            Logger.info("I'm an actor: " + sessionActor.getName());
+
+            this.username.setText("Welcome " + sessionActor.getName() + "!");
+            Image image = new Image(getClass().getResourceAsStream(sessionActor.getPicturePath()));
+            actorPicture.setImage(image);
+
+        } else if (actorType.equals("User")) {
+            User sessionActor = (User)MyPodcastDB.getInstance().getSessionActor();
+            Logger.info("I'm an user: " + sessionActor.getUsername());
+
+            this.username.setText("Welcome " + sessionActor.getUsername() + "!");
+            Image image = new Image(getClass().getResourceAsStream(sessionActor.getPicturePath()));
+            actorPicture.setImage(image);
+        } else
+            Logger.error("Unidentified Actor Type");
 
         /************************************************************************************/
 

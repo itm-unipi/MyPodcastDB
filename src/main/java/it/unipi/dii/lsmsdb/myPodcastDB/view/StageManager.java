@@ -19,7 +19,6 @@ import java.io.IOException;
 public class StageManager {
     private static Stage primaryStage;
     private static Application application;
-
     private static String objectIdentifier;
 
     public static void initialize(Stage stage, String title, Application main) throws IOException {

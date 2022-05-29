@@ -12,7 +12,7 @@
 
 <AnchorPane prefHeight="70.0" prefWidth="1020.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorReducedPodcastController">
    <children>
-      <HBox fx:id="reducedPodcast" onMouseClicked="#onClick" onMouseEntered="#OnMouseHover" onMouseExited="#onMouseExited" prefHeight="70.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="reducedPodcast" onMouseClicked="#onClickReducedPodcast" onMouseEntered="#OnMouseHoverReducedPodcast" onMouseExited="#onMouseExitedReducedPodcast" prefHeight="70.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="podcastImage" fitHeight="72.0" fitWidth="72.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -28,9 +28,6 @@
                      <font>
                         <Font name="Corbel Light" size="20.0" />
                      </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </Label>
                   <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="Business">
                      <font>
@@ -48,6 +45,9 @@
                </font>
             </Label>
          </children>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </HBox>
    </children>
 </AnchorPane>

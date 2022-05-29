@@ -14,16 +14,16 @@
    <children>
       <VBox alignment="TOP_CENTER" onMouseEntered="#changeBackgroundAuthor" onMouseExited="#restoreBackgroundAuthor" prefWidth="160.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="boxAuthorProfile" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="57.0" prefWidth="56.0" style="-fx-background-color: white; -fx-background-radius: 60;">
+            <VBox fx:id="boxAuthorImage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#onClickAuthorProfile" prefHeight="57.0" prefWidth="56.0" style="-fx-background-color: white; -fx-background-radius: 60;">
                <children>
-                  <ImageView fitHeight="45.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="authorPicture" fitHeight="45.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/authorAnonymousePicture.png" />
                      </image>
                   </ImageView>
                </children>
             </VBox>
-            <Label fx:id="authorFollowed" alignment="TOP_CENTER" prefHeight="22.0" prefWidth="140.0" text="Giovanotti">
+            <Label fx:id="nameAuthorFollowed" alignment="TOP_CENTER" onMouseClicked="#onClickAuthorName" prefHeight="22.0" prefWidth="140.0" text="Giovanotti">
                <font>
                   <Font name="Corbel Light" size="18.0" />
                </font>
@@ -31,7 +31,7 @@
                   <Insets bottom="7.0" top="7.0" />
                </padding>
             </Label>
-            <Button fx:id="followAuthor" mnemonicParsing="false" onMouseClicked="#onClick" onMouseEntered="#onMouseHover" onMouseExited="#onMouseExited" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-radius: 25; -fx-background-radius: 27;" text="Follow">
+            <Button fx:id="followAuthor" mnemonicParsing="false" onMouseClicked="#onClickFollowAuthor" onMouseEntered="#onMouseHoverFollowAuthor" onMouseExited="#onMouseExitedFollowAuthor" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-radius: 25; -fx-background-radius: 27;" text="Follow">
                <font>
                   <Font name="Corbel Light" size="14.0" />
                </font>

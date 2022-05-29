@@ -25,7 +25,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="80.0">
                      <children>
-                        <ImageView fitHeight="40.0" fitWidth="52.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@img/logo.png" />
                            </image>
@@ -54,17 +54,20 @@
                                     <Insets right="7.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/userPicture.png" />
                                  </image>
                                  <HBox.margin>
                                     <Insets right="3.0" />
                                  </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </ImageView>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>
-                                    <TextField onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
+                                    <TextField fx:id="searchText" onKeyPressed="#onEnterPressedSearch" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -111,7 +114,7 @@
                                     <Font name="Corbel Light" size="22.0" />
                                  </font>
                                  <VBox.margin>
-                                    <Insets bottom="8.0" top="5.0" />
+                                    <Insets bottom="8.0" top="8.0" />
                                  </VBox.margin>
                               </Label>
                               <VBox>
@@ -119,10 +122,13 @@
                                     <Insets left="120.0" right="120.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label prefWidth="1040.0" text="Podcasts (46)">
+                                    <Label fx:id="podcastsFound" prefWidth="1040.0" text="Podcasts (nPodcastFound)">
                                        <font>
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
                                     </Label>
                                     <ScrollPane fx:id="scrollFoundPodcasts" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
@@ -148,10 +154,13 @@
                                     <Insets left="120.0" right="120.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label prefWidth="1040.0" text="Authors (4)">
+                                    <Label fx:id="authorsFound" prefWidth="1040.0" text="Authors (nAuthorsFound)">
                                        <font>
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
                                     </Label>
                                     <ScrollPane fx:id="scrollFoundAuthors" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
@@ -172,12 +181,15 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="95.0" prefWidth="1040.0">
+                              <VBox fx:id="boxUsersFound" prefHeight="95.0" prefWidth="1040.0">
                                  <children>
-                                    <Label prefWidth="1063.0" text="Users (22)">
+                                    <Label fx:id="usersFound" prefWidth="1063.0" text="Users (nUsersFound)">
                                        <font>
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
+                                       <VBox.margin>
+                                          <Insets bottom="5.0" />
+                                       </VBox.margin>
                                     </Label>
                                     <ScrollPane fx:id="scrollFoundUsers" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>

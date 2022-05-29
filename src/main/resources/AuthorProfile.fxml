@@ -28,7 +28,7 @@
                <children>
                   <HBox alignment="CENTER" prefHeight="80.0">
                      <children>
-                        <ImageView fitHeight="40.0" fitWidth="52.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@img/logo.png" />
                            </image>
@@ -57,7 +57,7 @@
                                     <Insets right="7.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/userPicture.png" />
                                  </image>
@@ -70,7 +70,7 @@
                               </ImageView>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>
-                                    <TextField onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
+                                    <TextField fx:id="searchText" onKeyPressed="#onEnterPressedSearch" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -126,7 +126,7 @@
                               </HBox>
                               <VBox alignment="TOP_CENTER" prefHeight="200.0">
                                  <children>
-                                    <Label prefWidth="1040.0" text="Podcasts">
+                                    <Label fx:id="podcastLabel" prefWidth="1040.0" text="Podcasts">
                                        <font>
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>

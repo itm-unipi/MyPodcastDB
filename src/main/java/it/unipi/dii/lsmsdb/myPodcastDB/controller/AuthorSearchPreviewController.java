@@ -10,68 +10,62 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 
-public class AuthorPreviewController {
+public class AuthorSearchPreviewController {
     private Author author;
+
+    @FXML
+    private Label authorFollowed;
 
     @FXML
     private ImageView authorPicture;
 
     @FXML
-    private VBox boxAuthorImage;
+    private HBox boxAuthorPreview;
 
     @FXML
     private Button followAuthor;
 
     @FXML
-    private Label nameAuthorFollowed;
+    void onClickAuthor(MouseEvent event) throws IOException {
+        Logger.info("Clicked on author " + this.author.getName());
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
+    }
 
     @FXML
     void changeBackgroundAuthor(MouseEvent event) {
-        this.boxAuthorImage.setStyle("-fx-background-color: #dbe9fc; -fx-background-radius: 50px;");
+        this.boxAuthorPreview.setStyle("-fx-background-color: #e3e3e3;");
     }
 
     @FXML
     void restoreBackgroundAuthor(MouseEvent event) {
-        this.boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 50px;");
+        this.boxAuthorPreview.setStyle("-fx-background-color: transparent;");
     }
 
+    /****** Events on follow button ******/
     @FXML
-    void onClickAuthorName(MouseEvent event) throws IOException {
-        Logger.info("Clicked on Author name: " + this.author.getName());
-        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
-    }
-
-    @FXML
-    void onClickAuthorProfile(MouseEvent event) throws IOException {
-        Logger.info("Clicked on Author Picture: " + this.author.getName());
-        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
-    }
-
-    @FXML
-    void onClickFollowAuthor(MouseEvent event) {
+    void onClickFollowButton(MouseEvent event) {
         Logger.info("Clicked on Follow " + this.author.getName());
-        // TODO: change button text from Follow to Unfollow and viceversa
     }
-
     @FXML
-    void onMouseExitedFollowAuthor(MouseEvent event) {
+    void onMouseExitedFollowButton(MouseEvent event) {
         followAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
     }
 
     @FXML
-    void onMouseHoverFollowAuthor(MouseEvent event) {
+    void onMouseHoverFollowButton(MouseEvent event) {
         followAuthor.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
     }
 
     public void setData(Author author) {
         this.author = author;
-        nameAuthorFollowed.setText(author.getName());
+        authorFollowed.setText(author.getName());
 
-        //Image image = new Image(getClass().getResourceAsStream(author.getPicturePath()));
-        //authorPicture.setImage(image);
+        Image image = new Image(getClass().getResourceAsStream(author.getPicturePath()));
+        authorPicture.setImage(image);
     }
 }
+
