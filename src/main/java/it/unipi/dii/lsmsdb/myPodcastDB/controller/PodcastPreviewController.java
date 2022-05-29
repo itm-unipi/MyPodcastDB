@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -70,7 +71,7 @@ public class PodcastPreviewController {
     public void setData(Podcast podcast) {
         this.podcastPreview = podcast;
 
-        Image image = new Image(podcast.getArtworkUrl600());
+        Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
         this.podcastName.setText(podcast.getName());
         this.podcastToolTip.setText(podcast.getName());
