@@ -65,7 +65,7 @@ public class LoginController {
             Logger.error("Login clicked: invalid values");
             return;
         }
-        
+
         if(loginUserRadioButton.isSelected()) {
             Logger.info("User actor selected");
             String actorType = "User";
@@ -176,11 +176,11 @@ public class LoginController {
     Object simActorService(String actorname, String password, String actorType){
 
         if(actorType.equals("User")){
-            User user = new User("af679", actorname, password, "userTestName", "userTestSurname", "userTest@example.com", "Italy", "", "Horror", 34, "Male");
+            User user = new User("af679", actorname, password, "userTestName", "userTestSurname", "userTest@example.com", "Italy", "/img/account_50px.png", "Horror", 34, "Male");
             return user;
         }
         else if(actorType.equals("Author")){
-            Author author = new Author("1234",actorname, password, "authorTest@example.com","");
+            Author author = new Author("1234",actorname, password, "authorTest@example.com","/img/authorAnonymousePicture.png");
             return author;
         }
         else if(actorType.equals("Admin")){
