@@ -23,7 +23,9 @@ import java.util.List;
 
 public class UserPageController {
 
-    private Hashtable<String, String> cacheData;
+    private User pageOwner;
+
+    private boolean isFollowed;
     @FXML
     private ImageView homeButton;
 
@@ -217,27 +219,17 @@ public class UserPageController {
     @FXML
     void followButtonClick(MouseEvent event) {
         Logger.info("follow button pressed");
-        if(!userPagePrivateArea.visibleProperty().getValue()) {
+        if(isFollowed)
             userPageFollowButton.setImage(new Image("File:src/main/resources/img/heart_24px.png"));
-            userPagePrivateArea.setVisible(true);
-            userPageSettingsButton.setVisible(true);
-            userPageConfirmButton.setVisible(false);
-            userPageCrossButton.setVisible(false);
-        }
-        else {
+        else
             userPageFollowButton.setImage(new Image("File:src/main/resources/img/following_30px.png"));
-            userPagePrivateArea.setVisible(false);
-            userPageSettingsButton.setVisible(false);
-            userPageConfirmButton.setVisible(false);
-            userPageCrossButton.setVisible(false);
-        }
+
     }
 
     @FXML
     void settingsButtonClick(MouseEvent event) {
         Logger.info("settings button clicked");
         enableTextFields(true);
-        cacheData = getDataFromTextFields();
         userPageSettingsButton.setVisible(false);
         userPageConfirmButton.setVisible(true);
         userPageCrossButton.setVisible(true);
@@ -255,7 +247,7 @@ public class UserPageController {
     void crossButtonClick(MouseEvent event) {
         Logger.info("cross button clicked");
         enableTextFields(false);
-        restoreTextFields(cacheData);
+        restoreTextFields();
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
@@ -274,8 +266,8 @@ public class UserPageController {
     void confirmButtonClick(MouseEvent event) {
         Logger.info("confirm button clicked");
         enableTextFields(false);
-        cacheData = getDataFromTextFields();
-        Logger.info(cacheData.toString());
+        getDataFromTextFields();
+        Logger.info(pageOwner.toString());
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
@@ -294,28 +286,51 @@ public class UserPageController {
     /***********************/
 
     public void initialize() throws IOException {
-        // TODO: prendo l'user dallo state manager
-        User sessionUser = (User)MyPodcastDB.getInstance().getSessionActor();
-        Logger.info(sessionUser.getUsername());
 
-        User user = new User();
+        String sessionActorName = "";
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+        if(actorType.equals("User"))
+            sessionActorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+
+        Logger.info("session user: " + actorType);
+
+        String pageUsername = StageManager.getObjectIdentifier();
+
         List<Podcast> podcasts = new ArrayList<>();
         List<Author> authors = new ArrayList<>();
         List<User> users = new ArrayList<>();
+        pageOwner = new User();
+        this.simulateServiceLayer(pageUsername, podcasts, authors, users);
 
-        this.simulateServiceLayer(user, podcasts, authors, users);
+        if(pageOwner.getUsername().equals(sessionActorName)) {
+
+            Logger.info("owner mode");
+            userPageFollowButton.setVisible(false);
+            userPagePrivateArea.setVisible(true);
+            userPageSettingsButton.setVisible(true);
+            userPageConfirmButton.setVisible(false);
+            userPageCrossButton.setVisible(false);
+        }
+        else {
+            Logger.info("visitor mode");
+            userPageFollowButton.setVisible(true);
+            userPagePrivateArea.setVisible(false);
+            userPageSettingsButton.setVisible(false);
+            userPageConfirmButton.setVisible(false);
+            userPageCrossButton.setVisible(false);
+        }
 
         //fill textfields and image
-        userPageUsernameTextField.setText(user.getUsername());
-        userPageCountryTextField.setText(user.getCountry());
-        userPageFavGenreTextField.setText(user.getFavouriteGenre());
-        userPageGenderTextField.setText(user.getGender());
-        Image image = new Image(user.getPicturePath());
+        userPageUsernameTextField.setText(pageOwner.getUsername());
+        userPageCountryTextField.setText(pageOwner.getCountry());
+        userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
+        userPageGenderTextField.setText(pageOwner.getGender());
+        Image image = new Image(pageOwner.getPicturePath());
         userPageImage.setImage(image);
-        userPageNameTextField.setText(user.getName());
-        userPageSurnameTextField.setText(user.getSurname());
-        userPageAgeTextField.setText(((Integer)user.getAge()).toString());
-        userPageEmailTextField.setText(user.getEmail());
+        userPageNameTextField.setText(pageOwner.getName());
+        userPageSurnameTextField.setText(pageOwner.getSurname());
+        userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
+        userPageEmailTextField.setText(pageOwner.getEmail());
 
         // fill the watchlist and liked grids
         int row = 0;
@@ -370,24 +385,20 @@ public class UserPageController {
         userPageLikedScrollPane.setHvalue(0.0);
         userPageAuthorsScrollPane.setHvalue(0.0);
         userPageUsersScrollPane.setHvalue(0.0);
-        userPagePrivateArea.setVisible(false);
-        userPageSettingsButton.setVisible(false);
-        userPageConfirmButton.setVisible(false);
-        userPageCrossButton.setVisible(false);
     }
 
-    void simulateServiceLayer(User user, List<Podcast> podcasts, List<Author> authors, List<User> users){
+    void simulateServiceLayer(String usernamePage, List<Podcast> podcasts, List<Author> authors, List<User> users){
 
         // service simulation
-        user.setUsername("whitegoose14611");
-        user.setAge(65);
-        user.setGender("male");
-        user.setPicturePath("File:src/main/resources/img/user_100px.png");
-        user.setFavouriteGenre("Music History");
-        user.setCountry("Spain");
-        user.setEmail("whitegoose14611@example.com");
-        user.setName("Paolo");
-        user.setSurname("Giacomini");
+        pageOwner.setUsername(usernamePage);
+        pageOwner.setAge(65);
+        pageOwner.setGender("male");
+        pageOwner.setPicturePath("File:src/main/resources/img/user_100px.png");
+        pageOwner.setFavouriteGenre("Music History");
+        pageOwner.setCountry("Spain");
+        pageOwner.setEmail("paologiacomini@example.com");
+        pageOwner.setName("Paolo");
+        pageOwner.setSurname("Giacomini");
 
         Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
         Podcast p2 = new Podcast("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
@@ -428,30 +439,29 @@ public class UserPageController {
 
     }
 
-    Hashtable<String, String> getDataFromTextFields(){
-        Hashtable<String, String> list = new Hashtable<>();
-        list.put("username", userPageUsernameTextField.getText());
-        list.put("name", userPageNameTextField.getText());
-        list.put("surname", userPageSurnameTextField.getText());
-        list.put("age", userPageAgeTextField.getText());
-        list.put("country", userPageCountryTextField.getText());
-        list.put("email", userPageEmailTextField.getText());
-        list.put("gender", userPageGenderTextField.getText());
-        list.put("favGenre", userPageFavGenreTextField.getText());
+    void getDataFromTextFields(){
 
-        return list;
+        pageOwner.setUsername(userPageUsernameTextField.getText());
+        pageOwner.setName(userPageNameTextField.getText());
+        pageOwner.setSurname(userPageSurnameTextField.getText());
+        pageOwner.setAge(Integer.parseInt(userPageAgeTextField.getText()));
+        pageOwner.setCountry(userPageCountryTextField.getText());
+        pageOwner.setEmail(userPageEmailTextField.getText());
+        pageOwner.setGender(userPageGenderTextField.getText());
+        pageOwner.setFavouriteGenre(userPageFavGenreTextField.getText());
+
     }
 
-    void restoreTextFields(Hashtable<String, String> list){
+    void restoreTextFields(){
 
-        userPageUsernameTextField.setText(list.get("username"));
-        userPageNameTextField.setText(list.get("name"));
-        userPageSurnameTextField.setText(list.get("surname"));
-        userPageCountryTextField.setText(list.get("country"));
-        userPageFavGenreTextField.setText(list.get("favGenre"));
-        userPageAgeTextField.setText(list.get("age"));
-        userPageGenderTextField.setText(list.get("gender"));
-        userPageEmailTextField.setText(list.get("email"));
+        userPageUsernameTextField.setText(pageOwner.getUsername());
+        userPageNameTextField.setText(pageOwner.getName());
+        userPageSurnameTextField.setText(pageOwner.getSurname());
+        userPageCountryTextField.setText(pageOwner.getCountry());
+        userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
+        userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
+        userPageGenderTextField.setText(pageOwner.getGender());
+        userPageEmailTextField.setText(pageOwner.getEmail());
     }
 
 }
