@@ -27,10 +27,18 @@
                <children>
                   <HBox alignment="CENTER_LEFT" prefHeight="80.0" prefWidth="200.0">
                      <children>
-                        <Label text="MyPodcastDB">
+                        <ImageView fitHeight="40.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/logo.png" />
+                           </image>
+                        </ImageView>
+                        <Label prefHeight="28.0" prefWidth="183.0" text="MyPodcastDB">
                            <font>
                               <Font name="Corbel Light" size="24.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="3.0" />
+                           </HBox.margin>
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="80.0" prefWidth="777.0">
                            <children>
