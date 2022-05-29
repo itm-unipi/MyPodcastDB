@@ -254,7 +254,133 @@ public class ReviewPageController {
             Logger.error("Unidentified Actor Type");
     }
 
-    // TODO rendere cliccabile l'autore della review
+    @FXML
+    void mouseOnFirstStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(outlineStar);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+    }
+
+    @FXML
+    void mouseOnSecondStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+    }
+
+    @FXML
+    void mouseOnThirdStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+    }
+
+    @FXML
+    void mouseOnFourthStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(star);
+        this.star5.setImage(outlineStar);
+    }
+
+    @FXML
+    void mouseOnFifthStar(MouseEvent event) {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(star);
+        this.star5.setImage(star);
+    }
+
+    private void readRating() {
+        Image star = new Image(getClass().getResourceAsStream("/img/star.png"));
+        Image outlineStar = new Image(getClass().getResourceAsStream("/img/outline_star.png"));
+
+        if (this.ownReview.getRating() == 5) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(star);
+            this.star4.setImage(star);
+            this.star5.setImage(star);
+        } else if (this.ownReview.getRating() >= 4) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(star);
+            this.star4.setImage(star);
+            this.star5.setImage(outlineStar);
+        } else if (this.ownReview.getRating() >= 3) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(star);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        } else if (this.ownReview.getRating() >= 2) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(outlineStar);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        } else if (this.ownReview.getRating() >= 1) {
+            this.star1.setImage(star);
+            this.star2.setImage(outlineStar);
+            this.star3.setImage(outlineStar);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        } else {
+            this.star1.setImage(outlineStar);
+            this.star2.setImage(outlineStar);
+            this.star3.setImage(outlineStar);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        }
+    }
+
+    @FXML
+    void mouseOutFirstStar(MouseEvent event) {
+        readRating();
+    }
+
+    @FXML
+    void mouseOutSecondStar(MouseEvent event) {
+        readRating();
+    }
+
+    @FXML
+    void mouseOutThirdStar(MouseEvent event) {
+        readRating();
+    }
+
+    @FXML
+    void mouseOutFourthStar(MouseEvent event) {
+        readRating();
+    }
+
+    @FXML
+    void mouseOutFifthStar(MouseEvent event) {
+        readRating();
+    }
+
     public void initialize() throws IOException {
         Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
 
@@ -318,5 +444,6 @@ public class ReviewPageController {
         // initialize own review
         this.ownReview = new Review();
         this.ownReview.setPodcastId(podcast.getId());
+        this.ownReview.setRating(0);
     }
 }

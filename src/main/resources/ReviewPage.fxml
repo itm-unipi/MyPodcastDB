@@ -352,7 +352,7 @@
                                     </Label>
                                     <HBox prefWidth="200.0">
                                        <children>
-                                          <ImageView fx:id="star1" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnFirstStar" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="star1" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnFirstStar" onMouseEntered="#mouseOnFirstStar" onMouseExited="#mouseOutFirstStar" pickOnBounds="true" preserveRatio="true">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
@@ -360,22 +360,22 @@
                                                 <Image url="@img/outline_star.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="star2" fitHeight="30.0" fitWidth="30.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#clickOnSecondStar" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="star2" fitHeight="30.0" fitWidth="30.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#clickOnSecondStar" onMouseEntered="#mouseOnSecondStar" onMouseExited="#mouseOutSecondStar" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/outline_star.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="star3" fitHeight="30.0" fitWidth="30.0" layoutX="25.0" layoutY="10.0" onMouseClicked="#clickOnThirdStar" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="star3" fitHeight="30.0" fitWidth="30.0" layoutX="25.0" layoutY="10.0" onMouseClicked="#clickOnThirdStar" onMouseEntered="#mouseOnThirdStar" onMouseExited="#mouseOutThirdStar" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/outline_star.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="star4" fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="10.0" onMouseClicked="#clickOnFourthStar" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="star4" fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="10.0" onMouseClicked="#clickOnFourthStar" onMouseEntered="#mouseOnFourthStar" onMouseExited="#mouseOutFourthStar" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/outline_star.png" />
                                              </image>
                                           </ImageView>
-                                          <ImageView fx:id="star5" fitHeight="30.0" fitWidth="30.0" layoutX="56.0" layoutY="10.0" onMouseClicked="#clickOnFifthStar" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="star5" fitHeight="30.0" fitWidth="30.0" layoutX="56.0" layoutY="10.0" onMouseClicked="#clickOnFifthStar" onMouseEntered="#mouseOnFifthStar" onMouseExited="#mouseOutFifthStar" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/outline_star.png" />
                                              </image>
