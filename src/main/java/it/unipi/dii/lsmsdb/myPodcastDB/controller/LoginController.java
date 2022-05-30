@@ -228,7 +228,7 @@ public class LoginController {
             return user;
         }
         else if(actorType.equals("Author")){
-            Author author = new Author("1234",actorname, password, "authorTest@example.com","/img/authorAnonymousePicture.png");
+            Author author = new Author("1234",actorname, password, "authorTest@example.com", "/img/authorAnonymousPicture.png");
             return author;
         }
         else if(actorType.equals("Admin")){

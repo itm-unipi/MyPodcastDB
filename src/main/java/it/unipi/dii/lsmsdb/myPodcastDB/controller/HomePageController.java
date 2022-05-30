@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
@@ -20,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +47,19 @@ public class HomePageController {
     private TextField searchText;
 
     @FXML
+    private Label topCountryLabel;
+
+    @FXML
+    private GridPane gridMostFollowedAuthors;
+
+    @FXML
+    private GridPane gridSuggestedAuthors;
+
+    @FXML
     private GridPane gridMostLikedPodcasts;
+
+    @FXML
+    private GridPane gridPodcastsBasedOnWatchlist;
 
     @FXML
     private GridPane gridSuggestedForAuthor;
@@ -57,10 +71,25 @@ public class HomePageController {
     private GridPane gridSuggestedForUser;
 
     @FXML
+    private GridPane gridTopCountry;
+
+    @FXML
+    private GridPane gridTopRated;
+
+    @FXML
     private GridPane gridWatchlist;
 
     @FXML
+    private ScrollPane scrollMostFollowedAuthors;
+
+    @FXML
+    private ScrollPane scrollSuggestedAuthors;
+
+    @FXML
     private ScrollPane scrollMostLikedPodcasts;
+
+    @FXML
+    private ScrollPane scrollPodcastsBasedOnWatchlist;
 
     @FXML
     private ScrollPane scrollSuggestedForAuthor;
@@ -72,7 +101,40 @@ public class HomePageController {
     private ScrollPane scrollSuggestedForUser;
 
     @FXML
+    private ScrollPane scrollTopCountry;
+
+    @FXML
+    private ScrollPane scrollTopRated;
+
+    @FXML
     private ScrollPane scrollWatchlist;
+
+    @FXML
+    private VBox boxActorProfile;
+
+    @FXML
+    private VBox boxBasedOnAuthors;
+
+    @FXML
+    private VBox boxBasedOnUsers;
+
+    @FXML
+    private VBox boxPodcastsBasedOnWatchlist;
+
+    @FXML
+    private VBox boxSuggestedAuthors;
+
+    @FXML
+    private VBox boxTopCountry;
+
+    @FXML
+    private VBox boxTopGenres;
+
+    @FXML
+    private VBox boxTopRated;
+
+    @FXML
+    private VBox boxWatchlist;
 
     /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
@@ -214,8 +276,59 @@ public class HomePageController {
             scrollSuggestedForUser.setHvalue(scrollSuggestedForUser.getHvalue() - scrollValue);
     }
 
-    public void initialize() throws IOException {
+    @FXML
+    void backMostFollowedAuthors(MouseEvent event) {
+        Logger.info("Clicked on back most followed authors");
+    }
 
+    @FXML
+    void backPodcastsBasedOnWatchlist(MouseEvent event) {
+        Logger.info("Clicked on back podcasts based on your watchlist");
+    }
+
+    @FXML
+    void backTopCountry(MouseEvent event) {
+        Logger.info("Clicked on back top country");
+    }
+
+    @FXML
+    void backTopRated(MouseEvent event) {
+        Logger.info("Clicked on back top country");
+    }
+
+    @FXML
+    void backSuggestedAuthors(MouseEvent event) {
+        Logger.info("Clicked on back suggested authors");
+    }
+
+    @FXML
+    void nextMostFollowedAuthors(MouseEvent event) {
+        Logger.info("Clicked on next most followed authors");
+    }
+
+    @FXML
+    void nextPodcastsBasedOnWatchlist(MouseEvent event) {
+        Logger.info("Clicked on next podcasts based on watchlist");
+    }
+
+    @FXML
+    void nextTopCountry(MouseEvent event) {
+        Logger.info("Clicked on next top country");
+    }
+
+    @FXML
+    void nextTopRated(MouseEvent event) {
+        Logger.info("Clicked on next top rated");
+    }
+
+    @FXML
+    void nextSuggestedAuthors(MouseEvent event) {
+        Logger.info("Clicked on next suggested authors");
+    }
+
+    /***************************************************/
+
+    public void initialize() throws IOException {
         // Load information about the actor of the session
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
@@ -223,6 +336,7 @@ public class HomePageController {
             Author sessionActor = (Author)MyPodcastDB.getInstance().getSessionActor();
             Logger.info("I'm an actor: " + sessionActor.getName());
 
+            // Setting GUI params
             this.username.setText("Welcome " + sessionActor.getName() + "!");
             Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
@@ -231,15 +345,291 @@ public class HomePageController {
             User sessionActor = (User)MyPodcastDB.getInstance().getSessionActor();
             Logger.info("I'm an user: " + sessionActor.getUsername());
 
+            // Setting GUI params
             this.username.setText("Welcome " + sessionActor.getUsername() + "!");
             Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
-        } else
+
+        } else if (actorType.equals("Admin")) {
+            Admin sessionActor = (Admin)MyPodcastDB.getInstance().getSessionActor();
+            Logger.info("I'm an administrator: " + sessionActor.getName());
+
+            // Setting GUI params
+            this.username.setText("Welcome " + sessionActor.getName() + " (admin)!");
+            Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
+            actorPicture.setImage(image);
+
+        } else if (actorType.equals("Unregistered")) {
+            this.username.setText("Welcome to MyPodcastDB!");
+
+            // Disabling User Profile Page
+            boxActorProfile.setVisible(false);
+            boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+
+            Logger.info("I'm an unregistered user");
+        } else {
             Logger.error("Unidentified Actor Type");
+        }
 
         /************************************************************************************/
 
+        if (actorType.equals("User")) {
+
+            /*********** WATCHLIST ***********/
+            List<Podcast> previewList = new ArrayList<>();
+            Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
+            Podcast p2 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
+            Podcast p3 = new Podcast("061a68eb754c400eae8027d7", "Average O Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/54/e4/84/54e48471-6971-03c8-83f4-4f973dc2a8cb/mza_8686729233410161200.jpg/600x600bb.jpg");
+            Podcast p4 = new Podcast("34e734b09246d17dc5d56f63", "Getting Smart Podcast", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts115/v4/52/e3/25/52e325bd-e6ba-3899-b7b4-71e512a48472/mza_18046006527881111713.png/600x600bb.jpg");
+            Podcast p5 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
+            Podcast p6 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
+            previewList.add(p1);
+            previewList.add(p2);
+            previewList.add(p3);
+            previewList.add(p4);
+            previewList.add(p5);
+            previewList.add(p6);
+
+            int row = 0;
+            int column = 0;
+            for (Podcast podcast : previewList){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridWatchlist.add(newPodcast, column++, row);
+            }
+
+            /*********** SUGGESTED ON AUTHORS YOU FOLLOW ************/
+            previewList.clear();
+            p1 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
+            p2 = new Podcast("d79472fb8372d1adbf5dea69", "Willowbrook Church", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts113/v4/95/ce/df/95cedfb1-49a7-187a-b9c2-65f99b214ccd/mza_6194046548563981637.jpg/600x600bb.jpg");
+            p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
+            p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
+            p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+            p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
+            Podcast p7 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
+            Podcast p8 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
+            previewList.add(p1);
+            previewList.add(p2);
+            previewList.add(p3);
+            previewList.add(p4);
+            previewList.add(p5);
+            previewList.add(p6);
+            previewList.add(p7);
+            previewList.add(p8);
+
+            row = 0;
+            column = 0;
+            for (Podcast podcast : previewList){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridSuggestedForAuthor.add(newPodcast, column++, row);
+            }
+
+            /*********** SUGGESTED ON "CATEGORY" YOU LIKED ************/
+            previewList.clear();
+            p1 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
+            p2 = new Podcast("d79472fb8372d1adbf5dea69", "Willowbrook Church", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts113/v4/95/ce/df/95cedfb1-49a7-187a-b9c2-65f99b214ccd/mza_6194046548563981637.jpg/600x600bb.jpg");
+            p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
+            p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
+            p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+            p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
+            p7 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
+            p8 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
+            previewList.add(p8);
+            previewList.add(p5);
+            previewList.add(p7);
+            previewList.add(p1);
+            previewList.add(p4);
+            previewList.add(p6);
+            previewList.add(p3);
+            previewList.add(p8);
+
+            row = 0;
+            column = 0;
+            for (Podcast podcast : previewList){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridSuggestedForCategory.add(newPodcast, column++, row);
+            }
+
+            /*********** SUGGESTED ON USERS YOU FOLLOW ************/
+            previewList.clear();
+            p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
+            p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
+            p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+            p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
+            previewList.add(p5);
+            previewList.add(p4);
+            previewList.add(p3);
+            previewList.add(p6);
+            previewList.add(p5);
+            previewList.add(p6);
+
+            row = 0;
+            column = 0;
+            for (Podcast podcast : previewList){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridSuggestedForUser.add(newPodcast, column++, row);
+            }
+
+            /*********** TOP COUNTRY ************/
+            topCountryLabel.setText("Top " + ((User)MyPodcastDB.getInstance().getSessionActor()).getCountry());
+            previewList.clear();
+            p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
+            p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
+            p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+            p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
+            previewList.add(p5);
+            previewList.add(p4);
+            previewList.add(p3);
+            previewList.add(p6);
+            previewList.add(p5);
+            previewList.add(p6);
+
+            row = 0;
+            column = 0;
+            for (Podcast podcast : previewList){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridTopCountry.add(newPodcast, column++, row);
+            }
+
+            /*********** SUGGEST BASED ON THE AUTHORS IN YOUR WATCHLIST ************/
+            previewList.clear();
+            p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
+            p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
+            p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+            p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
+            previewList.add(p5);
+            previewList.add(p4);
+            previewList.add(p3);
+            previewList.add(p6);
+            previewList.add(p5);
+            previewList.add(p6);
+
+            row = 0;
+            column = 0;
+            for (Podcast podcast : previewList){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridPodcastsBasedOnWatchlist.add(newPodcast, column++, row);
+            }
+
+            /*********** SUGGEST AUTHORS BASED ON USER YOU FOLLOW ************/
+            List<Author> suggestedAuthors = new ArrayList<>();
+
+            for (int j = 0; j < 14; j++){
+                Author a = new Author();
+                a.setName("Apple Inc. " + j);
+                a.setPicturePath("/img/authorAnonymousPicture.png");
+                suggestedAuthors.add(a);
+            }
+
+            row = 0;
+            column = 0;
+            for (Author a : suggestedAuthors) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+
+                AnchorPane newAuthor = fxmlLoader.load();
+                AuthorPreviewController controller = fxmlLoader.getController();
+                controller.setData(a);
+
+                gridSuggestedAuthors.add(newAuthor, column++, row);
+            }
+
+            /*** VBOX TO HIDE TO THE USER ****/
+            boxTopRated.setVisible(false);
+            boxTopRated.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+        }
+
+        /************************************************************************************/
+
+        if (actorType.equals("Admin") || actorType.equals("Author") || actorType.equals("Unregistered")) {
+
+            /*********** TOP RATED ************/
+            List<Podcast> topRated = new ArrayList<>();
+            Podcast p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
+            Podcast p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
+            Podcast p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
+            Podcast p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
+            topRated.add(p5);
+            topRated.add(p4);
+            topRated.add(p3);
+            topRated.add(p6);
+            topRated.add(p5);
+            topRated.add(p6);
+
+            int row = 0;
+            int column = 0;
+            for (Podcast podcast : topRated){
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+                AnchorPane newPodcast = fxmlLoader.load();
+                PodcastPreviewController controller = fxmlLoader.getController();
+                controller.setData(podcast);
+
+                gridTopRated.add(newPodcast, column++, row);
+            }
+
+            /*** VBOX TO HIDE TO THE USER/ADMIN ****/
+            boxBasedOnAuthors.setVisible(false);
+            boxBasedOnAuthors.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+
+            boxBasedOnUsers.setVisible(false);
+            boxBasedOnUsers.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+
+            boxSuggestedAuthors.setVisible(false);
+            boxSuggestedAuthors.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+
+            boxWatchlist.setVisible(false);
+            boxWatchlist.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+
+            boxTopGenres.setVisible(false);
+            boxTopGenres.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+
+            boxTopCountry.setVisible(false);
+            boxTopCountry.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+
+            boxPodcastsBasedOnWatchlist.setVisible(false);
+            boxPodcastsBasedOnWatchlist.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+        }
+
+        /******* MOST LIKED PODCASTS (AVAILABLE TO EVERYONE) ********/
         List<Podcast> previewList = new ArrayList<>();
+        previewList.clear();
         Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
         Podcast p2 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
         Podcast p3 = new Podcast("061a68eb754c400eae8027d7", "Average O Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/54/e4/84/54e48471-6971-03c8-83f4-4f973dc2a8cb/mza_8686729233410161200.jpg/600x600bb.jpg");
@@ -259,142 +649,34 @@ public class HomePageController {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
-            // create new podcast element
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
             controller.setData(podcast);
 
-            // add new podcast to grid
-            gridWatchlist.add(newPodcast, column++, row);
-        }
-
-        /************************************************************************************/
-
-        previewList.clear();
-        p1 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
-        p2 = new Podcast("d79472fb8372d1adbf5dea69", "Willowbrook Church", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts113/v4/95/ce/df/95cedfb1-49a7-187a-b9c2-65f99b214ccd/mza_6194046548563981637.jpg/600x600bb.jpg");
-        p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
-        p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
-        p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
-        p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
-        Podcast p7 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        Podcast p8 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
-        previewList.add(p1);
-        previewList.add(p2);
-        previewList.add(p3);
-        previewList.add(p4);
-        previewList.add(p5);
-        previewList.add(p6);
-        previewList.add(p7);
-        previewList.add(p8);
-
-        row = 0;
-        column = 0;
-        for (Podcast podcast : previewList){
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-            // create new podcast element
-            AnchorPane newPodcast = fxmlLoader.load();
-            PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast);
-
-            // add new podcast to grid
-            gridSuggestedForAuthor.add(newPodcast, column++, row);
-        }
-
-        /************************************************************************************/
-
-        previewList.clear();
-        p1 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
-        p2 = new Podcast("d79472fb8372d1adbf5dea69", "Willowbrook Church", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts113/v4/95/ce/df/95cedfb1-49a7-187a-b9c2-65f99b214ccd/mza_6194046548563981637.jpg/600x600bb.jpg");
-        p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
-        p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
-        p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
-        p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
-        p7 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        p8 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
-        previewList.add(p8);
-        previewList.add(p5);
-        previewList.add(p7);
-        previewList.add(p1);
-        previewList.add(p4);
-        previewList.add(p6);
-        previewList.add(p3);
-        previewList.add(p8);
-
-        row = 0;
-        column = 0;
-        for (Podcast podcast : previewList){
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-            // create new podcast element
-            AnchorPane newPodcast = fxmlLoader.load();
-            PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast);
-
-            // add new podcast to grid
-            gridSuggestedForCategory.add(newPodcast, column++, row);
-        }
-
-        previewList.clear();
-        p3 = new Podcast("05faf4fccdf79b198b7a3407", "Can I be Funny?", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/89/56/0e/89560e3c-0b96-0691-350e-eab2f443bf6d/mza_11121304875938507631.jpg/600x600bb.jpg");
-        p4 = new Podcast("9aaae9ac725c3a586701abf4", "KTs Money Matters", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts126/v4/17/42/75/17427552-6eaa-cf22-6213-1774a2d424f7/mza_16549547877306014389.jpeg/600x600bb.jpg");
-        p5 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
-        p6 = new Podcast("b77ddff5e8d3df8aa39308ba", "Footnotes: A History Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/3b/b3/be/3bb3be3d-ebb0-e4e4-4311-1a7f9e43030a/mza_15641279120309904835.jpg/600x600bb.jpg");
-        previewList.add(p5);
-        previewList.add(p4);
-        previewList.add(p3);
-        previewList.add(p6);
-        previewList.add(p5);
-        previewList.add(p6);
-
-        row = 0;
-        column = 0;
-        for (Podcast podcast : previewList){
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-            // create new podcast element
-            AnchorPane newPodcast = fxmlLoader.load();
-            PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast);
-
-            // add new podcast to grid
-
-            gridSuggestedForUser.add(newPodcast, column++, row);
-        }
-
-        /************************************************************************************/
-
-        previewList.clear();
-        p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        p2 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
-        p3 = new Podcast("061a68eb754c400eae8027d7", "Average O Podcast", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/54/e4/84/54e48471-6971-03c8-83f4-4f973dc2a8cb/mza_8686729233410161200.jpg/600x600bb.jpg");
-        p4 = new Podcast("34e734b09246d17dc5d56f63", "Getting Smart Podcast", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts115/v4/52/e3/25/52e325bd-e6ba-3899-b7b4-71e512a48472/mza_18046006527881111713.png/600x600bb.jpg");
-        p5 = new Podcast("84baff1495bff70bb81bd016", "Sofra Sredom", "https://is4-ssl.mzstatic.com/image/thumb/Podcasts115/v4/98/ca/c7/98cac700-4398-7489-100a-416ec28d6662/mza_15500803433364327137.jpg/600x600bb.jpg");
-        p6 = new Podcast("34e734b09246d17dc5d56f63", "Cornerstone Baptist Church of Orlando", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts125/v4/d3/06/0f/d3060ffe-613b-74d6-9594-cca7a874cd6c/mza_12661332092752927859.jpg/600x600bb.jpg");
-        previewList.add(p1);
-        previewList.add(p2);
-        previewList.add(p3);
-        previewList.add(p4);
-        previewList.add(p5);
-        previewList.add(p6);
-
-        row = 0;
-        column = 0;
-        for (Podcast podcast : previewList){
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-            // create new podcast element
-            AnchorPane newPodcast = fxmlLoader.load();
-            PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast);
-
-            // add new podcast to grid
             gridMostLikedPodcasts.add(newPodcast, column++, row);
+        }
+
+        /*********** MOST FOLLOWED AUTHORS (AVAILABLE TO EVERYONE) ************/
+        List<Author> mostFollowedAuthors = new ArrayList<>();
+
+        for (int j = 0; j < 14; j++){
+            Author a = new Author();
+            a.setName("Apple Inc. " + j);
+            a.setPicturePath("/img/authorAnonymousPicture.png");
+            mostFollowedAuthors.add(a);
+        }
+
+        row = 0;
+        column = 0;
+        for (Author a : mostFollowedAuthors) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+
+            AnchorPane newAuthor = fxmlLoader.load();
+            AuthorPreviewController controller = fxmlLoader.getController();
+            controller.setData(a);
+
+            gridMostFollowedAuthors.add(newAuthor, column++, row);
         }
     }
 }

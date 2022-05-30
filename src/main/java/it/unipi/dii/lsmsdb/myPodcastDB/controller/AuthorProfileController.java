@@ -20,7 +20,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import org.javatuples.Triplet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -169,7 +168,7 @@ public class AuthorProfileController {
         List<Author> authorsFollowed = new ArrayList<>();
         Author a1 = new Author();
         a1.setName("Apple Inc.");
-        a1.setPicturePath("/img/authorAnonymousePicture.png");
+        a1.setPicturePath("/img/authorAnonymousPicture.png");
         Author a2 = new Author();
         a2.setName("Gino Paolino");
         a2.setPicturePath("/img/test.jpg");

@@ -21,7 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.javatuples.Triplet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -198,7 +197,7 @@ public class SearchController {
         for (int j = 0; j < 2; j++){
             Author a = new Author();
             a.setName("Apple Inc. " + j);
-            a.setPicturePath("/img/authorAnonymousePicture.png");
+            a.setPicturePath("/img/authorAnonymousPicture.png");
             authorsFound.add(a);
         }
 
