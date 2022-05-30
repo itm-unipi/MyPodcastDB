@@ -15,7 +15,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 import java.util.AbstractMap;
@@ -79,6 +82,8 @@ public class AdminDashboardController {
     @FXML
     private Button updateInfo;
 
+    private Admin admin;
+
     @FXML
     void onClickActorProfile(MouseEvent event) {
         Logger.info("Click on profile");
@@ -109,157 +114,206 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnCancel(MouseEvent event) {
-
+        // hide buttons and disable text fields
+        this.nameTextField.setText(this.admin.getName());
+        this.nameTextField.setStyle("-fx-background-color: transparent");
+        this.nameTextField.setDisable(true);
+        this.emailTextField.setText(this.admin.getEmail());
+        this.emailTextField.setStyle("-fx-background-color: transparent");
+        this.nameTextField.setDisable(true);
+        this.passwordTextField.setText("********************");
+        this.passwordTextField.setStyle("-fx-background-color: transparent");
+        this.nameTextField.setDisable(true);
+        this.modifyInfo.setVisible(true);
+        this.updateInfo.setVisible(false);
+        this.cancelInfo.setVisible(false);
+        this.modifyInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-margin-right: 10;");
+        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
     }
 
     @FXML
     void clickOnDelete(MouseEvent event) {
-
+        Logger.info("Delete Admin");
     }
 
     @FXML
     void clickOnModify(MouseEvent event) {
-
+        // show buttons and enable text fields
+        this.nameTextField.setStyle("-fx-background-color: white");
+        this.nameTextField.setDisable(false);
+        this.emailTextField.setStyle("-fx-background-color: white");
+        this.nameTextField.setDisable(false);
+        this.passwordTextField.setText("");
+        this.passwordTextField.setStyle("-fx-background-color: white");
+        this.nameTextField.setDisable(false);
+        this.modifyInfo.setVisible(false);
+        this.updateInfo.setVisible(true);
+        this.cancelInfo.setVisible(true);
+        this.modifyInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.updateInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-margin-right: 10;");
+        this.cancelInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #f4511e; -fx-background-radius: 10; -fx-margin-right: 10;");
     }
 
     @FXML
     void clickOnUpdate(MouseEvent event) {
+        // update admin
+        this.admin.setName(this.nameTextField.getText());
+        this.admin.setEmail(this.emailTextField.getText());
+        this.admin.setPassword(this.passwordTextField.getText());
 
+        // hide buttons and disable text fields
+        this.nameTextField.setText(this.admin.getName());
+        this.nameTextField.setStyle("-fx-background-color: transparent");
+        this.nameTextField.setDisable(true);
+        this.emailTextField.setText(this.admin.getEmail());
+        this.emailTextField.setStyle("-fx-background-color: transparent");
+        this.nameTextField.setDisable(true);
+        this.passwordTextField.setText("********************");
+        this.passwordTextField.setStyle("-fx-background-color: transparent");
+        this.nameTextField.setDisable(true);
+        this.modifyInfo.setVisible(true);
+        this.updateInfo.setVisible(false);
+        this.cancelInfo.setVisible(false);
+        this.modifyInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-margin-right: 10;");
+        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
     }
 
     @FXML
     void clickOnUpdate1(MouseEvent event) {
-
+        Logger.info("Update 1");
     }
 
     @FXML
     void clickOnUpdate2(MouseEvent event) {
-
+        Logger.info("Update 2");
     }
 
     @FXML
     void clickOnUpdate3(MouseEvent event) {
-
+        Logger.info("Update 3");
     }
 
     @FXML
     void clickOnUpdate4(MouseEvent event) {
-
+        Logger.info("Update 4");
     }
 
     @FXML
     void clickOnUpdate5(MouseEvent event) {
-
+        Logger.info("Update 5");
     }
 
     @FXML
     void clickOnUpdate6(MouseEvent event) {
-
+        Logger.info("Update 6");
     }
 
     @FXML
     void mouseOnCancel(MouseEvent event) {
-
+        this.cancelInfo.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnDelete(MouseEvent event) {
-
+        this.delete.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnModify(MouseEvent event) {
-
+        this.modifyInfo.setStyle("-fx-border-color: #008CBA; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate(MouseEvent event) {
-
+        this.updateInfo.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate1(MouseEvent event) {
-
+        this.update1.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate2(MouseEvent event) {
-
+        this.update2.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate3(MouseEvent event) {
-
+        this.update3.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate4(MouseEvent event) {
-
+        this.update4.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate5(MouseEvent event) {
-
+        this.update5.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOnUpdate6(MouseEvent event) {
-
+        this.update6.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutCancel(MouseEvent event) {
-
+        this.cancelInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #f44336; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutDelete(MouseEvent event) {
-
+        this.delete.setStyle("-fx-border-color: transparent; -fx-background-color: #f44336; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutModify(MouseEvent event) {
-
+        this.modifyInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate(MouseEvent event) {
-
+        this.updateInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate1(MouseEvent event) {
-
+        this.update1.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate2(MouseEvent event) {
-
+        this.update2.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate3(MouseEvent event) {
-
+        this.update3.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate4(MouseEvent event) {
-
+        this.update4.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate5(MouseEvent event) {
-
+        this.update5.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     @FXML
     void mouseOutUpdate6(MouseEvent event) {
-
+        this.update6.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10;");
     }
 
     public void initialize() throws IOException {
         Admin admin = (Admin)MyPodcastDB.getInstance().getSessionActor();
-        Logger.info("Admin logged : " + admin.getName());
+        this.admin = admin;
+        Logger.info("Admin logged : " + this.admin.getName());
 
         // example statistic
         List<Entry<String, Object>> statistics1 = new ArrayList<>();
@@ -331,8 +385,10 @@ public class AdminDashboardController {
         // settings buttons and texts
         this.updateInfo.setVisible(false);
         this.cancelInfo.setVisible(false);
-        this.nameTextField.setText(admin.getName());
-        this.emailTextField.setText(admin.getEmail());
+        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.nameTextField.setText(this.admin.getName());
+        this.emailTextField.setText(this.admin.getEmail());
         this.passwordTextField.setText("********************");
     }
 }

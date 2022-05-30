@@ -144,7 +144,7 @@
                                     <Insets top="3.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="update1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate1" onMouseEntered="#mouseOnUpdate1" onMouseExited="#mouseOutUpdate1" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                              <Button fx:id="update1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate1" onMouseEntered="#mouseOnUpdate1" onMouseExited="#mouseOutUpdate1" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
@@ -161,7 +161,7 @@
                                     <Insets top="3.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="update2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate2" onMouseEntered="#mouseOnUpdate2" onMouseExited="#mouseOutUpdate2" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                              <Button fx:id="update2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate2" onMouseEntered="#mouseOnUpdate2" onMouseExited="#mouseOutUpdate2" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
@@ -181,7 +181,7 @@
                                     <Insets top="3.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="update3" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate3" onMouseEntered="#mouseOnUpdate3" onMouseExited="#mouseOutUpdate3" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                              <Button fx:id="update3" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate3" onMouseEntered="#mouseOnUpdate3" onMouseExited="#mouseOutUpdate3" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
@@ -201,7 +201,7 @@
                                     <Insets top="3.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="update4" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate4" onMouseEntered="#mouseOnUpdate4" onMouseExited="#mouseOutUpdate4" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                              <Button fx:id="update4" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate4" onMouseEntered="#mouseOnUpdate4" onMouseExited="#mouseOutUpdate4" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
@@ -221,7 +221,7 @@
                                     <Insets top="3.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="update5" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate5" onMouseEntered="#mouseOnUpdate5" onMouseExited="#mouseOutUpdate5" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                              <Button fx:id="update5" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate5" onMouseEntered="#mouseOnUpdate5" onMouseExited="#mouseOutUpdate5" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
@@ -241,7 +241,7 @@
                                     <Insets top="3.0" />
                                  </HBox.margin>
                               </Label>
-                              <Button fx:id="update6" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate6" onMouseEntered="#mouseOnUpdate6" onMouseExited="#mouseOutUpdate6" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                              <Button fx:id="update6" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate6" onMouseEntered="#mouseOnUpdate6" onMouseExited="#mouseOutUpdate6" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
@@ -270,7 +270,7 @@
                                     <Font name="Corbel" size="20.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="nameTextField" style="-fx-background-color: transparent;">
+                              <TextField fx:id="nameTextField" prefWidth="200.0" style="-fx-background-color: transparent;">
                                  <font>
                                     <Font name="Corbel Light" size="19.0" />
                                  </font>
@@ -284,7 +284,7 @@
                                     <Font name="Corbel" size="20.0" />
                                  </font>
                               </Label>
-                              <TextField fx:id="emailTextField" style="-fx-background-color: transparent;">
+                              <TextField fx:id="emailTextField" prefWidth="200.0" style="-fx-background-color: transparent;">
                                  <font>
                                     <Font name="Corbel Light" size="18.0" />
                                  </font>
@@ -300,8 +300,11 @@
                                  <font>
                                     <Font name="Corbel" size="20.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
                               </Label>
-                              <TextField fx:id="passwordTextField" style="-fx-background-color: transparent;">
+                              <TextField fx:id="passwordTextField" prefWidth="200.0" style="-fx-background-color: transparent;">
                                  <font>
                                     <Font name="Corbel Light" size="18.0" />
                                  </font>
@@ -310,35 +313,42 @@
                            <padding>
                               <Insets top="5.0" />
                            </padding>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </HBox>
-                        <HBox maxWidth="-Infinity" prefWidth="920.0">
+                        <VBox maxHeight="20.0" maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Button fx:id="modifyInfo" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnModify" onMouseEntered="#mouseOnModify" onMouseExited="#mouseOutModify" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #008CBA; -fx-background-radius: 10;" text="Modify" textFill="WHITE">
-                                 <font>
-                                    <Font name="Corbel Bold" size="20.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="updateInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" onMouseEntered="#mouseOnUpdate" onMouseExited="#mouseOutUpdate" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
-                                 <font>
-                                    <Font name="Corbel Bold" size="20.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin>
-                              </Button>
-                              <Button fx:id="cancelInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#clickOnCancel" onMouseEntered="#mouseOnCancel" onMouseExited="#mouseOutCancel" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10;" text="Cancel" textFill="WHITE">
+                              <HBox maxWidth="-Infinity" prefWidth="920.0">
+                                 <children>
+                                    <Button fx:id="updateInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" onMouseEntered="#mouseOnUpdate" onMouseExited="#mouseOutUpdate" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="WHITE">
+                                       <font>
+                                          <Font name="Corbel Bold" size="20.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets right="10.0" />
+                                       </HBox.margin>
+                                    </Button>
+                                    <Button fx:id="cancelInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#clickOnCancel" onMouseEntered="#mouseOnCancel" onMouseExited="#mouseOutCancel" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10; -fx-border-radius: 10;" text="Cancel" textFill="WHITE">
+                                       <font>
+                                          <Font name="Corbel Bold" size="20.0" />
+                                       </font>
+                                    </Button>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </HBox>
+                              <Button fx:id="modifyInfo" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnModify" onMouseEntered="#mouseOnModify" onMouseExited="#mouseOutModify" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #008CBA; -fx-background-radius: 10; -fx-border-radius: 10;" text="Modify" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
                               </Button>
                            </children>
                            <VBox.margin>
-                              <Insets top="10.0" />
+                              <Insets />
                            </VBox.margin>
-                        </HBox>
+                        </VBox>
                         <Separator layoutX="188.0" layoutY="63.0" maxWidth="-Infinity" prefWidth="920.0">
                            <opaqueInsets>
                               <Insets />
@@ -365,7 +375,7 @@
                         </Label>
                         <HBox maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Button fx:id="delete" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnDelete" onMouseEntered="#mouseOnDelete" onMouseExited="#mouseOutDelete" prefHeight="50.0" prefWidth="198.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10;" text="DELETE ACCOUNT" textFill="WHITE">
+                              <Button fx:id="delete" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnDelete" onMouseEntered="#mouseOnDelete" onMouseExited="#mouseOutDelete" prefHeight="50.0" prefWidth="198.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10; -fx-border-radius: 10;" text="DELETE ACCOUNT" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel Bold" size="20.0" />
                                  </font>
