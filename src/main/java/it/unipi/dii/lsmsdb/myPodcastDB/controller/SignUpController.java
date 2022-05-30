@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -24,13 +25,13 @@ public class SignUpController {
     private DatePicker signUpAgeDatePicker;
 
     @FXML
-    private ChoiceBox<String> signUpCoutryChoiceBox;
+    private ComboBox<String> signUpCoutryComboBox;
 
     @FXML
     private TextField signUpEmailTextField;
 
     @FXML
-    private ChoiceBox<String> signUpFavGenreChoiceBox;
+    private ComboBox<String> signUpFavGenreComboBox;
 
     @FXML
     private ChoiceBox<String> signUpGenderChoiceBox;
@@ -86,28 +87,18 @@ public class SignUpController {
                 "famale",
                 "other"
         );
-        ObservableList<String> countryList = FXCollections.observableArrayList(
-                "Italy",
-                "France",
-                "Germany",
-                "Usa",
-                "UK"
-        );
+        ObservableList<String> countryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCountries());
 
-        ObservableList<String> FavGenreList = FXCollections.observableArrayList(
-                "Business",
-                "Thriller",
-                "Crime",
-                "Love"
-
-        );
+        ObservableList<String> FavGenreList = FXCollections.observableArrayList(JsonDecode.getInstance().getCategories());
         signUpGenderChoiceBox.setItems(genderList);
-        signUpCoutryChoiceBox.setItems(countryList);
-        signUpFavGenreChoiceBox.setItems(FavGenreList);
+        signUpCoutryComboBox.setItems(countryList);
+        signUpFavGenreComboBox.setItems(FavGenreList);
+        signUpCoutryComboBox.setVisibleRowCount(5);
+        signUpFavGenreComboBox.setVisibleRowCount(5);
 
         signUpGenderChoiceBox.setValue("unknown");
-        signUpCoutryChoiceBox.setValue("Unknown");
-        signUpFavGenreChoiceBox.setValue("Unknown");
+        signUpCoutryComboBox.setValue("Unknown");
+        signUpFavGenreComboBox.setValue("Unknown");
         signUpAgeDatePicker.setValue(LocalDate.now());
 
 
@@ -124,8 +115,8 @@ public class SignUpController {
             String password = signUpPasswordTextField.getText();
             String repPassword = signUpRepPasswTextField.getText();
             String gender = signUpGenderChoiceBox.getValue();
-            String favGenre = signUpFavGenreChoiceBox.getValue();
-            String country = signUpCoutryChoiceBox.getValue();
+            String favGenre = signUpFavGenreComboBox.getValue();
+            String country = signUpCoutryComboBox.getValue();
             LocalDate birthDate = signUpAgeDatePicker.getValue();
 
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
