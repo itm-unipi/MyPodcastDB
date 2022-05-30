@@ -9,6 +9,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.animation.TranslateTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -22,6 +23,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,6 +50,9 @@ public class HomePageController {
 
     @FXML
     private TextField searchText;
+
+    @FXML
+    private VBox boxErrorSearch;
 
     @FXML
     private Label topCountryLabel;
@@ -163,6 +168,18 @@ public class HomePageController {
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
         } else {
             Logger.error("Field cannot be empty!");
+
+            boxErrorSearch.setStyle("-fx-background-color:  #e43b3b; -fx-background-radius: 12; -fx-pref-width: 190px; fx-min-width: 190px; -fx-pref-height: 44px; -fx-min-height: 44;");
+
+            if (boxErrorSearch.getTranslateY() == -47.0) {
+                TranslateTransition errorTrans = new TranslateTransition();
+                errorTrans.setByY(70);
+                errorTrans.setDuration(Duration.seconds(2));
+                errorTrans.setCycleCount(2);
+                errorTrans.setAutoReverse(true);
+                errorTrans.setNode(boxErrorSearch);
+                errorTrans.play();
+            }
         }
     }
 

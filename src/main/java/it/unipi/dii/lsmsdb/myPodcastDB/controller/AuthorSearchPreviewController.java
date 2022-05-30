@@ -19,7 +19,7 @@ public class AuthorSearchPreviewController {
     private Author author;
 
     @FXML
-    private Label authorFollowed;
+    private Label authorFound;
 
     @FXML
     private ImageView authorPicture;
@@ -38,7 +38,7 @@ public class AuthorSearchPreviewController {
 
     @FXML
     void changeBackgroundAuthor(MouseEvent event) {
-        this.boxAuthorPreview.setStyle("-fx-background-color: #e3e3e3;");
+        this.boxAuthorPreview.setStyle("-fx-background-color: #eeeeee;");
     }
 
     @FXML
@@ -63,7 +63,7 @@ public class AuthorSearchPreviewController {
 
     public void setData(Author author) {
         this.author = author;
-        authorFollowed.setText(author.getName());
+        authorFound.setText(author.getName());
 
         Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
         authorPicture.setImage(image);

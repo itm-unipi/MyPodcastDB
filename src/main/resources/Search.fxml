@@ -47,24 +47,46 @@
                                  <image>
                                     <Image url="@img/home.png" />
                                  </image>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
                                  <HBox.margin>
-                                    <Insets right="7.0" />
-                                 </HBox.margin>
-                              </ImageView>
-                              <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@img/userPicture.png" />
-                                 </image>
-                                 <HBox.margin>
-                                    <Insets right="3.0" />
+                                    <Insets right="2.0" />
                                  </HBox.margin>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </ImageView>
+                              <VBox fx:id="boxActorProfile" alignment="CENTER">
+                                 <HBox.margin>
+                                    <Insets left="2.0" right="3.0" />
+                                 </HBox.margin>
+                                 <children>
+                                    <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/userPicture.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </VBox>
+                              <VBox fx:id="boxLogout" alignment="CENTER">
+                                 <children>
+                                    <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/logout.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </VBox>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>
                                     <TextField fx:id="searchText" onKeyPressed="#onEnterPressedSearch" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
@@ -82,10 +104,13 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
                                     </ImageView>
                                  </children>
                                  <HBox.margin>
-                                    <Insets bottom="23.0" left="5.0" top="23.0" />
+                                    <Insets bottom="23.0" left="3.0" top="23.0" />
                                  </HBox.margin>
                                  <padding>
                                     <Insets left="2.0" />
@@ -181,7 +206,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox fx:id="boxUsersFound" prefHeight="95.0" prefWidth="1040.0">
+                              <VBox fx:id="boxUsersFound">
                                  <children>
                                     <Label fx:id="usersFound" prefWidth="1063.0" text="Users (nUsersFound)">
                                        <font>
@@ -209,6 +234,9 @@
                                        </font>
                                     </Label>
                                  </children>
+                                 <VBox.margin>
+                                    <Insets bottom="20.0" left="120.0" right="120.0" />
+                                 </VBox.margin>
                               </VBox>
                            </children>
                         </VBox>

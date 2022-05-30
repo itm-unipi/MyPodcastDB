@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,6 +36,15 @@ public class AuthorProfileController {
 
     @FXML
     private ImageView actorPicture;
+
+    @FXML
+    private ImageView logout;
+
+    @FXML
+    private VBox boxActorProfile;
+
+    @FXML
+    private VBox boxLogout;
 
     @FXML
     private TextField searchText;
@@ -100,6 +110,14 @@ public class AuthorProfileController {
         Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
     }
 
+    @FXML
+    void onClickLogout(MouseEvent event) throws IOException {
+        Logger.info("Logout button clicked");
+        // TODO: clear the session
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
     /**********************************************************/
 
     @FXML
@@ -159,7 +177,7 @@ public class AuthorProfileController {
             authorName.setText(a.getName());
             authorFollowing.setText("Authors followed by " + a.getName());
 
-            podcastLabel.setText("Your podcasts");
+            podcastLabel.setText("Podcasts");
 
         } else
             Logger.error("Unidentified Actor Type");

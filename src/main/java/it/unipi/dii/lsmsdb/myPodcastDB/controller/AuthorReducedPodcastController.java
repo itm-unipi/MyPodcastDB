@@ -57,7 +57,7 @@ public class AuthorReducedPodcastController {
 
     /*************************************/
 
-    public void setData(String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String getArtworkUrl600 ) {
+    public void setData(String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String ArtworkUrl600 ) {
         this.podcastId = podcastId;
         this.podcastName.setText(podcastName);
         this.podcastCategory.setText(podcastCategory);
@@ -72,7 +72,7 @@ public class AuthorReducedPodcastController {
         podcastImage.setImage(image);
 
         Platform.runLater(() -> {
-            Image imageLoaded = ImageCache.getImageFromURL(getArtworkUrl600);
+            Image imageLoaded = ImageCache.getImageFromURL(ArtworkUrl600);
             this.podcastImage.setImage(imageLoaded);
         });
     }

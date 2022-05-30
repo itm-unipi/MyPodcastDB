@@ -54,20 +54,42 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <HBox.margin>
-                                    <Insets right="7.0" />
+                                    <Insets right="2.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@img/userPicture.png" />
-                                 </image>
+                              <VBox fx:id="boxActorProfile" alignment="CENTER">
+                                 <children>
+                                    <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/userPicture.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </ImageView>
+                                 </children>
                                  <HBox.margin>
-                                    <Insets right="3.0" />
+                                    <Insets left="2.0" right="3.0" />
                                  </HBox.margin>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
+                              </VBox>
+                              <VBox fx:id="boxLogout" alignment="CENTER">
+                                 <children>
+                                    <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/logout.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                    </ImageView>
+                                 </children>
+                              </VBox>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>
                                     <TextField fx:id="searchText" onKeyPressed="#onEnterPressedSearch" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
@@ -85,19 +107,19 @@
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
                                     </ImageView>
                                  </children>
                                  <HBox.margin>
-                                    <Insets bottom="23.0" left="5.0" top="23.0" />
+                                    <Insets bottom="23.0" left="3.0" top="23.0" />
                                  </HBox.margin>
                                  <padding>
                                     <Insets left="2.0" />
                                  </padding>
                               </HBox>
                            </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
                         </HBox>
                      </children>
                   </HBox>
@@ -139,7 +161,7 @@
                                           <RowConstraints />
                                        </rowConstraints>
                                        <VBox.margin>
-                                          <Insets bottom="18.0" left="120.0" right="120.0" top="10.0" />
+                                          <Insets bottom="15.0" left="120.0" right="120.0" top="10.0" />
                                        </VBox.margin>
                                     </GridPane>
                                  </children>
@@ -180,20 +202,17 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="145.0" prefHeight="110.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-                           <content>
-                              <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" hgap="6.0" prefWidth="0.0">
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                 </rowConstraints>
-                                 <columnConstraints>
-                                    <ColumnConstraints />
-                                 </columnConstraints>
-                              </GridPane>
-                           </content>
+                        <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="180.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
+                           <content>
+                              <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" hgap="30.0" prefHeight="0.0" prefWidth="0.0">
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </content>
                         </ScrollPane>
                         <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextFollowedAuthor" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -210,7 +229,7 @@
                   </HBox>
                </children>
                <BorderPane.margin>
-                  <Insets bottom="10.0" left="120.0" right="120.0" />
+                  <Insets bottom="10.0" left="120.0" right="120.0" top="10.0" />
                </BorderPane.margin>
             </VBox>
          </bottom>

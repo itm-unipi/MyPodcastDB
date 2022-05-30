@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorSearchPreviewController">
+<AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.UserSearchPreviewController">
    <children>
-      <HBox fx:id="boxAuthorPreview" onMouseClicked="#onClickAuthor" onMouseEntered="#changeBackgroundAuthor" onMouseExited="#restoreBackgroundAuthor" prefHeight="68.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="boxUserPreview" onMouseClicked="#onClickUser" onMouseEntered="#changeBackgroundUser" onMouseExited="#restoreBackgroundUser" prefHeight="68.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="60.0" prefWidth="60.0" style="-fx-background-color: white; -fx-background-radius: 60;">
                <children>
-                  <ImageView fx:id="authorPicture" fitHeight="35.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="userPicture" fitHeight="35.0" fitWidth="42.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/authorAnonymousPicture.png" />
                      </image>
@@ -26,7 +26,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="855.0">
                <children>
-                  <Label fx:id="authorFound" alignment="TOP_LEFT" text="Giovanotti">
+                  <Label fx:id="userFound" alignment="TOP_LEFT" text="Giovanotti">
                      <font>
                         <Font name="Corbel Light" size="18.0" />
                      </font>
@@ -36,7 +36,7 @@
                   <Insets left="6.0" />
                </padding>
             </VBox>
-            <Button fx:id="followAuthor" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onClickFollowButton" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-radius: 25; -fx-background-radius: 27;" text="Follow">
+            <Button fx:id="followUser" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onClickFollowButton" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-radius: 25; -fx-background-radius: 27;" text="Follow">
                <font>
                   <Font name="Corbel Light" size="14.0" />
                </font>

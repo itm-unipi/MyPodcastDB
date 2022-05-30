@@ -20,11 +20,23 @@
    <children>
       <BorderPane layoutX="50.0" layoutY="58.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox prefHeight="80.0" prefWidth="920.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" prefHeight="80.0" prefWidth="920.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
                <BorderPane.margin>
                   <Insets left="120.0" right="120.0" />
                </BorderPane.margin>
                <children>
+                  <VBox fx:id="boxErrorSearch" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="190.0" style="-fx-background-color: #e43b3b; -fx-background-radius: 12;" translateY="-47.0">
+                     <children>
+                        <Label alignment="CENTER" prefHeight="57.0" prefWidth="283.0" text="Empty Field!" textFill="WHITE">
+                           <font>
+                              <Font name="Corbel Light" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
                   <HBox alignment="CENTER" prefHeight="80.0">
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
@@ -121,6 +133,9 @@
                            </children>
                         </HBox>
                      </children>
+                     <VBox.margin>
+                        <Insets top="-44.0" />
+                     </VBox.margin>
                   </HBox>
                   <Separator />
                </children>

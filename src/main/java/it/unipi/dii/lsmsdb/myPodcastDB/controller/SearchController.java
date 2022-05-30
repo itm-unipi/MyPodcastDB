@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
@@ -33,6 +34,15 @@ public class SearchController {
 
     @FXML
     private ImageView actorPicture;
+
+    @FXML
+    private ImageView logout;
+
+    @FXML
+    private VBox boxActorProfile;
+
+    @FXML
+    private VBox boxLogout;
 
     @FXML
     private ImageView searchButton;
@@ -119,6 +129,14 @@ public class SearchController {
         Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
     }
 
+    @FXML
+    void onClickLogout(MouseEvent event) throws IOException {
+        Logger.info("Logout button clicked");
+        // TODO: clear the session
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
     /**********************************************************/
 
     public void initialize() throws IOException {
@@ -129,7 +147,7 @@ public class SearchController {
             Author sessionActor = (Author)MyPodcastDB.getInstance().getSessionActor();
             Logger.info("I'm an actor: " + sessionActor.getName());
 
-            // Setting user stuff
+            // Setting GUI params
             Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
 
@@ -137,11 +155,31 @@ public class SearchController {
             User sessionActor = (User)MyPodcastDB.getInstance().getSessionActor();
             Logger.info("I'm an user: " + sessionActor.getUsername());
 
-            // Setting user stuff
+            // Setting GUI params
             Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
-        } else
+
+        } else if (actorType.equals("Admin")) {
+            Admin sessionActor = (Admin)MyPodcastDB.getInstance().getSessionActor();
+            Logger.info("I'm an administrator: " + sessionActor.getName());
+
+            // Setting GUI params
+            Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
+            actorPicture.setImage(image);
+
+        } else if (actorType.equals("Unregistered")) {
+            Logger.info("I'm an unregistered user");
+
+            // Disabling User Profile Page and Logout Button
+            boxActorProfile.setVisible(false);
+            boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+
+            boxLogout.setVisible(false);
+            boxLogout.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+
+        } else {
             Logger.error("Unidentified Actor Type");
+        }
 
 
         // Load word searched
@@ -192,6 +230,7 @@ public class SearchController {
         this.podcastsFound.setText("Podcasts (" + author.getOwnPodcasts().size() + ")");
 
         /********************************************************************************/
+
         // Authors Followed
         List<Author> authorsFound = new ArrayList<>();
         for (int j = 0; j < 2; j++){
@@ -228,16 +267,17 @@ public class SearchController {
         /********************************************************************************/
 
         // User found
-
-        if (!actorType.equals("Author")) {
+        if (!actorType.equals("Author") && !actorType.equals("Unregistered")) {
             List<User> usersFound = new ArrayList<>();
-        /*for (int j = 0; j < 20; j++){
-            User a = new Author();
-            a.setName("Apple Inc. " + j);
-            authorsFound.add(a);
-        }   */
 
-            usersFound.clear();
+            for (int j = 0; j < 20; j++){
+                User u = new User();
+                u.setUsername("Jhonny " + j);
+                u.setPicturePath("/img/test.jpg");
+                usersFound.add(u);
+            }
+
+            //usersFound.clear();
             if (usersFound.isEmpty()) {
                 this.gridFoundUsers.setVisible(false);
                 this.noUsersFound.setVisible(true);
@@ -250,17 +290,17 @@ public class SearchController {
             column = 0;
             for (User u : usersFound) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserPreview.fxml"));
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserSearchPreview.fxml"));
 
                 AnchorPane newUser = fxmlLoader.load();
-                // TODO
-                //UserPreviewController controller = fxmlLoader.getController();
-                //controller.setData(u);
+                UserSearchPreviewController controller = fxmlLoader.getController();
+                controller.setData(u);
 
-                //gridFoundUsers.add(newUser, column, row++);
+                gridFoundUsers.add(newUser, column, row++);
             }
 
             this.usersFound.setText("Users (" + usersFound.size() + ")");
+
         } else {
             this.boxUsersFound.setVisible(false);
         }
