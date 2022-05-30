@@ -72,27 +72,70 @@ public class AdminDashboardController {
         Logger.info("Admin logged : " + name);
 
         // example statistic
-        List<Entry<String, Float>> statistics = new ArrayList<>();
-        statistics.add(new AbstractMap.SimpleEntry<>("Test1", 10.0f));
-        statistics.add(new AbstractMap.SimpleEntry<>("Test2", 10.0f));
-        statistics.add(new AbstractMap.SimpleEntry<>("Test3", 30.0f));
-        statistics.add(new AbstractMap.SimpleEntry<>("Test4", 10.0f));
-        statistics.add(new AbstractMap.SimpleEntry<>("Test5", 10.0f));
+        List<Entry<String, Object>> statistics1 = new ArrayList<>();
+        statistics1.add(new AbstractMap.SimpleEntry<>("Test1", 10.0f));
+        statistics1.add(new AbstractMap.SimpleEntry<>("Test2", 10.0f));
+        statistics1.add(new AbstractMap.SimpleEntry<>("Test3", 30.0f));
+        statistics1.add(new AbstractMap.SimpleEntry<>("Test4", 10.0f));
+        statistics1.add(new AbstractMap.SimpleEntry<>("Test5", 10.0f));
+        List<Entry<String, Object>> statistics2 = new ArrayList<>();
+        statistics2.add(new AbstractMap.SimpleEntry<>("Test1", 10));
+        statistics2.add(new AbstractMap.SimpleEntry<>("Test2", 10));
+        statistics2.add(new AbstractMap.SimpleEntry<>("Test3", 30));
+        statistics2.add(new AbstractMap.SimpleEntry<>("Test4", 10));
+        statistics2.add(new AbstractMap.SimpleEntry<>("Test5", 10));
 
         // statistics creation
-        int row = 0;
+        int row = 1;
         int column = 0;
-        while (row == 0) {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
 
-            // create new review element
-            AnchorPane newChart = fxmlLoader.load();
-            PieChartController controller = fxmlLoader.getController();
-            controller.setData(statistics);
+        // create new bar chart element
+        FXMLLoader barLoader = new FXMLLoader();
+        barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
+        AnchorPane newBarChart1 = barLoader.load();
+        BarChartController controller1 = barLoader.getController();
+        controller1.setData("Average age for favourite category", statistics1);
+        this.statisticsGrid.add(newBarChart1, column++, row);
 
-            // add new podcast to grid
-            this.statisticsGrid.add(newChart, column, row++);
-        }
+        // create new bar chart element
+        barLoader = new FXMLLoader();
+        barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
+        AnchorPane newBarChart2 = barLoader.load();
+        BarChartController controller2 = barLoader.getController();
+        controller2.setData("Podcasts with highest number of reviews", statistics1);
+        this.statisticsGrid.add(newBarChart2, column++, row);
+
+        // create new bar chart element
+        barLoader = new FXMLLoader();
+        barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
+        AnchorPane newBarChart3 = barLoader.load();
+        BarChartController controller3 = barLoader.getController();
+        controller3.setData("Country with highest number of podcasts\n", statistics1);
+        this.statisticsGrid.add(newBarChart3, column, row++);
+        column -= 2;
+
+        // create new pie chart element
+        FXMLLoader tableLoader = new FXMLLoader();
+        tableLoader.setLocation(getClass().getClassLoader().getResource("Table.fxml"));
+        AnchorPane newTable = tableLoader.load();
+        TableController controller4 = tableLoader.getController();
+        controller4.setData("Top favourite categories", new String[]{"Gender", "Category"}, statistics1);
+        this.statisticsGrid.add(newTable, column++, row);
+
+        // create new pie chart element
+        FXMLLoader pieLoader = new FXMLLoader();
+        pieLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
+        AnchorPane newPieChart1 = pieLoader.load();
+        PieChartController controller5 = pieLoader.getController();
+        controller5.setData("Most numerous category", statistics1);
+        this.statisticsGrid.add(newPieChart1, column++, row);
+
+        // create new pie chart element
+        pieLoader = new FXMLLoader();
+        pieLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
+        AnchorPane newPieChart2 = pieLoader.load();
+        PieChartController controller6 = pieLoader.getController();
+        controller6.setData("Most appreciated category", statistics1);
+        this.statisticsGrid.add(newPieChart2, column, row);
     }
 }
