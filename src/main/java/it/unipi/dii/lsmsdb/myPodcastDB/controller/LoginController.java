@@ -60,6 +60,12 @@ public class LoginController {
     void loginLoginButtonClick(MouseEvent event) throws IOException {
         if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty()) {
             Logger.error("Login clicked: invalid values");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error!");
+            alert.setHeaderText("Invalid inputs");
+            alert.setContentText("");
+
+            alert.showAndWait();
             return;
         }
 

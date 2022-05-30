@@ -143,12 +143,25 @@ public class SignUpController {
 
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("Invalid inputs");
+                alert.setContentText("");
+                alert.showAndWait();
                 return;
             }
 
             int age = LocalDate.now().getYear() - birthDate.getYear();
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, age, gender);
             Logger.info(user.toString());
+            Author author = new Author("", name, password,email, picturePath);
+            Logger.info(author.toString());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Account created");
+            alert.setContentText("");
+
+            alert.showAndWait();
         }
         else{
             String name = signUpUsernameTextField.getText();
@@ -159,11 +172,22 @@ public class SignUpController {
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error!");
+                alert.setHeaderText("Invalid inputs");
+                alert.setContentText("");
+                alert.showAndWait();
                 return;
             }
 
             Author author = new Author("", name, password,email, picturePath);
             Logger.info(author.toString());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Information!");
+            alert.setHeaderText("Account created");
+            alert.setContentText("");
+
+            alert.showAndWait();
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }

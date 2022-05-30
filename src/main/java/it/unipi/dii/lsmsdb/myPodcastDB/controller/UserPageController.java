@@ -9,10 +9,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -23,6 +20,7 @@ import javafx.scene.layout.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class UserPageController {
 
@@ -227,7 +225,7 @@ public class UserPageController {
     @FXML
     void scrollUsersButtonRightClick(MouseEvent event) {
         Logger.info("users right button pressed");
-        double scrollValue = 0.13;
+        double scrollValue = 0.125;
         if(userPageUsersScrollPane.getHvalue() == 1.0)
             return;
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() + scrollValue);
@@ -236,7 +234,7 @@ public class UserPageController {
     @FXML
     void scrollUsersButtonLeftClick(MouseEvent event) {
         Logger.info("users left button pressed");
-        double scrollValue = 0.13;
+        double scrollValue = 0.125;
         if(userPageUsersScrollPane.getHvalue() == 0.0)
             return;
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
@@ -370,7 +368,18 @@ public class UserPageController {
     @FXML
     void deleteButtonClick(MouseEvent event) throws  IOException{
         Logger.info("delete button clicked");
-        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("");
+        alert.setHeaderText("Really Delete your account?");
+        alert.setContentText("");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK){
+            StageManager.showPage(ViewNavigator.LOGIN.getPage());
+        } else {
+           return;
+        }
+
     }
 
     @FXML
