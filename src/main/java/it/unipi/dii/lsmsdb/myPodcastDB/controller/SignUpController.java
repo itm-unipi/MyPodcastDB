@@ -78,9 +78,29 @@ public class SignUpController {
     @FXML
     private Label signUpUsernameLabel;
 
+    @FXML
+    private ImageView signUpImage;
+
+    @FXML
+    private ImageView signUpLeftButton;
+
+    @FXML
+    private ImageView signUpRightButton;
+
+    private String actorType;
+
+    private int imageNumber;
+
+    private int maxAuthorImages = 20;
+
+    private int maxUserImages = 30;
+
 
 
     public void initialize() throws IOException,Exception {
+
+        actorType = "User";
+        imageNumber = 0;
 
         ObservableList<String> genderList = FXCollections.observableArrayList(
                 "male",
@@ -100,6 +120,7 @@ public class SignUpController {
         signUpCoutryComboBox.setValue("Unknown");
         signUpFavGenreComboBox.setValue("Unknown");
         signUpAgeDatePicker.setValue(LocalDate.now());
+        signUpImage.setImage(ImageCache.getInstance().getImageFromLocalPath("/img/users/user0.png"));
 
 
     }
@@ -107,7 +128,7 @@ public class SignUpController {
     void signUpSignUpButtonClick(MouseEvent event) throws IOException {
 
         Logger.info("Signup Button Clicked");
-        if(signUpLabelTitle.getText().equals("Your User Account")) {
+        if(actorType.equals("User")) {
             String username = signUpUsernameTextField.getText();
             String name = signupNameTextField.getText();
             String surname = signupSurnameTextField.getText();
@@ -118,6 +139,7 @@ public class SignUpController {
             String favGenre = signUpFavGenreComboBox.getValue();
             String country = signUpCoutryComboBox.getValue();
             LocalDate birthDate = signUpAgeDatePicker.getValue();
+            String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
 
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
@@ -125,7 +147,7 @@ public class SignUpController {
             }
 
             int age = LocalDate.now().getYear() - birthDate.getYear();
-            User user = new User("", username, password, name, surname, email, country, "", favGenre, age, gender);
+            User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, age, gender);
             Logger.info(user.toString());
         }
         else{
@@ -133,13 +155,14 @@ public class SignUpController {
             String password = signUpPasswordTextField.getText();
             String repPassword = signUpRepPasswTextField.getText();
             String email = signUpEmailTextField.getText();
+            String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
                 return;
             }
 
-            Author author = new Author("", name, password,email,"");
+            Author author = new Author("", name, password,email, picturePath);
             Logger.info(author.toString());
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
@@ -178,8 +201,8 @@ public class SignUpController {
     @FXML
     void signUpSwitchClicked(MouseEvent event) throws IOException{
         Logger.info("switch button clicked");
-        if(signUpLabelTitle.getText().equals("Your User Account")){
-            signUpSwitchButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/switch_on_80px.png"));
+        if(actorType.equals("User")){
+            signUpSwitchButton.setImage(ImageCache.getImageFromLocalPath("/img/switch_on_80px.png"));
             signUpLabelAuthor.setStyle("-fx-font-weight: bold;");
             signUpLabelUser.setStyle("-fx-font-weight: normal;");
             signUpLabelTitle.setText("Your Author Account");
@@ -187,10 +210,13 @@ public class SignUpController {
             fourthLineInput.setVisible(false);
             fifthLineInput.setVisible(false);
             signUpUsernameLabel.setText("Name");
+            imageNumber = 0;
+            actorType = "Author";
+            signUpImage.setImage(ImageCache.getInstance().getImageFromLocalPath("/img/authors/author0.png"));
 
         }
         else{
-            signUpSwitchButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/switch_off_80px.png"));
+            signUpSwitchButton.setImage(ImageCache.getImageFromLocalPath("/img/switch_off_80px.png"));
             signUpLabelAuthor.setStyle("-fx-font-weight: normal;");
             signUpLabelUser.setStyle("-fx-font-weight: bold;");
             signUpLabelTitle.setText("Your User Account");
@@ -198,8 +224,50 @@ public class SignUpController {
             fourthLineInput.setVisible(true);
             fifthLineInput.setVisible(true);
             signUpUsernameLabel.setText("Username");
+            imageNumber = 0;
+            actorType = "User";
+            signUpImage.setImage(ImageCache.getInstance().getImageFromLocalPath("/img/users/user0.png"));
         }
 
+    }
+
+    @FXML
+    void leftButtonClick(MouseEvent event){
+        Logger.info("left button clicked");
+        if(imageNumber == 0 && actorType.equals("User"))
+            imageNumber = maxUserImages - 1;
+        else if(imageNumber == 0 && actorType.equals("Author"))
+            imageNumber = maxAuthorImages - 1;
+        else
+            imageNumber -= 1;
+
+        String imagePath = "";
+        if(actorType.equals("User"))
+            imagePath = "/img/users/user" + (Integer)imageNumber + ".png";
+        else
+            imagePath = "/img/authors/author" + (Integer)imageNumber + ".png";
+
+        signUpImage.setImage(ImageCache.getImageFromLocalPath(imagePath));
+
+    }
+
+    @FXML
+    void rightButtonClick(MouseEvent event){
+        Logger.info("right button clicked");
+        if(actorType.equals("User") && imageNumber == maxUserImages - 1 )
+            imageNumber = 0;
+        else if(actorType.equals("Author") && imageNumber == maxAuthorImages - 1)
+            imageNumber = 0;
+        else
+            imageNumber += 1;
+
+        String imagePath = "";
+        if(actorType.equals("User"))
+            imagePath = "/img/users/user" + (Integer)imageNumber + ".png";
+        else
+            imagePath = "/img/authors/author" + (Integer)imageNumber + ".png";
+
+        signUpImage.setImage(ImageCache.getImageFromLocalPath(imagePath));
     }
 
 }
