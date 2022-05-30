@@ -9,6 +9,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
@@ -57,43 +59,12 @@ public class LoginController {
 
     @FXML
     void loginLoginButtonClick(MouseEvent event) throws IOException {
-
-        String actorname = loginUsernameTextField.getText();
-        String password = loginPasswordTextField.getText();
-
-        if(actorname.isEmpty() || password.isEmpty()) {
+        if(loginUsernameTextField.getText().isEmpty() || loginUsernameTextField.getText().isEmpty()) {
             Logger.error("Login clicked: invalid values");
             return;
         }
 
-        if(loginUserRadioButton.isSelected()) {
-            Logger.info("User actor selected");
-            String actorType = "User";
-            User user = (User)simActorService(actorname, password, actorType);
-            MyPodcastDB.getInstance().setSession(user, actorType);
-        }
-        else if(loginAuthorRadioButton.isSelected()) {
-            Logger.info("Author actor selected");
-            String actorType = "Author";
-            Author author = (Author)simActorService(actorname, password, actorType);
-            MyPodcastDB.getInstance().setSession(author, actorType);
-        }
-        else if(loginAdminRadioButton.isSelected()){
-            Logger.info("Admin actor selected");
-            String actorType = "Admin";
-            Admin admin = (Admin)simActorService(actorname, password, actorType);
-            MyPodcastDB.getInstance().setSession(admin, actorType);
-        }
-        else
-            Logger.error("No actor selected");
-
-        String log = "Login clicked: (" + actorname + ", " + password +")";
-        Logger.info(log);
-
-        if(loginAdminRadioButton.isSelected())
-            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-        else
-            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+        login();
     }
 
     @FXML
@@ -175,6 +146,49 @@ public class LoginController {
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
+    @FXML
+    void onKeyPressed(KeyEvent event) throws IOException {
+        if(!event.getCode().equals(KeyCode.ENTER))
+            return;
+        if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty())
+            return;
+
+        Logger.info("enter pressed");
+        login();
+
+
+
+    }
+
+    void login() throws IOException {
+        String actorname = loginUsernameTextField.getText();
+        String password = loginPasswordTextField.getText();
+
+        if(loginUserRadioButton.isSelected()) {
+            Logger.info("User actor selected");
+            String actorType = "User";
+            User user = (User)simActorService(actorname, password, actorType);
+            MyPodcastDB.getInstance().setSession(user, actorType);
+        }
+        else if(loginAuthorRadioButton.isSelected()) {
+            Logger.info("Author actor selected");
+            String actorType = "Author";
+            Author author = (Author)simActorService(actorname, password, actorType);
+            MyPodcastDB.getInstance().setSession(author, actorType);
+        }
+        else if(loginAdminRadioButton.isSelected()){
+            Logger.info("Admin actor selected");
+            String actorType = "User";
+            Admin admin = (Admin)simActorService(actorname, password, actorType);
+            MyPodcastDB.getInstance().setSession(admin, actorType);
+        }
+        else
+            Logger.error("No actor selected");
+
+        String log = "Login clicked: (" + actorname + ", " + password +")";
+        Logger.info(log);
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+    }
 
     Object simActorService(String actorname, String password, String actorType){
 
