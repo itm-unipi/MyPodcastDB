@@ -38,6 +38,9 @@ public class HomePageController {
     private ImageView actorPicture;
 
     @FXML
+    private ImageView logout;
+
+    @FXML
     private Label username;
 
     @FXML
@@ -113,6 +116,9 @@ public class HomePageController {
     private VBox boxActorProfile;
 
     @FXML
+    private VBox boxLogout;
+
+    @FXML
     private VBox boxBasedOnAuthors;
 
     @FXML
@@ -177,6 +183,14 @@ public class HomePageController {
     void onClickHome(MouseEvent event) throws IOException {
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
         Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
+    }
+
+    @FXML
+    void onClickLogout(MouseEvent event) throws IOException {
+        Logger.info("Logout button clicked");
+        // TODO: clear the session
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     /**********************************************************/
@@ -361,12 +375,15 @@ public class HomePageController {
 
         } else if (actorType.equals("Unregistered")) {
             this.username.setText("Welcome to MyPodcastDB!");
+            Logger.info("I'm an unregistered user");
 
-            // Disabling User Profile Page
+            // Disabling User Profile Page and Logout Button
             boxActorProfile.setVisible(false);
             boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
 
-            Logger.info("I'm an unregistered user");
+            boxLogout.setVisible(false);
+            boxLogout.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+
         } else {
             Logger.error("Unidentified Actor Type");
         }
