@@ -59,7 +59,7 @@ public class LoginController {
 
     @FXML
     void loginLoginButtonClick(MouseEvent event) throws IOException {
-        if(loginUsernameTextField.getText().isEmpty() || loginUsernameTextField.getText().isEmpty()) {
+        if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty()) {
             Logger.error("Login clicked: invalid values");
             return;
         }

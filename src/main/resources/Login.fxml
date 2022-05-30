@@ -39,7 +39,7 @@
                         </Label>
                      </children>
                   </HBox>
-                  <Separator prefWidth="0.0" style="-fx-background-color: black;" />
+                  <Separator prefHeight="1.0" prefWidth="0.0" />
                </children>
                <padding>
                   <Insets left="180.0" right="180.0" />

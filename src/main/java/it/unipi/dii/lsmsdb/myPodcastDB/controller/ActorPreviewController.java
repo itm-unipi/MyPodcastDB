@@ -73,7 +73,7 @@ public class ActorPreviewController {
 
         if(actorType.equals("Author")) {
             Logger.info(authorPreview.getId() + " : " + this.authorPreview.getName() + " selected");
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), authorPreview.getId());
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), authorPreview.getName());
         }
         else {
             Logger.info(userPreview.getUsername() + " selected");

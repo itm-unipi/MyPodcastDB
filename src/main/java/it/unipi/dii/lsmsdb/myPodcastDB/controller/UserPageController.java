@@ -15,11 +15,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -152,10 +151,17 @@ public class UserPageController {
     private Label userPageUsersLabel;
 
     @FXML
-    private VBox userPageWatchlistAreaVBox;
+    private HBox userPageWatchlistAreaHBox;
 
     @FXML
-    private VBox userPageVBox;
+    private HBox userPageLikedAreaHBox;
+
+    @FXML
+    private HBox userPageAuthorsAreaHBox;
+
+    @FXML
+    private HBox userPageUsersAreaHBox;
+
 
 
     /**************/
@@ -203,7 +209,7 @@ public class UserPageController {
     @FXML
     void scrollAuthorsButtonRightClick(MouseEvent event) {
         Logger.info("authors right button pressed");
-        double scrollValue = 0.13;
+        double scrollValue = 0.125;
         if(userPageAuthorsScrollPane.getHvalue() == 1.0)
             return;
         userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() + scrollValue);
@@ -212,7 +218,7 @@ public class UserPageController {
     @FXML
     void scrollAuthorsButtonLeftClick(MouseEvent event) {
         Logger.info("authors left button pressed");
-        double scrollValue = 0.13;
+        double scrollValue = 0.125;
         if(userPageAuthorsScrollPane.getHvalue() == 0.0)
             return;
         userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() - scrollValue);
@@ -245,19 +251,40 @@ public class UserPageController {
     @FXML
     void searchButtonClick(MouseEvent event) throws IOException {
 
+        if(searchTextField.getText().isEmpty()){
+            Logger.error("Field cannot be empty!");
+            return;
+        }
+
         Logger.info("Search: " + searchTextField.getText());
         StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchTextField.getText());
+    }
+
+    @FXML
+    private void onKeyPressedInSearchBar(KeyEvent event) throws IOException {
+
+        if(!event.getCode().equals(KeyCode.ENTER))
+            return;
+
+        if(searchTextField.getText().isEmpty()){
+            Logger.error("Field cannot be empty!");
+            return;
+        }
+
+        Logger.info("Search: " + searchTextField.getText());
+        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchTextField.getText());
+
     }
 
     @FXML
     void followButtonClick(MouseEvent event) {
         Logger.info("follow button pressed");
         if(isFollowed) {
-            userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_50px.png"));
+            userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
             isFollowed = false;
         }
         else {
-            userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_52px.png"));
+            userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
             isFollowed = true;
         }
 
@@ -368,6 +395,7 @@ public class UserPageController {
         );
     }
 
+
     /***********************/
 
     public void initialize() throws IOException {
@@ -389,20 +417,34 @@ public class UserPageController {
         pageOwner = new User();
         this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
 
+        if(actorType.equals("User"))
+            actorPageButton.setImage(
+                    ImageCache.getImageFromLocalPath(
+                            ((User)MyPodcastDB.getInstance().getSessionActor()).getPicturePath()
+                    )
+            );
+        else if(actorType.equals("Author"))
+            actorPageButton.setImage(
+                    ImageCache.getImageFromLocalPath(
+                            ((Author)MyPodcastDB.getInstance().getSessionActor()).getPicturePath()
+                    )
+            );
+
         if(actorType.equals("User") && pageOwner.getUsername().equals(sessionActorName)) {
 
             Logger.info("owner mode");
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(true);
             userPageSettingsButton.setVisible(true);
+
         }
         else if(!actorType.equals("Admin")){
             Logger.info("visitor mode");
             isFollowed = false; //take it by service
             if(isFollowed)
-                userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_52px.png"));
+                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
             else
-                userPageFollowButton.setImage(ImageCache.getImageFromURL("File:src/main/resources/img/favourite_50px.png"));
+                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
 
             userPageFollowButton.setVisible(true);
             userPagePrivateArea.setVisible(false);
@@ -432,7 +474,7 @@ public class UserPageController {
         userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
         userPageEmailTextField.setText(pageOwner.getEmail());
 
-        // fill the watchlist and liked grids
+        // fill the watchlist grid
         if(!wPodcasts.isEmpty()) {
             int row = 0;
             int column = 0;
@@ -452,12 +494,11 @@ public class UserPageController {
         }
         else{
             userPageWatchlistLabel.setText("Watchlist is empty");
-            // userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
-            userPageWatchlistScrollPane.setVisible(false);
-            userPageWatchlistScrollPane.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+            userPageWatchlistAreaHBox.setVisible(false);
+            userPageWatchlistAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
-        // fill the watchlist and liked grids
+        // fill the liked grid
 
         if(!lPodcasts.isEmpty()){
             int row = 0;
@@ -478,7 +519,8 @@ public class UserPageController {
         }
         else{
             userPageLikedLabel.setText("There are no liked podcasts");
-            //userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
+            userPageLikedAreaHBox.setVisible(false);
+            userPageLikedAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         //fill the authors grid
@@ -497,7 +539,8 @@ public class UserPageController {
         }
         else{
             userPageAuthorsLabel.setText("There are no followed authors");
-            //userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
+            userPageAuthorsAreaHBox.setVisible(false);
+            userPageAuthorsAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         //fill the users grid
@@ -516,7 +559,8 @@ public class UserPageController {
         }
         else{
             userPageUsersLabel.setText("There are no followed users");
-            //userPageVBox.getChildren().remove(userPageWatchlistAreaVBox); //it doesn't work
+            userPageUsersAreaHBox.setVisible(false);
+            userPageUsersAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         userPageWatchlistScrollPane.setHvalue(0.0);
@@ -567,7 +611,7 @@ public class UserPageController {
         }
 
         //test empty lists
-        wPodcasts.clear();
+        //wPodcasts.clear();
         //lPodcasts.clear();
         //authors.clear();
         //users.clear();

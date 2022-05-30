@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.UserPageController">
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.UserPageController">
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
@@ -69,7 +69,7 @@
                         </Pane>
                                 <Pane prefHeight="117.0" prefWidth="194.0">
                                     <children>
-                                        <TextField fx:id="searchTextField" layoutX="1.0" layoutY="26.0" prefHeight="20.0" prefWidth="193.0" promptText="Search..." style="-fx-backgroun-color: #bcbcbc; -fx-border-color: #e0e0e0; -fx-border-radius: 25; -fx-background-radius: 25;" />
+                                        <TextField fx:id="searchTextField" layoutX="1.0" layoutY="26.0" onKeyPressed="#onKeyPressedInSearchBar" prefHeight="20.0" prefWidth="193.0" promptText="Search..." style="-fx-backgroun-color: #bcbcbc; -fx-border-color: #e0e0e0; -fx-border-radius: 25; -fx-background-radius: 25;" />
                                         <ImageView fx:id="searchButton" fitHeight="20.0" fitWidth="20.0" layoutX="170.0" layoutY="29.0" onMouseClicked="#searchButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                             <image>
                                                 <Image url="@img/search_50px.png" />
@@ -90,9 +90,9 @@
                 <Pane prefHeight="640.0" prefWidth="95.0" BorderPane.alignment="CENTER" />
             </left>
          <center>
-            <ScrollPane hbarPolicy="NEVER" prefHeight="639.0" prefWidth="1178.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER" BorderPane.alignment="CENTER">
                <content>
-                  <VBox fx:id="userPageVBox" prefHeight="1306.0" prefWidth="1183.0" style="-fx-background-color: white; -fx-border-color: white;">
+                  <VBox minHeight="640.0" minWidth="1104.0" prefHeight="1362.0" prefWidth="1191.0" style="-fx-background-color: white; -fx-border-color: white;">
                      <children>
                         <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="920.0" />
                         <HBox style="-fx-background-color: white; -fx-border-color: white;">
@@ -276,7 +276,7 @@
                         </HBox>
                         <VBox>
                            <children>
-                              <VBox fx:id="userPageWatchlistAreaVBox">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageWatchlistLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Watchlist" textFill="#434343">
                                        <font>
@@ -286,7 +286,7 @@
                                           <Insets bottom="10.0" left="85.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <HBox minWidth="-Infinity" prefHeight="230.0" prefWidth="1090.0" style="-fx-background-color: white;">
+                                    <HBox fx:id="userPageWatchlistAreaHBox" minWidth="-Infinity" style="-fx-background-color: white;">
                                        <children>
                                           <ImageView fx:id="userPageWatchlistLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -296,17 +296,20 @@
                                                 <Insets right="20.0" top="100.0" />
                                              </HBox.margin>
                                           </ImageView>
-                                          <ScrollPane fx:id="userPageWatchlistScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="980.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
+                                          <ScrollPane fx:id="userPageWatchlistScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="980.0" style="-fx-border-color: white; -fx-background-color: white;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageWatchlistGrid" hgap="10.0" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                <GridPane fx:id="userPageWatchlistGrid" hgap="10.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="240.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="-Infinity" prefHeight="230.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
                                                    <columnConstraints>
                                                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="185.0" />
                                                    </columnConstraints>
                                                 </GridPane>
                                              </content>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
                                           </ScrollPane>
                                           <ImageView fx:id="userPageWatchlistRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -320,7 +323,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="290.0" prefWidth="918.0">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageLikedLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts" textFill="#434343">
                                        <font>
@@ -333,7 +336,7 @@
                                           <Insets bottom="10.0" />
                                        </padding>
                                     </Label>
-                                    <HBox prefHeight="230.0" prefWidth="200.0">
+                                    <HBox fx:id="userPageLikedAreaHBox" prefHeight="230.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="userPageLikedLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -343,14 +346,14 @@
                                                 <Insets right="20.0" top="100.0" />
                                              </HBox.margin>
                                           </ImageView>
-                                          <ScrollPane fx:id="userPageLikedScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="230.0" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                          <ScrollPane fx:id="userPageLikedScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageLikedGrid" hgap="10.0" minHeight="230.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                <GridPane fx:id="userPageLikedGrid" hgap="10.0" minHeight="-Infinity" prefHeight="240.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="-Infinity" prefHeight="230.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="180.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="185.0" />
                                                    </columnConstraints>
                                                 </GridPane>
                                              </content>
@@ -367,7 +370,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="290.0" prefWidth="918.0">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageAuthorsLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Authors" textFill="#434343">
                                        <font>
@@ -380,7 +383,7 @@
                                           <Insets bottom="10.0" />
                                        </padding>
                                     </Label>
-                                    <HBox prefHeight="130.0" prefWidth="200.0">
+                                    <HBox fx:id="userPageAuthorsAreaHBox" prefHeight="130.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="userPageAuthorsLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollAuthorsButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -390,17 +393,20 @@
                                                 <Insets right="20.0" top="50.0" />
                                              </HBox.margin>
                                           </ImageView>
-                                          <ScrollPane fx:id="userPageAuthorsScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="130.0" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                          <ScrollPane fx:id="userPageAuthorsScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="960.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageAuthorsGrid" hgap="20.0" minHeight="130.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                <GridPane fx:id="userPageAuthorsGrid" hgap="15.0" minHeight="-Infinity" prefHeight="140.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="-Infinity" prefHeight="130.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="105.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="105.0" />
                                                    </columnConstraints>
                                                 </GridPane>
                                              </content>
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
                                           </ScrollPane>
                                           <ImageView fx:id="userPageAuthorsRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollAuthorsButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -414,7 +420,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox prefHeight="290.0" prefWidth="918.0">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageUsersLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Users" textFill="#434343">
                                        <font>
@@ -427,7 +433,7 @@
                                           <Insets bottom="10.0" />
                                        </padding>
                                     </Label>
-                                    <HBox prefHeight="130.0" prefWidth="200.0">
+                                    <HBox fx:id="userPageUsersAreaHBox" prefHeight="130.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="userPageUsersLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollUsersButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -437,17 +443,20 @@
                                                 <Insets right="20.0" top="50.0" />
                                              </HBox.margin>
                                           </ImageView>
-                                          <ScrollPane fx:id="userPageUsersScrollPane" hbarPolicy="NEVER" minHeight="-Infinity" prefHeight="130.0" prefWidth="980.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
+                                          <ScrollPane fx:id="userPageUsersScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="960.0" style="-fx-background-color: white; -fx-border-color: white;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageUsersGrid" hgap="20.0" minHeight="130.0" style="-fx-background-color: white; -fx-border-color: white;">
+                                                <GridPane fx:id="userPageUsersGrid" hgap="15.0" minHeight="-Infinity" prefHeight="140.0" style="-fx-background-color: white; -fx-border-color: white;">
                                                    <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                                      <RowConstraints minHeight="-Infinity" prefHeight="130.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                    <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="105.0" />
+                                                      <ColumnConstraints hgrow="SOMETIMES" prefWidth="105.0" />
                                                    </columnConstraints>
                                                 </GridPane>
                                              </content>
+                                             <HBox.margin>
+                                                <Insets left="5.0" />
+                                             </HBox.margin>
                                           </ScrollPane>
                                           <ImageView fx:id="userPageUsersRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollUsersButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
