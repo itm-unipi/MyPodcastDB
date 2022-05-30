@@ -80,7 +80,7 @@ public class SignUpController {
 
 
 
-    public void initialize() throws IOException {
+    public void initialize() throws IOException,Exception {
 
         ObservableList<String> genderList = FXCollections.observableArrayList(
                 "male",

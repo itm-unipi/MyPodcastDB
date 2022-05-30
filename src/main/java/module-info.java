@@ -8,6 +8,7 @@ module myPodcastDB {
     requires org.neo4j.driver;
     requires java.xml;
     requires xstream;
+    requires json.simple;
 
     opens it.unipi.dii.lsmsdb.myPodcastDB.utility to xstream;
     opens it.unipi.dii.lsmsdb.myPodcastDB to javafx.fxml;

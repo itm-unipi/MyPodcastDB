@@ -2,6 +2,12 @@ package it.unipi.dii.lsmsdb.myPodcastDB.utility;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileReader;
+import java.util.Iterator;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.*;
 
 public class JsonDecode {
 
@@ -9,42 +15,33 @@ public class JsonDecode {
 
     public JsonDecode(){
 
-
     }
 
-    public static List<String> getCountries(){
+    public static List<String> getCountries() throws Exception {
 
-        //TODO import them from json file in resources/json
+        Object object = new JSONParser().parse(new FileReader("src/main/resources/json/countries.json"));
+        JSONObject jobject = (JSONObject)object;
+        JSONArray jarray = (JSONArray) jobject.get("countries");
+        Iterator iterator = jarray.iterator();
+
         List<String> countries = new ArrayList<>();
-        countries.add("Italy");
-        countries.add("Germany");
-        countries.add("France");
-        countries.add("USA");
-        countries.add("Canada");
-        countries.add("Spain");
-        countries.add("Turkey");
-        countries.add("UK");
-        countries.add("Mexico");
-        countries.add("China");
+        while(iterator.hasNext())
+            countries.add(iterator.next().toString());
 
         return countries;
 
     }
 
-    public static List<String> getCategories(){
+    public static List<String> getCategories() throws Exception{
 
-        //TODO import them from json file in resources/json
+        Object object = new JSONParser().parse(new FileReader("src/main/resources/json/categories.json"));
+        JSONObject jobject = (JSONObject)object;
+        JSONArray jarray = (JSONArray) jobject.get("categories");
+        Iterator iterator = jarray.iterator();
+
         List<String> categories = new ArrayList<>();
-        categories.add("Horror");
-        categories.add("Crime");
-        categories.add("Business");
-        categories.add("Sport");
-        categories.add("Videogames");
-        categories.add("Foods");
-        categories.add("Healt");
-        categories.add("Nature");
-        categories.add("History");
-        categories.add("Geography");
+        while(iterator.hasNext())
+            categories.add(iterator.next().toString());
 
         return categories;
 
