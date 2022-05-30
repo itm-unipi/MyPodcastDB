@@ -8,6 +8,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -28,7 +29,25 @@ public class AdminDashboardController {
     private ImageView actorPicture;
 
     @FXML
+    private Button cancelInfo;
+
+    @FXML
+    private Button delete;
+
+    @FXML
+    private TextField emailTextField;
+
+    @FXML
     private ImageView home;
+
+    @FXML
+    private Button modifyInfo;
+
+    @FXML
+    private TextField nameTextField;
+
+    @FXML
+    private TextField passwordTextField;
 
     @FXML
     private ImageView searchButton;
@@ -38,6 +57,27 @@ public class AdminDashboardController {
 
     @FXML
     private GridPane statisticsGrid;
+
+    @FXML
+    private Button update1;
+
+    @FXML
+    private Button update2;
+
+    @FXML
+    private Button update3;
+
+    @FXML
+    private Button update4;
+
+    @FXML
+    private Button update5;
+
+    @FXML
+    private Button update6;
+
+    @FXML
+    private Button updateInfo;
 
     @FXML
     void onClickActorProfile(MouseEvent event) {
@@ -67,9 +107,159 @@ public class AdminDashboardController {
         }
     }
 
+    @FXML
+    void clickOnCancel(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnDelete(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnModify(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate1(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate2(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate3(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate4(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate5(MouseEvent event) {
+
+    }
+
+    @FXML
+    void clickOnUpdate6(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnCancel(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnDelete(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnModify(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate1(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate2(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate3(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate4(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate5(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOnUpdate6(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutCancel(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutDelete(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutModify(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate1(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate2(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate3(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate4(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate5(MouseEvent event) {
+
+    }
+
+    @FXML
+    void mouseOutUpdate6(MouseEvent event) {
+
+    }
+
     public void initialize() throws IOException {
-        String name = ((Admin)MyPodcastDB.getInstance().getSessionActor()).getName();
-        Logger.info("Admin logged : " + name);
+        Admin admin = (Admin)MyPodcastDB.getInstance().getSessionActor();
+        Logger.info("Admin logged : " + admin.getName());
 
         // example statistic
         List<Entry<String, Object>> statistics1 = new ArrayList<>();
@@ -137,5 +327,12 @@ public class AdminDashboardController {
         PieChartController controller6 = pieLoader.getController();
         controller6.setData("Most appreciated category", statistics1);
         this.statisticsGrid.add(newPieChart2, column, row);
+
+        // settings buttons and texts
+        this.updateInfo.setVisible(false);
+        this.cancelInfo.setVisible(false);
+        this.nameTextField.setText(admin.getName());
+        this.emailTextField.setText(admin.getEmail());
+        this.passwordTextField.setText("********************");
     }
 }

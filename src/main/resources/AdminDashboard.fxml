@@ -123,7 +123,7 @@
                         </GridPane>
                         <Separator maxWidth="-Infinity" prefWidth="920.0">
                            <VBox.margin>
-                              <Insets bottom="5.0" top="20.0" />
+                              <Insets bottom="20.0" top="20.0" />
                            </VBox.margin>
                         </Separator>
                         <Label layoutX="188.0" layoutY="15.0" prefWidth="920.0" text="Update Statistics" textFill="#636366">
@@ -136,20 +136,248 @@
                         </Label>
                         <HBox maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Label text="Label">
+                              <Label prefWidth="800.0" text="Average age of users per favourite category">
                                  <font>
-                                    <Font name="Corbel Light" size="22.0" />
+                                    <Font name="Corbel Light" size="20.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
                               </Label>
-                              <Button mnemonicParsing="false" text="Update" />
+                              <Button fx:id="update1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate1" onMouseEntered="#mouseOnUpdate1" onMouseExited="#mouseOutUpdate1" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
                            </children>
                         </HBox>
-                        <Separator layoutX="188.0" layoutY="63.0" maxWidth="-Infinity" prefWidth="920.0" />
+                        <HBox layoutX="188.0" layoutY="109.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="800.0" text="Podcasts with highest number of reviews">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="update2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate2" onMouseEntered="#mouseOnUpdate2" onMouseExited="#mouseOutUpdate2" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <HBox layoutX="188.0" layoutY="168.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="800.0" text="Country with highest number of podcasts">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="update3" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate3" onMouseEntered="#mouseOnUpdate3" onMouseExited="#mouseOutUpdate3" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets top="4.0" />
+                           </padding>
+                        </HBox>
+                        <HBox layoutX="188.0" layoutY="195.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="800.0" text="Top favourite categories for every gender">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="update4" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate4" onMouseEntered="#mouseOnUpdate4" onMouseExited="#mouseOutUpdate4" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox layoutX="188.0" layoutY="222.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="800.0" text="Most numerous category">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="update5" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate5" onMouseEntered="#mouseOnUpdate5" onMouseExited="#mouseOutUpdate5" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox layoutX="188.0" layoutY="249.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="800.0" text="Most appreciated category">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets top="3.0" />
+                                 </HBox.margin>
+                              </Label>
+                              <Button fx:id="update6" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate6" onMouseEntered="#mouseOnUpdate6" onMouseExited="#mouseOutUpdate6" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="5.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Separator layoutX="188.0" layoutY="63.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin></Separator>
                         <Label layoutX="188.0" layoutY="71.0" prefWidth="920.0" text="Update your info" textFill="#636366">
                            <font>
                               <Font name="Corbel Bold" size="24.0" />
                            </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
                         </Label>
+                        <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="90.0" text="Name">
+                                 <font>
+                                    <Font name="Corbel" size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="nameTextField" style="-fx-background-color: transparent;">
+                                 <font>
+                                    <Font name="Corbel Light" size="19.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="188.0" layoutY="375.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="90.0" text="Email">
+                                 <font>
+                                    <Font name="Corbel" size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="emailTextField" style="-fx-background-color: transparent;">
+                                 <font>
+                                    <Font name="Corbel Light" size="18.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox alignment="CENTER_LEFT" layoutX="188.0" layoutY="411.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Label prefWidth="90.0" text="Password">
+                                 <font>
+                                    <Font name="Corbel" size="20.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="passwordTextField" style="-fx-background-color: transparent;">
+                                 <font>
+                                    <Font name="Corbel Light" size="18.0" />
+                                 </font>
+                              </TextField>
+                           </children>
+                           <padding>
+                              <Insets top="5.0" />
+                           </padding>
+                        </HBox>
+                        <HBox maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Button fx:id="modifyInfo" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnModify" onMouseEntered="#mouseOnModify" onMouseExited="#mouseOutModify" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #008CBA; -fx-background-radius: 10;" text="Modify" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="updateInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" onMouseEntered="#mouseOnUpdate" onMouseExited="#mouseOutUpdate" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10;" text="Update" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button fx:id="cancelInfo" alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="10.0" mnemonicParsing="false" onMouseClicked="#clickOnCancel" onMouseEntered="#mouseOnCancel" onMouseExited="#mouseOutCancel" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10;" text="Cancel" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </HBox>
+                        <Separator layoutX="188.0" layoutY="63.0" maxWidth="-Infinity" prefWidth="920.0">
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
+                           <VBox.margin>
+                              <Insets bottom="20.0" top="20.0" />
+                           </VBox.margin>
+                        </Separator>
+                        <Label layoutX="188.0" layoutY="347.0" prefWidth="920.0" text="Delete your account" textFill="#636366">
+                           <font>
+                              <Font name="Corbel Bold" size="24.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <Label prefWidth="920.0" scaleY="1.06" text="This action can't be undone.">
+                           <font>
+                              <Font name="Corbel Light" size="18.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="10.0" />
+                           </VBox.margin>
+                        </Label>
+                        <HBox maxWidth="-Infinity" prefWidth="920.0">
+                           <children>
+                              <Button fx:id="delete" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnDelete" onMouseEntered="#mouseOnDelete" onMouseExited="#mouseOutDelete" prefHeight="50.0" prefWidth="198.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10;" text="DELETE ACCOUNT" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel Bold" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </Button>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="40.0" />
+                           </VBox.margin>
+                        </HBox>
                      </children>
                   </VBox>
                </content>
