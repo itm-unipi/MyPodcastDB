@@ -42,6 +42,10 @@ public enum ViewNavigator {
     REVIEW {
         @Override
         public String getPage() { return "ReviewPage.fxml"; }
+    },
+    ADMINDASHBOARD {
+        @Override
+        public String getPage() { return "AdminDashboard.fxml"; }
     };
 
     public abstract String getPage();

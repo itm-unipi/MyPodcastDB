@@ -80,7 +80,7 @@ public class LoginController {
         }
         else if(loginAdminRadioButton.isSelected()){
             Logger.info("Admin actor selected");
-            String actorType = "User";
+            String actorType = "Admin";
             Admin admin = (Admin)simActorService(actorname, password, actorType);
             MyPodcastDB.getInstance().setSession(admin, actorType);
         }
@@ -89,8 +89,11 @@ public class LoginController {
 
         String log = "Login clicked: (" + actorname + ", " + password +")";
         Logger.info(log);
-        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
 
+        if(loginAdminRadioButton.isSelected())
+            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+        else
+            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
     @FXML
