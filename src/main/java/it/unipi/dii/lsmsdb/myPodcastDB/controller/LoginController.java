@@ -31,7 +31,7 @@ public class LoginController {
     private RadioButton loginAuthorRadioButton;
 
     @FXML
-    private RadioButton loginUnUserRadioButton;
+    private Label loginUnUserButton;
 
     @FXML
     private Button loginLoginButton;
@@ -53,7 +53,6 @@ public class LoginController {
         loginUserRadioButton.setToggleGroup(tg);
         loginAuthorRadioButton.setToggleGroup(tg);
         loginAdminRadioButton.setToggleGroup(tg);
-        loginUnUserRadioButton.setToggleGroup(tg);
         loginUserRadioButton.setSelected(true);
     }
 
@@ -140,10 +139,20 @@ public class LoginController {
     }
 
     @FXML
-    void unUserRadioButtonClick() throws IOException {
+    void unUserButtonClick() throws IOException {
         Logger.info("Sign in as unregistered user");
         MyPodcastDB.getInstance().setSession("","Unregistered");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+    }
+
+    @FXML
+    void unUserButtonIn(){
+        loginUnUserButton.setStyle("-fx-font-weight: bold; -fx-cursor: hand;");
+    }
+
+    @FXML
+    void unUserButtonOut(){
+        loginUnUserButton.setStyle("-fx-font-weight: normal; -fx-cursor: hand;");
     }
 
     @FXML

@@ -131,11 +131,14 @@
                               <Insets bottom="10.0" />
                            </VBox.margin>
                         </RadioButton>
-                        <RadioButton fx:id="loginUnUserRadioButton" mnemonicParsing="false" onMouseClicked="#unUserRadioButtonClick" style="-fx-cursor: hand;" text="Unregistered User">
+                        <Label fx:id="loginUnUserButton" onMouseClicked="#unUserButtonClick" onMouseEntered="#unUserButtonIn" onMouseExited="#unUserButtonOut" prefHeight="17.0" prefWidth="174.0" style="-fx-cursor: hand;" text="Continue as anonymous">
                            <font>
                               <Font name="Corbel" size="14.0" />
                            </font>
-                        </RadioButton>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Label>
                      </children>
                   </VBox>
                </children></Pane>
