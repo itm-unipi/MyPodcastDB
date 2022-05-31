@@ -6,6 +6,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -76,11 +77,13 @@ public class ReviewController {
 
     @FXML
     void mouseOnReviewAuthor(MouseEvent event) {
+        this.authorName.setCursor(Cursor.HAND);
         this.authorName.setTextFill(Color.color(0.388, 0.388, 0.4));
     }
 
     @FXML
     void mouseOutReviewAuthor(MouseEvent event) {
+        this.authorName.setCursor(Cursor.DEFAULT);
         this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 }

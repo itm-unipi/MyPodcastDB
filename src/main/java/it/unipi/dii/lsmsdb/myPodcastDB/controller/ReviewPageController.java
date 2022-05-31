@@ -11,6 +11,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -194,21 +195,25 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnAuthor(MouseEvent event) {
+        this.author.setCursor(Cursor.HAND);
         this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
     }
 
     @FXML
     void mouseOnTitle(MouseEvent event) {
+        this.title.setCursor(Cursor.HAND);
         this.title.setTextFill(Color.color(0.6, 0.6, 0.6));
     }
 
     @FXML
     void mouseOutAuthor(MouseEvent event) {
+        this.author.setCursor(Cursor.DEFAULT);
         this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
     @FXML
     void mouseOutTitle(MouseEvent event) {
+        this.title.setCursor(Cursor.DEFAULT);
         this.title.setTextFill(Color.color(0.0, 0.0, 0.0));
     }
 
@@ -266,6 +271,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnFirstStar(MouseEvent event) {
+        this.star1.setCursor(Cursor.HAND);
+
         Image star = ImageCache.getImageFromLocalPath("/img/star.png");
         Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
@@ -278,6 +285,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnSecondStar(MouseEvent event) {
+        this.star2.setCursor(Cursor.HAND);
+
         Image star = ImageCache.getImageFromLocalPath("/img/star.png");
         Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
@@ -290,6 +299,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnThirdStar(MouseEvent event) {
+        this.star3.setCursor(Cursor.HAND);
+
         Image star = ImageCache.getImageFromLocalPath("/img/star.png");
         Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
@@ -302,6 +313,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnFourthStar(MouseEvent event) {
+        this.star4.setCursor(Cursor.HAND);
+
         Image star = ImageCache.getImageFromLocalPath("/img/star.png");
         Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
@@ -314,6 +327,8 @@ public class ReviewPageController {
 
     @FXML
     void mouseOnFifthStar(MouseEvent event) {
+        this.star5.setCursor(Cursor.HAND);
+
         Image star = ImageCache.getImageFromLocalPath("/img/star.png");
 
         this.star1.setImage(star);
@@ -368,26 +383,31 @@ public class ReviewPageController {
 
     @FXML
     void mouseOutFirstStar(MouseEvent event) {
+        this.star1.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
     @FXML
     void mouseOutSecondStar(MouseEvent event) {
+        this.star2.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
     @FXML
     void mouseOutThirdStar(MouseEvent event) {
+        this.star3.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
     @FXML
     void mouseOutFourthStar(MouseEvent event) {
+        this.star4.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
     @FXML
     void mouseOutFifthStar(MouseEvent event) {
+        this.star5.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
