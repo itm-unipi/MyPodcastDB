@@ -10,11 +10,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="920.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.ReviewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefWidth="920.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.ReviewController">
    <children>
       <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
-            <VBox prefWidth="100.0" style="-fx-background-color: #f8f8f8; -fx-background-radius: 20;" BorderPane.alignment="CENTER">
+            <VBox prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 20;" BorderPane.alignment="CENTER">
                <children>
                   <HBox style="-fx-background-color: transparent;">
                      <children>
