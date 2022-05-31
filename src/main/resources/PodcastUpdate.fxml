@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -10,7 +11,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 
 <AnchorPane prefWidth="500.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastUpdateController">
    <children>
@@ -67,9 +67,22 @@
                         <Insets left="20.0" top="10.0" />
                      </VBox.margin>
                   </HBox>
+                  <HBox alignment="CENTER_LEFT" layoutX="30.0" layoutY="142.0">
+                     <children>
+                        <Label prefWidth="200.0" text="Release date">
+                           <font>
+                              <Font name="Corbel" size="20.0" />
+                           </font>
+                        </Label>
+                        <DatePicker fx:id="releaseDate" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="30.0" prefWidth="250.0" />
+                     </children>
+                     <VBox.margin>
+                        <Insets left="20.0" top="10.0" />
+                     </VBox.margin>
+                  </HBox>
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="40.0">
                      <children>
-                        <Label prefWidth="200.0" text="Content Advisory">
+                        <Label prefWidth="200.0" text="Content advisory">
                            <font>
                               <Font name="Corbel" size="20.0" />
                            </font>
@@ -109,7 +122,7 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="101.0">
                      <children>
-                        <Label prefWidth="200.0" text="URL Artwork 600 x 600">
+                        <Label prefWidth="200.0" text="URL artwork 600 x 600">
                            <font>
                               <Font name="Corbel" size="20.0" />
                            </font>

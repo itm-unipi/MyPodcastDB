@@ -4,8 +4,14 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class PodcastUpdateController {
 
@@ -33,6 +39,9 @@ public class PodcastUpdateController {
     private Podcast podcast;
 
     @FXML
+    private DatePicker releaseDate;
+
+    @FXML
     void clickOnCancel(MouseEvent event) {
         Logger.info("Cancel");
     }
@@ -50,6 +59,13 @@ public class PodcastUpdateController {
             this.podcast.setPrimaryCategory(this.category.getText());
         if (!this.artworkUrl.getText().equals(this.podcast.getArtworkUrl600()) && !this.artworkUrl.getText().equals(""))
             this.podcast.setArtworkUrl600(this.artworkUrl.getText());
+        if (this.releaseDate.getValue() != null) {
+            LocalDate localDate = this.releaseDate.getValue();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date releaseDate = Date.from(instant);
+            if (this.podcast.getReleaseDate() != releaseDate)
+                this.podcast.setReleaseDate(releaseDate);
+        }
 
         Logger.info(this.podcast.toString());
     }
@@ -94,6 +110,7 @@ public class PodcastUpdateController {
         this.podcast.setPrimaryCategory("test3");
         this.podcast.setCountry("test4");
         this.podcast.setArtworkUrl600("test5");
+        this.podcast.setReleaseDate(new Date());
 
         setData(podcast);
     }
