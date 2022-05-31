@@ -165,6 +165,19 @@ public class UserPageController {
     @FXML
     private AnchorPane userPageAnchorPane;
 
+    @FXML
+    private ImageView imageButtonRight;
+
+    @FXML
+    private ImageView imageButtonLeft;
+
+    private int imageNumber;
+
+    private String imagePath;
+
+    private int maxUserImages = 30;
+
+
 
 
     /**************/
@@ -301,6 +314,8 @@ public class UserPageController {
         userPageConfirmButton.setVisible(true);
         userPageCrossButton.setVisible(true);
         userPageDeleteButton.setVisible(true);
+        imageButtonLeft.setVisible(true);
+        imageButtonRight.setVisible(true);
         userPageUsernameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
         userPageNameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
         userPageSurnameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
@@ -309,6 +324,7 @@ public class UserPageController {
         userPageAgeTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
         userPageGenderTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
         userPageFavGenreTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
+        imageNumber = 0;
     }
 
     @FXML
@@ -320,6 +336,8 @@ public class UserPageController {
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
         userPageDeleteButton.setVisible(false);
+        imageButtonLeft.setVisible(false);
+        imageButtonRight.setVisible(false);
         userPageUsernameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageNameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageSurnameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
@@ -341,6 +359,8 @@ public class UserPageController {
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
         userPageDeleteButton.setVisible(false);
+        imageButtonLeft.setVisible(false);
+        imageButtonRight.setVisible(false);
         userPageUsernameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageNameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
         userPageSurnameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
@@ -419,6 +439,31 @@ public class UserPageController {
         );
     }
 
+    @FXML
+    private void imageRightButtonClick(MouseEvent event){
+        Logger.info("image right button clicked");
+        if(imageNumber == maxUserImages - 1 )
+            imageNumber = 0;
+        else
+            imageNumber += 1;
+
+        imagePath = imagePath = "/img/users/user" + (Integer)imageNumber + ".png";
+        userPageImage.setImage(ImageCache.getImageFromLocalPath(imagePath));
+    }
+
+    @FXML
+    private void imageLeftButtonClick(MouseEvent event){
+
+        Logger.info("image left button clicked");
+        if(imageNumber == 0 )
+            imageNumber = maxUserImages - 1;
+        else
+            imageNumber -= 1;
+
+        imagePath = "/img/users/user" + (Integer)imageNumber + ".png";
+        userPageImage.setImage(ImageCache.getImageFromLocalPath(imagePath));
+    }
+
 
     /***********************/
 
@@ -485,18 +530,21 @@ public class UserPageController {
 
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
+        imageButtonLeft.setVisible(false);
+        imageButtonRight.setVisible(false);
 
         //fill textfields and image
         userPageUsernameTextField.setText(pageOwner.getUsername());
         userPageCountryTextField.setText(pageOwner.getCountry());
         userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
         userPageGenderTextField.setText(pageOwner.getGender());
-        Image image = ImageCache.getImageFromURL(pageOwner.getPicturePath());
+        Image image = ImageCache.getImageFromLocalPath(pageOwner.getPicturePath());
         userPageImage.setImage(image);
         userPageNameTextField.setText(pageOwner.getName());
         userPageSurnameTextField.setText(pageOwner.getSurname());
         userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
         userPageEmailTextField.setText(pageOwner.getEmail());
+        imagePath = pageOwner.getPicturePath();
 
         // fill the watchlist grid
         if(!wPodcasts.isEmpty()) {
@@ -523,7 +571,6 @@ public class UserPageController {
         }
 
         // fill the liked grid
-
         if(!lPodcasts.isEmpty()){
             int row = 0;
             int column = 0;
@@ -605,6 +652,7 @@ public class UserPageController {
         pageOwner.setEmail("paologiacomini@example.com");
         pageOwner.setName("Paolo");
         pageOwner.setSurname("Giacomini");
+        pageOwner.setPicturePath("/img/users/user5.png");
 
         Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
         Podcast p2 = new Podcast("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
@@ -679,6 +727,7 @@ public class UserPageController {
         pageOwner.setEmail(userPageEmailTextField.getText());
         pageOwner.setGender(userPageGenderTextField.getText());
         pageOwner.setFavouriteGenre(userPageFavGenreTextField.getText());
+        pageOwner.setPicturePath(imagePath);
 
     }
 
@@ -692,6 +741,7 @@ public class UserPageController {
         userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
         userPageGenderTextField.setText(pageOwner.getGender());
         userPageEmailTextField.setText(pageOwner.getEmail());
+        userPageImage.setImage(ImageCache.getInstance().getImageFromLocalPath(pageOwner.getPicturePath()));
     }
 
 }
