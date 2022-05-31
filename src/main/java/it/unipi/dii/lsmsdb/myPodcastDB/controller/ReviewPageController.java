@@ -38,6 +38,9 @@ public class ReviewPageController {
     private ProgressBar fiveStars;
 
     @FXML
+    private ImageView logout;
+
+    @FXML
     private Label noReviewsMessage;
 
     @FXML
@@ -145,6 +148,12 @@ public class ReviewPageController {
         this.ownReview.setRating(4);
 
         Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnLogout(MouseEvent event) throws IOException {
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML

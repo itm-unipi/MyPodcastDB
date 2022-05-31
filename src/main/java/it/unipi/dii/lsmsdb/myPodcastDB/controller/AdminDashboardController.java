@@ -44,6 +44,9 @@ public class AdminDashboardController {
     private ImageView home;
 
     @FXML
+    private ImageView logout;
+
+    @FXML
     private Button modifyInfo;
 
     @FXML
@@ -135,6 +138,12 @@ public class AdminDashboardController {
     @FXML
     void clickOnDelete(MouseEvent event) {
         Logger.info("Delete Admin");
+    }
+
+    @FXML
+    void clickOnLogout(MouseEvent event) throws IOException {
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML

@@ -50,6 +50,9 @@ public class PodcastPageController {
     private ImageView like;
 
     @FXML
+    private ImageView logout;
+
+    @FXML
     private Label numEpisodes;
 
     @FXML
@@ -137,6 +140,12 @@ public class PodcastPageController {
             Logger.info("Like");
         else
             Logger.info("Dislike");
+    }
+
+    @FXML
+    void clickOnLogout(MouseEvent event) throws IOException {
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML

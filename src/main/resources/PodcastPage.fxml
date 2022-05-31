@@ -45,6 +45,17 @@
                               </Label>
                               <HBox alignment="CENTER_RIGHT" prefHeight="79.0" prefWidth="785.0">
                                  <children>
+                                    <ImageView fx:id="logout" fitHeight="28.0" fitWidth="30.0" layoutX="444.0" layoutY="36.0" onMouseClicked="#clickOnLogout" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/Logout_24px.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <HBox.margin>
+                                          <Insets right="7.0" />
+                                       </HBox.margin>
+                                    </ImageView>
                                     <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/home.png" />
