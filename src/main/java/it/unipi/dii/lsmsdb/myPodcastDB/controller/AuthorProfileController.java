@@ -10,29 +10,35 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 public class AuthorProfileController {
+    @FXML
+    private BorderPane MainPage;
     @FXML
     private Label authorName;
 
     @FXML
     private ImageView searchButton;
+
+    @FXML
+    private HBox authorButtons;
 
     @FXML
     private ImageView actorPicture;
@@ -118,6 +124,106 @@ public class AuthorProfileController {
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
+    @FXML
+    void addPodcast(MouseEvent event) throws IOException {
+        Logger.info("Add podcast button clicked");
+
+        BoxBlur blur = new BoxBlur(3, 3 , 3);
+        MainPage.setEffect(blur);
+
+        // Loading the fxml file of the popup dialog
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("AddPodcast.fxml"));
+
+        // Creating a Dialog Pane
+        DialogPane authorDialogPane = fxmlLoader.load();
+        AddPodcastController addPodcastController = fxmlLoader.getController();
+
+        // Pass the data of the author to the dialog pane
+        //addPodcastController.setData(MyPodcastDB.getInstance().getSessionType());
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.setDialogPane(authorDialogPane);
+        dialog.setTitle("Add new podcast");
+
+        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        ButtonType buttonTypeApply = new ButtonType("Apply", ButtonBar.ButtonData.APPLY);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeApply);
+
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeCancel);
+
+        Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+        //Logger.info("" + clickedButton.get());
+        MainPage.setEffect(null);
+
+    }
+
+    @FXML
+    void settings(MouseEvent event) throws IOException {
+        Logger.info("Settings button clicked");
+
+        BoxBlur blur = new BoxBlur(3, 3 , 3);
+        MainPage.setEffect(blur);
+
+        // Loading the fxml file of the popup dialog
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSettings.fxml"));
+
+        // Creating a Dialog Pane
+        DialogPane authorSettingsDialogPane = fxmlLoader.load();
+        AuthorSettingsController settingsController = fxmlLoader.getController();
+
+        // Pass the data of the author to the dialog pane
+        //settingsController.setData(MyPodcastDB.getInstance().getSessionType());
+
+        Dialog<Author> dialog = new Dialog<>();
+        dialog.setDialogPane(authorSettingsDialogPane);
+        dialog.setTitle("Settings");
+        settingsController.setData((Author)MyPodcastDB.getInstance().getSessionActor());
+
+        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        ButtonType buttonTypeApply = new ButtonType("Apply", ButtonBar.ButtonData.APPLY);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeApply);
+
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().add(buttonTypeCancel);
+        dialog.setResultConverter(new Callback<ButtonType, Author>() {
+            @Override
+            public Author call(ButtonType b) {
+
+                if (b == buttonTypeApply) {
+                    return new Author();
+                }
+
+                return null;
+            }
+        });
+
+        Optional<Author> result = dialog.showAndWait();
+
+        if (result.isPresent()) {
+            // query di update
+            Logger.info("Result: " + result.get());
+        }
+
+        //Optional<ButtonType> clickedButton = dialog.showAndWait();
+
+        //if (clickedButton.isPresent() && clickedButton.get() == ButtonType.APPLY) {
+        //    Logger.info(clickedButton.isPresent() + " ");
+        //}
+
+        //Logger.info("" + clickedButton.get());
+        MainPage.setEffect(null);
+    }
+
     /**********************************************************/
 
     @FXML
@@ -156,6 +262,10 @@ public class AuthorProfileController {
                 authorFollowing.setText("Authors you follow");
                 podcastLabel.setText("Your podcasts");
             } else {
+                // Hiding author buttons
+                authorButtons.setVisible(false);
+                authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-width: 0; -fx-min-height: 0;");
+
                 // QUERY
                 Author author = new Author();
                 author.setName(StageManager.getObjectIdentifier());
@@ -171,6 +281,24 @@ public class AuthorProfileController {
             // Setting actor stuff
             Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
             actorPicture.setImage(image);
+
+            // Hiding author buttons
+            authorButtons.setVisible(false);
+            authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-width: 0; -fx-min-height: 0;");
+
+            Author a = new Author(); // Find using ObjectIdentifier
+            a.setName(StageManager.getObjectIdentifier());
+            authorName.setText(a.getName());
+            authorFollowing.setText("Authors followed by " + a.getName());
+
+            podcastLabel.setText("Podcasts");
+
+        } else if (actorType.equals("Unregistered")) {
+            Logger.info("I'm an unregistered user");
+
+            // Hiding author buttons
+            authorButtons.setVisible(false);
+            authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-width: 0; -fx-min-height: 0;");
 
             Author a = new Author(); // Find using ObjectIdentifier
             a.setName(StageManager.getObjectIdentifier());
