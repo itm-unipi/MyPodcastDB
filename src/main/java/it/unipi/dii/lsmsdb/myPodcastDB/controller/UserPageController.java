@@ -10,12 +10,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -159,6 +161,9 @@ public class UserPageController {
 
     @FXML
     private HBox userPageUsersAreaHBox;
+
+    @FXML
+    private AnchorPane userPageAnchorPane;
 
 
 
@@ -362,22 +367,32 @@ public class UserPageController {
     @FXML
     void logoutButtonClick(MouseEvent event) throws IOException{
         Logger.info("logout button clicked");
+        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML
     void deleteButtonClick(MouseEvent event) throws  IOException{
         Logger.info("delete button clicked");
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("");
-        alert.setHeaderText("Really Delete your account?");
-        alert.setContentText("");
 
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("OK"),new ButtonType("CANCEL"));
+        Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+        alert.setTitle(null);
+        alert.setHeaderText("Really Delete your account?");
+        alert.setContentText(null);
+        alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/checked_80px.png")));
+        alert.initOwner(userPageAnchorPane.getScene().getWindow());
+
+        userPageAnchorPane.setEffect(new BoxBlur(3, 3, 3));
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        userPageAnchorPane.setEffect(null);
+
+
+        if (result.get().getText().equals(alert.getButtonTypes().get(0).getText())){
             StageManager.showPage(ViewNavigator.LOGIN.getPage());
         } else {
-           return;
+            return;
         }
 
     }

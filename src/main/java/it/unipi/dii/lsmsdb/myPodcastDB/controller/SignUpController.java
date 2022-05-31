@@ -11,10 +11,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -87,6 +90,9 @@ public class SignUpController {
     @FXML
     private ImageView signUpRightButton;
 
+    @FXML
+    private AnchorPane signUpAnchorPane;
+
     private String actorType;
 
     private int imageNumber;
@@ -144,10 +150,16 @@ public class SignUpController {
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
                 alert.setTitle("Error!");
                 alert.setHeaderText("Invalid inputs");
-                alert.setContentText("");
+                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+                alert.setContentText(null);
+
+                signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
                 alert.showAndWait();
+                signUpAnchorPane.setEffect(null);
                 return;
             }
 
@@ -156,12 +168,18 @@ public class SignUpController {
             Logger.info(user.toString());
             Author author = new Author("", name, password,email, picturePath);
             Logger.info(author.toString());
+
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
             alert.setTitle("Information!");
             alert.setHeaderText("Account created");
-            alert.setContentText("");
+            alert.setContentText(null);
+            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/info_80px.png")));
 
+            signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
             alert.showAndWait();
+            signUpAnchorPane.setEffect(null);
         }
         else{
             String name = signUpUsernameTextField.getText();
@@ -173,21 +191,32 @@ public class SignUpController {
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
                 alert.setTitle("Error!");
                 alert.setHeaderText("Invalid inputs");
-                alert.setContentText("");
+                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+                alert.setContentText(null);
+
+                signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
                 alert.showAndWait();
+                signUpAnchorPane.setEffect(null);
                 return;
             }
 
             Author author = new Author("", name, password,email, picturePath);
             Logger.info(author.toString());
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
             alert.setTitle("Information!");
             alert.setHeaderText("Account created");
-            alert.setContentText("");
+            alert.setContentText(null);
+            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/info_80px.png")));
 
+            signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
             alert.showAndWait();
+            signUpAnchorPane.setEffect(null);
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }

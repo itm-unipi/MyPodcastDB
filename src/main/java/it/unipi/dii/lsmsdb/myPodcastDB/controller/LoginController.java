@@ -4,16 +4,22 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -47,6 +53,9 @@ public class LoginController {
     private TextField loginUsernameTextField;
 
     @FXML
+    private AnchorPane loginAnchorPane;
+
+    @FXML
     public void initialize(){
 
         ToggleGroup tg = new ToggleGroup();
@@ -60,12 +69,18 @@ public class LoginController {
     void loginLoginButtonClick(MouseEvent event) throws IOException {
         if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty()) {
             Logger.error("Login clicked: invalid values");
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+            stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
             alert.setTitle("Error!");
             alert.setHeaderText("Invalid inputs");
-            alert.setContentText("");
+            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+            alert.setContentText(null);
 
+            loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
             alert.showAndWait();
+            loginAnchorPane.setEffect(null);
             return;
         }
 
@@ -176,31 +191,31 @@ public class LoginController {
     }
 
     void login() throws IOException {
-        String actorname = loginUsernameTextField.getText();
+        String actorName = loginUsernameTextField.getText();
         String password = loginPasswordTextField.getText();
 
         if(loginUserRadioButton.isSelected()) {
             Logger.info("User actor selected");
             String actorType = "User";
-            User user = (User)simActorService(actorname, password, actorType);
+            User user = (User)simActorService(actorName, password, actorType);
             MyPodcastDB.getInstance().setSession(user, actorType);
         }
         else if(loginAuthorRadioButton.isSelected()) {
             Logger.info("Author actor selected");
             String actorType = "Author";
-            Author author = (Author)simActorService(actorname, password, actorType);
+            Author author = (Author)simActorService(actorName, password, actorType);
             MyPodcastDB.getInstance().setSession(author, actorType);
         }
         else if(loginAdminRadioButton.isSelected()){
             Logger.info("Admin actor selected");
             String actorType = "User";
-            Admin admin = (Admin)simActorService(actorname, password, actorType);
+            Admin admin = (Admin)simActorService(actorName, password, actorType);
             MyPodcastDB.getInstance().setSession(admin, actorType);
         }
         else
             Logger.error("No actor selected");
 
-        String log = "Login clicked: (" + actorname + ", " + password +")";
+        String log = "Login clicked: (" + actorName + ", " + password +")";
         Logger.info(log);
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
