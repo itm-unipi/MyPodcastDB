@@ -323,6 +323,9 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
                               </Label>
                            </children>
                         </VBox>
@@ -344,6 +347,9 @@
                                              <font>
                                                 <Font name="Corbel Light" size="25.0" />
                                              </font>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
                                           </Label>
                                           <Label fx:id="country" scaleY="1.06" text="Country">
                                              <font>
@@ -389,7 +395,7 @@
                                  </children>
                               </HBox>
                               <Separator prefWidth="200.0" />
-                              <Label fx:id="noEpisodeMessage" text="There are no episodes yet.">
+                              <Label fx:id="noEpisodeMessage" scaleY="1.06" text="There are no episodes yet.">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />
                                  </font>
