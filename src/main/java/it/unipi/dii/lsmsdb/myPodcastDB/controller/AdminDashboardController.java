@@ -29,6 +29,9 @@ import java.util.Map.Entry;
 public class AdminDashboardController {
 
     @FXML
+    private Button addAdmin;
+
+    @FXML
     private ImageView actorPicture;
 
     @FXML
@@ -87,6 +90,10 @@ public class AdminDashboardController {
 
     private Admin admin;
 
+    @FXML
+    void clickOnAddAdmin(MouseEvent event) {
+        Logger.info("Add admin");
+    }
     @FXML
     void onClickActorProfile(MouseEvent event) {
         Logger.info("Click on profile");
@@ -225,6 +232,11 @@ public class AdminDashboardController {
     }
 
     @FXML
+    void mouseOnAddAdmin(MouseEvent event) {
+        this.addAdmin.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
+    }
+
+    @FXML
     void mouseOnDelete(MouseEvent event) {
         this.delete.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
@@ -267,6 +279,11 @@ public class AdminDashboardController {
     @FXML
     void mouseOnUpdate6(MouseEvent event) {
         this.update6.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+    }
+
+    @FXML
+    void mouseOutAddAdmin(MouseEvent event) {
+        this.addAdmin.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML

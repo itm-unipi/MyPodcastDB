@@ -368,36 +368,79 @@
                               <Insets bottom="20.0" top="20.0" />
                            </VBox.margin>
                         </Separator>
-                        <Label layoutX="188.0" layoutY="347.0" prefWidth="920.0" text="Delete your account" textFill="#636366">
-                           <font>
-                              <Font name="Corbel Bold" size="24.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <Label prefWidth="920.0" scaleY="1.06" text="This action can't be undone.">
-                           <font>
-                              <Font name="Corbel Light" size="18.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="10.0" />
-                           </VBox.margin>
-                        </Label>
-                        <HBox maxWidth="-Infinity" prefWidth="920.0">
+                        <HBox alignment="TOP_CENTER" maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Button fx:id="delete" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnDelete" onMouseEntered="#mouseOnDelete" onMouseExited="#mouseOutDelete" prefHeight="50.0" prefWidth="198.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10; -fx-border-radius: 10;" text="DELETE ACCOUNT" textFill="WHITE">
-                                 <font>
-                                    <Font name="Corbel Bold" size="20.0" />
-                                 </font>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                              </Button>
+                              <VBox>
+                                 <children>
+                                    <Label prefWidth="920.0" text="Delete your account" textFill="#636366">
+                                       <font>
+                                          <Font name="Corbel Bold" size="24.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label prefWidth="920.0" text="This action can't be undone.">
+                                       <font>
+                                          <Font name="Corbel Light" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <HBox maxWidth="-Infinity" prefWidth="920.0">
+                                       <children>
+                                          <Button fx:id="delete" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnDelete" onMouseEntered="#mouseOnDelete" onMouseExited="#mouseOutDelete" prefHeight="50.0" prefWidth="198.0" style="-fx-background-color: #f4511e; -fx-background-radius: 10; -fx-border-radius: 10;" text="DELETE ACCOUNT" textFill="WHITE">
+                                             <font>
+                                                <Font name="Corbel Bold" size="20.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="40.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <VBox layoutX="188.0" layoutY="10.0">
+                                 <children>
+                                    <Label prefWidth="920.0" text="Add new Administrator" textFill="#636366">
+                                       <font>
+                                          <Font name="Corbel Bold" size="24.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <Label prefWidth="920.0" text="This action can't be undone.">
+                                       <font>
+                                          <Font name="Corbel Light" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets bottom="10.0" />
+                                       </VBox.margin>
+                                    </Label>
+                                    <HBox maxWidth="-Infinity" prefWidth="920.0">
+                                       <children>
+                                          <Button fx:id="addAdmin" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnAddAdmin" onMouseEntered="#mouseOnAddAdmin" onMouseExited="#mouseOutAddAdmin" prefHeight="50.0" prefWidth="198.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10;" text="ADD NEW ADMIN" textFill="WHITE">
+                                             <font>
+                                                <Font name="Corbel Bold" size="20.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </Button>
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets bottom="40.0" />
+                                       </VBox.margin>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
-                           <VBox.margin>
-                              <Insets bottom="40.0" />
-                           </VBox.margin>
                         </HBox>
                      </children>
                   </VBox>
