@@ -145,9 +145,11 @@ public class AuthorSettingsController {
         if (!authorPassword.getText().equals(authorConfirmPassword.getText())) {
             Logger.info("password doesn't match");
             Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(dialogPane.getScene().getWindow());
             alert.setTitle("Password Error");
-            //alert.setHeaderText("Are u sure?");
-            //alert.setContentText(null);
+            alert.setHeaderText(null);
+            alert.setContentText("Password doesn't match!");
+            alert.setGraphic(null);
             alert.showAndWait();
             emptyFields = true;
         }
