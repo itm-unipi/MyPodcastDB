@@ -1,29 +1,181 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.DialogPane;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Paint;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class AddPodcastController {
+    @FXML
+    private TextField artworkURLField;
 
     @FXML
-    private ChoiceBox<String> choiceBoxCategories;
+    private TextField authorNameField;
 
     @FXML
-    private ChoiceBox<String> choiceBoxCountry;
+    private TextField contentAdvisoryRatingField;
 
     @FXML
-    private ChoiceBox<String> choiceBoxPrimaryCategory;
+    private TextField podcastNameField;
 
-    public void initialize() {
+    @FXML
+    private DatePicker releaseDateField;
+
+    @FXML
+    private ComboBox<String> comboBoxCountry;
+
+    @FXML
+    private ComboBox<String> comboBoxPrimaryCategory;
+
+    @FXML
+    private GridPane gridSecondaryCategories;
+
+    @FXML
+    private DialogPane dialogPane;
+
+    @FXML
+    void restoreBorderTextField(MouseEvent event) {
+        ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    @FXML
+    void restoreBorderComboBox(MouseEvent event) {
+        ((ComboBox)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    @FXML
+    void restoreBorderDatePicker(MouseEvent event) {
+        ((DatePicker)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    @FXML
+    void btnAddPodcast(ActionEvent event) throws IOException {
+        Logger.info("Add podcast clicked");
+
+        // TODO: query to database
+        boolean emptyFields = false;
+
+        if (podcastNameField.getText().equals("")) {
+            podcastNameField.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (artworkURLField.getText().equals("")) {
+            artworkURLField.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (contentAdvisoryRatingField.getText().equals("")) {
+            contentAdvisoryRatingField.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (comboBoxCountry.getValue() == null) {
+            comboBoxCountry.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (comboBoxPrimaryCategory.getValue() == null) {
+            comboBoxPrimaryCategory.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (releaseDateField.getValue() == null) {
+            releaseDateField.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (!emptyFields) {
+            String podcastName = podcastNameField.getText();
+            String authorId = ((Author) MyPodcastDB.getInstance().getSessionActor()).getId();
+            String authorName = ((Author) MyPodcastDB.getInstance().getSessionActor()).getName();
+            String artworkUrl600 = artworkURLField.getText();
+            String contentAdvisoryRating = contentAdvisoryRatingField.getText();
+            String country = comboBoxCountry.getValue();
+            String primaryCategory = comboBoxPrimaryCategory.getValue();
+            List<String> categories = new ArrayList<>();
+
+            for (Node child : gridSecondaryCategories.getChildren()) {
+                boolean isSelected = ((CheckBox) child).isSelected();
+                if (isSelected)
+                    categories.add(((CheckBox) child).getText());
+            }
+
+            LocalDate localDate = releaseDateField.getValue();
+            Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
+            Date releaseDate = Date.from(instant);
+
+            Podcast podcast = new Podcast("0", podcastName, authorId, authorName, "", artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+            Logger.info(podcast.toString());
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initOwner(dialogPane.getScene().getWindow());
+            alert.setTitle("Podcast added!");
+            alert.setHeaderText(null);
+            alert.setContentText("Podcast successfully added!");
+            alert.setGraphic(null);
+            alert.showAndWait();
+            closeStage(event);
+
+            // Changing stage
+            StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcast.getId());
+        }
+    }
+
+    @FXML
+    void btnCancel(ActionEvent event) {
+        Logger.info("Cancel clicked");
+        closeStage(event);
+    }
+
+    private void closeStage(ActionEvent event) {
+        Node source = (Node)event.getSource();
+        Stage stage = (Stage)source.getScene().getWindow();
+        stage.close();
+    }
+
+    public void initialize() throws Exception {
         // Add choice for Country
-        choiceBoxCountry.getItems().add("Choice 1");
+        for (String country: JsonDecode.getCountries()) {
+            comboBoxCountry.getItems().add(country);
+        }
 
-        // Add choice for Category
-        choiceBoxPrimaryCategory.getItems().add("Choice 1");
+        // Add choice for Category fields
+        int row = 0;
+        int column = 0;
+        for (String category: JsonDecode.getCategories()) {
+            comboBoxPrimaryCategory.getItems().add(category);
 
-        // Add choice for Secondary Categories
-        choiceBoxCategories.getItems().add("Choice 1");
+            CheckBox newCategory = new CheckBox(category);
+            newCategory.setStyle("-fx-font-family: Corbel; -fx-font-size: 13");
+            gridSecondaryCategories.add(newCategory, column++, row);
+
+            if (column == 3) {
+                column = 0;
+                row++;
+            }
+        }
+
+        authorNameField.setText(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
     }
 }

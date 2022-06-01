@@ -153,39 +153,39 @@
                                                 <Insets right="10.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Button fx:id="followAuthor" mnemonicParsing="false" style="-fx-background-color: #db55e7; -fx-border-radius: 10; -fx-background-radius: 10;" text="Follow" textFill="WHITE">
+                                          <Button fx:id="followAuthor" mnemonicParsing="false" style="-fx-background-color: #db55e7; -fx-border-radius: 8; -fx-background-radius: 8;" text="Follow" textFill="WHITE">
                                              <font>
-                                                <Font name="Corbel" size="16.0" />
+                                                <Font name="Corbel Bold" size="16.0" />
                                              </font>
                                              <HBox.margin>
-                                                <Insets right="10.0" top="1.0" />
+                                                <Insets right="10.0" top="2.0" />
                                              </HBox.margin>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                              <padding>
-                                                <Insets bottom="4.0" left="16.0" right="15.0" top="4.0" />
+                                                <Insets bottom="5.0" left="17.0" right="15.0" top="5.0" />
                                              </padding>
                                           </Button>
-                                          <Button fx:id="deleteAuthorButton" mnemonicParsing="false" style="-fx-background-color: black; -fx-background-radius: 10; -fx-border-radius: 10;" text="Delete Author" textFill="WHITE">
+                                          <Button fx:id="deleteAuthorButton" mnemonicParsing="false" style="-fx-background-color: #333333; -fx-background-radius: 8; -fx-border-radius: 8;" text="Delete Author" textFill="WHITE">
                                              <font>
-                                                <Font name="Corbel" size="16.0" />
+                                                <Font name="Corbel Bold" size="16.0" />
                                              </font>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                              <graphic>
-                                                <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView blendMode="ADD" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
                                                       <Image url="@img/deleteActor.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
                                              <padding>
-                                                <Insets bottom="4.0" left="11.0" right="15.0" top="4.0" />
+                                                <Insets bottom="5.0" left="13.0" right="15.0" top="5.0" />
                                              </padding>
                                              <HBox.margin>
-                                                <Insets top="1.0" />
+                                                <Insets top="2.0" />
                                              </HBox.margin>
                                           </Button>
                                        </children>
@@ -195,30 +195,30 @@
                                           <Insets left="6.0" top="2.0" />
                                        </HBox.margin>
                                        <children>
-                                          <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#settings" prefHeight="34.0" prefWidth="100.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Settings" textFill="#464646">
+                                          <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#settings" prefWidth="108.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-radius: 8; -fx-border-radius: 8; -fx-background-insets: 0;" text="Settings" textFill="#464646">
                                              <HBox.margin>
                                                 <Insets right="8.0" />
                                              </HBox.margin>
                                              <font>
-                                                <Font name="Corbel" size="16.0" />
+                                                <Font name="Corbel Bold" size="16.0" />
                                              </font>
                                              <graphic>
-                                                <ImageView fitHeight="20.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-41.0" translateY="1.0">
+                                                <ImageView fitHeight="20.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-43.0" translateY="1.0">
                                                    <image>
                                                       <Image url="@img/settings.png" />
                                                    </image>
                                                 </ImageView>
                                              </graphic>
                                              <padding>
-                                                <Insets bottom="6.0" right="-22.0" top="6.0" />
+                                                <Insets bottom="6.0" left="15.0" right="-6.0" top="5.0" />
                                              </padding>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </Button>
-                                          <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#addPodcast" prefHeight="32.0" prefWidth="118.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Add Podcast" textFill="#464646">
+                                          <Button alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#addPodcast" prefWidth="132.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-radius: 8; -fx-border-radius: 8; -fx-background-insets: 0;" text="Add Podcast" textFill="#464646">
                                              <font>
-                                                <Font name="Corbel" size="16.0" />
+                                                <Font name="Corbel Bold" size="16.0" />
                                              </font>
                                              <graphic>
                                                 <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
@@ -228,7 +228,7 @@
                                                 </ImageView>
                                              </graphic>
                                              <padding>
-                                                <Insets bottom="6.0" right="-20.0" top="6.0" />
+                                                <Insets bottom="6.0" left="15.0" right="-6.0" top="5.0" />
                                              </padding>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />

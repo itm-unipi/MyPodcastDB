@@ -10,7 +10,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
 
 public class JsonDecode {
-
     private static JsonDecode jsonDecode;
 
     public JsonDecode(){
@@ -29,7 +28,6 @@ public class JsonDecode {
             countries.add(iterator.next().toString());
 
         return countries;
-
     }
 
     public static List<String> getCategories() throws Exception{
@@ -44,7 +42,6 @@ public class JsonDecode {
             categories.add(iterator.next().toString());
 
         return categories;
-
     }
 
     public static JsonDecode getInstance(){

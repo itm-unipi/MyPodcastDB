@@ -10,6 +10,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
@@ -18,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -60,18 +62,28 @@ public class AuthorReducedPodcastController {
     void deletePodcast(MouseEvent event) throws IOException {
         Logger.info("Delete podcast");
 
+        Node source = (Node)event.getSource();
+        Stage stage = (Stage)source.getScene().getWindow();
+
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
+        alert.initOwner(stage);
+        alert.setTitle("Delete Podcast");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you really want to delete this podcast?");
+        alert.setGraphic(null);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
             Logger.info("Deleting podcast " + podcastId + " (" + podcastName + ") that belongs to " + StageManager.getObjectIdentifier());
 
             alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Done");
+            alert.initOwner(stage);
+            alert.setTitle("Delete Account");
+            alert.setHeaderText(null);
+            alert.setContentText("Podcast deleted successfully!");
+            alert.setGraphic(null);;
             alert.showAndWait();
             StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
-
         } else {
             Logger.info("Operation aborted");
         }

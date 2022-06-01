@@ -12,8 +12,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Optional;
 
 public class AuthorSettingsController {
@@ -35,6 +37,9 @@ public class AuthorSettingsController {
     private ImageView imagePreview;
 
     private int counterImage;
+
+    @FXML
+    private DialogPane dialogPane;
 
     @FXML
     void nextAuthorPicture(MouseEvent event) {
@@ -65,20 +70,26 @@ public class AuthorSettingsController {
         Logger.info("Delete account clicked!");
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmation");
-        //alert.setHeaderText("Are u sure?");
-        //alert.setContentText(null);
+        alert.initOwner(dialogPane.getScene().getWindow());
+        //alert.initStyle(StageStyle.UNDECORATED);
+        alert.setTitle("Delete Account");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you really want to delete this account?");
+        alert.setGraphic(null);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
             Logger.info("Delete account..");
 
             alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Done");
+            alert.initOwner(dialogPane.getScene().getWindow());
+            alert.setTitle("Delete Account");
+            alert.setHeaderText(null);
+            alert.setContentText("Account deleted successfully!");
+            alert.setGraphic(null);;
             alert.showAndWait();
             StageManager.showPage(ViewNavigator.LOGIN.getPage());
             closeStage(event);
-
         } else {
             Logger.info("Operation aborted");
         }
@@ -96,17 +107,58 @@ public class AuthorSettingsController {
     }
 
     @FXML
+    void restoreBorderTextField(MouseEvent event) {
+        ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    @FXML
+    void restoreBorderPasswordField(MouseEvent event) {
+        ((PasswordField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    @FXML
     void updatePersonalInfo(ActionEvent event) {
         System.out.println("Update applied");
 
-        Logger.info(imagePreview.getImage().getUrl());
+        boolean emptyFields = false;
 
-        this.author.setName(authorName.getText());
-        this.author.setEmail(authorEmail.getText());
-        this.author.setPassword(authorPassword.getText());
-        this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
+        if (authorName.getText().equals("")) {
+            authorName.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
 
-        closeStage(event);
+        if (authorEmail.getText().equals("")) {
+            authorEmail.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (authorPassword.getText().equals("")) {
+            authorPassword.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (authorConfirmPassword.getText().equals("")) {
+            authorConfirmPassword.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        }
+
+        if (!authorPassword.getText().equals(authorConfirmPassword.getText())) {
+            Logger.info("password doesn't match");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Password Error");
+            //alert.setHeaderText("Are u sure?");
+            //alert.setContentText(null);
+            alert.showAndWait();
+            emptyFields = true;
+        }
+
+        if (!emptyFields) {
+            this.author.setName(authorName.getText());
+            this.author.setEmail(authorEmail.getText());
+            this.author.setPassword(authorPassword.getText());
+            this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
+            closeStage(event);
+        }
     }
 
     @FXML

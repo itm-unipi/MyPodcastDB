@@ -22,13 +22,11 @@ import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Callback;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public class AuthorProfileController {
     @FXML
@@ -142,24 +140,17 @@ public class AuthorProfileController {
         // Loading the fxml file of the popup dialog
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("AddPodcast.fxml"));
+        DialogPane authorDialogPane = fxmlLoader.load();
 
         // Creating a Dialog Pane
-        DialogPane authorDialogPane = fxmlLoader.load();
-        AddPodcastController addPodcastController = fxmlLoader.getController();
-
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setDialogPane(authorDialogPane);
+        dialog.initOwner(MainPage.getScene().getWindow());
         dialog.setTitle("Add new podcast");
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
         stage.initStyle(StageStyle.UNDECORATED);
-
-        ButtonType buttonTypeApply = new ButtonType("Apply", ButtonBar.ButtonData.APPLY);
-        dialog.getDialogPane().getButtonTypes().add(buttonTypeApply);
-
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        dialog.getDialogPane().getButtonTypes().add(buttonTypeCancel);
 
         dialog.showAndWait();
         MainPage.setEffect(null);
@@ -176,7 +167,6 @@ public class AuthorProfileController {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSettings.fxml"));
 
-        // Creating a Dialog Pane
         DialogPane authorSettingsDialogPane = fxmlLoader.load();
         AuthorSettingsController settingsController = fxmlLoader.getController();
 
@@ -189,7 +179,6 @@ public class AuthorProfileController {
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
-        stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UNDECORATED);
 
         Author old = new Author();
