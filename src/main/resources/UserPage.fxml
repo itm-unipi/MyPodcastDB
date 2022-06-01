@@ -307,7 +307,7 @@
                                     </Label>
                                     <HBox fx:id="userPageWatchlistAreaHBox" minWidth="-Infinity" style="-fx-background-color: white;">
                                        <children>
-                                          <ImageView fx:id="userPageWatchlistLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                          <ImageView fx:id="userPageWatchlistLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
                                                 <Image url="@img/back_32px.png" />
                                              </image>
@@ -330,7 +330,7 @@
                                                 <Insets />
                                              </HBox.margin>
                                           </ScrollPane>
-                                          <ImageView fx:id="userPageWatchlistRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                          <ImageView fx:id="userPageWatchlistRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
                                                 <Image url="@img/forward_32px.png" />
                                              </image>
