@@ -167,7 +167,7 @@
                                                 <Insets bottom="5.0" left="17.0" right="15.0" top="5.0" />
                                              </padding>
                                           </Button>
-                                          <Button fx:id="deleteAuthorButton" mnemonicParsing="false" style="-fx-background-color: #333333; -fx-background-radius: 8; -fx-border-radius: 8;" text="Delete Author" textFill="WHITE">
+                                          <Button fx:id="deleteAuthorButton" mnemonicParsing="false" onMouseClicked="#deleteAuthorByAdmin" style="-fx-background-color: #333333; -fx-background-radius: 8; -fx-border-radius: 8;" text="Delete Author" textFill="WHITE">
                                              <font>
                                                 <Font name="Corbel Bold" size="16.0" />
                                              </font>

@@ -212,6 +212,39 @@ public class AuthorProfileController {
         MainPage.setEffect(null);
     }
 
+    @FXML
+    void deleteAuthorByAdmin(MouseEvent event) throws IOException {
+        Logger.info("Deleting author");
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initOwner(MainPage.getScene().getWindow());
+        alert.setTitle("Delete Account");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you really want to delete this account?");
+        alert.setGraphic(null);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            Logger.info("Delete account..");
+
+            alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initOwner(MainPage.getScene().getWindow());
+            alert.setTitle("Delete Account");
+            alert.setHeaderText(null);
+            alert.setContentText("Account deleted successfully!");
+            alert.setGraphic(null);;
+            alert.showAndWait();
+
+            // TODO: query to delete the author...
+
+            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+
+        } else {
+            Logger.info("Operation aborted");
+        }
+
+    }
+
     /**********************************************************/
 
     @FXML
