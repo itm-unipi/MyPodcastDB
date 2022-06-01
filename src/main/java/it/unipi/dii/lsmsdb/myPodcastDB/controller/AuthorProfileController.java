@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -139,9 +140,6 @@ public class AuthorProfileController {
         DialogPane authorDialogPane = fxmlLoader.load();
         AddPodcastController addPodcastController = fxmlLoader.getController();
 
-        // Pass the data of the author to the dialog pane
-        //addPodcastController.setData(MyPodcastDB.getInstance().getSessionType());
-
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.setDialogPane(authorDialogPane);
         dialog.setTitle("Add new podcast");
@@ -156,11 +154,8 @@ public class AuthorProfileController {
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         dialog.getDialogPane().getButtonTypes().add(buttonTypeCancel);
 
-        Optional<ButtonType> clickedButton = dialog.showAndWait();
-
-        //Logger.info("" + clickedButton.get());
+        dialog.showAndWait();
         MainPage.setEffect(null);
-
     }
 
     @FXML
@@ -179,48 +174,36 @@ public class AuthorProfileController {
         AuthorSettingsController settingsController = fxmlLoader.getController();
 
         // Pass the data of the author to the dialog pane
-        //settingsController.setData(MyPodcastDB.getInstance().getSessionType());
-
-        Dialog<Author> dialog = new Dialog<>();
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(MainPage.getScene().getWindow());
         dialog.setDialogPane(authorSettingsDialogPane);
         dialog.setTitle("Settings");
         settingsController.setData((Author)MyPodcastDB.getInstance().getSessionActor());
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.initStyle(StageStyle.UNDECORATED);
 
-        ButtonType buttonTypeApply = new ButtonType("Apply", ButtonBar.ButtonData.APPLY);
-        dialog.getDialogPane().getButtonTypes().add(buttonTypeApply);
+        Author old = new Author();
+        old.setName(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
+        old.setId(((Author)MyPodcastDB.getInstance().getSessionActor()).getId());
+        old.setPassword(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword());
+        old.setEmail(((Author)MyPodcastDB.getInstance().getSessionActor()).getEmail());
+        old.setPicturePath(((Author)MyPodcastDB.getInstance().getSessionActor()).getPicturePath());
+        Logger.info("OLD " + old);
 
-        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
-        dialog.getDialogPane().getButtonTypes().add(buttonTypeCancel);
-        dialog.setResultConverter(new Callback<ButtonType, Author>() {
-            @Override
-            public Author call(ButtonType b) {
+        dialog.showAndWait();
 
-                if (b == buttonTypeApply) {
-                    return new Author();
-                }
+        Author curr = (Author)MyPodcastDB.getInstance().getSessionActor();
+        Logger.info("NEW " + curr);
 
-                return null;
-            }
-        });
+        if (curr.getName().equals(old.getName()) && curr.getId().equals(old.getId()) && curr.getEmail().equals(old.getEmail())
+                && curr.getPassword().equals(old.getPassword()) && curr.getPicturePath().equals(old.getPicturePath()))
+            Logger.info("No changes");
+        else
+            Logger.info("Query to update..");
 
-        Optional<Author> result = dialog.showAndWait();
-
-        if (result.isPresent()) {
-            // query di update
-            Logger.info("Result: " + result.get());
-        }
-
-        //Optional<ButtonType> clickedButton = dialog.showAndWait();
-
-        //if (clickedButton.isPresent() && clickedButton.get() == ButtonType.APPLY) {
-        //    Logger.info(clickedButton.isPresent() + " ");
-        //}
-
-        //Logger.info("" + clickedButton.get());
         MainPage.setEffect(null);
     }
 

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -15,7 +16,7 @@
 
 <DialogPane prefWidth="600.0" style="-fx-border-color: #a6a6a6;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorSettingsController">
    <padding>
-      <Insets bottom="5.0" left="13.0" right="13.0" top="8.0" />
+      <Insets bottom="5.0" left="13.0" right="13.0" top="6.0" />
    </padding>
    <content>
       <HBox>
@@ -45,64 +46,74 @@
                   </ImageView>
                </children>
             </HBox>
-            <VBox prefHeight="175.0" prefWidth="340.0" style="-fx-border-color: #eaeaea; -fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+            <VBox>
                <children>
-                  <Label text="Your Name" textFill="#5e5e5e">
-                     <font>
-                        <Font name="Corbel" size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="authorName" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;name&gt;">
-                     <font>
-                        <Font name="Corbel Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="-10.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Your Email" textFill="#5e5e5e">
-                     <font>
-                        <Font name="Corbel" size="18.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="authorEmail" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;email&gt;">
-                     <font>
-                        <Font name="Corbel Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="-10.0" />
-                     </VBox.margin>
-                  </TextField>
-                  <Label text="Your Password" textFill="#5e5e5e">
-                     <font>
-                        <Font name="Corbel" size="18.0" />
-                     </font>
-                  </Label>
-                  <PasswordField fx:id="authorPassword" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;password&gt;">
-                     <font>
-                        <Font name="Corbel Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="-10.0" />
-                     </VBox.margin>
-                  </PasswordField>
-                  <Label text="Confirm Password" textFill="#5e5e5e">
-                     <font>
-                        <Font name="Corbel" size="18.0" />
-                     </font>
-                  </Label>
-                  <PasswordField fx:id="authorConfirmPassword" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;password&gt;">
-                     <font>
-                        <Font name="Corbel Light" size="16.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="6.0" left="-10.0" />
-                     </VBox.margin>
-                  </PasswordField>
+                  <VBox prefHeight="175.0" prefWidth="340.0" style="-fx-border-color: #eaeaea; -fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+                     <children>
+                        <Label text="Your Name" textFill="#5e5e5e">
+                           <font>
+                              <Font name="Corbel" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="authorName" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;name&gt;">
+                           <font>
+                              <Font name="Corbel Light" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="-10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label text="Your Email" textFill="#5e5e5e">
+                           <font>
+                              <Font name="Corbel" size="18.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="authorEmail" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;email&gt;">
+                           <font>
+                              <Font name="Corbel Light" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="-10.0" />
+                           </VBox.margin>
+                        </TextField>
+                        <Label text="Your Password" textFill="#5e5e5e">
+                           <font>
+                              <Font name="Corbel" size="18.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="authorPassword" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;password&gt;">
+                           <font>
+                              <Font name="Corbel Light" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets left="-10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                        <Label text="Confirm Password" textFill="#5e5e5e">
+                           <font>
+                              <Font name="Corbel" size="18.0" />
+                           </font>
+                        </Label>
+                        <PasswordField fx:id="authorConfirmPassword" maxWidth="-Infinity" style="-fx-background-color: transparent;" text="&lt;password&gt;">
+                           <font>
+                              <Font name="Corbel Light" size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets bottom="6.0" left="-10.0" />
+                           </VBox.margin>
+                        </PasswordField>
+                     </children>
+                     <padding>
+                        <Insets left="15.0" top="12.0" />
+                     </padding>
+                  </VBox>
+                  <HBox>
+                     <children>
+                        <Button mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+                        <Button mnemonicParsing="false" onAction="#updatePersonalInfo" text="Apply" />
+                     </children>
+                  </HBox>
                </children>
-               <padding>
-                  <Insets left="15.0" top="12.0" />
-               </padding>
             </VBox>
          </children>
       </HBox>
@@ -110,14 +121,26 @@
    <header>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity">
          <children>
-            <Label text="Personal Info" textFill="#5e5e5e">
-               <font>
-                  <Font name="Corbel" size="22.0" />
-               </font>
+            <HBox alignment="CENTER_LEFT">
                <VBox.margin>
                   <Insets bottom="6.0" />
                </VBox.margin>
-            </Label>
+               <children>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/info.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="2.0" top="2.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Personal Info" textFill="#5e5e5e">
+                     <font>
+                        <Font name="Corbel" size="22.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
             <Separator prefWidth="200.0" />
          </children>
       </VBox>

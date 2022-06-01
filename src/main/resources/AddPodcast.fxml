@@ -7,8 +7,11 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -17,14 +20,26 @@
    <header>
       <VBox>
          <children>
-            <Label text="Add new podcast" textFill="#5e5e5e">
-               <font>
-                  <Font name="Corbel" size="22.0" />
-               </font>
+            <HBox>
                <VBox.margin>
                   <Insets bottom="6.0" />
                </VBox.margin>
-            </Label>
+               <children>
+                  <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/new.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets left="-2.0" right="3.0" top="1.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label text="Add new podcast" textFill="#5e5e5e">
+                     <font>
+                        <Font name="Corbel" size="22.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
             <Separator prefWidth="200.0" />
          </children>
       </VBox>
