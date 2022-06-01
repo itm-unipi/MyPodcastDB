@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
@@ -40,6 +41,12 @@ public class AuthorProfileController {
 
     @FXML
     private HBox authorButtons;
+
+    @FXML
+    private Button deleteAuthorButton;
+
+    @FXML
+    private Button followAuthor;
 
     @FXML
     private ImageView actorPicture;
@@ -201,8 +208,17 @@ public class AuthorProfileController {
         if (curr.getName().equals(old.getName()) && curr.getId().equals(old.getId()) && curr.getEmail().equals(old.getEmail())
                 && curr.getPassword().equals(old.getPassword()) && curr.getPicturePath().equals(old.getPicturePath()))
             Logger.info("No changes");
-        else
+        else {
+            // TODO: Database update
             Logger.info("Query to update..");
+
+            // Updating GUI
+            authorName.setText(((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
+            actorPicture.setImage(ImageCache.getImageFromLocalPath(((Author) MyPodcastDB.getInstance().getSessionActor()).getPicturePath()));
+
+            // Updating Session Object
+            StageManager.setObjectIdentifier(((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
+        }
 
         MainPage.setEffect(null);
     }
@@ -232,66 +248,104 @@ public class AuthorProfileController {
         // Load information about the actor of the session
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if (actorType.equals("Author")) {
-            Author sessionActor = (Author)MyPodcastDB.getInstance().getSessionActor();
-            Logger.info("I'm an actor: " + sessionActor.getName());
+        switch (actorType) {
+            case "Author" -> {
+                Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an author: " + sessionActor.getName());
 
-            // Setting actor personal info
-            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-            actorPicture.setImage(image);
+                // Setting actor personal info
+                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
+                actorPicture.setImage(image);
 
-            if (StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName())) {
-                authorName.setText(sessionActor.getName());
-                authorFollowing.setText("Authors you follow");
-                podcastLabel.setText("Your podcasts");
-            } else {
-                // Hiding author buttons
+                if (StageManager.getObjectIdentifier().equals(((Author) MyPodcastDB.getInstance().getSessionActor()).getName())) {
+                    authorName.setText(sessionActor.getName());
+                    authorFollowing.setText("Authors you follow");
+                    podcastLabel.setText("Your podcasts");
+
+                    // Hiding unnecessary button for the author
+                    deleteAuthorButton.setVisible(false);
+                    deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                    followAuthor.setVisible(false);
+                    followAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+
+                } else {
+                    // Hiding unnecessary button
+                    deleteAuthorButton.setVisible(false);
+                    deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                    authorButtons.setVisible(false);
+                    authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+
+                    // QUERY
+                    Author author = new Author();
+                    author.setName(StageManager.getObjectIdentifier());
+                    authorName.setText(author.getName());
+                    authorFollowing.setText("Authors followed by " + author.getName());
+                    podcastLabel.setText("Podcasts");
+                }
+            }
+            case "User" -> {
+                User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an user: " + sessionActor.getUsername());
+
+                // Setting actor stuff
+                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
+                actorPicture.setImage(image);
+
+                // Hiding unnecessary button for the user
+                deleteAuthorButton.setVisible(false);
+                deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                 authorButtons.setVisible(false);
-                authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-width: 0; -fx-min-height: 0;");
+                authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
 
-                // QUERY
-                Author author = new Author();
-                author.setName(StageManager.getObjectIdentifier());
-                authorName.setText(author.getName());
-                authorFollowing.setText("Authors followed by " + author.getName());
+                Author a = new Author(); // Find using ObjectIdentifier
+                a.setName(StageManager.getObjectIdentifier());
+                authorName.setText(a.getName());
+                authorFollowing.setText("Authors followed by " + a.getName());
+                podcastLabel.setText("Podcasts");
+            }
+            case "Admin" -> {
+                Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an administrator: " + sessionActor.getName());
+
+                // Setting GUI params
+                Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
+                actorPicture.setImage(image);
+
+                // Hiding unnecessary button for the admin
+                followAuthor.setVisible(false);
+                followAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                authorButtons.setVisible(false);
+                authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+
+                // Find using ObjectIdentifier
+                Author a = new Author();
+                a.setName(StageManager.getObjectIdentifier());
+                authorName.setText(a.getName());
+                authorFollowing.setText("Authors followed by " + a.getName());
+                podcastLabel.setText("Podcasts");
+
+            }
+            case "Unregistered" -> {
+                Logger.info("I'm an unregistered user");
+
+                // Hiding buttons
+                deleteAuthorButton.setVisible(false);
+                deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                followAuthor.setVisible(false);
+                followAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                authorButtons.setVisible(false);
+                authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+
+                Author a = new Author(); // Find using ObjectIdentifier
+                a.setName(StageManager.getObjectIdentifier());
+                authorName.setText(a.getName());
+                authorFollowing.setText("Authors followed by " + a.getName());
+
                 podcastLabel.setText("Podcasts");
             }
 
-        } else if (actorType.equals("User")) {
-            User sessionActor = (User)MyPodcastDB.getInstance().getSessionActor();
-            Logger.info("I'm an user: " + sessionActor.getUsername());
-
-            // Setting actor stuff
-            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-            actorPicture.setImage(image);
-
-            // Hiding author buttons
-            authorButtons.setVisible(false);
-            authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-width: 0; -fx-min-height: 0;");
-
-            Author a = new Author(); // Find using ObjectIdentifier
-            a.setName(StageManager.getObjectIdentifier());
-            authorName.setText(a.getName());
-            authorFollowing.setText("Authors followed by " + a.getName());
-
-            podcastLabel.setText("Podcasts");
-
-        } else if (actorType.equals("Unregistered")) {
-            Logger.info("I'm an unregistered user");
-
-            // Hiding author buttons
-            authorButtons.setVisible(false);
-            authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-width: 0; -fx-min-height: 0;");
-
-            Author a = new Author(); // Find using ObjectIdentifier
-            a.setName(StageManager.getObjectIdentifier());
-            authorName.setText(a.getName());
-            authorFollowing.setText("Authors followed by " + a.getName());
-
-            podcastLabel.setText("Podcasts");
-
-        } else
-            Logger.error("Unidentified Actor Type");
+            default -> Logger.error("Unidentified Actor Type");
+        }
 
         // Authors Followed
         List<Author> authorsFollowed = new ArrayList<>();

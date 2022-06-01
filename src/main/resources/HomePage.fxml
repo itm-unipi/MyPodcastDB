@@ -25,18 +25,6 @@
                   <Insets left="120.0" right="120.0" />
                </BorderPane.margin>
                <children>
-                  <VBox fx:id="boxErrorSearch" alignment="CENTER" fillWidth="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="190.0" style="-fx-background-color: #e43b3b; -fx-background-radius: 12;" translateY="-47.0">
-                     <children>
-                        <Label alignment="CENTER" prefHeight="57.0" prefWidth="283.0" text="Empty Field!" textFill="WHITE">
-                           <font>
-                              <Font name="Corbel Light" size="18.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" top="10.0" />
-                     </padding>
-                  </VBox>
                   <HBox alignment="CENTER" prefHeight="80.0">
                      <children>
                         <ImageView fitHeight="40.0" fitWidth="52.0" pickOnBounds="true" preserveRatio="true">
@@ -134,7 +122,7 @@
                         </HBox>
                      </children>
                      <VBox.margin>
-                        <Insets top="-44.0" />
+                        <Insets />
                      </VBox.margin>
                   </HBox>
                   <Separator />
