@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
@@ -364,12 +365,12 @@
                                                 <Font name="Corbel Light" size="18.0" />
                                              </font>
                                              <VBox.margin>
-                                                <Insets bottom="10.0" />
+                                                <Insets top="3.0" />
                                              </VBox.margin>
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox alignment="TOP_RIGHT" prefHeight="122.0" prefWidth="190.0">
+                                    <VBox alignment="TOP_RIGHT" prefHeight="122.0">
                                        <children>
                                           <HBox alignment="TOP_RIGHT">
                                              <children>
@@ -391,16 +392,77 @@
                                                 </ImageView>
                                              </children>
                                           </HBox>
-                                          <Label fx:id="content" alignment="BOTTOM_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="59.0" prefWidth="190.0" scaleY="1.06" text="Content" textAlignment="RIGHT">
+                                          <HBox>
+                                             <children>
+                                                <Button fx:id="updatePodcast" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdatePodcast" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="#464646">
+                                                   <font>
+                                                      <Font name="Corbel Light" size="16.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="20.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-41.0" translateY="1.0">
+                                                         <image>
+                                                            <Image url="@img/settings.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <padding>
+                                                      <Insets bottom="6.0" right="-26.0" top="6.0" />
+                                                   </padding>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </Button>
+                                                <Button fx:id="deletePodcast" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDeletePodcast" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Delete" textFill="#464646">
+                                                   <font>
+                                                      <Font name="Corbel Light" size="16.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                                         <image>
+                                                            <Image url="@img/delete.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <padding>
+                                                      <Insets bottom="6.0" right="-26.0" top="6.0" />
+                                                   </padding>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                          <Label fx:id="content" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="59.0" prefWidth="190.0" scaleY="1.06" text="Content" textAlignment="RIGHT">
                                              <font>
                                                 <Font name="Corbel Light" size="18.0" />
                                              </font>
                                           </Label>
+                                          <Button fx:id="addEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#clickOnAddEpisode" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Add Episode" textFill="#464646">
+                                             <font>
+                                                <Font name="Corbel Light" size="16.0" />
+                                             </font>
+                                             <graphic>
+                                                <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                                   <image>
+                                                      <Image url="@img/add.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </graphic>
+                                             <padding>
+                                                <Insets bottom="6.0" right="-26.0" top="6.0" />
+                                             </padding>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Button>
                                        </children>
                                     </VBox>
                                  </children>
                               </HBox>
-                              <Separator prefWidth="200.0" />
+                              <Separator prefWidth="200.0">
+                                 <padding>
+                                    <Insets top="10.0" />
+                                 </padding></Separator>
                               <Label fx:id="noEpisodeMessage" scaleY="1.06" text="There are no episodes yet.">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />

@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,23 +19,44 @@
          <center>
             <VBox prefWidth="100.0" style="-fx-background-color: white; -fx-background-radius: 20;" BorderPane.alignment="CENTER">
                <children>
-                  <HBox style="-fx-background-color: transparent;">
+                  <HBox alignment="CENTER_LEFT" style="-fx-background-color: transparent;">
                      <children>
                         <ImageView fx:id="star1" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="star2" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="star3" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="star4" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="star5" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="deleteReview" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDeleteReview" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Delete" textFill="#464646">
+                           <font>
+                              <Font name="Corbel Light" size="16.0" />
+                           </font>
+                           <graphic>
+                              <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                 <image>
+                                    <Image url="@img/delete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <padding>
+                              <Insets bottom="6.0" right="-26.0" top="6.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets left="637.0" />
+                           </HBox.margin>
+                        </Button>
                      </children>
                   </HBox>
-                  <HBox>
+                  <HBox alignment="CENTER_LEFT">
                      <children>
                         <Label fx:id="authorName" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Author Name" textFill="BLUE">
                            <font>
                               <Font name="Dubai Regular" size="18.0" />
                            </font>
                            <padding>
-                              <Insets bottom="-3.0" top="5.0" />
+                              <Insets bottom="-3.0" />
                            </padding>
                         </Label>
                         <Label fx:id="reviewDate" layoutX="10.0" layoutY="10.0" text="Date" textFill="#636366">
@@ -40,7 +64,7 @@
                               <Font name="Dubai Regular" size="18.0" />
                            </font>
                            <padding>
-                              <Insets bottom="-3.0" top="5.0" />
+                              <Insets bottom="-3.0" />
                            </padding>
                            <HBox.margin>
                               <Insets left="6.0" />

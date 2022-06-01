@@ -32,7 +32,13 @@ import static java.lang.Math.floor;
 public class PodcastPageController {
 
     @FXML
+    private Button addEpisode;
+
+    @FXML
     private Label author;
+
+    @FXML
+    private Button deletePodcast;
 
     @FXML
     private Label category;
@@ -80,6 +86,9 @@ public class PodcastPageController {
     private Label title;
 
     @FXML
+    private Button updatePodcast;
+
+    @FXML
     private ImageView watchlater;
 
     @FXML
@@ -100,6 +109,21 @@ public class PodcastPageController {
     private Podcast podcast;
     private boolean liked;
     private boolean watchLatered;
+
+    @FXML
+    void clickOnAddEpisode(MouseEvent event) {
+        Logger.info("Add episode");
+    }
+
+    @FXML
+    void clickOnDeletePodcast(MouseEvent event) {
+        Logger.info("Delete podcast");
+    }
+
+    @FXML
+    void clickOnUpdatePodcast(MouseEvent event) {
+        Logger.info("Update podcast");
+    }
 
     @FXML
     void mouseOnAuthor(MouseEvent event) {

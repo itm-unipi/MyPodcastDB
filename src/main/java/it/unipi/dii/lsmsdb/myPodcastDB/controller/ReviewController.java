@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,6 +18,9 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 
 public class ReviewController {
+
+    @FXML
+    private Button deleteReview;
 
     @FXML
     private Label authorName;
@@ -46,6 +50,11 @@ public class ReviewController {
     private Label title;
 
     private Review review;
+
+    @FXML
+    void clickOnDeleteReview(MouseEvent event) {
+        Logger.info("Delete review");
+    }
 
     public void setData(Review review) {
         this.review = review;
