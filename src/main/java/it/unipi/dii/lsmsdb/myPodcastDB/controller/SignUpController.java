@@ -156,6 +156,7 @@ public class SignUpController {
                 alert.setHeaderText("Invalid inputs");
                 alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
                 alert.setContentText(null);
+                alert.initOwner(signUpAnchorPane.getScene().getWindow());
 
                 signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
                 alert.showAndWait();
@@ -176,6 +177,7 @@ public class SignUpController {
             alert.setHeaderText("Account created");
             alert.setContentText(null);
             alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/info_80px.png")));
+            alert.initOwner(signUpAnchorPane.getScene().getWindow());
 
             signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
             alert.showAndWait();
@@ -197,6 +199,7 @@ public class SignUpController {
                 alert.setHeaderText("Invalid inputs");
                 alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
                 alert.setContentText(null);
+                alert.initOwner(signUpAnchorPane.getScene().getWindow());
 
                 signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
                 alert.showAndWait();
@@ -213,6 +216,7 @@ public class SignUpController {
             alert.setHeaderText("Account created");
             alert.setContentText(null);
             alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/info_80px.png")));
+            alert.initOwner(signUpAnchorPane.getScene().getWindow());
 
             signUpAnchorPane.setEffect(new BoxBlur(3, 3, 3));
             alert.showAndWait();

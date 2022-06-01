@@ -401,7 +401,7 @@ public class UserPageController {
         alert.setTitle(null);
         alert.setHeaderText("Really Delete your account?");
         alert.setContentText(null);
-        alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/checked_80px.png")));
+        alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
         alert.initOwner(userPageAnchorPane.getScene().getWindow());
 
         userPageAnchorPane.setEffect(new BoxBlur(3, 3, 3));
@@ -533,7 +533,7 @@ public class UserPageController {
         imageButtonLeft.setVisible(false);
         imageButtonRight.setVisible(false);
 
-        //fill textfields and image
+        //fill textFields and image
         userPageUsernameTextField.setText(pageOwner.getUsername());
         userPageCountryTextField.setText(pageOwner.getCountry());
         userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());

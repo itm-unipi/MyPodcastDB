@@ -24,7 +24,7 @@
                <children>
                   <HBox>
                      <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#testAddAdminClick" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
                               <Insets top="15.0" />
                            </HBox.margin>
