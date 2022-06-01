@@ -51,6 +51,21 @@ public class Podcast {
         this.reviews = new ArrayList<>();
     }
 
+    public Podcast(Podcast podcast) {
+        this.id = podcast.id;
+        this.name = podcast.name;
+        this.author = new ReducedAuthor(podcast.author);
+        this.artworkUrl60 = podcast.artworkUrl60;
+        this.artworkUrl600 = podcast.artworkUrl600;
+        this.contentAdvisoryRating = podcast.contentAdvisoryRating;
+        this.country = podcast.country;
+        this.primaryCategory = podcast.primaryCategory;
+        this.categories = podcast.categories;
+        this.releaseDate = podcast.releaseDate;
+        this.episodes = new ArrayList<>(podcast.episodes);
+        this.reviews = new ArrayList<>(podcast.reviews);
+    }
+
     public String getId() {
         return id;
     }
@@ -239,6 +254,11 @@ class ReducedAuthor {
     public ReducedAuthor(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    public ReducedAuthor(ReducedAuthor author) {
+        this.id = author.id;
+        this.name = author.name;
     }
 
     public String getId() {

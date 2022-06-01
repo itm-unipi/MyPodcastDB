@@ -11,6 +11,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -18,8 +19,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +62,9 @@ public class PodcastPageController {
 
     @FXML
     private ImageView logout;
+
+    @FXML
+    private BorderPane mainPage;
 
     @FXML
     private Label numEpisodes;
@@ -109,10 +117,61 @@ public class PodcastPageController {
     private Podcast podcast;
     private boolean liked;
     private boolean watchLatered;
+    private int row, column;
 
     @FXML
-    void clickOnAddEpisode(MouseEvent event) {
+    void clickOnAddEpisode(MouseEvent event) throws IOException {
         Logger.info("Add episode");
+
+        BoxBlur blur = new BoxBlur(3, 3 , 3);
+        this.mainPage.setEffect(blur);
+
+        // loading the fxml file of the popup dialog
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("EpisodeEdit.fxml"));
+
+        // creating dialog Pane
+        DialogPane episodeEditDialogPane = fxmlLoader.load();
+        EpisodeEditController editController = fxmlLoader.getController();
+
+        Episode episode = new Episode();
+
+        // pass new episode object to dialog pane
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(this.mainPage.getScene().getWindow());
+        dialog.setDialogPane(episodeEditDialogPane);
+        dialog.setTitle("Update Podcast");
+        editController.setData(episode, true);
+
+        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        dialog.showAndWait();
+
+        // check if empty
+        if (episode.getName() == null|| episode.getReleaseDate() == null || episode.getDescription() == null || episode.getTimeMillis() == 0) {
+            Logger.error("No episode created");
+        } else {
+            // update podcast
+            Logger.info("Created episode : " + episode.toString());
+            this.podcast.addEpisode(episode);
+
+            // add episode to page
+            FXMLLoader fxmlEpisodeLoader = new FXMLLoader();
+            fxmlEpisodeLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
+
+            // create new podcast element
+            AnchorPane newEpisode = fxmlEpisodeLoader.load();
+            EpisodeController controller = fxmlEpisodeLoader.getController();
+            controller.setData(episode, this.mainPage);
+
+            // add new podcast to grid
+            this.episodesGrid.add(newEpisode, this.column, this.row++);
+        }
+
+        this.mainPage.setEffect(null);
     }
 
     @FXML
@@ -121,8 +180,57 @@ public class PodcastPageController {
     }
 
     @FXML
-    void clickOnUpdatePodcast(MouseEvent event) {
-        Logger.info("Update podcast");
+    void clickOnUpdatePodcast(MouseEvent event) throws IOException {
+        BoxBlur blur = new BoxBlur(3, 3 , 3);
+        this.mainPage.setEffect(blur);
+
+        // loading the fxml file of the popup dialog
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastUpdate.fxml"));
+
+        // creating dialog Pane
+        DialogPane podcastUpdateDialogPane = fxmlLoader.load();
+        PodcastUpdateController updateController = fxmlLoader.getController();
+
+        // create a copy of podcast
+        Podcast newPodcast = new Podcast(this.podcast);
+
+        // pass podcast's data to dialog pane
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(this.mainPage.getScene().getWindow());
+        dialog.setDialogPane(podcastUpdateDialogPane);
+        dialog.setTitle("Update Podcast");
+        updateController.setData(newPodcast);
+
+        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.initStyle(StageStyle.UNDECORATED);
+
+        dialog.showAndWait();
+
+        // check if modified
+        if (!this.podcast.equals(newPodcast)) {
+            // update podcast
+            Logger.info("New podcast : " + this.podcast.toString());
+            this.podcast = newPodcast;
+
+            // update page
+            this.title.setText(podcast.getName());
+            this.author.setText(podcast.getAuthorName());
+            this.country.setText(podcast.getCountry());
+            this.content.setText("Content: " + podcast.getContentAdvisoryRating());
+            Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
+            this.podcastImage.setImage(image);
+            this.category.setText(podcast.getPrimaryCategory());
+            this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
+            this.rating.setText("" + podcast.getRating());
+            this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+
+            // TODO: update rating and stars
+        }
+
+        this.mainPage.setEffect(null);
     }
 
     @FXML
@@ -286,8 +394,8 @@ public class PodcastPageController {
         this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
 
         // insert episodes in grid
-        int row = 0;
-        int column = 0;
+        this.row = 0;
+        this.column = 0;
         for (Episode ep : podcast.getEpisodes()) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
@@ -295,10 +403,10 @@ public class PodcastPageController {
             // create new podcast element
             AnchorPane newEpisode = fxmlLoader.load();
             EpisodeController controller = fxmlLoader.getController();
-            controller.setData(ep);
+            controller.setData(ep, this.mainPage);
 
             // add new podcast to grid
-            this.episodesGrid.add(newEpisode, column, row++);
+            this.episodesGrid.add(newEpisode, this.column, this.row++);
         }
 
         // calculate the progress bar for ratings

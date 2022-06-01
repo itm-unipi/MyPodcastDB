@@ -3,10 +3,12 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -44,6 +46,7 @@ public class PodcastUpdateController {
     @FXML
     void clickOnCancel(MouseEvent event) {
         Logger.info("Cancel");
+        closeStage(event);
     }
 
     @FXML
@@ -68,6 +71,7 @@ public class PodcastUpdateController {
         }
 
         Logger.info(this.podcast.toString());
+        closeStage(event);
     }
 
     @FXML
@@ -103,15 +107,11 @@ public class PodcastUpdateController {
     }
 
     public void initialize() {
-        // TODO: da togliere tutta sta funzione
-        this.podcast = new Podcast();
-        this.podcast.setName("test1");
-        this.podcast.setContentAdvisoryRating("test2");
-        this.podcast.setPrimaryCategory("test3");
-        this.podcast.setCountry("test4");
-        this.podcast.setArtworkUrl600("test5");
-        this.podcast.setReleaseDate(new Date());
+    }
 
-        setData(podcast);
+    private void closeStage(MouseEvent event) {
+        Node source = (Node)event.getSource();
+        Stage stage = (Stage)source.getScene().getWindow();
+        stage.close();
     }
 }

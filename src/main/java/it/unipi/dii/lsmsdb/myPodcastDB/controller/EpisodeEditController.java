@@ -3,11 +3,13 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -45,6 +47,7 @@ public class EpisodeEditController {
     @FXML
     void clickOnCancel(MouseEvent event) {
         Logger.info("Cancel");
+        closeStage(event);
     }
 
     @FXML
@@ -66,6 +69,7 @@ public class EpisodeEditController {
             this.episode.setTimeMillis(Integer.parseInt(this.duration.getText()) * 60 * 1000);
 
             Logger.info("New Episode : " + this.episode.toString());
+            closeStage(event);
         }
 
         // update
@@ -88,6 +92,7 @@ public class EpisodeEditController {
             }
 
             Logger.info(this.episode.toString());
+            closeStage(event);
         }
     }
 
@@ -131,8 +136,11 @@ public class EpisodeEditController {
     }
 
     public void initialize() {
-        // TODO: rimuovere tutta sta parte
-        Episode episode = new Episode("Test", "Description", new Date(), 6000000);
-        this.setData(episode, false);
+    }
+
+    private void closeStage(MouseEvent event) {
+        Node source = (Node)event.getSource();
+        Stage stage = (Stage)source.getScene().getWindow();
+        stage.close();
     }
 }
