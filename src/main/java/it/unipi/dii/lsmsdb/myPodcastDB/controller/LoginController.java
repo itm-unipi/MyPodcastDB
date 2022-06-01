@@ -254,66 +254,13 @@ public class LoginController {
 
         Dialog<Triplet<String, String, String>> dialog = new Dialog<>();
         dialog.setDialogPane(addAdminDialog);
-        dialog.getDialogPane().getButtonTypes().addAll(new ButtonType("CONFIRM"), new ButtonType("CANCEL"));
         dialog.setTitle("Add new Admin");
         dialog.initOwner(loginAnchorPane.getScene().getWindow());
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-
-        AddAdminController controller = fxmlLoader.getController();
-
-        dialog.setResultConverter(dialogButton -> {
-            if(dialogButton.getText().equals("CONFIRM")) {
-                String name = controller.getAdminNameTextField().getText();
-                String pwd = controller.getAdminPwdTextFiled().getText();
-                String repPwd = controller.getAdminPwdTextFiled().getText();
-                return new Triplet<String, String, String>(name, pwd, repPwd);
-            }
-            else if(dialogButton.getText().equals("CANCEL")){
-               return new Triplet<>("","","");
-            }
-            return null;
-        });
-
-        Optional<Triplet<String, String, String>> result = dialog.showAndWait();
+        dialog.showAndWait();
         loginAnchorPane.setEffect(null);
-
-        String name = result.get().getValue0();
-        String password = result.get().getValue1();
-        String rpPassword = result.get().getValue2();
-
-        if( !name.isEmpty() && !password.isEmpty() && !rpPassword.isEmpty() && password.equals(rpPassword) ) {
-            Logger.info("{ " + result.get().getValue0() + ", " + result.get().getValue1() + ", " + result.get().getValue2() + "}");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            Stage stageInfo = (Stage)alert.getDialogPane().getScene().getWindow();
-            stageInfo.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-            alert.setTitle("Information!");
-            alert.setHeaderText("Account created");
-            alert.setContentText(null);
-            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/info_80px.png")));
-            alert.initOwner(loginAnchorPane.getScene().getWindow());
-
-            loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-            alert.showAndWait();
-            loginAnchorPane.setEffect(null);
-        }
-        else {
-            Logger.info("no new admin created, invalid inputs typed");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            Stage stageErr = (Stage)alert.getDialogPane().getScene().getWindow();
-            stageErr.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-            alert.setTitle("Error!");
-            alert.setHeaderText("Invalid inputs");
-            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-            alert.setContentText(null);
-            alert.initOwner(loginAnchorPane.getScene().getWindow());
-
-            loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-            alert.showAndWait();
-            loginAnchorPane.setEffect(null);
-        }
-
 
     }
 }

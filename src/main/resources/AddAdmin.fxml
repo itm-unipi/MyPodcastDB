@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="addAdminAnchorPane" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AddAdminController">
+<AnchorPane fx:id="addAdminAnchorPane" prefHeight="361.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AddAdminController">
    <children>
-      <VBox prefHeight="300.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="320.0" prefWidth="400.0" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Admin Name">
                <font>
@@ -52,6 +54,23 @@
                   <PasswordField fx:id="adminRpPwdTextFiled" alignment="CENTER" layoutX="90.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" />
                </children>
             </Pane>
+            <Pane prefHeight="20.0" prefWidth="400.0" />
+            <HBox prefHeight="39.0" prefWidth="400.0">
+               <children>
+                  <Pane prefHeight="39.0" prefWidth="92.0" />
+                  <Button fx:id="confirmButton" mnemonicParsing="false" onMouseClicked="#confirmButtonClick" onMousePressed="#confirmButtonPressed" onMouseReleased="#confirmButtonReleased" prefHeight="40.0" prefWidth="85.0" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc; -fx-cursor: hand;" text="CONFIRM">
+                     <font>
+                        <Font name="Corbel Bold" size="14.0" />
+                     </font>
+                  </Button>
+                  <Pane prefHeight="39.0" prefWidth="53.0" />
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#cancelButtonClick" onMousePressed="#cancelButtonPressed" onMouseReleased="#cancelButtonReleased" prefHeight="40.0" prefWidth="85.0" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc; -fx-cursor: hand;" text="CANCEL">
+                     <font>
+                        <Font name="Corbel Bold" size="14.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>
