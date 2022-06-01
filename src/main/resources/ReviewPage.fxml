@@ -346,76 +346,80 @@
                                     <Insets bottom="20.0" top="20.0" />
                                  </VBox.margin>
                               </Separator>
-                              <Label text="Write your review:">
-                                 <font>
-                                    <Font name="Corbel" size="24.0" />
-                                 </font>
-                              </Label>
-                              <VBox prefWidth="100.0">
+                              <VBox fx:id="reviewForm">
                                  <children>
-                                    <Label text="Rating">
+                                    <Label text="Write your review:">
                                        <font>
-                                          <Font name="Corbel Light" size="20.0" />
+                                          <Font name="Corbel" size="24.0" />
                                        </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" top="10.0" />
-                                       </VBox.margin>
                                     </Label>
-                                    <HBox prefWidth="200.0">
+                                    <VBox prefWidth="100.0">
                                        <children>
-                                          <ImageView fx:id="star1" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnFirstStar" onMouseEntered="#mouseOnFirstStar" onMouseExited="#mouseOutFirstStar" pickOnBounds="true" preserveRatio="true">
-                                             <HBox.margin>
-                                                <Insets />
-                                             </HBox.margin>
-                                             <image>
-                                                <Image url="@img/outline_star.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fx:id="star2" fitHeight="30.0" fitWidth="30.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#clickOnSecondStar" onMouseEntered="#mouseOnSecondStar" onMouseExited="#mouseOutSecondStar" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/outline_star.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fx:id="star3" fitHeight="30.0" fitWidth="30.0" layoutX="25.0" layoutY="10.0" onMouseClicked="#clickOnThirdStar" onMouseEntered="#mouseOnThirdStar" onMouseExited="#mouseOutThirdStar" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/outline_star.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fx:id="star4" fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="10.0" onMouseClicked="#clickOnFourthStar" onMouseEntered="#mouseOnFourthStar" onMouseExited="#mouseOutFourthStar" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/outline_star.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ImageView fx:id="star5" fitHeight="30.0" fitWidth="30.0" layoutX="56.0" layoutY="10.0" onMouseClicked="#clickOnFifthStar" onMouseEntered="#mouseOnFifthStar" onMouseExited="#mouseOutFifthStar" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/outline_star.png" />
-                                             </image>
-                                          </ImageView>
+                                          <Label text="Rating">
+                                             <font>
+                                                <Font name="Corbel Light" size="20.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" top="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <HBox prefWidth="200.0">
+                                             <children>
+                                                <ImageView fx:id="star1" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#clickOnFirstStar" onMouseEntered="#mouseOnFirstStar" onMouseExited="#mouseOutFirstStar" pickOnBounds="true" preserveRatio="true">
+                                                   <HBox.margin>
+                                                      <Insets />
+                                                   </HBox.margin>
+                                                   <image>
+                                                      <Image url="@img/outline_star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fx:id="star2" fitHeight="30.0" fitWidth="30.0" layoutX="10.0" layoutY="10.0" onMouseClicked="#clickOnSecondStar" onMouseEntered="#mouseOnSecondStar" onMouseExited="#mouseOutSecondStar" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/outline_star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fx:id="star3" fitHeight="30.0" fitWidth="30.0" layoutX="25.0" layoutY="10.0" onMouseClicked="#clickOnThirdStar" onMouseEntered="#mouseOnThirdStar" onMouseExited="#mouseOutThirdStar" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/outline_star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fx:id="star4" fitHeight="30.0" fitWidth="30.0" layoutX="40.0" layoutY="10.0" onMouseClicked="#clickOnFourthStar" onMouseEntered="#mouseOnFourthStar" onMouseExited="#mouseOutFourthStar" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/outline_star.png" />
+                                                   </image>
+                                                </ImageView>
+                                                <ImageView fx:id="star5" fitHeight="30.0" fitWidth="30.0" layoutX="56.0" layoutY="10.0" onMouseClicked="#clickOnFifthStar" onMouseEntered="#mouseOnFifthStar" onMouseExited="#mouseOutFifthStar" pickOnBounds="true" preserveRatio="true">
+                                                   <image>
+                                                      <Image url="@img/outline_star.png" />
+                                                   </image>
+                                                </ImageView>
+                                             </children>
+                                          </HBox>
+                                          <Label text="Title">
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" top="10.0" />
+                                             </VBox.margin>
+                                             <font>
+                                                <Font name="Corbel Light" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <TextField fx:id="textTitle" maxWidth="-Infinity" prefWidth="917.0" promptText="Insert title" />
+                                          <Label text="Content">
+                                             <font>
+                                                <Font name="Corbel Light" size="20.0" />
+                                             </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" top="10.0" />
+                                             </VBox.margin>
+                                          </Label>
+                                          <TextArea fx:id="textContent" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="916.0" promptText="Insert content" />
+                                          <Button mnemonicParsing="false" onMouseClicked="#onSubmit" text="Submit">
+                                             <VBox.margin>
+                                                <Insets bottom="20.0" top="20.0" />
+                                             </VBox.margin>
+                                          </Button>
                                        </children>
-                                    </HBox>
-                                    <Label text="Title">
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" top="10.0" />
-                                       </VBox.margin>
-                                       <font>
-                                          <Font name="Corbel Light" size="20.0" />
-                                       </font>
-                                    </Label>
-                                    <TextField fx:id="textTitle" maxWidth="-Infinity" prefWidth="917.0" promptText="Insert title" />
-                                    <Label text="Content">
-                                       <font>
-                                          <Font name="Corbel Light" size="20.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets bottom="5.0" top="10.0" />
-                                       </VBox.margin>
-                                    </Label>
-                                    <TextArea fx:id="textContent" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="916.0" promptText="Insert content" />
-                                    <Button mnemonicParsing="false" onMouseClicked="#onSubmit" text="Submit">
-                                       <VBox.margin>
-                                          <Insets bottom="20.0" top="20.0" />
-                                       </VBox.margin>
-                                    </Button>
+                                    </VBox>
                                  </children>
                               </VBox>
                            </children>

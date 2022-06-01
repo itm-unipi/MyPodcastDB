@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
@@ -165,7 +166,7 @@ public class PodcastPageController {
             // create new podcast element
             AnchorPane newEpisode = fxmlEpisodeLoader.load();
             EpisodeController controller = fxmlEpisodeLoader.getController();
-            controller.setData(episode, this.mainPage);
+            controller.setData(episode, this.podcast.getAuthorName(), this.mainPage);
 
             // add new podcast to grid
             this.episodesGrid.add(newEpisode, this.column, this.row++);
@@ -363,6 +364,24 @@ public class PodcastPageController {
         }
         this.podcast = podcast;
 
+        // actor recognition
+        String sessionType = MyPodcastDB.getInstance().getSessionType();
+        if (sessionType.equals("Author") && ((Author)MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.podcast.getAuthorName())) {
+            // owner of podcast
+            this.like.setVisible(false);
+            this.watchlater.setVisible(false);
+        } else if (sessionType.equals("User") || sessionType.equals("Author") || sessionType.equals("Unregistered")) {
+            // visitator
+            this.updatePodcast.setVisible(false);
+            this.deletePodcast.setVisible(false);
+            this.addEpisode.setVisible(false);
+        } else if (sessionType.equals("Admin")) {
+            this.like.setVisible(false);
+            this.watchlater.setVisible(false);
+            this.updatePodcast.setVisible(false);
+            this.addEpisode.setVisible(false);
+        }
+
         // no reviews message
         if (!podcast.getEpisodes().isEmpty()) {
             this.noEpisodeMessage.setVisible(false);
@@ -403,7 +422,7 @@ public class PodcastPageController {
             // create new podcast element
             AnchorPane newEpisode = fxmlLoader.load();
             EpisodeController controller = fxmlLoader.getController();
-            controller.setData(ep, this.mainPage);
+            controller.setData(ep, this.podcast.getAuthorName(), this.mainPage);
 
             // add new podcast to grid
             this.episodesGrid.add(newEpisode, this.column, this.row++);

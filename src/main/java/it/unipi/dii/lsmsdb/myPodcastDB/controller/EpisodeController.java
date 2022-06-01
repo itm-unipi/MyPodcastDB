@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -38,6 +40,8 @@ public class EpisodeController {
     private Episode episode;
 
     private BorderPane mainPage;
+
+    private String podcastAuthorName;
 
     @FXML
     private Button updateEpisode;
@@ -87,20 +91,31 @@ public class EpisodeController {
         if (!modifiedEpisode.getName().equals(this.episode.getName()) || !modifiedEpisode.getDescription().equals(this.episode.getDescription()) || !modifiedEpisode.getReleaseDateAsString().equals(this.episode.getReleaseDateAsString()) /*|| modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis()*/) {
             // update page
             Logger.info("Modified episode : " + this.episode.toString());
-            setData(modifiedEpisode, this.mainPage);
+            setData(modifiedEpisode, this.podcastAuthorName, this.mainPage);
         }
 
         this.mainPage.setEffect(null);
     }
 
-    public void setData(Episode episode, BorderPane mainPage) {
+    public void setData(Episode episode, String podcastAuthorName, BorderPane mainPage) {
         this.episode = episode;
         this.mainPage = mainPage;
+        this.podcastAuthorName = podcastAuthorName;
 
         this.title.setText(episode.getName());
         this.description.setText(episode.getDescription());
         String[] date = this.episode.getReleaseDate().toString().split(" ");
         this.releaseDate.setText(date[2] + " " + date[1]);
         this.time.setText(round(this.episode.getTimeMillis() / (1000 * 60)) + " min");
+
+        // actor recognition
+        String sessionType = MyPodcastDB.getInstance().getSessionType();
+        if (sessionType.equals("User") || (sessionType.equals("Author") && !((Author)MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.podcastAuthorName)) || sessionType.equals("Unregistered")) {
+            // visitator
+            this.updateEpisode.setVisible(false);
+            this.deleteEpisode.setVisible(false);
+        } else if (sessionType.equals("Admin")) {
+            this.updateEpisode.setVisible(false);
+        }
     }
 }

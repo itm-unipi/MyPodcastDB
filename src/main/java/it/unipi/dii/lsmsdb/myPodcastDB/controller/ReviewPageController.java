@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
@@ -20,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
@@ -58,6 +60,9 @@ public class ReviewPageController {
 
     @FXML
     private Label rating;
+
+    @FXML
+    private VBox reviewForm;
 
     @FXML
     private GridPane reviewGrid;
@@ -426,6 +431,14 @@ public class ReviewPageController {
             podcast.addReview("" + i, 5);
         }
         this.podcast = podcast;
+
+        // actor recognition
+        String sessionType = MyPodcastDB.getInstance().getSessionType();
+        if (!sessionType.equals("User")) {
+            // only the user can write review
+            this.reviewForm.setVisible(false);
+            this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
+        }
 
         // review test
         Review review = new Review("", "", "frank", "Yes, I like it", "Duis ut molestie justo, non mattis arcu. Donec ac arcu eget sapien dignissim pretium eu a mi. Nullam consectetur mauris id maximus vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla mi leo, pulvinar nec blandit a, dictum semper nibh. Proin ut mauris turpis. Duis vehicula volutpat dolor, sodales varius ipsum venenatis sed.", 5, new Date());

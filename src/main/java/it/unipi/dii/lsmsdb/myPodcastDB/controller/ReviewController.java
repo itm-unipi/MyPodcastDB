@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -56,6 +58,24 @@ public class ReviewController {
         Logger.info("Delete review");
     }
 
+    @FXML
+    void clickOnReviewAuthor(MouseEvent event) throws IOException {
+        Logger.info("Click on Review Author : " + this.review.getAuthorUsername());
+        StageManager.showPage(ViewNavigator.USERPAGE.getPage(), this.review.getAuthorUsername());
+    }
+
+    @FXML
+    void mouseOnReviewAuthor(MouseEvent event) {
+        this.authorName.setCursor(Cursor.HAND);
+        this.authorName.setTextFill(Color.color(0.388, 0.388, 0.4));
+    }
+
+    @FXML
+    void mouseOutReviewAuthor(MouseEvent event) {
+        this.authorName.setCursor(Cursor.DEFAULT);
+        this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
+
     public void setData(Review review) {
         this.review = review;
 
@@ -76,23 +96,10 @@ public class ReviewController {
         this.reviewDate.setText(review.getCreatedAtAsString().replace("T", " ").replace("Z", ""));
         this.title.setText(review.getTitle());
         this.text.setText(review.getContent());
-    }
 
-    @FXML
-    void clickOnReviewAuthor(MouseEvent event) throws IOException {
-        Logger.info("Click on Review Author : " + this.review.getAuthorUsername());
-        StageManager.showPage(ViewNavigator.USERPAGE.getPage(), this.review.getAuthorUsername());
-    }
-
-    @FXML
-    void mouseOnReviewAuthor(MouseEvent event) {
-        this.authorName.setCursor(Cursor.HAND);
-        this.authorName.setTextFill(Color.color(0.388, 0.388, 0.4));
-    }
-
-    @FXML
-    void mouseOutReviewAuthor(MouseEvent event) {
-        this.authorName.setCursor(Cursor.DEFAULT);
-        this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
+        // actor recognition
+        String sessionType = MyPodcastDB.getInstance().getSessionType();
+        if (!sessionType.equals("Admin"))
+            this.deleteReview.setVisible(false);
     }
 }
