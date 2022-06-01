@@ -118,12 +118,20 @@
                <content>
                   <VBox alignment="TOP_CENTER" maxWidth="-Infinity" prefWidth="1278.0">
                      <children>
+                        <Label fx:id="title" layoutX="188.0" layoutY="36.0" prefWidth="920.0" text="Welcome Admin">
+                           <font>
+                              <Font name="Corbel" size="25.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets top="15.0" />
+                           </VBox.margin>
+                        </Label>
                         <Label prefWidth="920.0" text="Statistics" textFill="#636366">
                            <font>
                               <Font name="Corbel Bold" size="24.0" />
                            </font>
                            <VBox.margin>
-                              <Insets top="5.0" />
+                              <Insets top="25.0" />
                            </VBox.margin>
                         </Label>
                         <GridPane fx:id="statisticsGrid" alignment="CENTER" hgap="20.0" maxWidth="-Infinity" prefWidth="1240.0" vgap="20.0">

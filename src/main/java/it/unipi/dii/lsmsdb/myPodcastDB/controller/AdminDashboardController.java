@@ -9,6 +9,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -66,6 +67,9 @@ public class AdminDashboardController {
 
     @FXML
     private GridPane statisticsGrid;
+
+    @FXML
+    private Label title;
 
     @FXML
     private Button update1;
@@ -340,6 +344,7 @@ public class AdminDashboardController {
         Admin admin = (Admin)MyPodcastDB.getInstance().getSessionActor();
         this.admin = admin;
         Logger.info("Admin logged : " + this.admin.getName());
+        this.title.setText("Welcome " + this.admin.getName());
 
         // example statistic
         List<Entry<String, Object>> statistics1 = new ArrayList<>();
