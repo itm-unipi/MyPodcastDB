@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
@@ -11,12 +12,31 @@ import java.util.List;
 public class AuthorService {
 
     //---------------- GIANLUCA ---------------------
+    private AuthorMongo authorMongoManager;
+    private AuthorNeo4j authorNeo4jManager;
+
+    public AuthorService() {
+        this.authorMongoManager = new AuthorMongo();
+        this.authorNeo4jManager = new AuthorNeo4j();
+    }
+
+    public boolean getAuthorLogin(Author author){
+        boolean res;
+        MongoManager.getInstance().openConnection();
+        Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
+        if(newAuthor == null || !author.getPassword().equals(newAuthor.getPassword()))
+            res = false;
+        else {
+            author.copy(newAuthor);
+            res = true;
+        }
+
+        MongoManager.getInstance().closeConnection();
+        return res;
+    }
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------
-
-    private AuthorMongo authorMongoManager;
-    private AuthorNeo4j authorNeo4jManager;
 
     public void loadAuthorOwnProfile(Author author, List<Author> followed, int limit) {
         MongoManager.getInstance().openConnection();
@@ -33,10 +53,6 @@ public class AuthorService {
         Neo4jManager.getInstance().closeConnection();
     }
 
-    public AuthorService() {
-        this.authorMongoManager = new AuthorMongo();
-        this.authorNeo4jManager = new AuthorNeo4j();
-    }
 
     //-----------------------------------------------
 

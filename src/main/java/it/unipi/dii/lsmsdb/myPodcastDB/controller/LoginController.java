@@ -4,6 +4,9 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -126,7 +129,7 @@ public class LoginController {
 
     @FXML
     void loginSgnUpButtonReleased(MouseEvent event){
-        Logger.info("login butto released");
+        Logger.info("login button released");
         loginSignUpButton.setStyle(
                 "-fx-background-color: #e0e0e0;" +
                         "-fx-border-color:  #bcbcbc;" +
@@ -198,23 +201,91 @@ public class LoginController {
         if(loginUserRadioButton.isSelected()) {
             Logger.info("User actor selected");
             String actorType = "User";
-            User user = (User)simActorService(actorName, password, actorType);
-            MyPodcastDB.getInstance().setSession(user, actorType);
+            User user = new User();
+            user.setUsername(actorName);
+            user.setPassword(password);
+            //user = (User)simActorService(actorName, password, actorType);
+            UserService service = new UserService();
+            if(service.getUserLogin(user))
+                MyPodcastDB.getInstance().setSession(user, actorType);
+            else{
+                Logger.error("user not registered");
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+                alert.setTitle("Error!");
+                alert.setHeaderText("user not registered");
+                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+                alert.setContentText(null);
+                alert.initOwner(loginAnchorPane.getScene().getWindow());
+
+                loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
+                alert.showAndWait();
+                loginAnchorPane.setEffect(null);
+                return;
+            }
         }
         else if(loginAuthorRadioButton.isSelected()) {
             Logger.info("Author actor selected");
             String actorType = "Author";
-            Author author = (Author)simActorService(actorName, password, actorType);
-            MyPodcastDB.getInstance().setSession(author, actorType);
+            Author author = new Author();
+            author.setName(actorName);
+            author.setPassword(password);
+            //author = (Author)simActorService(actorName, password, actorType);
+            AuthorService service = new AuthorService();
+            if(service.getAuthorLogin(author)){
+                MyPodcastDB.getInstance().setSession(author, actorType);
+            }else{
+                Logger.error("author not registered");
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+                alert.setTitle("Error!");
+                alert.setHeaderText("author not registered");
+                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+                alert.setContentText(null);
+                alert.initOwner(loginAnchorPane.getScene().getWindow());
+
+                loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
+                alert.showAndWait();
+                loginAnchorPane.setEffect(null);
+                return;
+            }
         }
         else if(loginAdminRadioButton.isSelected()){
             Logger.info("Admin actor selected");
             String actorType = "Admin";
-            Admin admin = (Admin)simActorService(actorName, password, actorType);
-            MyPodcastDB.getInstance().setSession(admin, actorType);
+            Admin admin = new Admin();
+            admin.setName(actorName);
+            admin.setPassword(password);
+            //admin = (Admin)simActorService(actorName, password, actorType);
+            AdminService service = new AdminService();
+            if(service.getAdminLogin(admin))
+                MyPodcastDB.getInstance().setSession(admin, actorType);
+            else{
+                Logger.error("admin not registered");
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+                alert.setTitle("Error!");
+                alert.setHeaderText("admin not registered");
+                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+                alert.setContentText(null);
+                alert.initOwner(loginAnchorPane.getScene().getWindow());
+
+                loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
+                alert.showAndWait();
+                loginAnchorPane.setEffect(null);
+                return;
+            }
         }
-        else
+        else {
             Logger.error("No actor selected");
+            return;
+        }
 
         String log = "Login clicked: (" + actorName + ", " + password +")";
         Logger.info(log);
