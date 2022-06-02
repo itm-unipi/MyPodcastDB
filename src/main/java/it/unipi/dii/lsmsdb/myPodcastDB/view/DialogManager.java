@@ -1,5 +1,6 @@
-package it.unipi.dii.lsmsdb.myPodcastDB.utility;
+package it.unipi.dii.lsmsdb.myPodcastDB.view;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import javafx.scene.control.Alert;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;

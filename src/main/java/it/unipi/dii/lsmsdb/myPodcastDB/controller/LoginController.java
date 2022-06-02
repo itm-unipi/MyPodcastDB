@@ -7,7 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.DialogManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -16,7 +16,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -25,7 +24,6 @@ import javafx.stage.Stage;
 import org.javatuples.Triplet;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public class LoginController {
 
