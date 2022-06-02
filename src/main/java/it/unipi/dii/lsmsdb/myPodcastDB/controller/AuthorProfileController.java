@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -269,6 +270,14 @@ public class AuthorProfileController {
     }
 
     public void initialize() throws IOException {
+        // TEST SERVICE
+        AuthorService authorService = new AuthorService();
+        Author diversamente = new Author();
+        diversamente.setName("Kevin Pike");
+        List<Author> followed = new ArrayList<>();
+        authorService.loadAuthorOwnProfile(diversamente, followed, 10);
+        Logger.info("TEST SERVICE:\n" + diversamente + "\n" + followed);
+
         // Load information about the actor of the session
         String actorType = MyPodcastDB.getInstance().getSessionType();
 

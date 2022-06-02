@@ -1,14 +1,12 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import org.javatuples.Pair;
 import org.neo4j.driver.Record;
 import org.neo4j.driver.Value;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import static org.neo4j.driver.Values.parameters;
 
@@ -158,7 +156,7 @@ public class AuthorNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<String> showFollowedAuthors(String username, int limit) {
+    public List<Author> showFollowedAuthorsByUser(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u:User { username: $username})-[r:FOLLOWS]->(a:Author)" + "\n" +
                 "RETURN a" + "\n" +
@@ -175,31 +173,66 @@ public class AuthorNeo4j {
         if (result == null || !result.iterator().hasNext())
             return null;
 
-        List<String> authors = new ArrayList<>();
+        List<Author> authors = new ArrayList<>();
         for (Record record : result) {
-            authors.add(record.get(0).get("name").asString());
+            String name = record.get(0).get("name").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+            Author author = new Author("", name, picturePath);
+            authors.add(author);
         }
 
         return authors;
     }
 
-    public List<String> showSuggestedAuthorsFollowedByFollowedUser(String username, int limit) {
+    public List<Author> showFollowedAuthorsByAuthor(String name, int limit) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = " MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author)" + "\n" +
+                "RETURN a2" + "\n" +
+                "LIMIT $limit";
+        Value params = parameters("name", name, "limit", limit);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Author> authors = new ArrayList<>();
+        for (Record record : result) {
+            String authorName = record.get(0).get("name").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+            Author author = new Author("", authorName, picturePath);
+            authors.add(author);
+        }
+
+        return authors;
+    }
+
+    public List<Author> showSuggestedAuthorsFollowedByFollowedUser(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query = "MATCH (u:User { username: $username })-[:FOLLOWS_USER]-(:User)-[:FOLLOWS]->(a1:Author) " +
                     "WHERE NOT EXISTS " +
-                    "{ MATCH (u)-[:FOLLOWS]->(a1) }" +
-                    "RETURN DISTINCT a1.name as AuthorName " +
+                    "{ MATCH (u)-[:FOLLOWS]->(a1) } " +
+                    "RETURN DISTINCT a1 " +
                     "LIMIT $limit";
             List<Record> result = manager.read(query, parameters("username", username, "limit", limit));
 
             if (result.isEmpty())
                 return null;
 
-            List<String> authors = new ArrayList<String>();
-            for (Record record: result)
-                authors.add(record.get("AuthorName").asString());
+            List<Author> authors = new ArrayList<>();
+            for (Record record : result) {
+                String name = record.get(0).get("name").asString();
+                String picturePath = record.get(0).get("picturePath").asString();
+                Author author = new Author("", name, picturePath);
+                authors.add(author);
+            }
 
             return authors;
         } catch (Exception e) {
@@ -208,14 +241,14 @@ public class AuthorNeo4j {
         }
     }
 
-    public List<Entry<String, Integer>> showMostFollowedAuthor(int limit) {
+    public List<Pair<Author, Integer>> showMostFollowedAuthor(int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> result = null;
         try {
             String query =  "MATCH (a:Author)<-[f:FOLLOWS]-() " +
-                            "WITH a.name AS name, COUNT(f) AS followers " +
-                            "RETURN name, followers " +
+                            "WITH a.name AS name, a.picturePath AS picturePath, COUNT(f) AS followers " +
+                            "RETURN name, picturePath, followers " +
                             "ORDER BY followers DESC " +
                             "LIMIT $limit";
             Value params = parameters("limit", limit);
@@ -227,12 +260,13 @@ public class AuthorNeo4j {
         if (result == null)
             return null;
 
-        List<Entry<String, Integer>> authors = new ArrayList<>();
+        List<Pair<Author, Integer>> authors = new ArrayList<>();
         for (Record record : result) {
             String name = record.get("name").asString();
-            int value = record.get("followers").asInt();
-            Entry<String, Integer> category = new AbstractMap.SimpleEntry<>(name, value);
-            authors.add(category);
+            String picturePath = record.get("picturePath").asString();
+            int follows = record.get("followers").asInt();
+            Author author = new Author("", name, picturePath);
+            authors.add(new Pair<>(author, follows));
         }
 
         return authors;

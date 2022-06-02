@@ -21,6 +21,13 @@ public class Episode {
         this.timeMillis = timeMillis;
     }
 
+    public void copy(Episode episode) {
+        this.name = episode.name;
+        this.description = episode.description;
+        this.releaseDate = episode.releaseDate;
+        this.timeMillis = episode.timeMillis;
+    }
+
     public String getName() {
         return name;
     }

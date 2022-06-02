@@ -35,6 +35,20 @@ public class User {
         this.gender = gender;
     }
 
+    public void copy(User user) {
+        this.id = user.id;
+        this.username = user.username;
+        this.password = user.password;
+        this.name = user.name;
+        this.surname = user.surname;
+        this.email = user.email;
+        this.country = user.country;
+        this.picturePath = user.picturePath;
+        this.favouriteGenre = user.favouriteGenre;
+        this.age = user.age;
+        this.gender = user.gender;
+    }
+
     public String getId() {
         return id;
     }

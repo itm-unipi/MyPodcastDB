@@ -16,6 +16,13 @@ public class Admin {
         this.email = email;
     }
 
+    public void copy(Admin admin) {
+        this.id = admin.id;
+        this.name = admin.name;
+        this.password = admin.password;
+        this.email = admin.email;
+    }
+
     public String getId() {
         return id;
     }

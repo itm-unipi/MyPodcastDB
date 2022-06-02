@@ -34,6 +34,15 @@ public class Author {
         this.picturePath = picturePath;
     }
 
+    public void copy(Author author) {
+        this.id = author.id;
+        this.name = author.name;
+        this.password = author.password;
+        this.email = author.email;
+        this.ownPodcasts = new ArrayList<>(author.ownPodcasts);
+        this.picturePath = author.picturePath;
+    }
+
     public String getId() {
         return id;
     }

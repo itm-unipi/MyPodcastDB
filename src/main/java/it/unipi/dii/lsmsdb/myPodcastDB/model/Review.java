@@ -26,6 +26,16 @@ public class Review {
         this.createdAt = createdAt;
     }
 
+    public void copy(Review review) {
+        this.id = review.id;
+        this.podcastId = review.podcastId;
+        this.authorUsername = review.authorUsername;
+        this.title = review.title;
+        this.content = review.content;
+        this.rating = review.rating;
+        this.createdAt = review.createdAt;
+    }
+
     public String getId() {
         return id;
     }

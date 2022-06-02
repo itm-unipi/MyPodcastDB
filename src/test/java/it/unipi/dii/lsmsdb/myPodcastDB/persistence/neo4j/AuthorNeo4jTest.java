@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import org.javatuples.Pair;
 
 import java.util.List;
 import java.util.Map;
@@ -124,15 +125,15 @@ public class AuthorNeo4jTest {
     }
 
     public void showMostFollowedAuthorTest() {
-        List<Map.Entry<String, Integer>> results = this.authorNeo4j.showMostFollowedAuthor(10);
-        if (results.get(0).getKey().equals("Beijing Energy Network") && results.get(0).getValue() == 479)
+        List<Pair<Author, Integer>> results = this.authorNeo4j.showMostFollowedAuthor(10);
+        if (results.get(0).getValue0().equals("Beijing Energy Network") && results.get(0).getValue1() == 479)
             System.out.println("[+] showMostFollowedAuthor");
         else
             System.err.println("[-] showMostFollowedAuthor");
     }
 
     public void showSuggestedAuthorsFollowedByFollowedUserTest() {
-        List<String> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10);
+        List<Author> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10);
 
         if (authors != null && authors.size() == 10)
             System.out.println("[+] showSuggestedAuthorsFollowedByFollowedUser");
