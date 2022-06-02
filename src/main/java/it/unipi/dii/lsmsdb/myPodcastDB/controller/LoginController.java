@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -71,20 +72,10 @@ public class LoginController {
     @FXML
     void loginLoginButtonClick(MouseEvent event) throws IOException {
         if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty()) {
-            Logger.error("Login clicked: invalid values");
 
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-            alert.setTitle("Error!");
-            alert.setHeaderText("Invalid inputs");
-            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-            alert.setContentText(null);
-            alert.initOwner(loginAnchorPane.getScene().getWindow());
-
-            loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-            alert.showAndWait();
-            loginAnchorPane.setEffect(null);
+            String msg = "invalid values";
+            Logger.error("Login clicked: " + msg);
+            DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
             return;
         }
 
@@ -209,20 +200,9 @@ public class LoginController {
             if(service.getUserLogin(user))
                 MyPodcastDB.getInstance().setSession(user, actorType);
             else{
-                Logger.error("user not registered");
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
-                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-                alert.setTitle("Error!");
-                alert.setHeaderText("user not registered");
-                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-                alert.setContentText(null);
-                alert.initOwner(loginAnchorPane.getScene().getWindow());
-
-                loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-                alert.showAndWait();
-                loginAnchorPane.setEffect(null);
+                String msg = "user not registered";
+                Logger.error(msg);
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
                 return;
             }
         }
@@ -238,19 +218,7 @@ public class LoginController {
                 MyPodcastDB.getInstance().setSession(author, actorType);
             }else{
                 Logger.error("author not registered");
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
-                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-                alert.setTitle("Error!");
-                alert.setHeaderText("author not registered");
-                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-                alert.setContentText(null);
-                alert.initOwner(loginAnchorPane.getScene().getWindow());
-
-                loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-                alert.showAndWait();
-                loginAnchorPane.setEffect(null);
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane,"author not registered");
                 return;
             }
         }
@@ -266,19 +234,7 @@ public class LoginController {
                 MyPodcastDB.getInstance().setSession(admin, actorType);
             else{
                 Logger.error("admin not registered");
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
-                stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-                alert.setTitle("Error!");
-                alert.setHeaderText("admin not registered");
-                alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-                alert.setContentText(null);
-                alert.initOwner(loginAnchorPane.getScene().getWindow());
-
-                loginAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-                alert.showAndWait();
-                loginAnchorPane.setEffect(null);
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "admin not registered");
                 return;
             }
         }
