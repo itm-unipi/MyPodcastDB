@@ -118,13 +118,15 @@ public class AdminDashboardController {
         this.mainPage.setEffect(null);
     }
     @FXML
-    void onClickActorProfile(MouseEvent event) {
+    void onClickActorProfile(MouseEvent event) throws IOException {
         Logger.info("Click on profile");
+        StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
     }
 
     @FXML
-    void onClickHome(MouseEvent event) {
+    void onClickHome(MouseEvent event) throws IOException {
         Logger.info("Click on home");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
     @FXML
