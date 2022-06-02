@@ -16,12 +16,12 @@ public class AuthorNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addAuthor(String authorName) {
+    public boolean addAuthor(String authorName, String picturePath) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
-            String query = "CREATE (a:Author {name: $name})";
-            Value params = parameters("name", authorName);
+            String query = "CREATE (a:Author {name: $name, picturePath: $picturePath})";
+            Value params = parameters("name", authorName, "picturePath", picturePath);
             manager.write(query, params);
             return true;
         } catch (Exception e) {

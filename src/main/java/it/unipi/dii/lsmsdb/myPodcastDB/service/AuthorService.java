@@ -34,6 +34,34 @@ public class AuthorService {
         MongoManager.getInstance().closeConnection();
         return res;
     }
+
+    public boolean addAuthorSignUp(Author author){
+
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
+        if(newAuthor != null){
+            MongoManager.getInstance().closeConnection();
+            Neo4jManager.getInstance().closeConnection();
+            return false;
+        }
+        else {
+            if(!authorMongoManager.addAuthor(author)){
+                MongoManager.getInstance().closeConnection();
+                Neo4jManager.getInstance().closeConnection();
+                return false;
+            }
+            if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())) {
+                MongoManager.getInstance().closeConnection();
+                Neo4jManager.getInstance().closeConnection();
+                return false;
+            }
+            MongoManager.getInstance().closeConnection();
+            Neo4jManager.getInstance().closeConnection();
+            return true;
+        }
+    }
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------

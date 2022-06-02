@@ -2,6 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
@@ -151,10 +153,16 @@ public class SignUpController {
                 return;
             }
 
-
             int age = LocalDate.now().getYear() - birthDate.getYear();
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, age, gender);
             Logger.info(user.toString());
+
+            UserService service = new UserService();
+            if(!service.addUserSignUp(user)){
+                Logger.error("Adding user failed");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Adding user failed");
+                return;
+            }
             DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
         }
         else{
@@ -162,7 +170,7 @@ public class SignUpController {
             String password = signUpPasswordTextField.getText();
             String repPassword = signUpRepPasswTextField.getText();
             String email = signUpEmailTextField.getText();
-            String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
+            String picturePath = "/img/authors/author" + (Integer)imageNumber + ".png";
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("invalid values");
@@ -170,8 +178,16 @@ public class SignUpController {
                 return;
             }
 
-            Author author = new Author("", name, password,email, picturePath);
+            Author author = new Author("", name, password, email, picturePath);
             Logger.info(author.toString());
+
+            AuthorService service = new AuthorService();
+            if(!service.addAuthorSignUp(author)){
+                Logger.error("Adding author failed");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Adding author failed");
+                return;
+            }
+
             DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
