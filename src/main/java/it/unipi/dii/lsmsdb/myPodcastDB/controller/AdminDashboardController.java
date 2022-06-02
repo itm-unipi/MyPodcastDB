@@ -3,23 +3,22 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import org.javatuples.Triplet;
 
 import java.io.IOException;
 import java.util.AbstractMap;
@@ -49,6 +48,9 @@ public class AdminDashboardController {
 
     @FXML
     private ImageView logout;
+
+    @FXML
+    private BorderPane mainPage;
 
     @FXML
     private Button modifyInfo;
@@ -95,8 +97,25 @@ public class AdminDashboardController {
     private Admin admin;
 
     @FXML
-    void clickOnAddAdmin(MouseEvent event) {
+    void clickOnAddAdmin(MouseEvent event) throws IOException {
         Logger.info("Add admin");
+
+        this.mainPage.setEffect(new BoxBlur(3, 3, 3));
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getClassLoader().getResource("AddAdmin.fxml"));
+
+        DialogPane addAdminDialog = new DialogPane();
+        addAdminDialog.setContent(fxmlLoader.load());
+
+        Dialog<Triplet<String, String, String>> dialog = new Dialog<>();
+        dialog.setDialogPane(addAdminDialog);
+        dialog.setTitle("Add new Admin");
+        dialog.initOwner(this.mainPage.getScene().getWindow());
+
+        Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+        dialog.showAndWait();
+        this.mainPage.setEffect(null);
     }
     @FXML
     void onClickActorProfile(MouseEvent event) {

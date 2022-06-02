@@ -209,7 +209,7 @@ public class LoginController {
         }
         else if(loginAdminRadioButton.isSelected()){
             Logger.info("Admin actor selected");
-            String actorType = "User";
+            String actorType = "Admin";
             Admin admin = (Admin)simActorService(actorName, password, actorType);
             MyPodcastDB.getInstance().setSession(admin, actorType);
         }
