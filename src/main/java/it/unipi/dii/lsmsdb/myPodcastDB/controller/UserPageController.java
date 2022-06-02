@@ -380,6 +380,8 @@ public class UserPageController {
             StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         else if(actorType.equals("Author"))
             StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getId());
+        else if (actorType.equals("Admin"))
+            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
         else
             Logger.error("Unidentified Actor Type");
     }

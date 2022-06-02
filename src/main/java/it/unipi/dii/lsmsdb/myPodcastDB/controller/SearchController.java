@@ -96,6 +96,8 @@ public class SearchController {
             StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
         else if (actorType.equals("User"))
             StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        else if (actorType.equals("Admin"))
+            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
         else
             Logger.error("Unidentified Actor Type!");
     }

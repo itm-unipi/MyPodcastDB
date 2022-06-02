@@ -344,6 +344,8 @@ public class PodcastPageController {
             StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
         else if (actorType.equals("User"))
             StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        else if (actorType.equals("Admin"))
+            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
         else
             Logger.error("Unidentified Actor Type");
     }
