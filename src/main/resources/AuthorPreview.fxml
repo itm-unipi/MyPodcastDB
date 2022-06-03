@@ -24,7 +24,7 @@
                         <Insets bottom="-38.0" />
                      </VBox.margin>
                   </ImageView>
-                  <Button fx:id="followAuthor" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onClickFollowAuthor" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="30.0" prefWidth="0.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Follow">
+                  <Button fx:id="btnFollowAuthor" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onClickBtnFollowAuthor" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="30.0" prefWidth="0.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Follow">
                      <font>
                         <Font name="Corbel Light" size="14.0" />
                      </font>

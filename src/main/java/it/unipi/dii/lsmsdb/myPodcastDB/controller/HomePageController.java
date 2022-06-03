@@ -586,7 +586,7 @@ public class HomePageController {
 
                 AnchorPane newAuthor = fxmlLoader.load();
                 AuthorPreviewController controller = fxmlLoader.getController();
-                controller.setData(a);
+                controller.setData(a, true);
 
                 gridSuggestedAuthors.add(newAuthor, column++, row);
             }
@@ -696,7 +696,7 @@ public class HomePageController {
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(a);
+            controller.setData(a, true);
 
             gridMostFollowedAuthors.add(newAuthor, column++, row);
         }

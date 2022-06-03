@@ -21,7 +21,7 @@
    <content>
       <VBox>
          <children>
-            <HBox>
+            <HBox prefHeight="259.0">
                <children>
                   <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="180.0" prefWidth="190.0">
                      <children>
@@ -54,7 +54,7 @@
                         <Insets left="-1.0" top="22.0" />
                      </HBox.margin>
                   </HBox>
-                  <VBox prefWidth="355.0" style="-fx-border-color: #eaeaea; -fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+                  <VBox prefHeight="250.0" prefWidth="355.0" style="-fx-border-color: #eaeaea; -fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;">
                      <children>
                         <Label text="Your Name" textFill="#5e5e5e">
                            <font>
@@ -64,13 +64,16 @@
                               <Insets bottom="2.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="authorName" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;name&gt;">
+                        <TextField fx:id="authorName" focusTraversable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="230.0" text="&lt;name&gt;">
                            <font>
                               <Font name="Corbel Light" size="16.0" />
                            </font>
                            <VBox.margin>
                               <Insets bottom="2.0" left="-10.0" />
                            </VBox.margin>
+                           <opaqueInsets>
+                              <Insets />
+                           </opaqueInsets>
                         </TextField>
                         <Label text="Your Email" textFill="#5e5e5e">
                            <font>
@@ -80,7 +83,7 @@
                               <Insets bottom="2.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="authorEmail" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;email&gt;">
+                        <TextField fx:id="authorEmail" focusTraversable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="230.0" text="&lt;email&gt;">
                            <font>
                               <Font name="Corbel Light" size="16.0" />
                            </font>
@@ -96,7 +99,7 @@
                               <Insets bottom="2.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField fx:id="authorPassword" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;password&gt;">
+                        <PasswordField fx:id="authorPassword" focusTraversable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" text="&lt;password&gt;">
                            <font>
                               <Font name="Corbel Light" size="16.0" />
                            </font>
@@ -112,7 +115,7 @@
                               <Insets bottom="2.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField fx:id="authorConfirmPassword" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;password&gt;">
+                        <PasswordField fx:id="authorConfirmPassword" focusTraversable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" text="&lt;password&gt;">
                            <font>
                               <Font name="Corbel Light" size="16.0" />
                            </font>

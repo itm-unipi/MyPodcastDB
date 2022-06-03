@@ -58,7 +58,7 @@
                                     <Insets right="2.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <VBox fx:id="boxActorProfile" alignment="CENTER">
+                              <VBox fx:id="boxActorProfile" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                                  <children>
                                     <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -76,7 +76,7 @@
                                     <Insets left="2.0" right="3.0" />
                                  </HBox.margin>
                               </VBox>
-                              <VBox fx:id="boxLogout" alignment="CENTER">
+                              <VBox fx:id="boxLogout" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
                                  <children>
                                     <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
                                        <image>
@@ -153,7 +153,7 @@
                                                 <Insets right="10.0" />
                                              </HBox.margin>
                                           </Label>
-                                          <Button fx:id="followAuthor" mnemonicParsing="false" style="-fx-background-color: #db55e7; -fx-border-radius: 8; -fx-background-radius: 8;" text="Follow" textFill="WHITE">
+                                          <Button fx:id="btnFollowAuthor" mnemonicParsing="false" onMouseClicked="#onClickBtnFollowAuthor" style="-fx-background-color: #db55e7; -fx-border-radius: 8; -fx-background-radius: 8;" text="Follow" textFill="WHITE">
                                              <font>
                                                 <Font name="Corbel Bold" size="16.0" />
                                              </font>

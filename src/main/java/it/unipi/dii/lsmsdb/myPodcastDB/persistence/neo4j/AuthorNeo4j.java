@@ -264,9 +264,9 @@ public class AuthorNeo4j {
         for (Record record : result) {
             String name = record.get("name").asString();
             String picturePath = record.get("picturePath").asString();
-            int follows = record.get("followers").asInt();
+            int followers = record.get("followers").asInt();
             Author author = new Author("", name, picturePath);
-            authors.add(new Pair<>(author, follows));
+            authors.add(new Pair<>(author, followers));
         }
 
         return authors;
