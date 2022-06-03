@@ -81,50 +81,54 @@ public class LoginController {
     }
 
     @FXML
-    void loginLoginButtonPressed(MouseEvent event){
+    void loginLoginButtonIn(MouseEvent event){
         Logger.info("login button pressed");
         loginLoginButton.setStyle(
-                "-fx-background-color: #bcbcbc;" +
-                        "-fx-border-color:  #e0e0e0;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #4CAF50;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
         );
     }
 
     @FXML
-    void loginLoginButtonReleased(MouseEvent event){
+    void loginLoginButtonOut(MouseEvent event){
         Logger.info("login buttod released");
         loginLoginButton.setStyle(
-                "-fx-background-color: #e0e0e0;" +
-                        "-fx-border-color:  #bcbcbc;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color: #4CAF50;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
         );
     }
 
     @FXML
-    void loginSignUpButtonPressed(MouseEvent event){
+    void loginSignUpButtonIn(MouseEvent event){
         Logger.info("sugnup butto pressed");
         loginSignUpButton.setStyle(
-                "-fx-background-color: #bcbcbc;" +
-                        "-fx-border-color:  #e0e0e0;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color:  white;" +
+                        "-fx-border-color:  #f4511e;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
         );
     }
 
     @FXML
-    void loginSgnUpButtonReleased(MouseEvent event){
+    void loginSgnUpButtonOut(MouseEvent event){
         Logger.info("login button released");
         loginSignUpButton.setStyle(
-                "-fx-background-color: #e0e0e0;" +
-                        "-fx-border-color:  #bcbcbc;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color:  #f4511e;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
         );
     }
 
@@ -161,12 +165,12 @@ public class LoginController {
 
     @FXML
     void unUserButtonIn(){
-        loginUnUserButton.setStyle("-fx-font-weight: bold; -fx-cursor: hand;");
+        loginUnUserButton.setStyle("-fx-background-color: white; -fx-text-fill: grey; -fx-background-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void unUserButtonOut(){
-        loginUnUserButton.setStyle("-fx-font-weight: normal; -fx-cursor: hand;");
+        loginUnUserButton.setStyle("-fx-background-color: grey; -fx-text-fill: white; -fx-background-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
