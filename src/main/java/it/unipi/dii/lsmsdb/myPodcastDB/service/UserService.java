@@ -147,6 +147,26 @@ public class UserService {
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
+
+    public boolean deleteUserPageOwner(User user){
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        if(!userMongoManager.deleteUserByUsername(user.getUsername())){
+            MongoManager.getInstance().closeConnection();
+            Neo4jManager.getInstance().closeConnection();
+            return false;
+        }
+        if(!userNeo4jManager.deleteUser(user.getUsername())){
+            userMongoManager.addUser(user);
+            MongoManager.getInstance().closeConnection();
+            Neo4jManager.getInstance().closeConnection();
+            return false;
+        }
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return true;
+    }
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------

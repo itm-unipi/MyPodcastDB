@@ -445,24 +445,10 @@ public class UserPageController {
     void deleteButtonClick(MouseEvent event) throws  IOException{
         Logger.info("delete button clicked");
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("OK"),new ButtonType("CANCEL"));
-        Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-        alert.setTitle(null);
-        alert.setHeaderText("Really Delete your account?");
-        alert.setContentText(null);
-        alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-        alert.initOwner(userPageAnchorPane.getScene().getWindow());
-
-        userPageAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-        Optional<ButtonType> result = alert.showAndWait();
-        userPageAnchorPane.setEffect(null);
-
-
-        if (result.get().getText().equals(alert.getButtonTypes().get(0).getText())){
+        if(DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, "Really Delete your account?")) {
+            UserService service = new UserService();
+            service.deleteUserPageOwner(pageOwner);
             StageManager.showPage(ViewNavigator.LOGIN.getPage());
-        } else {
-            return;
         }
 
     }

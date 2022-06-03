@@ -2,10 +2,13 @@ package it.unipi.dii.lsmsdb.myPodcastDB.view;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.util.Optional;
 
 public class DialogManager {
 
@@ -15,8 +18,26 @@ public class DialogManager {
 
     }
 
-    public  void createWarningAlert(AnchorPane mainPage, String msg){
+    public boolean createConfirmationAlert(AnchorPane mainPage, String msg){
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("OK"),new ButtonType("CANCEL"));
+        Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+        alert.setTitle(null);
+        alert.setHeaderText(msg);
+        alert.setContentText(null);
+        alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
+        alert.initOwner(mainPage.getScene().getWindow());
 
+        mainPage.setEffect(new BoxBlur(3, 3, 3));
+        Optional<ButtonType> result = alert.showAndWait();
+        mainPage.setEffect(null);
+
+
+        if (result.get().getText().equals(alert.getButtonTypes().get(0).getText())){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void createErrorAlert(AnchorPane mainPage, String msg){

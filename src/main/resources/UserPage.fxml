@@ -315,7 +315,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets bottom="10.0" left="85.0" />
+                                          <Insets bottom="10.0" left="50.0" />
                                        </VBox.margin>
                                     </Label>
                                     <HBox fx:id="userPageWatchlistAreaHBox" minWidth="-Infinity">
@@ -362,7 +362,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets left="85.0" top="10.0" />
+                                          <Insets left="50.0" top="10.0" />
                                        </VBox.margin>
                                        <padding>
                                           <Insets bottom="10.0" />
@@ -409,7 +409,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets left="85.0" top="10.0" />
+                                          <Insets left="50.0" top="10.0" />
                                        </VBox.margin>
                                        <padding>
                                           <Insets bottom="10.0" />
@@ -459,7 +459,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                        <VBox.margin>
-                                          <Insets left="85.0" top="10.0" />
+                                          <Insets left="50.0" top="10.0" />
                                        </VBox.margin>
                                        <padding>
                                           <Insets bottom="10.0" />
