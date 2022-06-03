@@ -48,7 +48,13 @@ public class AuthorService {
             return false;
         }
         else {
-            if(!authorMongoManager.addAuthor(author) || !authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
+            if(!authorMongoManager.addAuthor(author)){
+                MongoManager.getInstance().closeConnection();
+                Neo4jManager.getInstance().closeConnection();
+                return false;
+            }
+            else if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
+                authorMongoManager.deleteAuthorByName(author.getName());
                 MongoManager.getInstance().closeConnection();
                 Neo4jManager.getInstance().closeConnection();
                 return false;

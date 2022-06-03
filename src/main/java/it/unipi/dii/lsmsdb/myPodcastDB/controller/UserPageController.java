@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -352,10 +353,20 @@ public class UserPageController {
 
     @FXML
     void confirmButtonClick(MouseEvent event) {
+
         Logger.info("confirm button clicked");
         enableTextFields(false);
-        getDataFromTextFields();
-        Logger.info(pageOwner.toString());
+        User newUser = getDataFromTextFields();
+        Logger.info(newUser.toString());
+
+        UserService service = new UserService();
+        if(!service.updateUserPageOwner(pageOwner, newUser)){
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating account failed");
+            return;
+        }
+        pageOwner.copy(newUser);
+        MyPodcastDB.getInstance().setSession(pageOwner, "User");
+        actorPageButton.setImage(ImageCache.getImageFromLocalPath(pageOwner.getPicturePath()));
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
@@ -724,18 +735,20 @@ public class UserPageController {
 
     }
 
-    void getDataFromTextFields(){
+    User getDataFromTextFields(){
 
-        pageOwner.setUsername(userPageUsernameTextField.getText());
-        pageOwner.setName(userPageNameTextField.getText());
-        pageOwner.setSurname(userPageSurnameTextField.getText());
-        pageOwner.setAge(Integer.parseInt(userPageAgeTextField.getText()));
-        pageOwner.setCountry(userPageCountryTextField.getText());
-        pageOwner.setEmail(userPageEmailTextField.getText());
-        pageOwner.setGender(userPageGenderTextField.getText());
-        pageOwner.setFavouriteGenre(userPageFavGenreTextField.getText());
-        pageOwner.setPicturePath(imagePath);
-
+        User newUser = new User();
+        newUser.copy(pageOwner);
+        newUser.setUsername(userPageUsernameTextField.getText());
+        newUser.setName(userPageNameTextField.getText());
+        newUser.setSurname(userPageSurnameTextField.getText());
+        newUser.setAge(Integer.parseInt(userPageAgeTextField.getText()));
+        newUser.setCountry(userPageCountryTextField.getText());
+        newUser.setEmail(userPageEmailTextField.getText());
+        newUser.setGender(userPageGenderTextField.getText());
+        newUser.setFavouriteGenre(userPageFavGenreTextField.getText());
+        newUser.setPicturePath(imagePath);
+        return newUser;
     }
 
     void restoreTextFields(){

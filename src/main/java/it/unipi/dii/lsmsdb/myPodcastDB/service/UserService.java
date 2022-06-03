@@ -56,7 +56,13 @@ public class UserService {
             return false;
         }
         else {
-            if(!userMongoManager.addUser(user) || !userNeo4jManager.addUser(user.getUsername(), user.getPicturePath())){
+            if(!userMongoManager.addUser(user)){
+                MongoManager.getInstance().closeConnection();
+                Neo4jManager.getInstance().closeConnection();
+                return false;
+            }
+            else if(!userNeo4jManager.addUser(user.getUsername(), user.getPicturePath())){
+                userMongoManager.deleteUserByUsername(user.getUsername());
                 MongoManager.getInstance().closeConnection();
                 Neo4jManager.getInstance().closeConnection();
                 return false;
@@ -78,26 +84,49 @@ public class UserService {
 
         //load podcasts in watchlist from neo4j
         List<Podcast> podcasts = podcastNeo4j.showPodcastsInWatchlist(pageOwner.getUsername(), limit);
-        wPodcasts.addAll(podcasts);
+        if(podcasts != null)
+            wPodcasts.addAll(podcasts);
 
         //load liked podcasts
         podcasts = podcastNeo4j.showLikedPodcastsByUser(pageOwner.getUsername(), limit);
-        lPodcasts.addAll(podcasts);
+        if(podcasts != null)
+            lPodcasts.addAll(podcasts);
 
         //load followed authors
         List<Author> authors = authorNeo4j.showFollowedAuthorsByUser(pageOwner.getUsername(), limit);
-        followedAuthors.addAll(authors);
+        if(authors != null)
+            followedAuthors.addAll(authors);
 
         //load followed users
         List<User> users = userNeo4jManager.showFollowedUsers(user.getUsername(), limit);
-        followedUsers.addAll(users);
+        if(users != null)
+            followedUsers.addAll(users);
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
     }
 
 
-        //-----------------------------------------------
+    public boolean updateUserPageOwner(User oldUser, User newUser){
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        if(!userMongoManager.updateUser(newUser)){
+            MongoManager.getInstance().closeConnection();
+            Neo4jManager.getInstance().closeConnection();
+            return false;
+        }
+        if(!userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())){
+            userMongoManager.updateUser(oldUser);
+            MongoManager.getInstance().closeConnection();
+            Neo4jManager.getInstance().closeConnection();
+            return false;
+        }
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return true;
+    }
+    //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------
     //-----------------------------------------------
