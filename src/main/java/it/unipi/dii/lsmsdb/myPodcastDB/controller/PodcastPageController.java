@@ -181,7 +181,7 @@ public class PodcastPageController {
     }
 
     @FXML
-    void clickOnUpdatePodcast(MouseEvent event) throws IOException {
+    void clickOnUpdatePodcast(MouseEvent event) throws Exception {
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
 
@@ -213,7 +213,7 @@ public class PodcastPageController {
         // check if modified
         if (!this.podcast.equals(newPodcast)) {
             // update podcast
-            Logger.info("New podcast : " + this.podcast.toString());
+            Logger.info("New podcast : " + newPodcast.toString());
             this.podcast = newPodcast;
 
             // update page
@@ -354,7 +354,11 @@ public class PodcastPageController {
         Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
 
         // Podcast Test
-        Podcast podcast = new Podcast(StageManager.getObjectIdentifier(), "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
+        List<String> categories = new ArrayList<>();
+        categories.add("Mental Health");
+        categories.add("Society & Culture");
+        categories.add("Football");
+        Podcast podcast = new Podcast(StageManager.getObjectIdentifier(), "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", categories, new Date());
         String name = "Greener Pastures";
         String description = "Hear Greiner USA President, David Kirkland, talk about developing new competitive advantages and how going “green” was the key to his company unlocking new international business.";
         Date releaseDate = new Date();
