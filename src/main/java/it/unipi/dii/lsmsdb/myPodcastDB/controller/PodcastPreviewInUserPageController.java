@@ -40,12 +40,12 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void podcastIn(MouseEvent event) {
-        podcastContainer.setStyle("-fx-background-color: f2f2f2; -fx-background-radius: 10;");
+        podcastContainer.setStyle("-fx-background-color: #E5E5E5; -fx-background-radius: 10;");
     }
 
     @FXML
     void podcastOut(MouseEvent event) {
-        podcastContainer.setStyle("-fx-background-color: white");
+        podcastContainer.setStyle("-fx-background-color: transparent;");
     }
 
 

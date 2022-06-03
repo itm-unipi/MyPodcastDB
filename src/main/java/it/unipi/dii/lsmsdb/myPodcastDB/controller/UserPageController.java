@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 public class UserPageController {
 
@@ -199,7 +200,7 @@ public class UserPageController {
         if(column < wPodcasts.size())
             loadWatchlaterPodcast(false);
 
-        double scrollValue = 0.20;
+        double scrollValue = 0.2;
         if(userPageWatchlistScrollPane.getHvalue() == 1.0)
             return;
         userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() + scrollValue);
@@ -209,7 +210,8 @@ public class UserPageController {
     @FXML
     void scrollWatchlistButtonLeftClick(MouseEvent event) {
         Logger.info("watchlist left button pressed");
-        double scrollValue = 0.20;
+
+        double scrollValue = 0.2;
         if(userPageWatchlistScrollPane.getHvalue() == 0.0)
             return;
         userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() - scrollValue);
@@ -223,7 +225,7 @@ public class UserPageController {
         if(column < lPodcasts.size())
             loadLikedPodcast(false);
 
-        double scrollValue = 0.20;
+        double scrollValue = 0.2;
         if(userPageLikedScrollPane.getHvalue() == 1.0)
             return;
         userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() + scrollValue);
@@ -232,7 +234,7 @@ public class UserPageController {
     @FXML
     void scrollLikedButtonLeftClick(MouseEvent event) {
         Logger.info("liked left button pressed");
-        double scrollValue = 0.20;
+        double scrollValue = 0.2;
         if(userPageLikedScrollPane.getHvalue() == 0.0)
             return;
         userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() - scrollValue);
@@ -254,6 +256,7 @@ public class UserPageController {
     @FXML
     void scrollAuthorsButtonLeftClick(MouseEvent event) {
         Logger.info("authors left button pressed");
+
         double scrollValue = 0.125;
         if(userPageAuthorsScrollPane.getHvalue() == 0.0)
             return;
@@ -266,7 +269,8 @@ public class UserPageController {
         int column = userPageUsersGrid.getColumnCount();
         if(column < users.size())
             loadUser(false);
-        double scrollValue = 0.125;
+
+        double scrollValue = 0.13;
         if(userPageUsersScrollPane.getHvalue() == 1.0)
             return;
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() + scrollValue);
@@ -275,7 +279,8 @@ public class UserPageController {
     @FXML
     void scrollUsersButtonLeftClick(MouseEvent event) {
         Logger.info("users left button pressed");
-        double scrollValue = 0.125;
+
+        double scrollValue = 0.13;
         if(userPageUsersScrollPane.getHvalue() == 0.0)
             return;
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
@@ -349,17 +354,16 @@ public class UserPageController {
         userPageSettingsButton.setVisible(false);
         userPageConfirmButton.setVisible(true);
         userPageCrossButton.setVisible(true);
-        userPageDeleteButton.setVisible(true);
         imageButtonLeft.setVisible(true);
         imageButtonRight.setVisible(true);
-        userPageUsernameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageNameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageSurnameTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageCountryTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageEmailTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageAgeTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageGenderTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
-        userPageFavGenreTextField.setStyle("-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc;");
+        userPageUsernameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageNameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageSurnameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageCountryTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageEmailTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageAgeTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageGenderTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPageFavGenreTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         imageNumber = 0;
     }
 
@@ -371,17 +375,16 @@ public class UserPageController {
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
-        userPageDeleteButton.setVisible(false);
         imageButtonLeft.setVisible(false);
         imageButtonRight.setVisible(false);
-        userPageUsernameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageNameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageSurnameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageCountryTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageEmailTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageAgeTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageGenderTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageFavGenreTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
+        userPageUsernameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageCountryTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageAgeTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageGenderTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageFavGenreTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
 
     }
 
@@ -389,7 +392,6 @@ public class UserPageController {
     void confirmButtonClick(MouseEvent event) {
 
         Logger.info("confirm button clicked");
-        enableTextFields(false);
         User newUser = getDataFromTextFields();
         Logger.info(newUser.toString());
 
@@ -398,23 +400,23 @@ public class UserPageController {
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating account failed");
             return;
         }
+        enableTextFields(false);
         pageOwner.copy(newUser);
         MyPodcastDB.getInstance().setSession(pageOwner, "User");
         actorPageButton.setImage(ImageCache.getImageFromLocalPath(pageOwner.getPicturePath()));
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
         userPageCrossButton.setVisible(false);
-        userPageDeleteButton.setVisible(false);
         imageButtonLeft.setVisible(false);
         imageButtonRight.setVisible(false);
-        userPageUsernameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageNameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageSurnameTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageCountryTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageEmailTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageAgeTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageGenderTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
-        userPageFavGenreTextField.setStyle("-fx-background-color: white; -fx-border-color: white");
+        userPageUsernameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageCountryTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageAgeTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageGenderTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageFavGenreTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
 
     }
 
@@ -466,24 +468,26 @@ public class UserPageController {
     }
 
     @FXML
-    private void deleteButtonPressed(MouseEvent event){
+    private void deleteButtonIn(MouseEvent event){
         userPageDeleteButton.setStyle(
-                "-fx-background-color: #bcbcbc;" +
-                        "-fx-border-color:  #e0e0e0;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color:  white;" +
+                        "-fx-border-color:  #f4511e;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
         );
     }
 
     @FXML
-    private void deleteButtonReleased(MouseEvent event){
+    private void deleteButtonOut(MouseEvent event){
         userPageDeleteButton.setStyle(
-                "-fx-background-color: #e0e0e0;" +
-                        "-fx-border-color:  #bcbcbc;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color:  #f4511e;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
         );
     }
 

@@ -10,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="185.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewInUserPageController">
    <children>
-      <VBox fx:id="podcastContainer" onMouseClicked="#onClick" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" prefHeight="230.0" prefWidth="185.0" style="-fx-background-color: white; -fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="podcastContainer" onMouseClicked="#onClick" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" prefHeight="230.0" prefWidth="185.0" style="-fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                <VBox.margin>

@@ -60,12 +60,12 @@ public class ActorPreviewController {
 
     @FXML
     void actorIn(MouseEvent event) {
-        actorContainer.setStyle("-fx-background-color: f2f2f2; -fx-background-radius: 10;");
+        actorContainer.setStyle("-fx-background-color: #E5E5E5; -fx-background-radius: 10;");
     }
 
     @FXML
     void actorOut(MouseEvent event) {
-        actorContainer.setStyle("-fx-background-color: white");
+        actorContainer.setStyle("-fx-background-color: transparent");
     }
 
     @FXML
