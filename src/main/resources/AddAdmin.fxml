@@ -15,9 +15,9 @@
    <children>
       <VBox prefHeight="320.0" prefWidth="400.0" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Admin Name">
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Admin Name" textFill="#636366">
                <font>
-                  <Font name="Corbel" size="18.0" />
+                  <Font name="Corbel Bold" size="18.0" />
                </font>
                <VBox.margin>
                   <Insets top="20.0" />
@@ -25,12 +25,12 @@
             </Label>
             <Pane prefHeight="49.0" prefWidth="400.0">
                <children>
-                  <TextField fx:id="adminNameTextField" alignment="CENTER" layoutX="88.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" />
+                  <TextField fx:id="adminNameTextField" alignment="CENTER" layoutX="88.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
                </children>
             </Pane>
-            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Password">
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Password" textFill="#636366">
                <font>
-                  <Font name="Corbel" size="18.0" />
+                  <Font name="Corbel Bold" size="18.0" />
                </font>
                <VBox.margin>
                   <Insets top="5.0" />
@@ -38,12 +38,12 @@
             </Label>
             <Pane prefHeight="49.0" prefWidth="400.0">
                <children>
-                  <PasswordField fx:id="adminPwdTextFiled" alignment="CENTER" layoutX="89.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" />
+                  <PasswordField fx:id="adminPwdTextFiled" alignment="CENTER" layoutX="89.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
                </children>
             </Pane>
-            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Repeat Password">
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Repeat Password" textFill="#636366">
                <font>
-                  <Font name="Corbel" size="18.0" />
+                  <Font name="Corbel Bold" size="18.0" />
                </font>
                <VBox.margin>
                   <Insets top="5.0" />
@@ -51,20 +51,20 @@
             </Label>
             <Pane prefHeight="49.0" prefWidth="400.0">
                <children>
-                  <PasswordField fx:id="adminRpPwdTextFiled" alignment="CENTER" layoutX="90.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" />
+                  <PasswordField fx:id="adminRpPwdTextFiled" alignment="CENTER" layoutX="90.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
                </children>
             </Pane>
             <Pane prefHeight="20.0" prefWidth="400.0" />
             <HBox prefHeight="39.0" prefWidth="400.0">
                <children>
                   <Pane prefHeight="39.0" prefWidth="92.0" />
-                  <Button fx:id="confirmButton" mnemonicParsing="false" onMouseClicked="#confirmButtonClick" onMousePressed="#confirmButtonPressed" onMouseReleased="#confirmButtonReleased" prefHeight="40.0" prefWidth="85.0" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc; -fx-cursor: hand;" text="CONFIRM">
+                  <Button fx:id="confirmButton" mnemonicParsing="false" onMouseClicked="#confirmButtonClick" onMouseEntered="#confirmButtonIn" onMouseExited="#confirmButtonOut" prefHeight="40.0" prefWidth="85.0" style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #4CAF50; -fx-border-color: transparent; -fx-cursor: hand;" text="CONFIRM" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="14.0" />
                      </font>
                   </Button>
                   <Pane prefHeight="39.0" prefWidth="53.0" />
-                  <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#cancelButtonClick" onMousePressed="#cancelButtonPressed" onMouseReleased="#cancelButtonReleased" prefHeight="40.0" prefWidth="85.0" style="-fx-border-radius: 25; -fx-background-radius: 25; -fx-background-color: #e0e0e0; -fx-border-color: #bcbcbc; -fx-cursor: hand;" text="CANCEL">
+                  <Button fx:id="cancelButton" mnemonicParsing="false" onMouseClicked="#cancelButtonClick" onMouseEntered="#cancelButtonIn" onMouseExited="#cancelButtonOut" prefHeight="40.0" prefWidth="85.0" style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #f4511e; -fx-border-color: transparent; -fx-cursor: hand;" text="CANCEL" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="14.0" />
                      </font>

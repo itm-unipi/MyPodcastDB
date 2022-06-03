@@ -30,6 +30,18 @@ public class AdminService {
         MongoManager.getInstance().closeConnection();
         return res;
     }
+
+    public boolean addAdmin(Admin admin){
+
+        boolean res;
+        MongoManager.getInstance().openConnection();
+        if(adminMongoManager.findAdminByName(admin.getName()) != null || !adminMongoManager.addAdmin(admin))
+            res = false;
+        else
+            res = true;
+        MongoManager.getInstance().closeConnection();
+        return res;
+    }
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------
