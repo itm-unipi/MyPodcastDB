@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -486,7 +487,10 @@ public class UserPageController {
         List<Author> authors = new ArrayList<>();
         List<User> users = new ArrayList<>();
         pageOwner = new User();
-        this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
+        pageOwner.setUsername(pageUsername);
+        //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
+        UserService service = new UserService();
+        service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 10);
 
         if(actorType.equals("User"))
             actorPageButton.setImage(
@@ -641,6 +645,7 @@ public class UserPageController {
         userPageAuthorsScrollPane.setHvalue(0.0);
         userPageUsersScrollPane.setHvalue(0.0);
     }
+
 
     void simulateServiceLayer(String usernamePage, List<Podcast> wPodcasts, List<Podcast> lPodcasts, List<Author> authors, List<User> users){
 

@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
@@ -47,22 +48,19 @@ public class AuthorService {
             return false;
         }
         else {
-            if(!authorMongoManager.addAuthor(author)){
+            if(!authorMongoManager.addAuthor(author) || !authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
                 MongoManager.getInstance().closeConnection();
                 Neo4jManager.getInstance().closeConnection();
                 return false;
             }
-            if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())) {
-                MongoManager.getInstance().closeConnection();
-                Neo4jManager.getInstance().closeConnection();
-                return false;
-            }
+
             MongoManager.getInstance().closeConnection();
             Neo4jManager.getInstance().closeConnection();
             return true;
         }
     }
-    //-----------------------------------------------
+
+     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------
 
