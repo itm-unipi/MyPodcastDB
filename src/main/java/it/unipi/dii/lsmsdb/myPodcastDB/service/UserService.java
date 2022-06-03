@@ -126,6 +126,27 @@ public class UserService {
         Neo4jManager.getInstance().closeConnection();
         return true;
     }
+
+    public boolean checkFollowUser(String user1, String user2){
+        boolean res;
+        Neo4jManager.getInstance().openConnection();
+        res = userNeo4jManager.findUserFollowsUser(user1, user2);
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+
+    }
+
+    public boolean updateFollowUser(String user1, String user2, boolean op){
+        boolean res;
+        Neo4jManager.getInstance().openConnection();
+        if(op)
+            res = userNeo4jManager.addUserFollowUser(user1, user2);
+        else
+            res = userNeo4jManager.deleteUserFollowUser(user1, user2);
+
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------

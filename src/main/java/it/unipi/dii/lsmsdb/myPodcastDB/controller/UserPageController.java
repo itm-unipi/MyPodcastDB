@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -297,14 +298,27 @@ public class UserPageController {
     @FXML
     void followButtonClick(MouseEvent event) {
         Logger.info("follow button pressed");
+        UserService service = new UserService();
+        String owner = pageOwner.getUsername();
+        String visitor = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         if(isFollowed) {
+            if(!service.updateFollowUser(visitor, owner, false)){
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating follow failed");
+                return;
+            }
             userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
             isFollowed = false;
         }
-        else {
+        else if(!isFollowed) {
+            if(!service.updateFollowUser(visitor, owner, true)){
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating follow failed");
+                return;
+            }
             userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
             isFollowed = true;
         }
+        else
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
 
     }
 
@@ -488,6 +502,8 @@ public class UserPageController {
         String actorType = MyPodcastDB.getInstance().getSessionType();
         if(actorType.equals("User"))
             sessionActorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        else if(actorType.equals("Author"))
+            sessionActorName = ((Author)MyPodcastDB.getInstance().getSessionActor()).getName();
 
         Logger.info("session user: " + actorType);
 
@@ -524,15 +540,27 @@ public class UserPageController {
             userPageSettingsButton.setVisible(true);
 
         }
-        else if(!actorType.equals("Admin")){
-            Logger.info("visitor mode");
-            isFollowed = false; //take it by service
-            if(isFollowed)
+        else if (actorType.equals("User")){
+            Logger.info("user visitor mode");
+            UserService followService = new UserService();
+            if(followService.checkFollowUser(sessionActorName, pageOwner.getUsername())) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
-            else
+                isFollowed = true;
+            }
+            else {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
+                isFollowed = false;
+            }
 
             userPageFollowButton.setVisible(true);
+            userPagePrivateArea.setVisible(false);
+            userPageSettingsButton.setVisible(false);
+            userPageDeleteButton.setVisible(false);
+        }
+        else if(actorType.equals("Author")){
+            Logger.info("author visitor mode");
+
+            userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(false);
             userPageSettingsButton.setVisible(false);
             userPageDeleteButton.setVisible(false);
@@ -555,8 +583,7 @@ public class UserPageController {
         userPageCountryTextField.setText(pageOwner.getCountry());
         userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
         userPageGenderTextField.setText(pageOwner.getGender());
-        Image image = ImageCache.getImageFromLocalPath(pageOwner.getPicturePath());
-        userPageImage.setImage(image);
+        userPageImage.setImage(ImageCache.getImageFromLocalPath(pageOwner.getPicturePath()));
         userPageNameTextField.setText(pageOwner.getName());
         userPageSurnameTextField.setText(pageOwner.getSurname());
         userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
@@ -671,6 +698,7 @@ public class UserPageController {
         pageOwner.setName("Paolo");
         pageOwner.setSurname("Giacomini");
         pageOwner.setPicturePath("/img/users/user5.png");
+        isFollowed = false;
 
         Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
         Podcast p2 = new Podcast("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
