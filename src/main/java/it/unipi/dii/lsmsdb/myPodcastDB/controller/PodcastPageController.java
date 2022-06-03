@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -23,6 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -45,9 +47,6 @@ public class PodcastPageController {
     private Label author;
 
     @FXML
-    private Button deletePodcast;
-
-    @FXML
     private Label category;
 
     @FXML
@@ -57,7 +56,22 @@ public class PodcastPageController {
     private Label country;
 
     @FXML
+    private Button deletePodcast;
+
+    @FXML
     private GridPane episodesGrid;
+
+    @FXML
+    private ProgressBar fiveStars;
+
+    @FXML
+    private ProgressBar fourStars;
+
+    @FXML
+    private ImageView home;
+
+    @FXML
+    private VBox homeWrapper;
 
     @FXML
     private ImageView like;
@@ -66,7 +80,13 @@ public class PodcastPageController {
     private ImageView logout;
 
     @FXML
+    private VBox logoutWrapper;
+
+    @FXML
     private BorderPane mainPage;
+
+    @FXML
+    private Label noEpisodeMessage;
 
     @FXML
     private Label numEpisodes;
@@ -75,7 +95,7 @@ public class PodcastPageController {
     private Label numReviews;
 
     @FXML
-    private Label noEpisodeMessage;
+    private ProgressBar oneStar;
 
     @FXML
     private ImageView podcastImage;
@@ -90,31 +110,31 @@ public class PodcastPageController {
     private TextField searchBarText;
 
     @FXML
+    private ImageView searchButton;
+
+    @FXML
     private Label showReviews;
-
-    @FXML
-    private Label title;
-
-    @FXML
-    private Button updatePodcast;
-
-    @FXML
-    private ImageView watchlater;
-
-    @FXML
-    private ProgressBar fiveStars;
-
-    @FXML
-    private ProgressBar fourStars;
 
     @FXML
     private ProgressBar threeStars;
 
     @FXML
+    private Label title;
+
+    @FXML
     private ProgressBar twoStars;
 
     @FXML
-    private ProgressBar oneStar;
+    private Button updatePodcast;
+
+    @FXML
+    private ImageView userPicture;
+
+    @FXML
+    private VBox userPictureWrapper;
+
+    @FXML
+    private ImageView watchlater;
 
     private Podcast podcast;
     private boolean liked;
@@ -429,7 +449,7 @@ public class PodcastPageController {
             this.deletePodcast.setVisible(false);
             this.addEpisode.setVisible(false);
 
-            // like and watchlater setup
+            // image setup
             if (sessionType.equals("User")) {
                 // like image
                 Image likeIcon;
@@ -446,9 +466,29 @@ public class PodcastPageController {
                 else
                     watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
                 this.watchlater.setImage(watchlaterIcon);
+
+                // profile picture
+                User user = (User)MyPodcastDB.getInstance().getSessionActor();
+                Image picture = ImageCache.getImageFromLocalPath(user.getPicturePath());
+                userPicture.setImage(picture);
             } else {
                 this.like.setVisible(false);
                 this.watchlater.setVisible(false);
+
+                // if author update the picture profile
+                if (sessionType.equals("Author")) {
+                    Author author = (Author) MyPodcastDB.getInstance().getSessionActor();
+                    Image picture = ImageCache.getImageFromLocalPath(author.getPicturePath());
+                    userPicture.setImage(picture);
+                }
+
+                // if unregisterd remove even the profile icon
+                if (sessionType.equals("Unregistered")) {
+                    this.userPictureWrapper.setVisible(false);
+                    this.userPictureWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+                    // this.logoutWrapper.setVisible(false);
+                    // this.logoutWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+                }
             }
         } else if (sessionType.equals("Admin")) {
             this.like.setVisible(false);

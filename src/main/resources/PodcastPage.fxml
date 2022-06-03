@@ -46,39 +46,51 @@
                               </Label>
                               <HBox alignment="CENTER_RIGHT" prefHeight="79.0" prefWidth="785.0">
                                  <children>
-                                    <ImageView fx:id="logout" fitHeight="28.0" fitWidth="30.0" layoutX="444.0" layoutY="36.0" onMouseClicked="#clickOnLogout" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/Logout_24px.png" />
-                                       </image>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
+                                    <VBox fx:id="logoutWrapper" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="28.0">
                                        <HBox.margin>
-                                          <Insets right="7.0" />
+                                          <Insets right="5.0" />
                                        </HBox.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/home.png" />
-                                       </image>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
+                                       <children>
+                                          <ImageView fx:id="logout" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#clickOnLogout" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/Logout_24px.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                    <VBox fx:id="homeWrapper" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="28.0">
                                        <HBox.margin>
-                                          <Insets right="7.0" />
+                                          <Insets right="5.0" />
                                        </HBox.margin>
-                                    </ImageView>
-                                    <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/userPicture.png" />
-                                       </image>
+                                       <children>
+                                          <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/home.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
+                                    <VBox fx:id="userPictureWrapper" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="28.0" prefWidth="28.0">
                                        <HBox.margin>
-                                          <Insets right="3.0" />
+                                          <Insets />
                                        </HBox.margin>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                    </ImageView>
+                                       <children>
+                                          <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/userPicture.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                       </children>
+                                    </VBox>
                                     <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-radius: 40; -fx-background-color: white;">
                                        <children>
                                           <TextField fx:id="searchBarText" onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
