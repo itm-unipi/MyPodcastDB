@@ -28,7 +28,7 @@ public class PodcastService {
         this.userNeo4j = new UserNeo4j();
     }
 
-    public Boolean loadPodcastPageForUsers(Podcast podcast, Boolean watchlatered, Boolean liked) {
+    public Boolean loadPodcastPageForUsers(Podcast podcast, Boolean[] status) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         Boolean result = true;
@@ -43,8 +43,8 @@ public class PodcastService {
 
             // get like and watchlater status
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-            watchlatered = this.userNeo4j.checkUserWatchLaterPodcastExists(username, podcast.getId());
-            liked = this.userNeo4j.checkUserLikesPodcastExists(username, podcast.getId());
+            status[0] = this.userNeo4j.checkUserWatchLaterPodcastExists(username, podcast.getId());
+            status[1] = this.userNeo4j.checkUserLikesPodcastExists(username, podcast.getId());
         }
 
         MongoManager.getInstance().closeConnection();
@@ -81,10 +81,14 @@ public class PodcastService {
             result = this.userNeo4j.deleteUserWatchLaterPodcast(username, podcastId);
 
         // check the result of operation
-        if (result)
-            Logger.success("Watchlater status modified");
-        else
+        if (result) {
+            if (newStatus)
+                Logger.success("Added to watchlater");
+            else
+                Logger.success("Removed from watchlater");
+        } else {
             Logger.error("Watchlater status not modified");
+        }
 
         Neo4jManager.getInstance().closeConnection();
         return result;
@@ -102,10 +106,14 @@ public class PodcastService {
             result = this.userNeo4j.deleteUserLikesPodcast(username, podcastId);
 
         // check the result of operation
-        if (result)
-            Logger.success("Like status modified");
-        else
+        if (result) {
+            if (newStatus)
+                Logger.success("Liked podcast");
+            else
+                Logger.success("Unliked podcast");
+        } else {
             Logger.error("Like status not modified");
+        }
 
         Neo4jManager.getInstance().closeConnection();
         return result;

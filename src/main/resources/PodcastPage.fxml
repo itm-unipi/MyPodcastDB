@@ -360,12 +360,12 @@
                                                 <Insets bottom="5.0" top="6.0" />
                                              </VBox.margin>
                                           </Label>
-                                          <Label fx:id="numEpisodes" layoutX="10.0" layoutY="83.0" scaleY="1.06" text="# Episodes">
+                                          <Label fx:id="numEpisodes" layoutX="10.0" layoutY="83.0" text="# Episodes">
                                              <font>
-                                                <Font name="Corbel Light" size="18.0" />
+                                                <Font name="Dubai Light" size="18.0" />
                                              </font>
                                              <VBox.margin>
-                                                <Insets top="3.0" />
+                                                <Insets />
                                              </VBox.margin>
                                           </Label>
                                        </children>

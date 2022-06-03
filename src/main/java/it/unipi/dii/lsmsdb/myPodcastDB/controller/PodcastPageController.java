@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -119,6 +120,8 @@ public class PodcastPageController {
     private boolean liked;
     private boolean watchLatered;
     private int row, column;
+
+    private PodcastService service;
 
     @FXML
     void clickOnAddEpisode(MouseEvent event) throws IOException {
@@ -267,12 +270,20 @@ public class PodcastPageController {
 
     @FXML
     void clickOnLike(MouseEvent event) {
-        this.liked = !this.liked;
+        Boolean result = this.service.setLike(this.podcast.getId(), !this.liked);
+        if (result) {
+            this.liked = !this.liked;
 
-        if (this.liked)
-            Logger.info("Like");
-        else
-            Logger.info("Dislike");
+            // update the image
+            Image likeIcon;
+            if (this.liked)
+                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+            else
+                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+            this.like.setImage(likeIcon);
+        } else {
+            // TODO: Error case
+        }
     }
 
     @FXML
@@ -283,32 +294,64 @@ public class PodcastPageController {
 
     @FXML
     void clickOnWatchlater(MouseEvent event) {
-        this.watchLatered = !this.watchLatered;
+        Boolean result = this.service.setWatchLater(this.podcast.getId(), !this.watchLatered);
+        if (result) {
+            this.watchLatered = !this.watchLatered;
 
-        if (this.watchLatered)
-            Logger.info("Added to watchlater");
-        else
-            Logger.info("Removed from watchlater");
+            // update the image
+            Image watchlaterIcon;
+            if (this.watchLatered)
+                watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
+            else
+                watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
+            this.watchlater.setImage(watchlaterIcon);
+        } else {
+            // TODO: Error case
+        }
     }
 
     @FXML
     void mouseOnLike(MouseEvent event) {
-        Logger.info("On like");
+        // update the image
+        Image likeIcon;
+        if (!this.liked)
+            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+        else
+            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+        this.like.setImage(likeIcon);
     }
 
     @FXML
     void mouseOnWatchlater(MouseEvent event) {
-        Logger.info("On watchlater");
+        // update the image
+        Image watchlaterIcon;
+        if (!this.watchLatered)
+            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
+        else
+            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
+        this.watchlater.setImage(watchlaterIcon);
     }
 
     @FXML
     void mouseOutLike(MouseEvent event) {
-        Logger.info("Out of like");
+        // update the image
+        Image likeIcon;
+        if (this.liked)
+            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+        else
+            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+        this.like.setImage(likeIcon);
     }
 
     @FXML
     void mouseOutWatchlater(MouseEvent event) {
-        Logger.info("Out of watchlater");
+        // update the image
+        Image watchlaterIcon;
+        if (this.watchLatered)
+            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
+        else
+            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
+        this.watchlater.setImage(watchlaterIcon);
     }
 
     @FXML
@@ -351,27 +394,31 @@ public class PodcastPageController {
     }
 
     public void initialize() throws IOException {
-        Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
+        // Get the podcast info from service
+        Podcast podcast = new Podcast();
+        podcast.setId(StageManager.getObjectIdentifier());
+        this.service = new PodcastService();
 
-        // Podcast Test
-        List<String> categories = new ArrayList<>();
-        categories.add("Mental Health");
-        categories.add("Society & Culture");
-        categories.add("Football");
-        Podcast podcast = new Podcast(StageManager.getObjectIdentifier(), "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", categories, new Date());
-        String name = "Greener Pastures";
-        String description = "Hear Greiner USA President, David Kirkland, talk about developing new competitive advantages and how going “green” was the key to his company unlocking new international business.";
-        Date releaseDate = new Date();
-        int time = 1450000;
-        Episode episode = new Episode(name, description, releaseDate, time);
-        for (int i = 0; i < 10; i++) {
-            podcast.addEpisode(episode);
-            podcast.addReview("" + i, 5);
-        }
-        this.podcast = podcast;
-
-        // actor recognition
+        // load podcast from service
+        Boolean result;
         String sessionType = MyPodcastDB.getInstance().getSessionType();
+        if (sessionType.equals("User")) {
+            Boolean[] status = new Boolean[2];
+            result = this.service.loadPodcastPageForUsers(podcast, status);
+            this.watchLatered = status[0];
+            this.liked = status[1];
+        } else {
+            result = this.service.loadPodcastPageForNotUser(podcast);
+        }
+
+        // check service result
+        if (result) {
+            this.podcast = podcast;
+        } else {
+            // TODO: Error case
+        }
+
+        // actor specific action
         if (sessionType.equals("Author") && ((Author)MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.podcast.getAuthorName())) {
             // owner of podcast
             this.like.setVisible(false);
@@ -381,6 +428,28 @@ public class PodcastPageController {
             this.updatePodcast.setVisible(false);
             this.deletePodcast.setVisible(false);
             this.addEpisode.setVisible(false);
+
+            // like and watchlater setup
+            if (sessionType.equals("User")) {
+                // like image
+                Image likeIcon;
+                if (this.liked)
+                    likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+                else
+                    likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+                this.like.setImage(likeIcon);
+
+                // watch later
+                Image watchlaterIcon;
+                if (this.watchLatered)
+                    watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
+                else
+                    watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
+                this.watchlater.setImage(watchlaterIcon);
+            } else {
+                this.like.setVisible(false);
+                this.watchlater.setVisible(false);
+            }
         } else if (sessionType.equals("Admin")) {
             this.like.setVisible(false);
             this.watchlater.setVisible(false);
@@ -395,16 +464,6 @@ public class PodcastPageController {
         } else {
             this.scroll.setVisible(false);
         }
-
-        // status test
-        this.liked = false;
-        this.watchLatered = false;
-
-        // image setup
-        Image likeIcon = ImageCache.getImageFromLocalPath("/img/hearts.png");
-        this.like.setImage(likeIcon);
-        Image watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
-        this.watchlater.setImage(watchlaterIcon);
 
         // podcast initialization
         this.title.setText(podcast.getName());
@@ -435,10 +494,30 @@ public class PodcastPageController {
         }
 
         // calculate the progress bar for ratings
-        this.oneStar.setProgress(0.1);
-        this.twoStars.setProgress(0.1);
-        this.threeStars.setProgress(0.2);
-        this.fourStars.setProgress(0.3);
-        this.fiveStars.setProgress(0.3);
+        int[] numReview = new int[5];
+        for (Entry<String, Integer> review : this.podcast.getReviews()) {
+            switch (review.getValue()) {
+                case 1:
+                    numReview[0]++;
+                    break;
+                case 2:
+                    numReview[1]++;
+                    break;
+                case 3:
+                    numReview[2]++;
+                    break;
+                case 4:
+                    numReview[3]++;
+                    break;
+                case 5:
+                    numReview[4]++;
+                    break;
+            }
+        }
+        this.oneStar.setProgress((float)numReview[0] / this.podcast.getReviews().size());
+        this.twoStars.setProgress((float)numReview[1] / this.podcast.getReviews().size());
+        this.threeStars.setProgress((float)numReview[2] / this.podcast.getReviews().size());
+        this.fourStars.setProgress((float)numReview[3] / this.podcast.getReviews().size());
+        this.fiveStars.setProgress((float)numReview[4] / this.podcast.getReviews().size());
     }
 }
