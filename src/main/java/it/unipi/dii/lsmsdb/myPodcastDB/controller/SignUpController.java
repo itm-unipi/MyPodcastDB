@@ -194,26 +194,28 @@ public class SignUpController {
     }
 
     @FXML
-    void signUpSignUpButtonPressed(MouseEvent event){
-        Logger.info("sugnup button pressed");
+    void signUpSignUpButtonIn(MouseEvent event){
+        Logger.info("signup button pressed");
         signUpSignUpButton.setStyle(
-                "-fx-background-color: #bcbcbc;" +
-                        "-fx-border-color:  #e0e0e0;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #4CAF50;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
         );
     }
 
     @FXML
-    void signUpSignUpButtonReleased(MouseEvent event){
+    void signUpSignUpButtonOut(MouseEvent event){
         Logger.info("signup button released");
         signUpSignUpButton.setStyle(
-                "-fx-background-color: #e0e0e0;" +
-                        "-fx-border-color:  #bcbcbc;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color: #4CAF50;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
         );
     }
 
