@@ -29,10 +29,6 @@ import java.util.Optional;
 
 public class UserPageController {
 
-    private User pageOwner;
-
-    private boolean isFollowed;
-
     @FXML
     private ImageView homeButton;
 
@@ -174,11 +170,20 @@ public class UserPageController {
     @FXML
     private ImageView imageButtonLeft;
 
+    private User pageOwner;
+
+    private boolean isFollowed;
+
     private int imageNumber;
 
     private String imagePath;
 
     private int maxUserImages = 30;
+
+    List<Podcast> wPodcasts;
+    List<Podcast> lPodcasts;
+    List<Author> authors;
+    List<User> users;
 
 
 
@@ -188,8 +193,12 @@ public class UserPageController {
     //click event
 
     @FXML
-    void scrollWatchlistButtonRightClick(MouseEvent event) {
+    void scrollWatchlistButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("watchlist right button pressed");
+        int column = userPageWatchlistGrid.getColumnCount();
+        if(column < wPodcasts.size())
+            loadWatchlaterPodcast(false);
+
         double scrollValue = 0.20;
         if(userPageWatchlistScrollPane.getHvalue() == 1.0)
             return;
@@ -208,8 +217,12 @@ public class UserPageController {
     }
 
     @FXML
-    void scrollLikedButtonRightClick(MouseEvent event) {
+    void scrollLikedButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("liked right button pressed");
+        int column = userPageLikedGrid.getColumnCount();
+        if(column < lPodcasts.size())
+            loadLikedPodcast(false);
+
         double scrollValue = 0.20;
         if(userPageLikedScrollPane.getHvalue() == 1.0)
             return;
@@ -226,8 +239,12 @@ public class UserPageController {
     }
 
     @FXML
-    void scrollAuthorsButtonRightClick(MouseEvent event) {
+    void scrollAuthorsButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("authors right button pressed");
+        int column = userPageAuthorsGrid.getColumnCount();
+        if(column < authors.size())
+            loadAuthor(false);
+
         double scrollValue = 0.125;
         if(userPageAuthorsScrollPane.getHvalue() == 1.0)
             return;
@@ -244,8 +261,11 @@ public class UserPageController {
     }
 
     @FXML
-    void scrollUsersButtonRightClick(MouseEvent event) {
+    void scrollUsersButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("users right button pressed");
+        int column = userPageUsersGrid.getColumnCount();
+        if(column < users.size())
+            loadUser(false);
         double scrollValue = 0.125;
         if(userPageUsersScrollPane.getHvalue() == 1.0)
             return;
@@ -509,15 +529,15 @@ public class UserPageController {
 
         String pageUsername = StageManager.getObjectIdentifier();
 
-        List<Podcast> wPodcasts = new ArrayList<>();
-        List<Podcast> lPodcasts = new ArrayList<>();
-        List<Author> authors = new ArrayList<>();
-        List<User> users = new ArrayList<>();
+        wPodcasts = new ArrayList<>();
+        lPodcasts = new ArrayList<>();
+        authors = new ArrayList<>();
+        users = new ArrayList<>();
         pageOwner = new User();
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
         UserService service = new UserService();
-        service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 10);
+        service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 100);
 
         if(actorType.equals("User"))
             actorPageButton.setImage(
@@ -579,34 +599,13 @@ public class UserPageController {
         imageButtonRight.setVisible(false);
 
         //fill textFields and image
-        userPageUsernameTextField.setText(pageOwner.getUsername());
-        userPageCountryTextField.setText(pageOwner.getCountry());
-        userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
-        userPageGenderTextField.setText(pageOwner.getGender());
-        userPageImage.setImage(ImageCache.getImageFromLocalPath(pageOwner.getPicturePath()));
-        userPageNameTextField.setText(pageOwner.getName());
-        userPageSurnameTextField.setText(pageOwner.getSurname());
-        userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
-        userPageEmailTextField.setText(pageOwner.getEmail());
-        imagePath = pageOwner.getPicturePath();
+        restoreTextFields();
 
         // fill the watchlist grid
         if(!wPodcasts.isEmpty()) {
-            int row = 0;
-            int column = 0;
-            for (Podcast podcast : wPodcasts) {
-                FXMLLoader watchListfxmlLoader = new FXMLLoader();
-                watchListfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreviewInUserPage.fxml"));
-
-                // create new podcast element
-                AnchorPane newPodcast = watchListfxmlLoader.load();
-                PodcastPreviewInUserPageController watchListController = watchListfxmlLoader.getController();
-                watchListController.setData(podcast);
-
-                // add new podcast to grid
-                this.userPageWatchlistGrid.add(newPodcast, column, row);
-                column++;
-            }
+            loadWatchlaterPodcast(true);
+            for(int i = 1; i < wPodcasts.size() && i < 8; i++)
+                loadWatchlaterPodcast(false);
         }
         else{
             userPageWatchlistLabel.setText("Watchlist is empty");
@@ -616,21 +615,9 @@ public class UserPageController {
 
         // fill the liked grid
         if(!lPodcasts.isEmpty()){
-            int row = 0;
-            int column = 0;
-            for (Podcast podcast : lPodcasts) {
-                FXMLLoader likedfxmlLoader = new FXMLLoader();
-                likedfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreviewInUserPage.fxml"));
-
-                // create new podcast element
-                AnchorPane newPodcast = likedfxmlLoader.load();
-                PodcastPreviewInUserPageController likedController = likedfxmlLoader.getController();
-                likedController.setData(podcast);
-
-                // add new podcast to grid
-                this.userPageLikedGrid.add(newPodcast, column, row);
-                column++;
-            }
+            loadLikedPodcast(true);
+            for(int i = 1; i < lPodcasts.size() && i < 8; i++)
+                loadLikedPodcast(false);
         }
         else{
             userPageLikedLabel.setText("There are no liked podcasts");
@@ -640,17 +627,9 @@ public class UserPageController {
 
         //fill the authors grid
         if(!authors.isEmpty()) {
-            int row = 0;
-            int column = 0;
-            for (Author author : authors) {
-                FXMLLoader authorfxmlLoader = new FXMLLoader();
-                authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
-                AnchorPane newAuthor = authorfxmlLoader.load();
-                ActorPreviewController authorController = authorfxmlLoader.getController();
-                authorController.setData(author);
-                this.userPageAuthorsGrid.add(newAuthor, column, row);
-                column++;
-            }
+            loadAuthor(true);
+           for(int i = 1; i < authors.size() && i < 12; i++)
+               loadAuthor(false);
         }
         else{
             userPageAuthorsLabel.setText("There are no followed authors");
@@ -660,17 +639,9 @@ public class UserPageController {
 
         //fill the users grid
         if(!users.isEmpty()) {
-            int row = 0;
-            int column = 0;
-            for (User u : users) {
-                FXMLLoader userfxmlLoader = new FXMLLoader();
-                userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
-                AnchorPane newUser = userfxmlLoader.load();
-                ActorPreviewController actorController = userfxmlLoader.getController();
-                actorController.setData(u);
-                this.userPageUsersGrid.add(newUser, column, row);
-                column++;
-            }
+            loadUser(true);
+            for(int i = 1; i < users.size() && i < 12; i++)
+                loadUser(false);
         }
         else{
             userPageUsersLabel.setText("There are no followed users");
@@ -790,6 +761,88 @@ public class UserPageController {
         userPageGenderTextField.setText(pageOwner.getGender());
         userPageEmailTextField.setText(pageOwner.getEmail());
         userPageImage.setImage(ImageCache.getInstance().getImageFromLocalPath(pageOwner.getPicturePath()));
+        imagePath = pageOwner.getPicturePath();
+    }
+
+    void loadWatchlaterPodcast(boolean first) throws IOException {
+
+        int row = 0;
+        int column;
+        if(first)
+            column = 0;
+        else
+            column = this.userPageWatchlistGrid.getColumnCount();
+
+        Podcast podcast = wPodcasts.get(column);
+
+        FXMLLoader likedfxmlLoader = new FXMLLoader();
+        likedfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreviewInUserPage.fxml"));
+
+        // create new podcast element
+        AnchorPane newPodcast = likedfxmlLoader.load();
+        PodcastPreviewInUserPageController whatlistController = likedfxmlLoader.getController();
+        whatlistController.setData(podcast);
+
+        // add new podcast to grid
+        this.userPageWatchlistGrid.add(newPodcast, column, row);
+    }
+
+    void loadLikedPodcast(boolean first) throws IOException {
+        int row = 0;
+        int column;
+        if(first)
+            column = 0;
+        else
+            column = userPageLikedGrid.getColumnCount();
+
+        if(column == lPodcasts.size())
+            return;
+        Podcast podcast = lPodcasts.get(column);
+        FXMLLoader likedfxmlLoader = new FXMLLoader();
+        likedfxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreviewInUserPage.fxml"));
+
+        // create new podcast element
+        AnchorPane newPodcast = likedfxmlLoader.load();
+        PodcastPreviewInUserPageController likedController = likedfxmlLoader.getController();
+        likedController.setData(podcast);
+
+        // add new podcast to grid
+        this.userPageLikedGrid.add(newPodcast, column, row);
+    }
+
+    void loadAuthor(boolean first) throws IOException {
+        int row = 0;
+        int column;
+        if(first)
+            column = 0;
+        else
+            column = userPageAuthorsGrid.getColumnCount();
+        Author author = authors.get(column);
+        FXMLLoader authorfxmlLoader = new FXMLLoader();
+        authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+        AnchorPane newAuthor = authorfxmlLoader.load();
+        ActorPreviewController authorController = authorfxmlLoader.getController();
+        authorController.setData(author);
+        this.userPageAuthorsGrid.add(newAuthor, column, row);
+        column++;
+    }
+
+    void loadUser(boolean first) throws IOException {
+        int row = 0;
+        int column;
+        if(first)
+            column = 0;
+        else
+            column = userPageUsersGrid.getColumnCount();
+
+        User user = users.get(column);
+        FXMLLoader userfxmlLoader = new FXMLLoader();
+        userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+        AnchorPane newUser = userfxmlLoader.load();
+        ActorPreviewController actorController = userfxmlLoader.getController();
+        actorController.setData(user);
+        this.userPageUsersGrid.add(newUser, column, row);
+
     }
 
 }
