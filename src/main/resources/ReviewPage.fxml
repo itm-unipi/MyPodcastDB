@@ -65,17 +65,21 @@
                                     <Insets right="7.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@img/userPicture.png" />
-                                 </image>
+                              <VBox fx:id="userPictureWrapper" alignment="CENTER">
                                  <HBox.margin>
-                                    <Insets right="3.0" />
+                                    <Insets />
                                  </HBox.margin>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
+                                 <children>
+                                    <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/userPicture.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </ImageView>
+                                 </children>
+                              </VBox>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>
                                     <TextField fx:id="searchBarText" onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">

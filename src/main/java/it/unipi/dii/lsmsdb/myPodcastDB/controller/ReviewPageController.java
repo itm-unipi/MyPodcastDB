@@ -128,6 +128,9 @@ public class ReviewPageController {
     @FXML
     private ImageView userPicture;
 
+    @FXML
+    private VBox userPictureWrapper;
+
     private Review ownReview;
     private Podcast podcast;
     private List<Review> loadedReviews;
@@ -457,6 +460,7 @@ public class ReviewPageController {
         this.podcast = new Podcast();
         this.podcast.setId(StageManager.getObjectIdentifier());
         this.loadedReviews = new ArrayList<>();
+        this.ownReview = new Review();
 
         // actor recognition and info loading from service
         Boolean result = true;
@@ -466,9 +470,27 @@ public class ReviewPageController {
             this.reviewForm.setVisible(false);
             this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
             result = this.service.loadPodcastPageForNotUser(this.podcast, this.loadedReviews, 10, "cretedAt", false);
+
+            // if author update the profile picture
+            if (sessionType.equals("Author")) {
+                Author author = (Author) MyPodcastDB.getInstance().getSessionActor();
+                Image picture = ImageCache.getImageFromLocalPath(author.getPicturePath());
+                userPicture.setImage(picture);
+            }
+
+            // if unregisterd disable buttons
+            if (sessionType.equals("Unregistered")) {
+                this.userPictureWrapper.setVisible(false);
+                this.userPictureWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+            }
         } else {
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
             result = this.service.loadPodcastPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, 10, "cretedAt", false);
+
+            // profile picture
+            User user = (User)MyPodcastDB.getInstance().getSessionActor();
+            Image picture = ImageCache.getImageFromLocalPath(user.getPicturePath());
+            userPicture.setImage(picture);
         }
 
         // check service result
