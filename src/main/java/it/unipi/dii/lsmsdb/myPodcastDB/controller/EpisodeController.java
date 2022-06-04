@@ -48,7 +48,23 @@ public class EpisodeController {
 
     @FXML
     void clickOnDelete(MouseEvent event) {
-        Logger.info("Delete episode");
+        // create the alert
+        BoxBlur blur = new BoxBlur(3, 3 , 3);
+        this.mainPage.setEffect(blur);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initOwner(this.mainPage.getScene().getWindow());
+        alert.setTitle("Delete Episode");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you really want to delete this episode?");
+        alert.setGraphic(null);
+        alert.showAndWait();
+
+        // button handling
+        if (alert.getResult() == ButtonType.OK) {
+            Logger.info("Si");
+        }
+
+        this.mainPage.setEffect(null);
     }
 
     @FXML

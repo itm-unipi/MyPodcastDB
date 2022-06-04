@@ -9,11 +9,15 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -52,10 +56,27 @@ public class ReviewController {
     private Label title;
 
     private Review review;
+    private BorderPane mainPage;
 
     @FXML
     void clickOnDeleteReview(MouseEvent event) {
-        Logger.info("Delete review");
+        // create the alert
+        BoxBlur blur = new BoxBlur(3, 3 , 3);
+        this.mainPage.setEffect(blur);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initOwner(this.mainPage.getScene().getWindow());
+        alert.setTitle("Delete Podcast");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you really want to delete this podcast?");
+        alert.setGraphic(null);
+        alert.showAndWait();
+
+        // button handling
+        if (alert.getResult() == ButtonType.OK) {
+            Logger.info("Si");
+        }
+
+        this.mainPage.setEffect(null);
     }
 
     @FXML
@@ -76,8 +97,9 @@ public class ReviewController {
         this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
-    public void setData(Review review) {
+    public void setData(Review review, BorderPane mainPage) {
         this.review = review;
+        this.mainPage = mainPage;
 
         // review fields
         int rating = review.getRating();

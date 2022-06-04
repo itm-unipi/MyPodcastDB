@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -54,6 +55,9 @@ public class ReviewPageController {
 
     @FXML
     private ProgressBar oneStar;
+
+    @FXML
+    private BorderPane mainPage;
 
     @FXML
     private ImageView podcastImage;
@@ -480,7 +484,7 @@ public class ReviewPageController {
             // create new review element
             AnchorPane newReview = fxmlLoader.load();
             ReviewController controller = fxmlLoader.getController();
-            controller.setData(r);
+            controller.setData(r, this.mainPage);
 
             // add new podcast to grid
             this.reviewGrid.add(newReview, column, row++);
