@@ -73,12 +73,12 @@ public class ReviewService {
         return result;
     }
 
-    public int addNewReview(Review review, String username) {
+    public int addNewReview(Review review) {
         MongoManager.getInstance().openConnection();
         int result = 0;
 
         // check if the user has already written a review
-        List<Review> reviews = this.reviewMongo.findReviewsByAuthorUsername(username, 1, "cretedAt", false);
+        List<Review> reviews = this.reviewMongo.findReviewsByAuthorUsername(review.getAuthorUsername(), 1, "cretedAt", false);
         if (reviews != null && !reviews.isEmpty()) {
             Logger.error("User has already written a review");
             result = -1;

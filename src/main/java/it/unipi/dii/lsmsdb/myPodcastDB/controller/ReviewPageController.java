@@ -136,6 +136,9 @@ public class ReviewPageController {
     private List<Review> loadedReviews;
     private ReviewService service;
 
+    private int row;
+    private int column;
+
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
         Logger.info("Click on author : " + this.podcast.getAuthorId());
@@ -259,7 +262,7 @@ public class ReviewPageController {
     }
 
     @FXML
-    void onSubmit(MouseEvent event) {
+    void onSubmit(MouseEvent event) throws IOException {
         // get the text
         String title = this.textTitle.getText();
         String content = this.textContent.getText();
@@ -270,7 +273,25 @@ public class ReviewPageController {
         this.ownReview.setCreatedAt(new Date());
 
         // send the review
-        Logger.info(this.ownReview.toString());
+        int result = this.service.addNewReview(this.ownReview);
+
+        // if is successful update the page
+        if (result == 0) {
+            // disable form
+            this.disableForm();
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
+
+            // create new review element
+            AnchorPane newReview = fxmlLoader.load();
+            ReviewController controller = fxmlLoader.getController();
+            controller.setData(this.ownReview, this.mainPage);
+
+            this.reviewGrid.add(newReview, this.column, this.row++);
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
@@ -467,8 +488,7 @@ public class ReviewPageController {
         String sessionType = MyPodcastDB.getInstance().getSessionType();
         if (!sessionType.equals("User")) {
             // only the user can write review
-            this.reviewForm.setVisible(false);
-            this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
+            this.disableForm();
             result = this.service.loadPodcastPageForNotUser(this.podcast, this.loadedReviews, 10, "cretedAt", false);
 
             // if author update the profile picture
@@ -491,6 +511,10 @@ public class ReviewPageController {
             User user = (User)MyPodcastDB.getInstance().getSessionActor();
             Image picture = ImageCache.getImageFromLocalPath(user.getPicturePath());
             userPicture.setImage(picture);
+
+            // if user has already writter a review, disable form
+            if (this.ownReview != null && this.ownReview.getTitle() != null)
+                this.disableForm();
         }
 
         // check service result
@@ -520,8 +544,8 @@ public class ReviewPageController {
         // TODO: progress bars
 
         // insert reviews in grid
-        int row = 0;
-        int column = 0;
+        this.row = 0;
+        this.column = 0;
         for (Review review : this.loadedReviews) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
@@ -538,6 +562,7 @@ public class ReviewPageController {
         // initialize own review
         this.ownReview = new Review();
         this.ownReview.setPodcastId(podcast.getId());
+        this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         this.ownReview.setRating(0);
 
         // initialize combo box
@@ -545,5 +570,11 @@ public class ReviewPageController {
         this.orderBy.getItems().add("Rating");
         this.ascending.getItems().add("true");
         this.ascending.getItems().add("false");
+    }
+
+    private void disableForm() {
+        // hide form
+        this.reviewForm.setVisible(false);
+        this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
     }
 }

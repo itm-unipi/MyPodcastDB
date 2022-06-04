@@ -530,12 +530,10 @@ public class PodcastPageController {
                     userPicture.setImage(picture);
                 }
 
-                // if unregisterd remove even the profile icon
+                // if unregistered remove even the profile icon
                 if (sessionType.equals("Unregistered")) {
                     this.userPictureWrapper.setVisible(false);
                     this.userPictureWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
-                    // this.logoutWrapper.setVisible(false);
-                    // this.logoutWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
                 }
             }
         } else if (sessionType.equals("Admin")) {
