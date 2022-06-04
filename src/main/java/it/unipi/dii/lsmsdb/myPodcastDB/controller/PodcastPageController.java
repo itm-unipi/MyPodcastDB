@@ -197,18 +197,8 @@ public class PodcastPageController {
                 this.episodesGrid.add(newEpisode, this.column, this.row++);
             }
 
-            // ERROR: Podcast not exist
-            else if (result == 1) {
-                // TODO: alert
-            }
-
-            // ERROR: Episode title already exist
-            else if (result == 2) {
-                // TODO: alert
-            }
-
-            // ERROR: Adding of podcast failed
-            else if (result == 3) {
+            // error
+            else if (result != 0) {
                 // TODO: alert
             }
         }
@@ -265,14 +255,9 @@ public class PodcastPageController {
                 this.updatePodcastPage();
             }
 
-            // ERROR: podcast not found
-            else if (result == 1) {
-                // TODO: che faccio
-            }
-
-            // ERROR: podcast not updated
-            else if (result == 2) {
-                // TODO: che faccio
+            // error in update
+            else if (result != 0) {
+                // TODO: alert
             }
         }
 
@@ -324,7 +309,7 @@ public class PodcastPageController {
                 likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
             this.like.setImage(likeIcon);
         } else {
-            // TODO: Error case
+            // TODO: Alert
         }
     }
 
@@ -348,7 +333,7 @@ public class PodcastPageController {
                 watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
             this.watchlater.setImage(watchlaterIcon);
         } else {
-            // TODO: Error case
+            // TODO: Alert
         }
     }
 
@@ -457,7 +442,7 @@ public class PodcastPageController {
         if (result) {
             this.podcast = podcast;
         } else {
-            // TODO: Error case
+            // TODO: Alert
         }
 
         // actor specific action
