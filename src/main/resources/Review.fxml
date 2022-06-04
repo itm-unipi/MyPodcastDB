@@ -51,14 +51,30 @@
                   </HBox>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label fx:id="authorName" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Author Name" textFill="BLUE">
-                           <font>
-                              <Font name="Dubai Regular" size="18.0" />
-                           </font>
-                           <padding>
-                              <Insets bottom="-3.0" />
-                           </padding>
-                        </Label>
+                        <VBox fx:id="authorNameWrapper">
+                           <children>
+                              <Label fx:id="authorName" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Author Name" textFill="BLUE">
+                                 <font>
+                                    <Font name="Dubai Regular" size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="-3.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
+                        <VBox fx:id="yourNameWrapper" layoutX="10.0" layoutY="10.0">
+                           <children>
+                              <Label fx:id="yourReview" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Your review">
+                                 <font>
+                                    <Font name="Dubai Regular" size="18.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="-3.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </VBox>
                         <Label fx:id="reviewDate" layoutX="10.0" layoutY="10.0" text="Date" textFill="#636366">
                            <font>
                               <Font name="Dubai Regular" size="18.0" />

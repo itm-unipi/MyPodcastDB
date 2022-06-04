@@ -1,11 +1,11 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -33,6 +33,9 @@ import java.util.List;
 public class ReviewPageController {
 
     @FXML
+    private ComboBox<String> ascending;
+
+    @FXML
     private Label author;
 
     @FXML
@@ -42,13 +45,22 @@ public class ReviewPageController {
     private ProgressBar fiveStars;
 
     @FXML
+    private ProgressBar fourStars;
+
+    @FXML
+    private VBox gridWrapper;
+
+    @FXML
+    private ImageView home;
+
+    @FXML
     private ImageView logout;
 
     @FXML
-    private Label noReviewsMessage;
+    private BorderPane mainPage;
 
     @FXML
-    private ProgressBar fourStars;
+    private Label noReviewsMessage;
 
     @FXML
     private Label numReviews;
@@ -57,13 +69,16 @@ public class ReviewPageController {
     private ProgressBar oneStar;
 
     @FXML
-    private BorderPane mainPage;
+    private ComboBox<String> orderBy;
 
     @FXML
     private ImageView podcastImage;
 
     @FXML
     private Label rating;
+
+    @FXML
+    private Button reload;
 
     @FXML
     private VBox reviewForm;
@@ -76,6 +91,9 @@ public class ReviewPageController {
 
     @FXML
     private TextField searchBarText;
+
+    @FXML
+    private ImageView searchButton;
 
     @FXML
     private ImageView star1;
@@ -107,8 +125,13 @@ public class ReviewPageController {
     @FXML
     private ProgressBar twoStars;
 
+    @FXML
+    private ImageView userPicture;
+
     private Review ownReview;
     private Podcast podcast;
+    private List<Review> loadedReviews;
+    private ReviewService service;
 
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
@@ -164,6 +187,12 @@ public class ReviewPageController {
     void clickOnLogout(MouseEvent event) throws IOException {
         MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    }
+
+    @FXML
+    void clickOnReload(MouseEvent event) {
+        // TODO: reload
+        Logger.info("Reload reviews");
     }
 
     @FXML
@@ -423,69 +452,62 @@ public class ReviewPageController {
     }
 
     public void initialize() throws IOException {
-        Logger.info("Podcast ID : " + StageManager.getObjectIdentifier());
+        // Initialize structure
+        this.service = new ReviewService();
+        this.podcast = new Podcast();
+        this.podcast.setId(StageManager.getObjectIdentifier());
+        this.loadedReviews = new ArrayList<>();
 
-        // podcast test
-        Podcast podcast = new Podcast("00000000", "Scaling Global", "00000000", "Slate Studios", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/60x60bb.jpg", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg", "Clean", "Trinidad & Tobago", "Business", null, new Date());
-        String name = "Greener Pastures";
-        String description = "Hear Greiner USA President, David Kirkland, talk about developing new competitive advantages and how going “green” was the key to his company unlocking new international business.";
-        Date releaseDate = new Date();
-        int time = 1450000;
-        Episode episode = new Episode(name, description, releaseDate, time);
-        for (int i = 0; i < 10; i++) {
-            podcast.addEpisode(episode);
-            podcast.addReview("" + i, 5);
-        }
-        this.podcast = podcast;
-
-        // actor recognition
+        // actor recognition and info loading from service
+        Boolean result = true;
         String sessionType = MyPodcastDB.getInstance().getSessionType();
         if (!sessionType.equals("User")) {
             // only the user can write review
             this.reviewForm.setVisible(false);
             this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
+            result = this.service.loadPodcastPageForNotUser(this.podcast, this.loadedReviews, 10, "cretedAt", false);
+        } else {
+            String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+            result = this.service.loadPodcastPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, 10, "cretedAt", false);
         }
 
-        // review test
-        Review review = new Review("", "", "frank", "Yes, I like it", "Duis ut molestie justo, non mattis arcu. Donec ac arcu eget sapien dignissim pretium eu a mi. Nullam consectetur mauris id maximus vestibulum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nulla mi leo, pulvinar nec blandit a, dictum semper nibh. Proin ut mauris turpis. Duis vehicula volutpat dolor, sodales varius ipsum venenatis sed.", 5, new Date());
-        List<Review> reviews = new ArrayList<>();
-        for (int i = 0; i < 10; i++)
-            reviews.add(review);
+        // check service result
+        if (!result) {
+            // TODO: Alert
+        }
 
         // no reviews message
-        if (!reviews.isEmpty()) {
+        if (!this.loadedReviews.isEmpty()) {
             this.noReviewsMessage.setVisible(false);
             this.noReviewsMessage.setPadding(new Insets(-20, 0, 0, 0));
+        } else {
+            this.gridWrapper.setVisible(false);
+            this.gridWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
         }
 
         // set fields
-        this.title.setText(podcast.getName());
-        this.author.setText(podcast.getAuthorName());
-        this.category.setText(podcast.getPrimaryCategory());
-        Image podcastImage = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
+        this.title.setText(this.podcast.getName());
+        this.author.setText(this.podcast.getAuthorName());
+        this.category.setText(this.podcast.getPrimaryCategory());
+        Image podcastImage = ImageCache.getImageFromURL(this.podcast.getArtworkUrl600());
         this.podcastImage.setImage(podcastImage);
-        int ratingIntermediate = (int)(podcast.getRating() * 10);
+        int ratingIntermediate = (int)(this.podcast.getRating() * 10);
         this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
-        this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+        this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
 
-        // progress bars
-        this.oneStar.setProgress(0.1);
-        this.twoStars.setProgress(0.1);
-        this.threeStars.setProgress(0.2);
-        this.fourStars.setProgress(0.3);
-        this.fiveStars.setProgress(0.3);
+        // TODO: progress bars
 
         // insert reviews in grid
         int row = 0;
         int column = 0;
-        for (Review r : reviews) {
+        for (Review review : this.loadedReviews) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
 
             // create new review element
             AnchorPane newReview = fxmlLoader.load();
             ReviewController controller = fxmlLoader.getController();
-            controller.setData(r, this.mainPage);
+            controller.setData(review, this.mainPage);
 
             // add new podcast to grid
             this.reviewGrid.add(newReview, column, row++);
@@ -495,5 +517,11 @@ public class ReviewPageController {
         this.ownReview = new Review();
         this.ownReview.setPodcastId(podcast.getId());
         this.ownReview.setRating(0);
+
+        // initialize combo box
+        this.orderBy.getItems().add("Date of creation");
+        this.orderBy.getItems().add("Rating");
+        this.ascending.getItems().add("true");
+        this.ascending.getItems().add("false");
     }
 }

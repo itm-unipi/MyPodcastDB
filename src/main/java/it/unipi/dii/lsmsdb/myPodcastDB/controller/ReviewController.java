@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -18,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
@@ -30,6 +32,9 @@ public class ReviewController {
 
     @FXML
     private Label authorName;
+
+    @FXML
+    private VBox authorNameWrapper;
 
     @FXML
     private Label reviewDate;
@@ -54,6 +59,12 @@ public class ReviewController {
 
     @FXML
     private Label title;
+
+    @FXML
+    private VBox yourNameWrapper;
+
+    @FXML
+    private Label yourReview;
 
     private Review review;
     private BorderPane mainPage;
@@ -123,5 +134,14 @@ public class ReviewController {
         String sessionType = MyPodcastDB.getInstance().getSessionType();
         if (!sessionType.equals("Admin"))
             this.deleteReview.setVisible(false);
+
+        // if is the owner hide the author name
+        if (sessionType.equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(this.review.getAuthorUsername())) {
+            this.authorNameWrapper.setVisible(false);
+            this.authorNameWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+        } else {
+            this.yourNameWrapper.setVisible(false);
+            this.yourNameWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+        }
     }
 }
