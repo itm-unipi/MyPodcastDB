@@ -102,6 +102,7 @@ public class AuthorService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
+        // 0: no update done
         int updateResult = 0;
 
         if (!oldAuthor.getName().equals(newAuthor.getName()) && authorMongoManager.findAuthorByName(newAuthor.getName()) != null) {

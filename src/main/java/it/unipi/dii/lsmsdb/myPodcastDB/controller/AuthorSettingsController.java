@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import java.io.IOException;
 
@@ -44,12 +43,13 @@ public class AuthorSettingsController {
     @FXML
     private DialogPane dialogPane;
 
+    /******* AUTHOR PICTURE SLIDE *******/
+
     @FXML
     void nextAuthorPicture(MouseEvent event) {
-        Logger.info("Next author picture");
 
         if (this.counterImage == 19)
-            this.counterImage = 0; // MIN_NUMBER
+            this.counterImage = 0; // MIN_NUMBER_IMAGE
         else
             ++this.counterImage;
 
@@ -58,7 +58,6 @@ public class AuthorSettingsController {
 
     @FXML
     void previousAuthorPicture(MouseEvent event) {
-        Logger.info("Previous author picture");
 
         if (this.counterImage == 0)
             this.counterImage = 19; // MAX_NUMBER_IMAGE
@@ -67,6 +66,20 @@ public class AuthorSettingsController {
 
         imagePreview.setImage(ImageCache.getImageFromLocalPath("/img/authors/author" + this.counterImage + ".png"));
     }
+
+    /********** RESET BORDER EMPTY FIELDS **********/
+
+    @FXML
+    void restoreBorderTextField(MouseEvent event) {
+        ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    @FXML
+    void restoreBorderPasswordField(MouseEvent event) {
+        ((PasswordField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
+    }
+
+    /*********************************************/
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException {
@@ -105,33 +118,9 @@ public class AuthorSettingsController {
                 alert.setGraphic(null);;
                 alert.showAndWait();
             }
-
         } else {
             Logger.info("Operation aborted");
         }
-    }
-
-    public void setData(Author author, Label authorNameLabel, ImageView actorPictureImage) {
-        this.author = author;
-        this.authorNameProfile = authorNameLabel;
-        this.actorPictureProfile = actorPictureImage;
-        this.counterImage = 0;
-
-        authorName.setText(author.getName());
-        authorEmail.setText(author.getEmail());
-        authorPassword.setText("");
-        authorNewPassword.setText("");
-        imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
-    }
-
-    @FXML
-    void restoreBorderTextField(MouseEvent event) {
-        ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
-    }
-
-    @FXML
-    void restoreBorderPasswordField(MouseEvent event) {
-        ((PasswordField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
     }
 
     @FXML
@@ -154,12 +143,11 @@ public class AuthorSettingsController {
         }
 
         if (!emptyFields) {
-            // Old Author
+            // Author object that keeps the old information of the session author
             Author oldAuthor = new Author();
             oldAuthor.copy((Author) MyPodcastDB.getInstance().getSessionActor());
-            Logger.info("OLD AUTHOR: " + oldAuthor);
 
-            // Temporary Author (to commit)
+            // Temporary author with the new information to commit if there are no error
             String password;
             if (authorNewPassword.getText().equals(""))
                 password = oldAuthor.getPassword();
@@ -167,8 +155,6 @@ public class AuthorSettingsController {
                 password = authorNewPassword.getText();
 
             Author tempAuthor = new Author(author.getId(), authorName.getText(), password, authorEmail.getText(), "/img/authors/author" + this.counterImage + ".png");
-            this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
-            Logger.info("TEMPORARY AUTHOR: " + tempAuthor);
 
             if (authorPassword.getText().equals(oldAuthor.getPassword())) {
                 if (!(tempAuthor.getName().equals(oldAuthor.getName())
@@ -181,10 +167,10 @@ public class AuthorSettingsController {
                     int updateResult = authorService.updateAuthor(oldAuthor, tempAuthor);
 
                     if (updateResult == 1) {
-                        // Commit update
+                        // Commit
                         this.author.setName(authorName.getText());
                         this.author.setEmail(authorEmail.getText());
-                        this.author.setPassword(authorNewPassword.getText());
+                        this.author.setPassword(password);
                         this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
 
                         // Updating GUI
@@ -253,8 +239,24 @@ public class AuthorSettingsController {
                 alert.setContentText("Incorrect Current Password!");
                 alert.setGraphic(null);
                 alert.showAndWait();
+
+                // Resetting password field
+                authorPassword.setText("");
             }
         }
+    }
+
+    public void setData(Author author, Label authorNameLabel, ImageView actorPictureImage) {
+        this.author = author;
+        this.authorNameProfile = authorNameLabel;
+        this.actorPictureProfile = actorPictureImage;
+        this.counterImage = 0;
+
+        authorName.setText(author.getName());
+        authorEmail.setText(author.getEmail());
+        authorPassword.setText("");
+        authorNewPassword.setText("");
+        imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
     }
 
     @FXML
@@ -264,7 +266,6 @@ public class AuthorSettingsController {
 
     @FXML
     void cancel(ActionEvent event) {
-        System.out.println("Cancel Operation");
         closeStage(event);
     }
 
