@@ -83,8 +83,6 @@ public class AuthorSettingsController {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException {
-        Logger.info("Delete account clicked!");
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initOwner(dialogPane.getScene().getWindow());
         alert.setTitle("Delete Account");
@@ -97,18 +95,37 @@ public class AuthorSettingsController {
 
             if (authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
                 AuthorService authorService = new AuthorService();
-                authorService.deleteAccount();
+                int deleteResult = authorService.deleteAccount();
 
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.initOwner(dialogPane.getScene().getWindow());
-                alert.setTitle("Delete Account");
-                alert.setHeaderText(null);
-                alert.setContentText("Account deleted successfully!");
-                alert.setGraphic(null);;
-                alert.showAndWait();
-                StageManager.showPage(ViewNavigator.LOGIN.getPage());
-                closeStage(event);
+                if (deleteResult == 0) {
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initOwner(dialogPane.getScene().getWindow());
+                    alert.setTitle("Delete Account");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Account deleted successfully!");
+                    alert.setGraphic(null);;
+                    alert.showAndWait();
 
+                    closeStage(event);
+                    StageManager.showPage(ViewNavigator.LOGIN.getPage());
+                } else {
+                    Logger.error("Error during the delete operation");
+
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initOwner(dialogPane.getScene().getWindow());
+                    alert.setTitle("Delete Account Error");
+                    alert.setHeaderText(null);
+
+                    if (deleteResult == -1) {
+                        alert.setContentText("Author don't exists!");
+                    } else {
+                        // General message error
+                        alert.setContentText("Something went wrong!");
+                    }
+
+                    alert.setGraphic(null);;
+                    alert.showAndWait();
+                }
             } else {
                 alert = new Alert(Alert.AlertType.ERROR);
                 alert.initOwner(dialogPane.getScene().getWindow());
@@ -154,7 +171,13 @@ public class AuthorSettingsController {
             else
                 password = authorNewPassword.getText();
 
+            // TODO: bug in tempAuthor -> imagePreview.getImage().getURL()
+            // "/img/authors/author" + this.counterImage + ".png" (this.counter is always 0 when the setData is called there will be always a change in the picutre path)
+            // if the default img has not index 0
             Author tempAuthor = new Author(author.getId(), authorName.getText(), password, authorEmail.getText(), "/img/authors/author" + this.counterImage + ".png");
+
+            Logger.info("SESSION AUTHOR: " + oldAuthor);
+            Logger.info("TEMP AUTHOR (to commit): " + tempAuthor);
 
             if (authorPassword.getText().equals(oldAuthor.getPassword())) {
                 if (!(tempAuthor.getName().equals(oldAuthor.getName())
@@ -171,11 +194,13 @@ public class AuthorSettingsController {
                         this.author.setName(authorName.getText());
                         this.author.setEmail(authorEmail.getText());
                         this.author.setPassword(password);
-                        this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
+                        this.author.setPicturePath(tempAuthor.getPicturePath());
+
+                        Logger.info("NEW AUTHOR (commited): " + this.author);
 
                         // Updating GUI
-                        authorNameProfile.setText(((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
-                        actorPictureProfile.setImage(ImageCache.getImageFromLocalPath(((Author) MyPodcastDB.getInstance().getSessionActor()).getPicturePath()));
+                        authorNameProfile.setText(this.author.getName());
+                        actorPictureProfile.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.initOwner(dialogPane.getScene().getWindow());
@@ -250,7 +275,7 @@ public class AuthorSettingsController {
         this.author = author;
         this.authorNameProfile = authorNameLabel;
         this.actorPictureProfile = actorPictureImage;
-        this.counterImage = 0;
+        this.counterImage = Integer.parseInt(author.getPicturePath().replaceAll("\\D+",""));
 
         authorName.setText(author.getName());
         authorEmail.setText(author.getEmail());

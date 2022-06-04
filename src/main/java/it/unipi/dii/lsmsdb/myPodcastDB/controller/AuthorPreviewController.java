@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -115,9 +116,19 @@ public class AuthorPreviewController {
                 btnFollowAuthor.setText("Follow");
             }
         } else if (actorType.equals("User")) {
+            UserService userService = new UserService();
 
-        } else
+            if (btnFollowAuthor.getText().equals("Follow")) {
+                userService.followAuthor(author.getName());
+                btnFollowAuthor.setText("Unfollow");
+            } else {
+                userService.unfollowAuthor(author.getName());
+                btnFollowAuthor.setText("Follow");
+            }
+
+        } else {
             Logger.error("Operation not allowed!");
+        }
     }
 
     public void setData(Author author, boolean follow) {

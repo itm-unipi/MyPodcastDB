@@ -224,7 +224,7 @@ public class SearchController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             AuthorReducedPodcastController controller = fxmlLoader.getController();
-            controller.setData(entry.getId(), entry.getName(), entry.getReleaseDate(), entry.getPrimaryCategory(), entry.getArtworkUrl600());
+            controller.setData(entry.getAuthorId(), entry.getId(), entry.getName(), entry.getReleaseDate(), entry.getPrimaryCategory(), entry.getArtworkUrl600());
 
             gridFoundPodcasts.add(newPodcast, column, row++);
         }

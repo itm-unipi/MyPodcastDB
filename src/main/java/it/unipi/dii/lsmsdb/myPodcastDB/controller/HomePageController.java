@@ -386,9 +386,6 @@ public class HomePageController {
             boxActorProfile.setVisible(false);
             boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
 
-            boxLogout.setVisible(false);
-            boxLogout.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
-
         } else {
             Logger.error("Unidentified Actor Type");
         }
@@ -680,6 +677,11 @@ public class HomePageController {
 
         /*********** MOST FOLLOWED AUTHORS (AVAILABLE TO EVERYONE) ************/
         List<Author> mostFollowedAuthors = new ArrayList<>();
+
+        Author ae = new Author();
+        ae.setName("Apple Inc.");
+        ae.setPicturePath("/img/authorAnonymousPicture.png");
+        mostFollowedAuthors.add(ae);
 
         for (int j = 0; j < 14; j++){
             Author a = new Author();

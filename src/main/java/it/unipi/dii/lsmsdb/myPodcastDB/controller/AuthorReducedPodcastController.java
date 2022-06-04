@@ -1,7 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -26,6 +28,8 @@ import java.util.Date;
 
 public class AuthorReducedPodcastController {
     private String podcastId;
+
+    private String authorId;
 
     @FXML
     private Label podcastCategory;
@@ -67,18 +71,45 @@ public class AuthorReducedPodcastController {
 
         if (alert.getResult() == ButtonType.OK) {
             Logger.info("Deleting podcast " + podcastId + " (" + podcastName + ") that belongs to " + StageManager.getObjectIdentifier());
+            String actorType = MyPodcastDB.getInstance().getSessionType();
 
-            AuthorService authorService = new AuthorService();
-            authorService.deletePodcast(this.podcastId);
+            int deleteResult = 0;
+            if (actorType.equals("Author")) {
+                AuthorService authorService = new AuthorService();
+                deleteResult = authorService.deletePodcast(this.podcastId);
+            } else {
+                AdminService adminService = new AdminService();
+                deleteResult = adminService.deletePodcast(this.authorId, this.podcastId);
+            }
 
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(stage);
-            alert.setTitle("Delete Account");
-            alert.setHeaderText(null);
-            alert.setContentText("Podcast deleted successfully!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+            if (deleteResult == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initOwner(stage);
+                alert.setTitle("Delete Account");
+                alert.setHeaderText(null);
+                alert.setContentText("Podcast deleted successfully!");
+                alert.setGraphic(null);
+                alert.showAndWait();
+                StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+            } else {
+                Logger.error("Error during the delete podcast operation");
+
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(stage);
+                alert.setTitle("Delete Podcast Error");
+                alert.setHeaderText(null);
+
+                if (deleteResult == -1) {
+                    alert.setContentText("Podcast not found!");
+                } else {
+                    // General message error
+                    alert.setContentText("Something went wrong!");
+                }
+
+                alert.setGraphic(null);;
+                alert.showAndWait();
+            }
+
         } else {
             Logger.info("Operation aborted");
         }
@@ -119,7 +150,8 @@ public class AuthorReducedPodcastController {
 
     /*************************************/
 
-    public void setData(String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String ArtworkUrl600 ) {
+    public void setData(String authorId, String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String ArtworkUrl600 ) {
+        this.authorId = authorId;
         this.podcastId = podcastId;
         this.podcastName.setText(podcastName);
         this.podcastCategory.setText(podcastCategory);

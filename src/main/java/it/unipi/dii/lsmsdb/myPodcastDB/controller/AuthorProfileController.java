@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorProfileController {
+    private Author author;
     @FXML
     private BorderPane MainPage;
 
@@ -154,9 +155,19 @@ public class AuthorProfileController {
             }
 
         } else if (actorType.equals("User")) {
+            UserService userService = new UserService();
 
-        } else
+            if (btnFollowAuthor.getText().equals("Follow")) {
+                userService.followAuthor(StageManager.getObjectIdentifier());
+                btnFollowAuthor.setText("Unfollow");
+            } else {
+                userService.unfollowAuthor(StageManager.getObjectIdentifier());
+                btnFollowAuthor.setText("Follow");
+            }
+
+        } else {
             Logger.error("Operation not allowed!");
+        }
     }
 
     @FXML
@@ -187,7 +198,6 @@ public class AuthorProfileController {
 
     @FXML
     void settings(MouseEvent event) throws IOException {
-        Logger.info("Settings button clicked");
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         MainPage.setEffect(blur);
 
@@ -214,8 +224,6 @@ public class AuthorProfileController {
 
     @FXML
     void deleteAuthorByAdmin(MouseEvent event) throws IOException {
-        Logger.info("Deleting author");
-
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initOwner(MainPage.getScene().getWindow());
         alert.setTitle("Delete Account");
@@ -225,19 +233,38 @@ public class AuthorProfileController {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Delete account..");
 
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(MainPage.getScene().getWindow());
-            alert.setTitle("Delete Account");
-            alert.setHeaderText(null);
-            alert.setContentText("Account deleted successfully!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
+            AdminService adminService = new AdminService();
+            int deleteResult = adminService.deleteAuthor(author);
 
-            // TODO: query to delete the author...
+            if (deleteResult == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initOwner(MainPage.getScene().getWindow());
+                alert.setTitle("Delete Account");
+                alert.setHeaderText(null);
+                alert.setContentText("Account deleted successfully!");
+                alert.setGraphic(null);;
+                alert.showAndWait();
 
-            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+                StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+            } else {
+                Logger.error("Error during the delete operation");
+
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(MainPage.getScene().getWindow());
+                alert.setTitle("Delete Account Error");
+                alert.setHeaderText(null);
+
+                if (deleteResult == -1) {
+                    alert.setContentText("Author don't exists!");
+                } else {
+                    // General message error
+                    alert.setContentText("Something went wrong!");
+                }
+
+                alert.setGraphic(null);;
+                alert.showAndWait();
+            }
 
         } else {
             Logger.info("Operation aborted");
@@ -274,7 +301,7 @@ public class AuthorProfileController {
 
         // Declaring object in order to contain author's information
         List<Pair<Author, Boolean>> followedAuthors = new ArrayList<>();
-        Author author = new Author();
+        this.author = new Author();
 
         switch (actorType) {
             case "Author" -> {
@@ -291,7 +318,6 @@ public class AuthorProfileController {
                     authorService.loadAuthorOwnProfile(author, followedAuthors, 10);
                     // TODO: rimuovere dopo il rebase
                     ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(author);
-                    Logger.success("AUTHOR FOUND: \n" + author + "\nFOLLOWED AUTHORS: \n" + followedAuthors);
 
                     authorName.setText(sessionActor.getName());
                     authorFollowing.setText("Authors you follow");
@@ -308,9 +334,8 @@ public class AuthorProfileController {
                     AuthorService authorService = new AuthorService();
                     author.setName(StageManager.getObjectIdentifier());
                     this.followingAuthor = authorService.loadAuthorProfile(author, followedAuthors, 10);
-                    Logger.success("AUTHOR FOUND: \n" + author + "\nFOLLOWED AUTHORS: \n" + followedAuthors);
 
-                    // Setting GUI information about the author requested
+                    // Setting GUI information about the author visited
                     authorName.setText(author.getName());
                     authorFollowing.setText("Authors followed by " + author.getName());
                     podcastLabel.setText("Podcasts");
@@ -329,20 +354,22 @@ public class AuthorProfileController {
                 User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
                 Logger.info("I'm an user: " + sessionActor.getUsername());
 
-                // Setting user GUI stuff
+                // Setting user GUI parameters of the user
                 Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
                 actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
                 author.setName(StageManager.getObjectIdentifier());
                 UserService userService = new UserService();
-                author.setName(StageManager.getObjectIdentifier());
-                //userService.loadAuthorProfile(author, followedAuthors, 10, registeredUser);
-                Logger.success("AUTHOR FOUND: \n" + author + "\nFOLLOWED AUTHORS: \n" + followedAuthors);
+                this.followingAuthor = userService.loadAuthorProfileRegistered(author, followedAuthors, 10);
 
+                // Setting GUI information about the author visited
                 authorName.setText(author.getName());
                 authorFollowing.setText("Authors followed by " + author.getName());
                 podcastLabel.setText("Podcasts");
+
+                if (this.followingAuthor)
+                    btnFollowAuthor.setText("Unfollow");
 
                 // Hiding unnecessary button for the user
                 deleteAuthorButton.setVisible(false);
@@ -354,15 +381,16 @@ public class AuthorProfileController {
                 Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
                 Logger.info("I'm an administrator: " + sessionActor.getName());
 
-                // Setting GUI params
+                // Setting GUI parameters of the admin
                 Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
                 actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
                 AdminService adminService = new AdminService();
                 author.setName(StageManager.getObjectIdentifier());
-                //adminService.loadAuthorProfile(author, followedAuthors, 10,); // non devo ritornare following
+                adminService.loadAuthorProfile(author, followedAuthors, 10);
 
+                // Setting GUI information of the author visited
                 authorName.setText(author.getName());
                 authorFollowing.setText("Authors followed by " + author.getName());
                 podcastLabel.setText("Podcasts");
@@ -379,8 +407,7 @@ public class AuthorProfileController {
                 // Requesting the author's information from the database
                 author.setName(StageManager.getObjectIdentifier());
                 UserService userService = new UserService();
-                author.setName(StageManager.getObjectIdentifier());
-                //userService.loadAuthorProfile(author, followedAuthors, 10, unregisteredUser);
+                userService.loadAuthorProfileUnregistered(author, followedAuthors, 10);
 
                 authorName.setText(author.getName());
                 authorFollowing.setText("Authors followed by " + author.getName());
@@ -396,7 +423,6 @@ public class AuthorProfileController {
                 authorButtons.setVisible(false);
                 authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
             }
-
             default -> Logger.error("Unidentified Actor Type");
         }
 
@@ -418,14 +444,12 @@ public class AuthorProfileController {
         row = 0;
         column = 0;
         for (Podcast podcast: author.getOwnPodcasts()){
-            Logger.info(podcast.toString());
-            
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
             AnchorPane newPodcast = fxmlLoader.load();
             AuthorReducedPodcastController controller = fxmlLoader.getController();
-            controller.setData(podcast.getId(), podcast.getName(), podcast.getReleaseDate(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
+            controller.setData(author.getId(), podcast.getId(), podcast.getName(), podcast.getReleaseDate(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
 
             gridAuthorPodcasts.add(newPodcast, column, row++);
         }
