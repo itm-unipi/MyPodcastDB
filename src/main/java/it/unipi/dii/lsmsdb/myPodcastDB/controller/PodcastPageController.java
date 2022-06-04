@@ -34,6 +34,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map.Entry;
 
+import static java.lang.Math.round;
+
 public class PodcastPageController {
 
     @FXML
@@ -281,7 +283,6 @@ public class PodcastPageController {
 
             // if update is succesfull update the page
             if (result == 0) {
-                Logger.info("Updated podcast : " + newPodcast.toString());
                 this.podcast = newPodcast;
 
                 // update page
@@ -545,7 +546,7 @@ public class PodcastPageController {
         }
 
         // no reviews message
-        if (!podcast.getEpisodes().isEmpty()) {
+        if (podcast.getEpisodes() != null && !podcast.getEpisodes().isEmpty()) {
             this.noEpisodeMessage.setVisible(false);
             this.noEpisodeMessage.setPadding(new Insets(-20, 0, 0, 0));
         } else {
@@ -565,7 +566,8 @@ public class PodcastPageController {
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
         this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-        this.rating.setText("" + podcast.getRating());
+        int ratingIntermediate = (int)(podcast.getRating() * 10);
+        this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
         this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
 
         // order episodes by release date

@@ -464,7 +464,8 @@ public class ReviewPageController {
         this.category.setText(podcast.getPrimaryCategory());
         Image podcastImage = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
         this.podcastImage.setImage(podcastImage);
-        this.rating.setText("" + podcast.getRating());
+        int ratingIntermediate = (int)(podcast.getRating() * 10);
+        this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
         this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
 
         // progress bars
