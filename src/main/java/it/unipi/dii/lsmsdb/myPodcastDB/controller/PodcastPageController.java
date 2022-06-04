@@ -120,6 +120,9 @@ public class PodcastPageController {
     private Label title;
 
     @FXML
+    private Tooltip titleTooltip;
+
+    @FXML
     private ProgressBar twoStars;
 
     @FXML
@@ -557,6 +560,7 @@ public class PodcastPageController {
 
     public void updatePodcastPage() throws IOException {
         this.title.setText(podcast.getName());
+        this.titleTooltip.setText(podcast.getName());
         this.author.setText(podcast.getAuthorName());
         this.country.setText(podcast.getCountry());
         this.content.setText("Content: " + podcast.getContentAdvisoryRating());
@@ -580,7 +584,7 @@ public class PodcastPageController {
         this.row = 0;
         this.column = 0;
         if (!this.episodesGrid.getChildren().isEmpty()) {
-            this.episodesGrid.getChildren().retainAll(this.episodesGrid.getChildren().get(0));          // remove all elements
+            this.episodesGrid.getChildren().clear();                        // remove all elements
         }
         for (Episode ep : podcast.getEpisodes()) {
             FXMLLoader fxmlLoader = new FXMLLoader();

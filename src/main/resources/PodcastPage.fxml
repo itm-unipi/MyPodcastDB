@@ -8,6 +8,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -355,6 +356,9 @@
                                              <VBox.margin>
                                                 <Insets top="5.0" />
                                              </VBox.margin>
+                                             <tooltip>
+                                                <Tooltip fx:id="titleTooltip" />
+                                             </tooltip>
                                           </Label>
                                           <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
                                              <font>
