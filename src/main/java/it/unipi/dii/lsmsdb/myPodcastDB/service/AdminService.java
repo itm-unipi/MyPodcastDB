@@ -4,10 +4,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
@@ -27,12 +25,14 @@ public class AdminService {
     private PodcastMongo podcastMongoManager;
     private PodcastNeo4j podcastNeo4jManager;
     private AuthorNeo4j authorNeo4jManager;
+    private UserMongo userMongoManager;
     private UserNeo4j userNeo4jManager;
     private ReviewMongo reviewMongoManager;
 
     public AdminService() {
         this.authorMongoManager = new AuthorMongo();
         this.authorNeo4jManager = new AuthorNeo4j();
+        this.userMongoManager = new UserMongo();
         this.userNeo4jManager = new UserNeo4j();
         this.podcastMongoManager = new PodcastMongo();
         this.podcastNeo4jManager = new PodcastNeo4j();
@@ -145,6 +145,27 @@ public class AdminService {
 
         return deleteResult;
     }
+
+    public void search(String searchText, List<Podcast> podcastsMatch, List<Pair<Author, Boolean>> authorsMatch, List<Pair<User, Boolean>> usersMatch, int limit) {
+        MongoManager.getInstance().openConnection();
+
+        // Searching for podcasts
+        podcastsMatch.addAll(podcastMongoManager.searchPodcast(searchText, limit));
+
+        // Searching for authors
+        List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
+        for (Author authorFound: authors)
+            authorsMatch.add(new Pair<>(authorFound, false));
+
+        // Searching for users
+        List<User> users = userMongoManager.searchUser(searchText, limit);
+        for (User userFound: users)
+            usersMatch.add(new Pair<>(userFound, false));
+
+        MongoManager.getInstance().closeConnection();
+    }
+
+
     //-----------------------------------------------
 
     //----------------- MATTEO ----------------------

@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
@@ -12,10 +13,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
-import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import org.javatuples.Pair;
-
-import java.lang.invoke.MethodHandles;
 import java.util.List;
 
 public class AuthorService {
@@ -310,6 +308,24 @@ public class AuthorService {
         Neo4jManager.getInstance(). closeConnection();
 
         return deleteResult;
+    }
+
+    public void search(String searchText, List<Podcast> podcastsMatch, List<Pair<Author, Boolean>> authorsMatch, List<Pair<User, Boolean>> usersMatch, int limit) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        // Searching for podcasts
+        podcastsMatch.addAll(podcastMongoManager.searchPodcast(searchText, limit));
+
+        // Searching for authors
+        List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
+        for (Author authorFound: authors) {
+            boolean followingAuthor = authorNeo4jManager.findAuthorFollowsAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName(), authorFound.getName());
+            authorsMatch.add(new Pair<>(authorFound, followingAuthor));
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        MongoManager.getInstance().closeConnection();
     }
 
     //-----------------------------------------------

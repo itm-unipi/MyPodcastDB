@@ -1,6 +1,10 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -18,6 +22,8 @@ import java.io.IOException;
 public class AuthorSearchPreviewController {
     private Author author;
 
+    private boolean followed;
+
     @FXML
     private Label authorFound;
 
@@ -28,7 +34,7 @@ public class AuthorSearchPreviewController {
     private HBox boxAuthorPreview;
 
     @FXML
-    private Button followAuthor;
+    private Button btnFollowAuthor;
 
     @FXML
     void onClickAuthor(MouseEvent event) throws IOException {
@@ -48,25 +54,62 @@ public class AuthorSearchPreviewController {
 
     /****** Events on follow button ******/
     @FXML
-    void onClickFollowButton(MouseEvent event) {
-        Logger.info("Clicked on Follow " + this.author.getName());
+    void onClickBtnFollowAuthor(MouseEvent event) {
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+
+        if (actorType.equals("Author")) {
+            AuthorService authorService = new AuthorService();
+
+            if (btnFollowAuthor.getText().equals("Follow")) {
+                authorService.followAuthor(author.getName());
+                btnFollowAuthor.setText("Unfollow");
+            } else {
+                authorService.unfollowAuthor(author.getName());
+                btnFollowAuthor.setText("Follow");
+            }
+        } else if (actorType.equals("User")) {
+            UserService userService = new UserService();
+
+            if (btnFollowAuthor.getText().equals("Follow")) {
+                userService.followAuthor(author.getName());
+                btnFollowAuthor.setText("Unfollow");
+            } else {
+                userService.unfollowAuthor(author.getName());
+                btnFollowAuthor.setText("Follow");
+            }
+
+        } else {
+            Logger.error("Operation not allowed!");
+        }
     }
     @FXML
     void onMouseExitedFollowButton(MouseEvent event) {
-        followAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
+        this.btnFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
     }
 
     @FXML
     void onMouseHoverFollowButton(MouseEvent event) {
-        followAuthor.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
+        btnFollowAuthor.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
     }
 
-    public void setData(Author author) {
+    public void setData(Author author, boolean follow) {
         this.author = author;
-        authorFound.setText(author.getName());
+        this.authorFound.setText(author.getName());
 
         Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
-        authorPicture.setImage(image);
+        this.authorPicture.setImage(image);
+
+        // Disabling follow button for unregistered users, admin and if author founds himself
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+
+        if (actorType.equals("Admin") || actorType.equals("Unregistered")
+                || (actorType.equals("Author") && ((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(author.getName()))) {
+            this.btnFollowAuthor.setVisible(false);
+        } else {
+            this.followed = follow;
+            if (followed)
+                this.btnFollowAuthor.setText("Unfollow");
+        }
     }
 }
 

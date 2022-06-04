@@ -1,17 +1,17 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.Map.Entry;
 
 import static com.mongodb.client.model.Aggregates.*;
@@ -56,6 +56,34 @@ public class UserMongo {
     }
 
     // ---------- READ ---------- //
+
+    public List<User> searchUser(String textToSearch, int limit) {
+        MongoManager manager = MongoManager.getInstance();
+
+        List<User> userMatch = new ArrayList<>();
+        Bson filter = Filters.text(textToSearch);
+
+        try (MongoCursor<Document> cursor = manager.getCollection("user").find(filter).limit(limit).iterator()) {
+            while (cursor.hasNext()) {
+                Document user = cursor.next();
+
+                String id = user.getObjectId("_id").toString();
+                String username = user.getString("username");
+                String picturePath = user.getString("picturePath");
+
+                User userFound = new User(username, picturePath);
+                userFound.setId(id);
+
+                userMatch.add(userFound);
+            }
+
+            return userMatch;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public User findUserById(String id) {
         MongoManager manager = MongoManager.getInstance();

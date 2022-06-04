@@ -7,6 +7,7 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -45,6 +46,32 @@ public class AuthorMongo {
     }
 
     // ---------- READ ---------- //
+
+    public List<Author> searchAuthor(String textToSearch, int limit) {
+        MongoManager manager = MongoManager.getInstance();
+
+        List<Author> authorMatch = new ArrayList<>();
+        Bson filter = Filters.text(textToSearch);
+
+        try (MongoCursor<Document> cursor = manager.getCollection("author").find(filter).limit(limit).iterator()) {
+            while (cursor.hasNext()) {
+                Document user = cursor.next();
+
+                String id = user.getObjectId("_id").toString();
+                String name = user.getString("name");
+                String picturePath = user.getString("picturePath");
+
+                Author authorFound = new Author(id, name, picturePath);
+                authorMatch.add(authorFound);
+            }
+
+            return authorMatch;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public Author findAuthorById(String id) {
         MongoManager manager = MongoManager.getInstance();

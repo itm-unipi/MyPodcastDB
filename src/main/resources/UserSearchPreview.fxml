@@ -36,7 +36,7 @@
                   <Insets left="6.0" />
                </padding>
             </VBox>
-            <Button fx:id="followUser" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onClickFollowButton" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-radius: 25; -fx-background-radius: 27;" text="Follow">
+            <Button fx:id="btnFollowUser" alignment="CENTER" mnemonicParsing="false" onMouseClicked="#onClickBtnFollowUser" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="27.0" prefWidth="90.0" style="-fx-background-color: white; -fx-border-color: #c9c9c9; -fx-border-radius: 25; -fx-background-radius: 27;" text="Follow">
                <font>
                   <Font name="Corbel Light" size="14.0" />
                </font>

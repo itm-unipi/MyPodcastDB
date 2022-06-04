@@ -90,7 +90,8 @@ public class AuthorReducedPodcastController {
                 alert.setContentText("Podcast deleted successfully!");
                 alert.setGraphic(null);
                 alert.showAndWait();
-                StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+                //StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+                StageManager.showPage(ViewNavigator.HOMEPAGE.getPage(), StageManager.getObjectIdentifier());
             } else {
                 Logger.error("Error during the delete podcast operation");
 
