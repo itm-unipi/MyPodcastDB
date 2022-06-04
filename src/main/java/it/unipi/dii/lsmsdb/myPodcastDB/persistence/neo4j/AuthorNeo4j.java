@@ -91,13 +91,13 @@ public class AuthorNeo4j {
 
     // --------- UPDATE --------- //
 
-    public boolean updateAuthor(String oldName, String newName) {
+    public boolean updateAuthor(String oldName, String newName, String newPicturePath) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query =  "MATCH (a:Author {name: $oldName}) " +
-                            "SET a.name = $newName";
-            Value params = parameters("oldName", oldName, "newName", newName);
+                            "SET a.name = $newName, a.picturePath = $newPicturePath";
+            Value params = parameters("oldName", oldName, "newName", newName, "newPicturePath", newPicturePath);
             manager.write(query, params);
             return true;
         } catch (Exception e) {

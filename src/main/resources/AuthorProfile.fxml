@@ -47,6 +47,24 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="920.0">
                            <children>
+                              <VBox fx:id="boxLogout" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
+                                 <children>
+                                    <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/logout.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets top="3.0" />
+                                       </VBox.margin>
+                                    </ImageView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="2.0" />
+                                 </HBox.margin>
+                              </VBox>
                               <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/home.png" />
@@ -55,7 +73,7 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <HBox.margin>
-                                    <Insets right="2.0" />
+                                    <Insets />
                                  </HBox.margin>
                               </ImageView>
                               <VBox fx:id="boxActorProfile" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
@@ -73,23 +91,8 @@
                                     </ImageView>
                                  </children>
                                  <HBox.margin>
-                                    <Insets left="2.0" right="3.0" />
+                                    <Insets left="2.0" />
                                  </HBox.margin>
-                              </VBox>
-                              <VBox fx:id="boxLogout" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity">
-                                 <children>
-                                    <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/logout.png" />
-                                       </image>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </ImageView>
-                                 </children>
                               </VBox>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>

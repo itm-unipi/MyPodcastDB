@@ -1,6 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -11,16 +13,17 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
 
 public class AuthorSettingsController {
-
     private Author author;
+
+    private Label authorNameProfile;
+
+    private ImageView actorPictureProfile;
+
     @FXML
     private TextField authorEmail;
 
@@ -31,7 +34,7 @@ public class AuthorSettingsController {
     private PasswordField authorPassword;
 
     @FXML
-    private PasswordField authorConfirmPassword;
+    private PasswordField authorNewPassword;
 
     @FXML
     private ImageView imagePreview;
@@ -71,7 +74,6 @@ public class AuthorSettingsController {
 
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.initOwner(dialogPane.getScene().getWindow());
-        //alert.initStyle(StageStyle.UNDECORATED);
         alert.setTitle("Delete Account");
         alert.setHeaderText(null);
         alert.setContentText("Do you really want to delete this account?");
@@ -79,30 +81,46 @@ public class AuthorSettingsController {
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Delete account..");
 
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(dialogPane.getScene().getWindow());
-            alert.setTitle("Delete Account");
-            alert.setHeaderText(null);
-            alert.setContentText("Account deleted successfully!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
-            StageManager.showPage(ViewNavigator.LOGIN.getPage());
-            closeStage(event);
+            if (authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
+                AuthorService authorService = new AuthorService();
+                authorService.deleteAccount();
+
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Delete Account");
+                alert.setHeaderText(null);
+                alert.setContentText("Account deleted successfully!");
+                alert.setGraphic(null);;
+                alert.showAndWait();
+                StageManager.showPage(ViewNavigator.LOGIN.getPage());
+                closeStage(event);
+
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Delete Account: incorrect password");
+                alert.setHeaderText(null);
+                alert.setContentText("Invalid current password! Please try again.");
+                alert.setGraphic(null);;
+                alert.showAndWait();
+            }
+
         } else {
             Logger.info("Operation aborted");
         }
     }
 
-    public void setData(Author author) {
+    public void setData(Author author, Label authorNameLabel, ImageView actorPictureImage) {
         this.author = author;
+        this.authorNameProfile = authorNameLabel;
+        this.actorPictureProfile = actorPictureImage;
         this.counterImage = 0;
 
         authorName.setText(author.getName());
         authorEmail.setText(author.getEmail());
-        authorPassword.setText(author.getPassword());
-        authorConfirmPassword.setText(author.getPassword());
+        authorPassword.setText("");
+        authorNewPassword.setText("");
         imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
     }
 
@@ -118,8 +136,6 @@ public class AuthorSettingsController {
 
     @FXML
     void updatePersonalInfo(ActionEvent event) {
-        System.out.println("Update applied");
-
         boolean emptyFields = false;
 
         if (authorName.getText().equals("")) {
@@ -137,30 +153,113 @@ public class AuthorSettingsController {
             emptyFields = true;
         }
 
-        if (authorConfirmPassword.getText().equals("")) {
-            authorConfirmPassword.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
-            emptyFields = true;
-        }
-
-        if (!authorPassword.getText().equals(authorConfirmPassword.getText())) {
-            Logger.info("password doesn't match");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(dialogPane.getScene().getWindow());
-            alert.setTitle("Password Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Password doesn't match!");
-            alert.setGraphic(null);
-            alert.showAndWait();
-            emptyFields = true;
-        }
-
         if (!emptyFields) {
-            this.author.setName(authorName.getText());
-            this.author.setEmail(authorEmail.getText());
-            this.author.setPassword(authorPassword.getText());
+            // Old Author
+            Author oldAuthor = new Author();
+            oldAuthor.copy((Author) MyPodcastDB.getInstance().getSessionActor());
+            Logger.info("OLD AUTHOR: " + oldAuthor);
+
+            // Temporary Author (to commit)
+            String password;
+            if (authorNewPassword.getText().equals(""))
+                password = oldAuthor.getPassword();
+            else
+                password = authorNewPassword.getText();
+
+            Author tempAuthor = new Author(author.getId(), authorName.getText(), password, authorEmail.getText(), "/img/authors/author" + this.counterImage + ".png");
             this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
-            closeStage(event);
+            Logger.info("TEMPORARY AUTHOR: " + tempAuthor);
+
+            if (authorPassword.getText().equals(oldAuthor.getPassword())) {
+                if (!(tempAuthor.getName().equals(oldAuthor.getName())
+                        && tempAuthor.getId().equals(oldAuthor.getId())
+                        && tempAuthor.getEmail().equals(oldAuthor.getEmail())
+                        && authorNewPassword.getText().equals("")
+                        && tempAuthor.getPicturePath().equals(oldAuthor.getPicturePath()))) {
+
+                    AuthorService authorService = new AuthorService();
+                    int updateResult = authorService.updateAuthor(oldAuthor, tempAuthor);
+
+                    if (updateResult == 1) {
+                        // Commit update
+                        this.author.setName(authorName.getText());
+                        this.author.setEmail(authorEmail.getText());
+                        this.author.setPassword(authorNewPassword.getText());
+                        this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
+
+                        // Updating GUI
+                        authorNameProfile.setText(((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
+                        actorPictureProfile.setImage(ImageCache.getImageFromLocalPath(((Author) MyPodcastDB.getInstance().getSessionActor()).getPicturePath()));
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Done");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Settings updated successfully!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+                        closeStage(event);
+
+                    } else if (updateResult == -1) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Name Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Name already exists!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+
+                        // Resetting field that caused the error
+                        authorName.setText(oldAuthor.getName());
+
+                    } else if (updateResult == -2) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Email Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Email is already associate to an account!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+
+                        // Resetting field that caused the error
+                        authorEmail.setText(oldAuthor.getEmail());
+
+                    } else if (updateResult == -4) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Error during the update operation!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+
+                    }
+
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initOwner(dialogPane.getScene().getWindow());
+                    alert.setTitle("Update Personal Info");
+                    alert.setHeaderText(null);
+                    alert.setContentText("No changes found.");
+                    alert.setGraphic(null);
+                    alert.showAndWait();
+                    closeStage(event);
+                }
+            }  else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Update Personal Info: Invalid Password");
+                alert.setHeaderText(null);
+                alert.setContentText("Incorrect Current Password!");
+                alert.setGraphic(null);
+                alert.showAndWait();
+            }
         }
+    }
+
+    @FXML
+    void exit(ActionEvent event) {
+        closeStage(event);
     }
 
     @FXML

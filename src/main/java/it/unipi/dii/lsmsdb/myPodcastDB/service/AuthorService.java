@@ -2,10 +2,15 @@ package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import org.javatuples.Pair;
@@ -20,10 +25,16 @@ public class AuthorService {
 
     private AuthorMongo authorMongoManager;
     private AuthorNeo4j authorNeo4jManager;
+    private PodcastMongo podcastMongoManager;
+    private PodcastNeo4j podcastNeo4jManager;
+    private ReviewMongo reviewMongoManager;
 
     public AuthorService() {
         this.authorMongoManager = new AuthorMongo();
         this.authorNeo4jManager = new AuthorNeo4j();
+        this.podcastMongoManager = new PodcastMongo();
+        this.podcastNeo4jManager = new PodcastNeo4j();
+        this.reviewMongoManager = new ReviewMongo();
     }
 
     public void loadAuthorOwnProfile(Author author, List<Pair<Author, Boolean>> followed, int limit) {
@@ -84,6 +95,102 @@ public class AuthorService {
         else
             Logger.error("(Author) Error during the unfollowing operation");
 
+        Neo4jManager.getInstance().closeConnection();
+    }
+
+    public int updateAuthor(Author oldAuthor, Author newAuthor) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        int updateResult = 0;
+
+        if (!oldAuthor.getName().equals(newAuthor.getName()) && authorMongoManager.findAuthorByName(newAuthor.getName()) != null) {
+            Logger.error("Author name already exists!");
+            updateResult = -1;
+        }
+
+        if (!oldAuthor.getEmail().equals(newAuthor.getEmail()) && authorMongoManager.findAuthorByEmail(newAuthor.getEmail()) != null) {
+            Logger.error("Email already associated to an account!");
+            updateResult = -2;
+        }
+
+        if (updateResult == 0) {
+            if (authorMongoManager.updateAuthor(newAuthor)
+                    && authorNeo4jManager.updateAuthor(oldAuthor.getName(), newAuthor.getName(), newAuthor.getPicturePath())) {
+
+                if (!oldAuthor.getName().equals(newAuthor.getName())) {
+                    List<Podcast> authorPodcasts = podcastMongoManager.findPodcastsByAuthorId(newAuthor.getId(), 0);
+                    for (Podcast podcast : authorPodcasts) {
+                        podcast.setAuthor(newAuthor.getId(), newAuthor.getName());
+                        if (!podcastMongoManager.updatePodcast(podcast)) {
+                            updateResult = -3;
+                            break;
+                        }
+                    }
+                }
+
+                Logger.success("Author updated with success!");
+                updateResult = 1;
+
+            }  else {
+                Logger.error("Error during the update operation");
+                updateResult = -4;
+            }
+        }
+
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+
+        return updateResult;
+    }
+
+    public void deletePodcast(String podcastId) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        if (podcastMongoManager.deletePodcastById(podcastId) && podcastNeo4jManager.deletePodcastByPodcastId(podcastId))
+            Logger.success(podcastId + " deleted successfully!");
+        else
+            Logger.error(podcastId + " deleted failed!");
+
+        // remove reviews associated to that podcast
+        Logger.info("Deleted " + reviewMongoManager.deleteReviewsByPodcastId(podcastId) + " reviews associated to podcastId " + podcastId);
+
+        // Update author embedded podcasts
+        if (authorMongoManager.deletePodcastOfAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getId() , podcastId))
+            Logger.success("Deleted embedded podcast");
+        else
+            Logger.error("Embedded podcast failed");
+
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+    }
+
+    public void deleteAccount() {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        Author authorToDelete = (Author) MyPodcastDB.getInstance().getSessionActor();
+
+        int deletedPodcast = podcastMongoManager.deletePodcastsByAuthorName(authorToDelete.getName());
+        Logger.success("Deleted " + deletedPodcast + " podcasts!");
+
+        for (Podcast podcast: authorToDelete.getOwnPodcasts()) {
+            if(podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId()))
+                Logger.success("Podcast neo4j deleted!");
+            else
+                Logger.error("Error deleting podcast neo4j");
+
+            Logger.success("Deleted " + reviewMongoManager.deleteReviewsByPodcastId(podcast.getId()) + " reviews associated to " + podcast.getName() + " (" + podcast.getId() + ") ");
+        }
+
+        if (authorMongoManager.deleteAuthorByName(authorToDelete.getName())
+            && authorNeo4jManager.deleteAuthor(authorToDelete.getName()))
+            Logger.success(authorToDelete.getName() + " deleted successfully!");
+        else
+            Logger.error(authorToDelete.getName() + " deleted failed!");
+
+        MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
     }
 

@@ -257,7 +257,8 @@ public class AuthorMongo {
             Bson filter = eq("_id", new ObjectId(author.getId()));
             Bson update = combine(set("name", author.getName()),
                     set("password", author.getPassword()),
-                    set("email", author.getEmail())
+                    set("email", author.getEmail()),
+                    set("picturePath", author.getPicturePath())
             );
 
             UpdateResult result = manager.getCollection("author").updateOne(filter, update);

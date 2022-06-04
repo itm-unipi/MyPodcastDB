@@ -52,7 +52,7 @@ public class AuthorNeo4jTest {
         Author author = new Author();
         author.setName("test");
         this.authorNeo4j.addAuthor(author.getName());
-        this.authorNeo4j.updateAuthor("test", "newTest");
+        this.authorNeo4j.updateAuthor("test", "newTest", "null");
 
         boolean test1 = this.authorNeo4j.findAuthorByName("test");
         boolean test2 = this.authorNeo4j.findAuthorByName("newTest");

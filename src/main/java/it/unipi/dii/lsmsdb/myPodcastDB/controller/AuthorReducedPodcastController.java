@@ -2,7 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -21,14 +21,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import java.util.Date;
-import java.util.List;
 
 public class AuthorReducedPodcastController {
     private String podcastId;
@@ -60,8 +54,6 @@ public class AuthorReducedPodcastController {
 
     @FXML
     void deletePodcast(MouseEvent event) throws IOException {
-        Logger.info("Delete podcast");
-
         Node source = (Node)event.getSource();
         Stage stage = (Stage)source.getScene().getWindow();
 
@@ -76,6 +68,9 @@ public class AuthorReducedPodcastController {
         if (alert.getResult() == ButtonType.OK) {
             Logger.info("Deleting podcast " + podcastId + " (" + podcastName + ") that belongs to " + StageManager.getObjectIdentifier());
 
+            AuthorService authorService = new AuthorService();
+            authorService.deletePodcast(this.podcastId);
+
             alert = new Alert(Alert.AlertType.INFORMATION);
             alert.initOwner(stage);
             alert.setTitle("Delete Account");
@@ -87,7 +82,6 @@ public class AuthorReducedPodcastController {
         } else {
             Logger.info("Operation aborted");
         }
-
     }
 
     @FXML

@@ -188,7 +188,6 @@ public class AuthorProfileController {
     @FXML
     void settings(MouseEvent event) throws IOException {
         Logger.info("Settings button clicked");
-
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         MainPage.setEffect(blur);
 
@@ -204,35 +203,12 @@ public class AuthorProfileController {
         dialog.initOwner(MainPage.getScene().getWindow());
         dialog.setDialogPane(authorSettingsDialogPane);
         dialog.setTitle("Settings");
-        settingsController.setData((Author)MyPodcastDB.getInstance().getSessionActor());
+        settingsController.setData((Author)MyPodcastDB.getInstance().getSessionActor(), authorName, actorPicture);
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.initStyle(StageStyle.UNDECORATED);
 
-        Author old = new Author();
-        old.copy((Author)MyPodcastDB.getInstance().getSessionActor());
-        Logger.info("OLD AUTHOR " + old);
-
         dialog.showAndWait();
-
-        Author curr = (Author)MyPodcastDB.getInstance().getSessionActor();
-        Logger.info("NEW " + curr);
-
-        if (curr.getName().equals(old.getName()) && curr.getId().equals(old.getId()) && curr.getEmail().equals(old.getEmail())
-                && curr.getPassword().equals(old.getPassword()) && curr.getPicturePath().equals(old.getPicturePath()))
-            Logger.info("No changes");
-        else {
-            // TODO: Database update
-            Logger.info("Query to update..");
-
-            // Updating GUI
-            authorName.setText(((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
-            actorPicture.setImage(ImageCache.getImageFromLocalPath(((Author) MyPodcastDB.getInstance().getSessionActor()).getPicturePath()));
-
-            // Updating Session Object
-            StageManager.setObjectIdentifier(((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
-        }
-
         MainPage.setEffect(null);
     }
 

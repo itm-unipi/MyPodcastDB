@@ -91,7 +91,7 @@
                               <Insets bottom="2.0" left="-10.0" />
                            </VBox.margin>
                         </TextField>
-                        <Label text="Your Password" textFill="#5e5e5e">
+                        <Label text="Current Password" textFill="#5e5e5e">
                            <font>
                               <Font name="Corbel" size="18.0" />
                            </font>
@@ -107,7 +107,7 @@
                               <Insets bottom="2.0" left="-10.0" />
                            </VBox.margin>
                         </PasswordField>
-                        <Label text="Confirm Password" textFill="#5e5e5e">
+                        <Label text="New Password" textFill="#5e5e5e">
                            <font>
                               <Font name="Corbel" size="18.0" />
                            </font>
@@ -115,7 +115,7 @@
                               <Insets bottom="2.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField fx:id="authorConfirmPassword" focusTraversable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" text="&lt;password&gt;">
+                        <PasswordField fx:id="authorNewPassword" focusTraversable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" text="&lt;password&gt;">
                            <font>
                               <Font name="Corbel Light" size="16.0" />
                            </font>
@@ -217,6 +217,25 @@
                         <Font name="Corbel" size="22.0" />
                      </font>
                   </Label>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="418.0" translateX="5.0">
+                     <children>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exit" prefHeight="22.0" prefWidth="22.0" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/delete.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                        </Button>
+                     </children>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </HBox>
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
