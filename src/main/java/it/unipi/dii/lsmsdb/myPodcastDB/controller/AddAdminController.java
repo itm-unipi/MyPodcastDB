@@ -32,6 +32,8 @@ public class AddAdminController {
     private TextField adminRpPwdTextFiled;
 
     @FXML
+    private TextField adminEmailTextFiled;
+    @FXML
     private Button confirmButton;
 
     @FXML
@@ -56,24 +58,33 @@ public class AddAdminController {
         String name = adminNameTextField.getText();
         String password = adminPwdTextFiled.getText();
         String rpPassword = adminRpPwdTextFiled.getText();
+        String email = adminEmailTextFiled.getText();
 
-        if( !name.isEmpty() && !password.isEmpty() && !rpPassword.isEmpty() && password.equals(rpPassword) ) {
+        if( !name.isEmpty() && !password.isEmpty() && !rpPassword.isEmpty() && password.equals(rpPassword) && !email.isEmpty()) {
 
-            Admin admin = new Admin("",name, password, "");
+            Admin admin = new Admin("",name, password, email);
             Logger.info(admin.toString());
 
             AdminService service = new AdminService();
-            if(service.addAdmin(admin)) {
+            int res = service.addAdmin(admin);
+            if(res == 0) {
+                Logger.success("admin account created");
                 DialogManager.getInstance().createInformationAlert(addAdminAnchorPane, "Account created");
                 closeStage(event);
             }
-            else
-                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Creating account failed");
+            else if(res == 1){
+                Logger.error("admin already exists");
+                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "admin already exists");
+            }
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "unknown error");
+            }
 
         }
         else{
-            Logger.info("no new admin created, invalid inputs typed");
-            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid ");
+            Logger.error("no new admin created, invalid inputs typed");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid inputs");
         }
     }
 

@@ -158,12 +158,21 @@ public class SignUpController {
             Logger.info(user.toString());
 
             UserService service = new UserService();
-            if(!service.addUserSignUp(user)){
+            int res = service.addUserSignUp(user);
+            if(res == 0){
+                Logger.success("user account created");
+                DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
+            }
+            else if(res == 1){
                 Logger.error("Adding user failed");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Adding user failed");
                 return;
             }
-            DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "unknown error");
+                return;
+            }
         }
         else{
             String name = signUpUsernameTextField.getText();
@@ -182,13 +191,22 @@ public class SignUpController {
             Logger.info(author.toString());
 
             AuthorService service = new AuthorService();
-            if(!service.addAuthorSignUp(author)){
+            int res = service.addAuthorSignUp(author);
+            if(res == 0){
+                Logger.success("author account created");
+                DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
+            }
+            else if(res == 1){
                 Logger.error("Adding author failed");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Adding author failed");
                 return;
             }
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "unknown error");
+                return;
+            }
 
-            DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }

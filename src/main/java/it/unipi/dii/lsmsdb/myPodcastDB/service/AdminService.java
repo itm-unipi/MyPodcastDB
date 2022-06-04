@@ -14,31 +14,35 @@ public class AdminService {
         adminMongoManager = new AdminMongo();
     }
 
-    public boolean getAdminLogin(Admin admin){
+    public int getAdminLogin(Admin admin){
 
-        boolean res;
+        int res = -1;
         MongoManager.getInstance().openConnection();
 
         Admin newAdmin = adminMongoManager.findAdminByName(admin.getName());
         if(newAdmin == null || !admin.getPassword().equals(newAdmin.getPassword()))
-            res = false;
+            res = 1;
         else {
             admin.copy(newAdmin);
-            res = true;
+            res = 0;
         }
 
         MongoManager.getInstance().closeConnection();
         return res;
     }
 
-    public boolean addAdmin(Admin admin){
+    public int addAdmin(Admin admin){
 
-        boolean res;
+        int res = -1;
         MongoManager.getInstance().openConnection();
-        if(adminMongoManager.findAdminByName(admin.getName()) != null || !adminMongoManager.addAdmin(admin))
-            res = false;
+        //check if an admin with the same name already exists
+        if(adminMongoManager.findAdminByName(admin.getName()) != null)
+            res = 1;
+        //check failure mongo operation
+        else if (!adminMongoManager.addAdmin(admin))
+            res = 2;
         else
-            res = true;
+            res = 0;
         MongoManager.getInstance().closeConnection();
         return res;
     }

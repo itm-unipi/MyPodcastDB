@@ -5,10 +5,13 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -27,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.function.LongFunction;
 
 public class UserPageController {
 
@@ -64,7 +68,7 @@ public class UserPageController {
     private ImageView userPageConfirmButton;
 
     @FXML
-    private TextField userPageCountryTextField;
+    private ComboBox userPageCountryComboBox;
 
     @FXML
     private ImageView userPageCrossButton;
@@ -73,13 +77,13 @@ public class UserPageController {
     private TextField userPageEmailTextField;
 
     @FXML
-    private TextField userPageFavGenreTextField;
+    private ComboBox userPageFavGenreComboBox;
 
     @FXML
     private ImageView userPageFollowButton;
 
     @FXML
-    private TextField userPageGenderTextField;
+    private ComboBox userPageGenderComboBox;
 
     @FXML
     private ImageView userPageImage;
@@ -171,6 +175,15 @@ public class UserPageController {
     @FXML
     private ImageView imageButtonLeft;
 
+    @FXML
+    private Label userPageCountryLabel;
+
+    @FXML
+    private Label userPageFavGenreLabel;
+
+    @FXML
+    private Label userPageGenderLabel;
+
     private User pageOwner;
 
     private boolean isFollowed;
@@ -185,9 +198,6 @@ public class UserPageController {
     List<Podcast> lPodcasts;
     List<Author> authors;
     List<User> users;
-
-
-
 
     /**************/
 
@@ -326,25 +336,69 @@ public class UserPageController {
         UserService service = new UserService();
         String owner = pageOwner.getUsername();
         String visitor = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        int res = -1;
         if(isFollowed) {
-            if(!service.updateFollowUser(visitor, owner, false)){
-                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating follow failed");
-                return;
+            res = service.updateFollowUser(visitor, owner, false);
+            if(res == 0) {
+                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
+                isFollowed = false;
             }
-            userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
-            isFollowed = false;
         }
         else if(!isFollowed) {
-            if(!service.updateFollowUser(visitor, owner, true)){
-                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating follow failed");
-                return;
+            res = service.updateFollowUser(visitor, owner, true);
+            if(res == 0) {
+                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
+                isFollowed = true;
             }
-            userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
-            isFollowed = true;
         }
-        else
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
+        String logMsg = "";
+        String dialogMsg = "";
+        switch(res){
+            case 0:
+                Logger.success("update follow relation success");
+                break;
+            case 1:
+                logMsg = "visitor account not exists in mongo";
+                dialogMsg = "your account not exists";
+                break;
+            case 2:
+                logMsg = "visitor account not exists in neo4j";
+                dialogMsg = "your account not exists";
+                break;
+            case 3:
+                logMsg = "owner not exists in mongo";
+                dialogMsg = "user not exists";
+                break;
+            case 4:
+                logMsg = "owner not exists in neo4j";
+                dialogMsg = "user not exists";
+                break;
+            case 5:
+                logMsg = "follow relation already exists";
+                dialogMsg = "you already followed user";
+                break;
+            case 6:
+                logMsg = "add follow operation failed";
+                dialogMsg = "operation failed";
+                break;
+            case 7:
+                logMsg = "follow relation already not exists";
+                dialogMsg = "your already unfollowed user";
+                break;
+            case 8:
+                logMsg = "delete follow operation failed";
+                dialogMsg = "operation failed";
+                break;
+            case -1:
+                logMsg = "unknown error";
+                dialogMsg = "unknown error";
+                break;
+        }
 
+        if(res > 0 || res == -1){
+            Logger.error(logMsg);
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
+        }
     }
 
     @FXML
@@ -359,11 +413,8 @@ public class UserPageController {
         userPageUsernameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageNameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageSurnameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
-        userPageCountryTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageEmailTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageAgeTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
-        userPageGenderTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
-        userPageFavGenreTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         imageNumber = 0;
     }
 
@@ -380,11 +431,8 @@ public class UserPageController {
         userPageUsernameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageCountryTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageAgeTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageGenderTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageFavGenreTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
 
     }
 
@@ -393,13 +441,50 @@ public class UserPageController {
 
         Logger.info("confirm button clicked");
         User newUser = getDataFromTextFields();
+
+        if(newUser.getUsername().isEmpty() || newUser.getEmail().isEmpty() || (Integer)newUser.getAge() < 0){
+            Logger.error("invalid inputs typed");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid inputs");
+            return;
+        }
         Logger.info(newUser.toString());
 
         UserService service = new UserService();
-        if(!service.updateUserPageOwner(pageOwner, newUser)){
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "updating account failed");
+        int res = service.updateUserPageOwner(pageOwner, newUser);
+        String logMsg = "";
+        String dialogMsg = "";
+        switch(res){
+            case 0 :
+                Logger.info("updating user success");
+                break;
+            case 1 :
+                logMsg = "user not exists in mongo";
+                dialogMsg = "update failed";
+                break;
+            case 2 :
+                logMsg = "user not exists in neo4j";
+                dialogMsg = "update failed";
+                break;
+            case 3 :
+                logMsg = "user with the same username already exists";
+                dialogMsg = "username already in use";
+                break;
+            case 4 :
+                logMsg = "neo4j operation failed";
+                dialogMsg = "update failed";
+                break;
+            case -1:
+                logMsg = "unknown error";
+                dialogMsg = "unknown error";
+                break;
+
+        }
+        if(res > 0 || res == -1){
+            Logger.error(logMsg);
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             return;
         }
+
         enableTextFields(false);
         pageOwner.copy(newUser);
         MyPodcastDB.getInstance().setSession(pageOwner, "User");
@@ -412,11 +497,11 @@ public class UserPageController {
         userPageUsernameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageCountryTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageAgeTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageGenderTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageFavGenreTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPageCountryLabel.setText(pageOwner.getCountry());
+        userPageGenderLabel.setText(pageOwner.getGender());
+        userPageFavGenreLabel.setText(pageOwner.getFavouriteGenre());
 
     }
 
@@ -447,8 +532,40 @@ public class UserPageController {
 
         if(DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, "Really Delete your account?")) {
             UserService service = new UserService();
-            service.deleteUserPageOwner(pageOwner);
-            StageManager.showPage(ViewNavigator.LOGIN.getPage());
+            int res = service.deleteUserPageOwner(pageOwner);
+            String logMsg = "";
+            String dialogMsg = "";
+            switch(res){
+                case 0:
+                    Logger.success("delete account success");
+                    break;
+                case 1:
+                    logMsg = "user not exists in mongo";
+                    dialogMsg = "your account not exists";
+                    break;
+                case 2:
+                    logMsg = "user not exists in neo4j";
+                    dialogMsg = "your account not exists";
+                    break;
+                case 3:
+                    logMsg = "delete operation failed in mongo";
+                    dialogMsg = "operation failed";
+                    break;
+                case 4:
+                    logMsg = "delete opration failed in neo4j";
+                    dialogMsg = "operation failed";
+                    break;
+                case -1:
+                    logMsg = "unknown error";
+                    dialogMsg = "unknown error";
+                    break;
+            }
+            if(res > 0 || res == -1){
+                Logger.error(logMsg);
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
+            }
+            else
+                StageManager.showPage(ViewNavigator.LOGIN.getPage());
         }
 
     }
@@ -505,7 +622,7 @@ public class UserPageController {
 
     /***********************/
 
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, Exception {
 
 
         String sessionActorName = "";
@@ -524,10 +641,33 @@ public class UserPageController {
         authors = new ArrayList<>();
         users = new ArrayList<>();
         pageOwner = new User();
+        ObservableList<String> countryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCountries());
+        ObservableList<String> categoryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCategories());
+        ObservableList<String> genderList =FXCollections.observableArrayList("male", "famale", "other");
+        userPageCountryComboBox.setItems(countryList);
+        userPageFavGenreComboBox.setItems(categoryList);
+        userPageGenderComboBox.setItems(genderList);
+        userPageCountryComboBox.setVisibleRowCount(5);
+        userPageFavGenreComboBox.setVisibleRowCount(5);
+        userPageCountryComboBox.setEditable(false);
+        userPageFavGenreComboBox.setEditable(false);
+        userPageGenderComboBox.setEditable(false);
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
         UserService service = new UserService();
-        service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 100);
+        int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 100);
+        if(res == 0)
+            Logger.success("load user success");
+        else if(res == 1){
+            Logger.error("user not exists");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "user not exists");
+            return;
+        }
+        else{
+            Logger.error("unknown error");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
+            return;
+        }
 
         if(actorType.equals("User"))
             actorPageButton.setImage(
@@ -553,13 +693,47 @@ public class UserPageController {
         else if (actorType.equals("User")){
             Logger.info("user visitor mode");
             UserService followService = new UserService();
-            if(followService.checkFollowUser(sessionActorName, pageOwner.getUsername())) {
+            int result = followService.checkFollowUser(sessionActorName, pageOwner.getUsername());
+            String logMsg = "";
+            String dialogMsg = "";
+            switch (res){
+                case 0 :
+                case 1 :
+                    Logger.success("check relation success");
+                    break;
+                case 2 :
+                    logMsg = "your account not exists in mongo";
+                    dialogMsg = "your account not exists";
+                    break;
+                case 3 :
+                    logMsg = "your account not exists in neo4j";
+                    dialogMsg = "your account not exists";
+                    break;
+                case 4 :
+                    logMsg = "user not exists in mongo";
+                    dialogMsg = "user not exists";
+                    break;
+                case 5 :
+                    logMsg = "user not exists in neo4j";
+                    dialogMsg = "user not exists";
+                    break;
+            }
+            if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
                 isFollowed = true;
             }
-            else {
+            else if(res == 1) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
                 isFollowed = false;
+            }
+            else if (res == -1){
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
+                return;
+            }
+            else{
+                Logger.error(logMsg);
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             }
 
             userPageFollowButton.setVisible(true);
@@ -643,6 +817,9 @@ public class UserPageController {
         userPageLikedScrollPane.setHvalue(0.0);
         userPageAuthorsScrollPane.setHvalue(0.0);
         userPageUsersScrollPane.setHvalue(0.0);
+        userPageCountryComboBox.setVisible(false);
+        userPageGenderComboBox.setVisible(false);
+        userPageFavGenreComboBox.setVisible(false);
     }
 
 
@@ -706,20 +883,23 @@ public class UserPageController {
             padding = 0;
         userPageUsernameTextField.setEditable(value);
         userPageNameTextField.setEditable(value);
-        userPageCountryTextField.setEditable(value);
         userPageSurnameTextField.setEditable(value);
-        userPageFavGenreTextField.setEditable(value);
         userPageEmailTextField.setEditable(value);
         userPageAgeTextField.setEditable(value);
-        userPageGenderTextField.setEditable(value);
         userPageUsernameTextField.setPadding(new Insets(0,0,0,padding));
         userPageNameTextField.setPadding(new Insets(0,0,0,padding));
-        userPageCountryTextField.setPadding(new Insets(0,0,0,padding));
+        userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageSurnameTextField.setPadding(new Insets(0,0,0,padding));
-        userPageFavGenreTextField.setPadding(new Insets(0,0,0,padding));
+        userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageEmailTextField.setPadding(new Insets(0,0,0,padding));
         userPageAgeTextField.setPadding(new Insets(0,0,0,padding));
-        userPageGenderTextField.setPadding(new Insets(0,0,0,padding));
+        userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
+        userPageCountryComboBox.setVisible(value);
+        userPageGenderComboBox.setVisible(value);
+        userPageFavGenreComboBox.setVisible(value);
+        userPageCountryLabel.setVisible(!value);
+        userPageGenderLabel.setVisible(!value);
+        userPageFavGenreLabel.setVisible(!value);
 
 
     }
@@ -732,10 +912,10 @@ public class UserPageController {
         newUser.setName(userPageNameTextField.getText());
         newUser.setSurname(userPageSurnameTextField.getText());
         newUser.setAge(Integer.parseInt(userPageAgeTextField.getText()));
-        newUser.setCountry(userPageCountryTextField.getText());
+        newUser.setCountry(userPageCountryComboBox.getValue().toString());
         newUser.setEmail(userPageEmailTextField.getText());
-        newUser.setGender(userPageGenderTextField.getText());
-        newUser.setFavouriteGenre(userPageFavGenreTextField.getText());
+        newUser.setGender(userPageGenderComboBox.getValue().toString());
+        newUser.setFavouriteGenre(userPageFavGenreComboBox.getValue().toString());
         newUser.setPicturePath(imagePath);
         return newUser;
     }
@@ -745,13 +925,16 @@ public class UserPageController {
         userPageUsernameTextField.setText(pageOwner.getUsername());
         userPageNameTextField.setText(pageOwner.getName());
         userPageSurnameTextField.setText(pageOwner.getSurname());
-        userPageCountryTextField.setText(pageOwner.getCountry());
-        userPageFavGenreTextField.setText(pageOwner.getFavouriteGenre());
+        userPageCountryComboBox.setValue(pageOwner.getCountry());
+        userPageFavGenreComboBox.setValue(pageOwner.getFavouriteGenre());
         userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
-        userPageGenderTextField.setText(pageOwner.getGender());
+        userPageGenderComboBox.setValue(pageOwner.getGender());
         userPageEmailTextField.setText(pageOwner.getEmail());
         userPageImage.setImage(ImageCache.getInstance().getImageFromLocalPath(pageOwner.getPicturePath()));
         imagePath = pageOwner.getPicturePath();
+        userPageFavGenreLabel.setText(pageOwner.getFavouriteGenre());
+        userPageCountryLabel.setText(pageOwner.getCountry());
+        userPageGenderLabel.setText(pageOwner.getGender());
     }
 
     void loadWatchlaterPodcast(boolean first) throws IOException {

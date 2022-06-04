@@ -11,9 +11,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="addAdminAnchorPane" prefHeight="361.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AddAdminController">
+<AnchorPane fx:id="addAdminAnchorPane" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AddAdminController">
    <children>
-      <VBox prefHeight="320.0" prefWidth="400.0" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox prefHeight="470.0" AnchorPane.bottomAnchor="-20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Admin Name" textFill="#636366">
                <font>
@@ -52,6 +52,16 @@
             <Pane prefHeight="49.0" prefWidth="400.0">
                <children>
                   <PasswordField fx:id="adminRpPwdTextFiled" alignment="CENTER" layoutX="90.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
+               </children>
+            </Pane>
+            <Label alignment="CENTER" prefHeight="35.0" prefWidth="400.0" text="Email" textFill="#636366">
+               <font>
+                  <Font name="Corbel Bold" size="18.0" />
+               </font>
+            </Label>
+            <Pane prefHeight="49.0" prefWidth="400.0">
+               <children>
+                  <PasswordField fx:id="adminEmailTextFiled" alignment="CENTER" layoutX="90.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
                </children>
             </Pane>
             <Pane prefHeight="20.0" prefWidth="400.0" />

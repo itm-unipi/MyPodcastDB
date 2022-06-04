@@ -199,13 +199,19 @@ public class LoginController {
             user.setPassword(password);
             //user = (User)simActorService(actorName, password, actorType);
             UserService service = new UserService();
-            if(service.getUserLogin(user))
+            int res = service.getUserLogin(user);
+            if(res == 0){
+                Logger.success("login user success");
                 MyPodcastDB.getInstance().setSession(user, actorType);
-            else{
-                String msg = "user not registered";
-                Logger.error(msg);
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
+            }
+            else if(res == 1){
+                Logger.error("user not registered");
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "user not registered");
                 return;
+            }
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "unknown error");
             }
         }
         else if(loginAuthorRadioButton.isSelected()) {
@@ -216,11 +222,18 @@ public class LoginController {
             author.setPassword(password);
             //author = (Author)simActorService(actorName, password, actorType);
             AuthorService service = new AuthorService();
-            if(service.getAuthorLogin(author)){
+            int res = service.getAuthorLogin(author);
+            if(res == 0){
+                Logger.success("login author success");
                 MyPodcastDB.getInstance().setSession(author, actorType);
-            }else{
+            }else if(res == 1){
                 Logger.error("author not registered");
                 DialogManager.getInstance().createErrorAlert(loginAnchorPane,"author not registered");
+                return;
+            }
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane,"unknown error");
                 return;
             }
         }
@@ -232,11 +245,19 @@ public class LoginController {
             admin.setPassword(password);
             //admin = (Admin)simActorService(actorName, password, actorType);
             AdminService service = new AdminService();
-            if(service.getAdminLogin(admin))
+            int res = service.getAdminLogin(admin);
+            if(res == 0) {
                 MyPodcastDB.getInstance().setSession(admin, actorType);
-            else{
+                Logger.success("login admin success");
+            }
+            else if(res == 1){
                 Logger.error("admin not registered");
                 DialogManager.getInstance().createErrorAlert(loginAnchorPane, "admin not registered");
+                return;
+            }
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "unknown error");
                 return;
             }
         }

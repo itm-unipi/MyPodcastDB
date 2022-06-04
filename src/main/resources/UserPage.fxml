@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -158,46 +159,46 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageCountryTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: transparent;" text="Altamura">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets left="-1.0" />
-                                       </padding>
-                                       <font>
-                                          <Font name="Corbel Light" size="15.0" />
-                                       </font>
-                                    </TextField>
+                                    <Pane prefHeight="30.0" prefWidth="200.0">
+                                       <children>
+                                          <ComboBox fx:id="userPageCountryComboBox" layoutX="-2.0" layoutY="-1.0" prefHeight="30.0" prefWidth="182.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
+                                          <Label fx:id="userPageCountryLabel" layoutY="-1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Altamura" textFill="#434343">
+                                             <font>
+                                                <Font name="Corbel Light" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
                                     <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="313.0" text="Favourite Genre" textFill="#434343">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageFavGenreTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: transparent;" text="Crime">
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets left="-1.0" />
-                                       </padding>
-                                       <font>
-                                          <Font name="Corbel Light" size="15.0" />
-                                       </font>
-                                    </TextField>
+                                    <Pane prefHeight="30.0" prefWidth="200.0">
+                                       <children>
+                                          <ComboBox fx:id="userPageFavGenreComboBox" layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
+                                          <Label fx:id="userPageFavGenreLabel" layoutX="1.0" layoutY="1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Horror" textFill="#434343">
+                                             <font>
+                                                <Font name="Corbel Light" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
                                     <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="313.0" text="Gender" textFill="#434343">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageGenderTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" style="-fx-background-color: transparent;" text="Famale">
-                                       <padding>
-                                          <Insets left="-1.0" />
-                                       </padding>
-                                       <font>
-                                          <Font name="Corbel Light" size="15.0" />
-                                       </font>
-                                    </TextField>
+                                    <Pane prefHeight="30.0" prefWidth="200.0">
+                                       <children>
+                                          <ComboBox fx:id="userPageGenderComboBox" layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
+                                          <Label fx:id="userPageGenderLabel" layoutX="1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="famale" textFill="#434343">
+                                             <font>
+                                                <Font name="Corbel Light" size="14.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </Pane>
                                  </children>
                                  <HBox.margin>
                                     <Insets right="50.0" />
@@ -262,7 +263,7 @@
                                                 <Insets left="-1.0" />
                                              </padding>
                                              <font>
-                                                <Font name="Corbel Light" size="15.0" />
+                                                <Font name="Dubai Light" size="15.0" />
                                              </font>
                                           </TextField>
                                        </children>

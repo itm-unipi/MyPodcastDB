@@ -21,49 +21,49 @@ public class AuthorService {
         this.authorNeo4jManager = new AuthorNeo4j();
     }
 
-    public boolean getAuthorLogin(Author author){
-        boolean res;
+    public int getAuthorLogin(Author author){
+        int res = -1;
         MongoManager.getInstance().openConnection();
         Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
         if(newAuthor == null || !author.getPassword().equals(newAuthor.getPassword()))
-            res = false;
+            res = 1;
         else {
             author.copy(newAuthor);
-            res = true;
+            res = 0;
         }
 
         MongoManager.getInstance().closeConnection();
         return res;
     }
 
-    public boolean addAuthorSignUp(Author author){
+    public int addAuthorSignUp(Author author){
 
+        int res = -1;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
-        if(newAuthor != null){
-            MongoManager.getInstance().closeConnection();
-            Neo4jManager.getInstance().closeConnection();
-            return false;
-        }
+        //check if author with the same name already exists in mongo
+        if(authorMongoManager.findAuthorByName(author.getName()) != null)
+            res = 1;
+        //check if author with the same name already exists in neo4j
+        else if(authorNeo4jManager.findAuthorByName(author.getName()))
+            res = 2;
         else {
-            if(!authorMongoManager.addAuthor(author)){
-                MongoManager.getInstance().closeConnection();
-                Neo4jManager.getInstance().closeConnection();
-                return false;
-            }
+            //check failure mongo operation
+            if(!authorMongoManager.addAuthor(author))
+                res = 3;
+            //check failure neo4j operation
             else if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
                 authorMongoManager.deleteAuthorByName(author.getName());
-                MongoManager.getInstance().closeConnection();
-                Neo4jManager.getInstance().closeConnection();
-                return false;
+                res = 4;
             }
-
-            MongoManager.getInstance().closeConnection();
-            Neo4jManager.getInstance().closeConnection();
-            return true;
+            else
+                res = 0;
         }
+
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return res;
     }
 
      //-----------------------------------------------
