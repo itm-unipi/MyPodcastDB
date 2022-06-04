@@ -244,7 +244,7 @@ public class AuthorMongoTest {
         am.addPodcastToAuthor(authorId, podcast);
 
         int podcastIndex = 0;
-        if(am.updatePodcastOfAuthor(authorId, podcastIndex, podcast.getId(), "Podcast Test UPDATED", "2012-01-15T12:47:00Z"))
+        if(am.updatePodcastOfAuthor(authorId, podcastIndex, podcast.getId(), "Podcast Test UPDATED", "2012-01-15T12:47:00Z", "test", "test"))
             if(am.findAuthorByPodcastId(podcast.getId()) != null)
                 System.out.println("[+] updatePodcastOfAuthor");
             else
