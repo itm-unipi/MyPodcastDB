@@ -286,7 +286,7 @@ public class ReviewPageController {
             // create new review element
             AnchorPane newReview = fxmlLoader.load();
             ReviewController controller = fxmlLoader.getController();
-            controller.setData(this.ownReview, this.mainPage);
+            controller.setData(this.ownReview, this.mainPage, this.service, this);
 
             this.reviewGrid.add(newReview, this.column, this.row++);
         } else {
@@ -475,6 +475,39 @@ public class ReviewPageController {
         readRating();
     }
 
+    private void disableForm() {
+        // hide form
+        this.reviewForm.setVisible(false);
+        this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
+    }
+
+    private void reloadReviewList() throws IOException {
+        // empty the grid
+        this.reviewGrid.getChildren().clear();
+
+        // insert reviews in grid
+        this.row = 0;
+        this.column = 0;
+        for (Review review : this.loadedReviews) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
+
+            // create new review element
+            AnchorPane newReview = fxmlLoader.load();
+            ReviewController controller = fxmlLoader.getController();
+            controller.setData(review, this.mainPage, this.service, this);
+
+            // add new podcast to grid
+            this.reviewGrid.add(newReview, column, row++);
+        }
+    }
+
+    public void removeReviewFromLocalList(Review review) throws IOException {
+        boolean result = this.loadedReviews.remove(review);
+        if (result)
+            reloadReviewList();
+    }
+
     public void initialize() throws IOException {
         // Initialize structure
         this.service = new ReviewService();
@@ -553,7 +586,7 @@ public class ReviewPageController {
             // create new review element
             AnchorPane newReview = fxmlLoader.load();
             ReviewController controller = fxmlLoader.getController();
-            controller.setData(review, this.mainPage);
+            controller.setData(review, this.mainPage, this.service, this);
 
             // add new podcast to grid
             this.reviewGrid.add(newReview, column, row++);
@@ -562,7 +595,8 @@ public class ReviewPageController {
         // initialize own review
         this.ownReview = new Review();
         this.ownReview.setPodcastId(podcast.getId());
-        this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+            this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         this.ownReview.setRating(0);
 
         // initialize combo box
@@ -570,11 +604,5 @@ public class ReviewPageController {
         this.orderBy.getItems().add("Rating");
         this.ascending.getItems().add("true");
         this.ascending.getItems().add("false");
-    }
-
-    private void disableForm() {
-        // hide form
-        this.reviewForm.setVisible(false);
-        this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
     }
 }

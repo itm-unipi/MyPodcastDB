@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -68,9 +69,11 @@ public class ReviewController {
 
     private Review review;
     private BorderPane mainPage;
+    private ReviewService service;
+    private ReviewPageController controller;
 
     @FXML
-    void clickOnDeleteReview(MouseEvent event) {
+    void clickOnDeleteReview(MouseEvent event) throws IOException {
         // create the alert
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
@@ -84,7 +87,15 @@ public class ReviewController {
 
         // button handling
         if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Si");
+            // delete review
+            int result = this.service.deleteReview(this.review);
+
+            // check the status and update the page
+            if (result == 0) {
+                this.controller.removeReviewFromLocalList(this.review);
+            } else {
+                // TODO: alert
+            }
         }
 
         this.mainPage.setEffect(null);
@@ -108,9 +119,11 @@ public class ReviewController {
         this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
-    public void setData(Review review, BorderPane mainPage) {
+    public void setData(Review review, BorderPane mainPage, ReviewService service, ReviewPageController controller) {
         this.review = review;
         this.mainPage = mainPage;
+        this.service = service;
+        this.controller = controller;
 
         // review fields
         int rating = review.getRating();
