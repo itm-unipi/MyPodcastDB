@@ -455,21 +455,28 @@ public class UserPageController {
         String dialogMsg = "";
         switch(res){
             case 0 :
-                Logger.info("updating user success");
+                Logger.success("updating user success");
                 break;
             case 1 :
+                Logger.success("no operation needed");
+                break;
+            case 2 :
                 logMsg = "user not exists in mongo";
                 dialogMsg = "update failed";
                 break;
-            case 2 :
+            case 3 :
                 logMsg = "user not exists in neo4j";
                 dialogMsg = "update failed";
                 break;
-            case 3 :
+            case 4 :
                 logMsg = "user with the same username already exists";
                 dialogMsg = "username already in use";
                 break;
-            case 4 :
+            case 5 :
+                logMsg = "mongo operation failed";
+                dialogMsg = "update failed";
+                break;
+            case 6 :
                 logMsg = "neo4j operation failed";
                 dialogMsg = "update failed";
                 break;
@@ -479,7 +486,7 @@ public class UserPageController {
                 break;
 
         }
-        if(res > 0 || res == -1){
+        if(res > 1 || res == -1){
             Logger.error(logMsg);
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             return;

@@ -122,22 +122,31 @@ public class UserService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        //check if oldUser exists in mongo
-        if(userMongoManager.findUserByUsername(oldUser.getUsername()) == null)
+        if(oldUser.getUsername().equals(newUser.getUsername()) &&
+            oldUser.getCountry().equals(newUser.getCountry()) &&
+            oldUser.getGender().equals(newUser.getGender()) &&
+            oldUser.getName().equals(newUser.getName()) &&
+            oldUser.getSurname().equals(newUser.getSurname()) &&
+            oldUser.getEmail().equals(newUser.getEmail()) &&
+            oldUser.getAge() == newUser.getAge()
+        )
             res = 1;
+        //check if oldUser exists in mongo
+        else if(userMongoManager.findUserByUsername(oldUser.getUsername()) == null)
+            res = 2;
         //check if oldUser exists in neo4j
         else if(!userNeo4jManager.findUserByUsername(oldUser.getUsername()))
-            res = 2;
+            res = 3;
         //check if a user with the new username already exists
         else if(!oldUser.getUsername().equals(newUser.getUsername()) && userMongoManager.findUserByUsername(newUser.getUsername()) != null)
-            res = 3;
+            res = 4;
         //failure mongo operation from persistence
         else if(!userMongoManager.updateUser(newUser))
-            res = 0;
+            res = 5;
         //failure neo4j operation from persistence
         else if(!userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())){
             userMongoManager.updateUser(oldUser);
-            res = 4;
+            res = 6;
         }
         else
             res = 0;
