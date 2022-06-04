@@ -30,6 +30,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Map.Entry;
 
 public class PodcastPageController {
@@ -565,6 +567,14 @@ public class PodcastPageController {
         this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
         this.rating.setText("" + podcast.getRating());
         this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+
+        // order episodes by release date
+        Collections.sort(this.podcast.getEpisodes(), new Comparator<Episode>() {
+            @Override
+            public int compare(Episode e1, Episode e2) {
+                return e1.getReleaseDate().compareTo(e2.getReleaseDate());
+            }
+        });
 
         // insert episodes in grid
         this.row = 0;

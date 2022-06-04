@@ -86,7 +86,7 @@ public class EpisodeEditController {
                     this.episode.setReleaseDate(releaseDate);
             }
             if (!this.title.getText().equals("")) {
-                int timeMillis = Integer.parseInt(this.duration.getText()) * 60 * 1000;
+                int timeMillis = Integer.parseInt(this.duration.getText());
                 if (timeMillis != this.episode.getTimeMillis())
                     this.episode.setTimeMillis(timeMillis);
             }
@@ -131,7 +131,7 @@ public class EpisodeEditController {
         else {
             this.title.setText(episode.getName());
             this.description.setText(episode.getDescription());
-            this.duration.setText("" + round((episode.getTimeMillis() / 100 ) / 60));
+            this.duration.setText("" + this.episode.getTimeMillis());
         }
     }
 

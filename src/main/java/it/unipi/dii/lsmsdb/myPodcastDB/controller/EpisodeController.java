@@ -70,6 +70,8 @@ public class EpisodeController {
             // if delete is succesfull remove episode from grid
             if (result == 0) {
                 this.podcastPageController.updatePodcastPage();
+            } else {
+                // TODO: alert
             }
         }
 
@@ -78,8 +80,6 @@ public class EpisodeController {
 
     @FXML
     void clickOnUpdate(MouseEvent event) throws IOException {
-        Logger.info("Update episode");
-
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
 
@@ -113,10 +113,41 @@ public class EpisodeController {
         dialog.showAndWait();
 
         // check if modified
-        if (!modifiedEpisode.getName().equals(this.episode.getName()) || !modifiedEpisode.getDescription().equals(this.episode.getDescription()) || !modifiedEpisode.getReleaseDateAsString().equals(this.episode.getReleaseDateAsString()) /*|| modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis()*/) {
-            // update page
-            Logger.info("Modified episode : " + this.episode.toString());
-            setData(modifiedEpisode, this.podcast, this.mainPage, this.service, this.podcastPageController);
+        if (!modifiedEpisode.getName().equals(this.episode.getName()) || !modifiedEpisode.getDescription().equals(this.episode.getDescription()) || !modifiedEpisode.getReleaseDateAsString().equals(this.episode.getReleaseDateAsString()) || modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis()) {
+            // delete old version
+            int resDel = this.service.deleteEpisode(this.podcast, this.episode);
+
+            // if is succesfull update the page
+            if (resDel == 0) {
+                // add new version
+                int resAdd = this.service.addEpisode(this.podcast, modifiedEpisode);
+
+                if (resAdd == 0) {
+                    // update local podcast
+                    for (Episode ep : this.podcast.getEpisodes()) {
+                        // if is the modified episode update it
+                        if (ep.getName().equals(this.episode.getName())) {
+                            if (!modifiedEpisode.getName().equals(this.episode.getName()))
+                                ep.setName(modifiedEpisode.getName());
+                            if (!modifiedEpisode.getDescription().equals(this.episode.getDescription()))
+                                ep.setDescription(modifiedEpisode.getDescription());
+                            if (!modifiedEpisode.getReleaseDate().equals(this.episode.getReleaseDate()))
+                                ep.setReleaseDate(modifiedEpisode.getReleaseDate());
+                            if (modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis())
+                                ep.setTimeMillis(modifiedEpisode.getTimeMillis());
+
+                            break;
+                        }
+                    }
+
+                    // update page
+                    setData(modifiedEpisode, this.podcast, this.mainPage, this.service, this.podcastPageController);
+                } else {
+                    // TODO: alert
+                }
+            } else {
+                // TODO: alert
+            }
         }
 
         this.mainPage.setEffect(null);
