@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -31,12 +30,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Map.Entry;
-
-import static java.lang.Math.floor;
 
 public class PodcastPageController {
 
@@ -191,7 +185,7 @@ public class PodcastPageController {
                 // create new podcast element
                 AnchorPane newEpisode = fxmlEpisodeLoader.load();
                 EpisodeController controller = fxmlEpisodeLoader.getController();
-                controller.setData(episode, this.podcast.getAuthorName(), this.mainPage);
+                controller.setData(episode, this.podcast, this.mainPage, this.service, this);
 
                 // add new podcast to grid
                 this.episodesGrid.add(newEpisode, this.column, this.row++);
@@ -560,7 +554,7 @@ public class PodcastPageController {
         this.updatePodcastPage();
     }
 
-    private void updatePodcastPage() throws IOException {
+    public void updatePodcastPage() throws IOException {
         this.title.setText(podcast.getName());
         this.author.setText(podcast.getAuthorName());
         this.country.setText(podcast.getCountry());
@@ -575,6 +569,9 @@ public class PodcastPageController {
         // insert episodes in grid
         this.row = 0;
         this.column = 0;
+        if (!this.episodesGrid.getChildren().isEmpty()) {
+            this.episodesGrid.getChildren().retainAll(this.episodesGrid.getChildren().get(0));          // remove all elements
+        }
         for (Episode ep : podcast.getEpisodes()) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
@@ -582,7 +579,7 @@ public class PodcastPageController {
             // create new podcast element
             AnchorPane newEpisode = fxmlLoader.load();
             EpisodeController controller = fxmlLoader.getController();
-            controller.setData(ep, this.podcast.getAuthorName(), this.mainPage);
+            controller.setData(ep, this.podcast, this.mainPage, this.service, this);
 
             // add new podcast to grid
             this.episodesGrid.add(newEpisode, this.column, this.row++);

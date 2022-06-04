@@ -59,7 +59,7 @@
                                     <Insets bottom="5.0" top="5.0" />
                                  </VBox.margin>
                               </Label>
-                              <TextField fx:id="description" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="100.0" prefWidth="399.0">
+                              <TextField fx:id="description" alignment="TOP_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefColumnCount="50" prefHeight="100.0" prefWidth="399.0">
                                  <font>
                                     <Font name="Corbel Light" size="15.0" />
                                  </font>

@@ -3,6 +3,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.fxml.FXML;
@@ -37,17 +39,19 @@ public class EpisodeController {
     @FXML
     private Label title;
 
-    private Episode episode;
-
-    private BorderPane mainPage;
-
-    private String podcastAuthorName;
-
     @FXML
     private Button updateEpisode;
 
+    private PodcastService service;
+    private Podcast podcast;
+
+    private Episode episode;
+
+    private BorderPane mainPage;
+    private PodcastPageController podcastPageController;
+
     @FXML
-    void clickOnDelete(MouseEvent event) {
+    void clickOnDelete(MouseEvent event) throws IOException {
         // create the alert
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
@@ -61,7 +65,12 @@ public class EpisodeController {
 
         // button handling
         if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Si");
+            int result = this.service.deleteEpisode(this.podcast, this.episode);
+
+            // if delete is succesfull remove episode from grid
+            if (result == 0) {
+                this.podcastPageController.updatePodcastPage();
+            }
         }
 
         this.mainPage.setEffect(null);
@@ -107,16 +116,18 @@ public class EpisodeController {
         if (!modifiedEpisode.getName().equals(this.episode.getName()) || !modifiedEpisode.getDescription().equals(this.episode.getDescription()) || !modifiedEpisode.getReleaseDateAsString().equals(this.episode.getReleaseDateAsString()) /*|| modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis()*/) {
             // update page
             Logger.info("Modified episode : " + this.episode.toString());
-            setData(modifiedEpisode, this.podcastAuthorName, this.mainPage);
+            setData(modifiedEpisode, this.podcast, this.mainPage, this.service, this.podcastPageController);
         }
 
         this.mainPage.setEffect(null);
     }
 
-    public void setData(Episode episode, String podcastAuthorName, BorderPane mainPage) {
+    public void setData(Episode episode, Podcast podcast, BorderPane mainPage, PodcastService service, PodcastPageController podcastPageController) {
         this.episode = episode;
         this.mainPage = mainPage;
-        this.podcastAuthorName = podcastAuthorName;
+        this.podcast = podcast;
+        this.service = service;
+        this.podcastPageController = podcastPageController;
 
         this.title.setText(episode.getName());
         this.description.setText(episode.getDescription());
@@ -126,7 +137,7 @@ public class EpisodeController {
 
         // actor recognition
         String sessionType = MyPodcastDB.getInstance().getSessionType();
-        if (sessionType.equals("User") || (sessionType.equals("Author") && !((Author)MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.podcastAuthorName)) || sessionType.equals("Unregistered")) {
+        if (sessionType.equals("User") || (sessionType.equals("Author") && !((Author)MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.podcast.getAuthorName())) || sessionType.equals("Unregistered")) {
             // visitator
             this.updateEpisode.setVisible(false);
             this.deleteEpisode.setVisible(false);
