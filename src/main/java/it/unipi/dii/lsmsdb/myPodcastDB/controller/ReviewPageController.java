@@ -123,6 +123,9 @@ public class ReviewPageController {
     private Label title;
 
     @FXML
+    private Tooltip titleTooltip;
+
+    @FXML
     private ProgressBar twoStars;
 
     @FXML
@@ -196,9 +199,24 @@ public class ReviewPageController {
     }
 
     @FXML
-    void clickOnReload(MouseEvent event) {
-        // TODO: reload
-        Logger.info("Reload reviews");
+    void clickOnReload(MouseEvent event) throws IOException {
+        if (this.orderBy.getValue() == null || this.ascending.getValue() == null) {
+            // TODO: alert error
+        } else {
+            // reload local list with new parameters
+            this.loadedReviews.clear();                         // empty old list
+            int limit = 10;
+            String ordering = this.orderBy.getValue().equals("Date of creation") ? "createdAt" : "rating";
+            Boolean ascending = this.ascending.getValue().equals("Ascending");
+            Boolean result = this.service.loadOtherReview(this.podcast, this.loadedReviews, this.loadedReviews.size(), limit, ordering, ascending);
+
+            // if successful reload page
+            if (!result) {
+                // TODO: alert error
+            } else {
+                this.reloadReviewList();
+            }
+        }
     }
 
     @FXML
@@ -566,6 +584,7 @@ public class ReviewPageController {
 
         // set fields
         this.title.setText(this.podcast.getName());
+        this.titleTooltip.setText(this.podcast.getName());
         this.author.setText(this.podcast.getAuthorName());
         this.category.setText(this.podcast.getPrimaryCategory());
         Image podcastImage = ImageCache.getImageFromURL(this.podcast.getArtworkUrl600());
@@ -602,7 +621,7 @@ public class ReviewPageController {
         // initialize combo box
         this.orderBy.getItems().add("Date of creation");
         this.orderBy.getItems().add("Rating");
-        this.ascending.getItems().add("true");
-        this.ascending.getItems().add("false");
+        this.ascending.getItems().add("Ascending");
+        this.ascending.getItems().add("Descending");
     }
 }

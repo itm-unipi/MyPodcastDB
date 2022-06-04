@@ -103,7 +103,7 @@ public class ReviewMongo {
                             .skip(skip).limit(limit).iterator();
                 }
             } else {
-                cursor = cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId))).limit(limit).iterator();
+                cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId))).limit(limit).iterator();
             }
 
             List<Review> reviews = new ArrayList<>();

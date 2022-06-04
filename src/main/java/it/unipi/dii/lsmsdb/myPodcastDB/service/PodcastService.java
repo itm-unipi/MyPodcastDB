@@ -315,9 +315,9 @@ public class PodcastService {
             Boolean res = this.podcastMongo.deleteEpisodeOfPodcast(podcast.getId(), episode.getName());
             if (res) {
                 podcast.getEpisodes().remove(episode);
-                Logger.success("Podcast deleted");
+                Logger.success("Episode deleted");
             } else {
-                Logger.error("Podcast not deleted");
+                Logger.error("Episode not deleted");
                 result = -3;
             }
         }
