@@ -75,7 +75,7 @@ public class ReviewMongo {
         return null;
     }
 
-    public List<Review> findReviewsByPodcastId(String podcastId, int limit, String attributeToOrder, boolean ascending) {
+    public List<Review> findReviewsByPodcastId(String podcastId, int skip, int limit, String attributeToOrder, boolean ascending) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
@@ -86,21 +86,21 @@ public class ReviewMongo {
                 if (ascending) {
                     cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
                             .sort(ascending("createdAt"))
-                            .limit(limit).iterator();
+                            .skip(skip).limit(limit).iterator();
                 } else {
                     cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
                             .sort(descending("createdAt"))
-                            .limit(limit).iterator();
+                            .skip(skip).limit(limit).iterator();
                 }
             } else if (attributeToOrder.equals("rating")) {
                 if (ascending) {
                     cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
                             .sort(ascending("rating"))
-                            .limit(limit).iterator();
+                            .skip(skip).limit(limit).iterator();
                 } else {
                     cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId)))
                             .sort(descending("rating"))
-                            .limit(limit).iterator();
+                            .skip(skip).limit(limit).iterator();
                 }
             } else {
                 cursor = cursor = manager.getCollection("review").find(eq("podcastId", new ObjectId(podcastId))).limit(limit).iterator();

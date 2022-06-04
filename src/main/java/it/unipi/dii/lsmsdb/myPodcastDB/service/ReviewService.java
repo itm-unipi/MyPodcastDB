@@ -42,7 +42,7 @@ public class ReviewService {
         }
 
         // load the podcast's reviews (limited)
-        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), limit, attributeToOrder, ascending));
+        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending));
 
         // load own review if exists
         List<Review> owns = this.reviewMongo.findReviewsByAuthorUsername(username, 1, "createdAt", false);
@@ -67,7 +67,7 @@ public class ReviewService {
         }
 
         // load the podcast's reviews
-        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), limit, attributeToOrder, ascending));
+        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending));
 
         MongoManager.getInstance().closeConnection();
         return result;
@@ -139,6 +139,26 @@ public class ReviewService {
                 }
             }
         }
+
+        MongoManager.getInstance().closeConnection();
+        return result;
+    }
+
+    public boolean loadOtherReview(Podcast podcast, List<Review> reviews, int skip, int limit, String attributeToOrder, Boolean ascending) {
+        MongoManager.getInstance().openConnection();
+        Boolean result = true;
+
+        // search the podcast
+        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
+        if (foundPodcast == null) {
+            Logger.error("Podcast requested not found");
+            result = false;
+        } else {
+            podcast.copy(foundPodcast);
+        }
+
+        // load the podcast's reviews
+        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), skip, limit, attributeToOrder, ascending));
 
         MongoManager.getInstance().closeConnection();
         return result;

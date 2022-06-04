@@ -58,7 +58,7 @@ public class ReviewMongoTest {
         Review newReview = new Review("", podcastId, authorUsername, title, content, rating, createdAt);
         this.reviewMongo.addReview(newReview);
 
-        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId(podcastId, 0, "", true);
+        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId(podcastId, 0, 0, "", true);
         boolean test = false;
         for (Review review : reviews) {
             if (compare(newReview, review)) {
@@ -89,7 +89,7 @@ public class ReviewMongoTest {
     }
 
     public void findByPodcastIdTest() {
-        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 4, "", true);
+        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 0, 4, "", true);
         if (reviews.size() != 4)
             System.err.println("[-] findReviewsByPodcastId: limit doesn't work");
         boolean test = true;
