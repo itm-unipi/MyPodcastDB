@@ -178,7 +178,7 @@ public class PodcastPageController {
         if (episode.getName() == null|| episode.getReleaseDate() == null || episode.getDescription() == null || episode.getTimeMillis() == 0) {
             Logger.error("No episode created");
         } else {
-            // update podcast
+            // update podcast in persistence
             Logger.info("Created episode : " + episode.toString());
             this.podcast.addEpisode(episode);
 
@@ -244,18 +244,7 @@ public class PodcastPageController {
                 this.podcast = newPodcast;
 
                 // update page
-                this.title.setText(podcast.getName());
-                this.author.setText(podcast.getAuthorName());
-                this.country.setText(podcast.getCountry());
-                this.content.setText("Content: " + podcast.getContentAdvisoryRating());
-                Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
-                this.podcastImage.setImage(image);
-                this.category.setText(podcast.getPrimaryCategory());
-                this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-                this.rating.setText("" + podcast.getRating());
-                this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
-
-                // TODO: update rating and stars
+                this.updatePodcastPage();
             }
 
             // ERROR: podcast not found
@@ -521,6 +510,10 @@ public class PodcastPageController {
         }
 
         // podcast initialization
+        this.updatePodcastPage();
+    }
+
+    private void updatePodcastPage() throws IOException {
         this.title.setText(podcast.getName());
         this.author.setText(podcast.getAuthorName());
         this.country.setText(podcast.getCountry());
