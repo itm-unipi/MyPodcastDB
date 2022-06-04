@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -53,6 +54,8 @@ public class AddPodcastController {
     @FXML
     private DialogPane dialogPane;
 
+    /********** RESET BORDER EMPTY FIELDS **********/
+
     @FXML
     void restoreBorderTextField(MouseEvent event) {
         ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
@@ -68,11 +71,10 @@ public class AddPodcastController {
         ((DatePicker)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
     }
 
+    /*********************************************/
+
     @FXML
     void btnAddPodcast(ActionEvent event) throws IOException {
-        Logger.info("Add podcast clicked");
-
-        // TODO: query to database
         boolean emptyFields = false;
 
         if (podcastNameField.getText().equals("")) {
@@ -126,25 +128,46 @@ public class AddPodcastController {
             Date releaseDate = Date.from(instant);
 
             Podcast podcast = new Podcast("0", podcastName, authorId, authorName, "", artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
-            Logger.info(podcast.toString());
+            Logger.info("PODCAST TO ADD: " + podcast.toString());
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(dialogPane.getScene().getWindow());
-            alert.setTitle("Podcast added!");
-            alert.setHeaderText(null);
-            alert.setContentText("Podcast successfully added!");
-            alert.setGraphic(null);
-            alert.showAndWait();
-            closeStage(event);
+            AuthorService authorService = new AuthorService();
+            int addResult = authorService.addPodcast(podcast);
 
-            // Changing stage
-            StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcast.getId());
+            if (addResult == 0) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Podcast added!");
+                alert.setHeaderText(null);
+                alert.setContentText("Podcast successfully added!");
+                alert.setGraphic(null);
+                alert.showAndWait();
+                closeStage(event);
+
+                Logger.success("Added " + podcast);
+                StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcast.getId());
+
+            } else {
+                Logger.error("Error during the creation of a podcast");
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Add podcast error");
+                alert.setHeaderText(null);
+                alert.setContentText("Something went wrong during the adding of the podcast.");
+                alert.setGraphic(null);
+                alert.showAndWait();
+
+            }
         }
     }
 
     @FXML
     void btnCancel(ActionEvent event) {
-        Logger.info("Cancel clicked");
+        closeStage(event);
+    }
+
+    @FXML
+    void exit(ActionEvent event) {
         closeStage(event);
     }
 
@@ -155,12 +178,12 @@ public class AddPodcastController {
     }
 
     public void initialize() throws Exception {
-        // Add choice for Country
+        // Add choice for country field
         for (String country: JsonDecode.getCountries()) {
             comboBoxCountry.getItems().add(country);
         }
 
-        // Add choice for Category fields
+        // Add choices for category fields
         int row = 0;
         int column = 0;
         for (String category: JsonDecode.getCategories()) {

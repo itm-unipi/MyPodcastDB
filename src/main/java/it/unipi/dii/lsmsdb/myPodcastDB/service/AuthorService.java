@@ -145,6 +145,78 @@ public class AuthorService {
         return updateResult;
     }
 
+    public int addPodcast(Podcast podcast) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        int addResult = 0;
+
+        // Adding podcast to mongo
+        if (!podcastMongoManager.addPodcast(podcast))
+            addResult = -1;
+        else {
+            // Adding reduced podcast
+            if (!authorMongoManager.addPodcastToAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast)) {
+                addResult = -1;
+
+                // Rollback
+                Logger.info("Rollback");
+                podcastMongoManager.deletePodcastById(podcast.getId());
+            } else {
+                // Adding podcast to Neo4j
+                if (!podcastNeo4jManager.addPodcast(podcast)) {
+                    addResult = -1;
+
+                    Logger.info("Rollback");
+                    authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+                    podcastMongoManager.deletePodcastById(podcast.getId());
+                } else {
+                    // Adding created by "author" -> "podcast"
+                    if (!podcastNeo4jManager.addPodcastCreatedByAuthor(podcast)) {
+                        addResult = -1;
+
+                        Logger.info("Rollback");
+                        authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+                        podcastMongoManager.deletePodcastById(podcast.getId());
+                        podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
+                    } else {
+                        // Adding belongs to "podcast" -> "category"
+                        if (!podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory())) {
+                            addResult = -1;
+
+                            Logger.info("Rollback");
+                            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+                            podcastMongoManager.deletePodcastById(podcast.getId());
+                            // Delete podcast uses DETACH keyword so every relationship will be removed as well
+                            podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
+                        } else {
+                            // Adding secondary categories
+                            for (String category : podcast.getCategories()) {
+                                // To avoid duplicated relationship
+                                if (!category.equals(podcast.getPrimaryCategory())) {
+                                    if (!podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category)) {
+                                        addResult = -1;
+
+                                        Logger.info("Rollback");
+                                        authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+                                        podcastMongoManager.deletePodcastById(podcast.getId());
+                                        podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+
+        return addResult;
+    }
+
     public void deletePodcast(String podcastId) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();

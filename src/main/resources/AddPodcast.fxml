@@ -41,6 +41,28 @@
                         <Font name="Corbel" size="22.0" />
                      </font>
                   </Label>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="264.0">
+                     <children>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exit" prefHeight="22.0" prefWidth="22.0" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/delete.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets right="-5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </HBox>
             <Separator prefWidth="200.0" />

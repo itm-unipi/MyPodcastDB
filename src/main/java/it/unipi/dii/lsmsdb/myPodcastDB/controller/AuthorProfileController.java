@@ -418,6 +418,8 @@ public class AuthorProfileController {
         row = 0;
         column = 0;
         for (Podcast podcast: author.getOwnPodcasts()){
+            Logger.info(podcast.toString());
+            
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
