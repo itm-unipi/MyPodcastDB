@@ -235,23 +235,38 @@ public class PodcastPageController {
 
         // check if modified
         if (!this.podcast.equals(newPodcast)) {
-            // update podcast
-            Logger.info("New podcast : " + newPodcast.toString());
-            this.podcast = newPodcast;
+            // update podcast on persistence
+            int result = this.service.updatePodcast(newPodcast);
 
-            // update page
-            this.title.setText(podcast.getName());
-            this.author.setText(podcast.getAuthorName());
-            this.country.setText(podcast.getCountry());
-            this.content.setText("Content: " + podcast.getContentAdvisoryRating());
-            Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
-            this.podcastImage.setImage(image);
-            this.category.setText(podcast.getPrimaryCategory());
-            this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-            this.rating.setText("" + podcast.getRating());
-            this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+            // if update is succesfull update the page
+            if (result == 0) {
+                Logger.info("Updated podcast : " + newPodcast.toString());
+                this.podcast = newPodcast;
 
-            // TODO: update rating and stars
+                // update page
+                this.title.setText(podcast.getName());
+                this.author.setText(podcast.getAuthorName());
+                this.country.setText(podcast.getCountry());
+                this.content.setText("Content: " + podcast.getContentAdvisoryRating());
+                Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
+                this.podcastImage.setImage(image);
+                this.category.setText(podcast.getPrimaryCategory());
+                this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
+                this.rating.setText("" + podcast.getRating());
+                this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+
+                // TODO: update rating and stars
+            }
+
+            // ERROR: podcast not found
+            else if (result == 1) {
+                // TODO: che faccio
+            }
+
+            // ERROR: podcast not updated
+            else if (result == 2) {
+                // TODO: che faccio
+            }
         }
 
         this.mainPage.setEffect(null);
