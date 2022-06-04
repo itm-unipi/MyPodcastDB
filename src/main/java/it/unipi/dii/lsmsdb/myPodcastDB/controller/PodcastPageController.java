@@ -207,7 +207,7 @@ public class PodcastPageController {
     }
 
     @FXML
-    void clickOnDeletePodcast(MouseEvent event) {
+    void clickOnDeletePodcast(MouseEvent event) throws IOException {
         // create the alert
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
@@ -220,11 +220,32 @@ public class PodcastPageController {
         alert.showAndWait();
 
         // button handling
-        if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Si");
-        }
+        int result = 0;
+        if (alert.getResult() == ButtonType.OK)
+            result = this.service.deletePodcast(this.podcast);
 
         this.mainPage.setEffect(null);
+
+        // if successful go to author/admin page
+        if (result == 0) {
+            if (MyPodcastDB.getInstance().getSessionType().equals("Author"))
+                StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+            else
+                StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+        }
+
+        // if failed show an alert
+        else {
+            this.mainPage.setEffect(blur);
+            alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(this.mainPage.getScene().getWindow());
+            alert.setTitle("Delete Podcast");
+            alert.setHeaderText(null);
+            alert.setContentText("Error in removing Podcast");
+            alert.setGraphic(null);
+            alert.showAndWait();
+            this.mainPage.setEffect(null);
+        }
     }
 
     @FXML
@@ -448,10 +469,17 @@ public class PodcastPageController {
         if (sessionType.equals("User")) {
             Boolean[] status = new Boolean[2];
             result = this.service.loadPodcastPageForUsers(podcast, status);
-            this.watchLatered = status[0];
-            this.liked = status[1];
+            if (result) {
+                this.watchLatered = status[0];
+                this.liked = status[1];
+            } else {
+                // TODO: errore se il caricamento fallisce
+            }
         } else {
             result = this.service.loadPodcastPageForNotUser(podcast);
+            if (!result) {
+                // TODO: errore se il caricamento fallisce
+            }
         }
 
         // check service result

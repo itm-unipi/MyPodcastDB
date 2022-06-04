@@ -54,6 +54,12 @@ public class PodcastService {
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
             status[0] = this.userNeo4j.checkUserWatchLaterPodcastExists(username, podcast.getId());
             status[1] = this.userNeo4j.checkUserLikesPodcastExists(username, podcast.getId());
+
+            // check the result
+            if (status[0] == null || status[1] == null) {
+                Logger.error("Like and watchlater info not found");
+                result = false;
+            }
         }
 
         MongoManager.getInstance().closeConnection();
