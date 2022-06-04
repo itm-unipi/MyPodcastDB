@@ -180,19 +180,37 @@ public class PodcastPageController {
         } else {
             // update podcast in persistence
             Logger.info("Created episode : " + episode.toString());
-            this.podcast.addEpisode(episode);
+            int result = this.service.addEpisode(this.podcast, episode);
 
-            // add episode to page
-            FXMLLoader fxmlEpisodeLoader = new FXMLLoader();
-            fxmlEpisodeLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
+            // if the service is successful update the page
+            if (result == 0) {
+                // add episode to page
+                FXMLLoader fxmlEpisodeLoader = new FXMLLoader();
+                fxmlEpisodeLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
 
-            // create new podcast element
-            AnchorPane newEpisode = fxmlEpisodeLoader.load();
-            EpisodeController controller = fxmlEpisodeLoader.getController();
-            controller.setData(episode, this.podcast.getAuthorName(), this.mainPage);
+                // create new podcast element
+                AnchorPane newEpisode = fxmlEpisodeLoader.load();
+                EpisodeController controller = fxmlEpisodeLoader.getController();
+                controller.setData(episode, this.podcast.getAuthorName(), this.mainPage);
 
-            // add new podcast to grid
-            this.episodesGrid.add(newEpisode, this.column, this.row++);
+                // add new podcast to grid
+                this.episodesGrid.add(newEpisode, this.column, this.row++);
+            }
+
+            // ERROR: Podcast not exist
+            else if (result == 1) {
+                // TODO: alert
+            }
+
+            // ERROR: Episode title already exist
+            else if (result == 2) {
+                // TODO: alert
+            }
+
+            // ERROR: Adding of podcast failed
+            else if (result == 3) {
+                // TODO: alert
+            }
         }
 
         this.mainPage.setEffect(null);
@@ -394,8 +412,8 @@ public class PodcastPageController {
 
     @FXML
     void onEnterPressed(KeyEvent event) throws IOException {
-        Logger.info("Enter on search");
-
+        // if enter is pressed go to search
+        // TODO: search solo se il campo di ricerca non è vuoto
         if (event.getCode().equals(KeyCode.ENTER)) {
             String searchString = this.searchBarText.getText();
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);

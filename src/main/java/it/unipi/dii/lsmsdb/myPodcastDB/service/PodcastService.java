@@ -182,28 +182,37 @@ public class PodcastService {
         if (foundPodcast == null) {
             Logger.error("Episode's podcast not found");
             result = 1;
-        }
+        } else {
+            // check if episode already exists
+            Boolean exists = false;
+            for (Episode ep : foundPodcast.getEpisodes()) {
+                if (ep.getName().equals(episode.getName())) {
+                    exists = true;
+                    break;
+                }
+            }
 
-        // check if episode already exists
-        else if (podcast.getEpisodes().contains(episode)) {
-            Logger.error("Episode already exists");
-            result = 2;
-        }
+            // the episode exists
+            if (exists) {
+                Logger.error("Episode already exists");
+                result = 2;
+            }
 
-        // update podcast
-        else {
-            podcast.addEpisode(episode);
-            Boolean res = this.podcastMongo.updatePodcast(podcast);
-            if (res) {
-                Logger.success("Episode added");
-            } else {
-                // reset the podcast object to the old status (for interface update)
-                Logger.error("Episode not added");
-                podcast.copy(foundPodcast);
-                result = 3;
+            // update podcast
+            else {
+                Boolean res = this.podcastMongo.addEpisodeToPodcast(podcast.getId(), episode);
+                if (res) {
+                    Logger.success("Episode added");
+                    podcast.addEpisode(episode);
+                } else {
+                    // reset the podcast object to the old status (for interface update)
+                    Logger.error("Episode not added");
+                    podcast.copy(foundPodcast);
+                    result = 3;
+                }
             }
         }
-
+        
         MongoManager.getInstance().closeConnection();
         return result;
     }
