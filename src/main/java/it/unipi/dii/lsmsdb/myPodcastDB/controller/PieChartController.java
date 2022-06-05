@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import org.javatuples.Pair;
 
 import java.util.List;
 import java.util.Map.Entry;
@@ -21,10 +22,19 @@ public class PieChartController {
     @FXML
     private Tooltip titleTooltip;
 
-    public void setData(String title, List<Entry<String, Object>> statistics) {
+    public void setDataFloat(String title, List<Pair<String, Float>> statistics) {
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
-        for (Entry<String, Object> stat : statistics)
-            data.add(new PieChart.Data(stat.getKey(), (float)stat.getValue()));
+        for (Pair<String, Float> stat : statistics)
+            data.add(new PieChart.Data(stat.getValue0(), stat.getValue1()));
+        this.pieChart.setData(data);
+        this.title.setText(title);
+        this.titleTooltip.setText(title);
+    }
+
+    public void setDataInteger(String title, List<Pair<String, Integer>> statistics) {
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        for (Pair<String, Integer> stat : statistics)
+            data.add(new PieChart.Data(stat.getValue0(), stat.getValue1()));
         this.pieChart.setData(data);
         this.title.setText(title);
         this.titleTooltip.setText(title);
