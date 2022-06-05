@@ -42,6 +42,36 @@ public class AdminDashboardController {
     private Button cancelInfo;
 
     @FXML
+    private Label data1;
+
+    @FXML
+    private Label data2;
+
+    @FXML
+    private Label data3;
+
+    @FXML
+    private Label data4;
+
+    @FXML
+    private Label data5;
+
+    @FXML
+    private Label data6;
+
+    @FXML
+    private Label data7;
+
+    @FXML
+    private Label data8;
+
+    @FXML
+    private Label data9;
+
+    @FXML
+    private Label data10;
+
+    @FXML
     private Button delete;
 
     @FXML
@@ -509,7 +539,19 @@ public class AdminDashboardController {
         this.limit = 10;
 
         // load chart
-        this.loadCharts();
+        List<String> updateTimes = this.loadCharts();
+
+        // update the last update data of queries
+        this.data1.setText("Last update: " + updateTimes.get(0) + "  ");
+        this.data2.setText("Last update: " + updateTimes.get(1) + "  ");
+        this.data3.setText("Last update: " + updateTimes.get(2) + "  ");
+        this.data4.setText("Last update: " + updateTimes.get(3) + "  ");
+        this.data5.setText("Last update: " + updateTimes.get(4) + "  ");
+        this.data6.setText("Last update: " + updateTimes.get(5) + "  ");
+        this.data7.setText("Last update: " + updateTimes.get(6) + "  ");
+        this.data8.setText("Last update: " + updateTimes.get(7) + "  ");
+        this.data9.setText("Last update: " + updateTimes.get(8) + "  ");
+        this.data10.setText("Last update: " + updateTimes.get(9) + "  ");
 
         // settings buttons and texts
 //        this.modifyInfoWrapper.setVisible(true);
@@ -521,7 +563,7 @@ public class AdminDashboardController {
         this.passwordTextField.setText("********************");
     }
 
-    private void loadCharts() throws IOException {
+    private List<String> loadCharts() throws IOException {
         // create the lists that will contain statistics
         List<Pair<String, Float>> averageAgeOfUsersPerFavouriteCategory = new ArrayList<>();
         List<Pair<Podcast, Integer>> podcastsWithHighestNumberOfReviews = new ArrayList<>();
@@ -531,7 +573,7 @@ public class AdminDashboardController {
         List<Pair<String, Integer>> mostAppreciatedCategory = new ArrayList<>();
 
         // load them from service
-        this.service.loadAdminPage(averageAgeOfUsersPerFavouriteCategory, podcastsWithHighestNumberOfReviews, countryWithHighestNumberOfPodcasts, topFavouriteCategoriesPerGender, mostNumerousCategories, mostAppreciatedCategory);
+        List<String> updateTimes = this.service.loadAdminPage(averageAgeOfUsersPerFavouriteCategory, podcastsWithHighestNumberOfReviews, countryWithHighestNumberOfPodcasts, topFavouriteCategoriesPerGender, mostNumerousCategories, mostAppreciatedCategory);
 
         // statistics creation
         int row = 1;
@@ -585,5 +627,7 @@ public class AdminDashboardController {
         PieChartController controller6 = pieLoader.getController();
         controller6.setData("Most appreciated category", new String[] {"Category", "Number of likes"}, mostAppreciatedCategory, this.mainPage);
         this.statisticsGrid.add(newPieChart2, column, row);
+
+        return updateTimes;
     }
 }
