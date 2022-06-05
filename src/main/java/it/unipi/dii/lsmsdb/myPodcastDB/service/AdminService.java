@@ -156,6 +156,7 @@ public class AdminService {
     }
 
     public int updateMostNumerousCategory(Date updateTime, int limit) {
+        MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
@@ -179,11 +180,13 @@ public class AdminService {
             result = -1;
         }
 
+        MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return result;
     }
 
     public int updateMostAppreciatedCategory(Date updateTime, int limit) {
+        MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
@@ -207,6 +210,7 @@ public class AdminService {
             result = -1;
         }
 
+        MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return result;
     }
@@ -268,6 +272,7 @@ public class AdminService {
     }
 
     public int updateMostFollowedAuthor(Date updateTime, int limit) {
+        MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
@@ -291,11 +296,13 @@ public class AdminService {
             result = -1;
         }
 
+        MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return result;
     }
 
     public int updateMostLikedPodcast(Date updateTime, int limit) {
+        MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
@@ -319,6 +326,7 @@ public class AdminService {
             result = -1;
         }
 
+        MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return result;
     }
