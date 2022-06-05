@@ -13,6 +13,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,16 @@ public class AdminService {
         this.queryMongo = new QueryMongo();
         this.podcastNeo4j = new PodcastNeo4j();
         this.authorNeo4j = new AuthorNeo4j();
+    }
+
+    public void loadAdminPage() {
+        MongoManager.getInstance().openConnection();
+
+        List<Pair<String, Float>> test = new ArrayList<>();
+        String updateTime = this.queryMongo.getAverageAgeOfUsersPerFavouriteCategory(test);
+        Logger.info(updateTime + " : " + test);
+
+        MongoManager.getInstance().closeConnection();
     }
 
     public int updateAverageAgeOfUsersPerFavouriteCategory(Date updateTime, int limit) {

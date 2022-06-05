@@ -1,7 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
@@ -13,6 +15,7 @@ import org.javatuples.Triplet;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,19 +28,66 @@ import static com.mongodb.client.model.Updates.set;
 
 public class QueryMongo {
 
+    private String dateAsString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateAsString = dateFormat.format(date);
+        return dateAsString;
+    }
+
     // ------------------------------- CRUD OPERATION ----------------------------------- //
 
     // --------- CREATE --------- //
 
     // ---------- READ ---------- //
 
-    // --------- UPDATE --------- //
+    public String getAverageAgeOfUsersPerFavouriteCategory(List<Pair<String, Float>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
 
-    private String dateAsString(Date date) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateAsString = dateFormat.format(date);
-        return dateAsString;
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "AverageAgeOfUsersPerFavouriteCategory")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String category = result.getString("category");
+                    Float averageAge = (float)(double)result.getDouble("averageAge");
+                    Pair<String, Float> r = new Pair<>(category, averageAge);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
     }
+
+//    public String getPodcastsWithHighestNumberOfReviews(List<Pair<Podcast, Integer>> readValues) {}
+//
+//    public String getCountryWithHighestNumberOfPodcasts(List<Pair<String, Integer>> readValues) {}
+//
+//    public String getFavouriteCategoryForGender(List<String> female, List<String> male, List<String> notBinary) {}
+//
+//    public String getMostNumerousCategory(List<Entry<String, Integer>> readValues) {}
+//
+//    public String getMostAppreciatedCategory(List<Entry<String, Integer>> readValues) {}
+//
+//    public String getPodcastsWithHighestAverageRating(List<Pair<Podcast, Float>> readValues) {}
+//
+//    public String getPodcastWithHighestAverageRatingPerCountry(List<Triplet<Podcast, String, Float>> readValues) {}
+//
+//    public String getMostFollowedAuthor(List<Pair<Author, Integer>> readValues) {}
+//
+//    public String getMostLikedPodcast(List<Entry<Podcast, Integer>> readValues) {}
+
+    // --------- UPDATE --------- //
 
     public boolean updateAverageAgeOfUsersPerFavouriteCategory(List<Entry<String, Float>> newValues, Date updateTime) {
         MongoManager manager = MongoManager.getInstance();

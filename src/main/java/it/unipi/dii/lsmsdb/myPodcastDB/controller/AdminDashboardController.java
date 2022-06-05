@@ -506,6 +506,9 @@ public class AdminDashboardController {
         this.title.setText("Welcome " + this.admin.getName());
         this.limit = 10;
 
+        // test service
+        this.service.loadAdminPage();
+
         // example statistic
         List<Entry<String, Object>> statistics1 = new ArrayList<>();
         statistics1.add(new AbstractMap.SimpleEntry<>("Test1", 10.0f));
