@@ -49,6 +49,8 @@ public class ReviewService {
         if (owns != null && owns.size() != 0) {
             ownReview.copy(owns.get(0));
             loaded.remove(ownReview);
+        } else {
+            ownReview.setTitle(null);
         }
         reviews.addAll(loaded);
 

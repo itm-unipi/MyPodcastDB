@@ -540,6 +540,22 @@ public class ReviewPageController {
         this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
     }
 
+    private void enableForm() {
+        // clean parameter
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
+        this.star1.setImage(outlineStar);
+        this.star2.setImage(outlineStar);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+        this.textTitle.setText("");
+        this.textContent.setText("");
+
+        // show form
+        this.reviewForm.setVisible(true);
+        this.reviewForm.setStyle("-fx-pref-width: 918px; -fx-pref-height: 342px");
+    }
+
     private void reloadReviewList() throws IOException {
         // empty the grid
         this.reviewGrid.getChildren().clear();
@@ -572,9 +588,16 @@ public class ReviewPageController {
     }
 
     public void removeReviewFromLocalList(Review review) throws IOException {
-        boolean result = this.loadedReviews.remove(review);
-        if (result)
-            reloadReviewList();
+        this.loadedReviews.remove(review);
+        this.reloadReviewList();
+        this.enableForm();
+
+        // reinitialize own review
+        this.ownReview = new Review();
+        this.ownReview.setPodcastId(podcast.getId());
+        if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+            this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        this.ownReview.setRating(0);
     }
 
     private int getLoaded() {
