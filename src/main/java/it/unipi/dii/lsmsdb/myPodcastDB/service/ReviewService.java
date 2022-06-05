@@ -42,12 +42,15 @@ public class ReviewService {
         }
 
         // load the podcast's reviews (limited)
-        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending));
+        List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending);
 
         // load own review if exists
         List<Review> owns = this.reviewMongo.findReviewsByAuthorUsername(username, 1, "createdAt", false);
-        if (owns != null && owns.size() != 0)
+        if (owns != null && owns.size() != 0) {
             ownReview.copy(owns.get(0));
+            loaded.remove(ownReview);
+        }
+        reviews.addAll(loaded);
 
         MongoManager.getInstance().closeConnection();
         return result;

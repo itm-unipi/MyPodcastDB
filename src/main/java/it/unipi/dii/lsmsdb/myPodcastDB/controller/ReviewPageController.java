@@ -96,6 +96,13 @@ public class ReviewPageController {
     private ImageView searchButton;
 
     @FXML
+    private Label showMore;
+
+    @FXML
+    private VBox showMoreWrapper;
+
+
+    @FXML
     private ImageView star1;
 
     @FXML
@@ -141,6 +148,9 @@ public class ReviewPageController {
 
     private int row;
     private int column;
+    private String selectedOrder;
+    private Boolean selectedAscending;
+    private int limitPerQuery;
 
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
@@ -205,10 +215,9 @@ public class ReviewPageController {
         } else {
             // reload local list with new parameters
             this.loadedReviews.clear();                         // empty old list
-            int limit = 10;
-            String ordering = this.orderBy.getValue().equals("Date of creation") ? "createdAt" : "rating";
-            Boolean ascending = this.ascending.getValue().equals("Ascending");
-            Boolean result = this.service.loadOtherReview(this.podcast, this.loadedReviews, this.loadedReviews.size(), limit, ordering, ascending);
+            this.selectedOrder = this.orderBy.getValue().equals("Date of creation") ? "createdAt" : "rating";
+            this.selectedAscending = this.ascending.getValue().equals("Ascending");
+            Boolean result = this.service.loadOtherReview(this.podcast, this.loadedReviews, this.loadedReviews.size(), this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // if successful reload page
             if (!result) {
@@ -232,6 +241,26 @@ public class ReviewPageController {
         this.ownReview.setRating(2);
 
         Logger.info("Rating set to " + this.ownReview.getRating());
+    }
+
+    @FXML
+    void clickOnShow(MouseEvent event) throws IOException {
+        // load other reviews
+        Boolean result = this.service.loadOtherReview(this.podcast, this.loadedReviews, this.loadedReviews.size(), this.limitPerQuery, this.selectedOrder, this.selectedAscending);
+
+        // if succesfull update the page
+        if (!result) {
+            // TODO: alert
+        } else {
+            // add new review to list
+            this.reloadReviewList();
+
+            // check if are finished
+            if (this.getLoaded() == this.podcast.getReviews().size()) {
+                this.showMoreWrapper.setVisible(false);
+                this.showMoreWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+            }
+        }
     }
 
     @FXML
@@ -262,6 +291,12 @@ public class ReviewPageController {
     }
 
     @FXML
+    void mouseOnShow(MouseEvent event) {
+        this.showMore.setCursor(Cursor.HAND);
+        this.showMore.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
+
+    @FXML
     void mouseOnTitle(MouseEvent event) {
         this.title.setCursor(Cursor.HAND);
         this.title.setTextFill(Color.color(0.6, 0.6, 0.6));
@@ -271,6 +306,12 @@ public class ReviewPageController {
     void mouseOutAuthor(MouseEvent event) {
         this.author.setCursor(Cursor.DEFAULT);
         this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
+
+    @FXML
+    void mouseOutShow(MouseEvent event) {
+        this.showMore.setCursor(Cursor.DEFAULT);
+        this.showMore.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
     @FXML
@@ -507,6 +548,10 @@ public class ReviewPageController {
         this.row = 0;
         this.column = 0;
         for (Review review : this.loadedReviews) {
+            // if is the own review skip
+            if (review.equals(ownReview))
+                return;
+
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
 
@@ -518,12 +563,23 @@ public class ReviewPageController {
             // add new podcast to grid
             this.reviewGrid.add(newReview, column, row++);
         }
+
+        // check if the show review should be reneabled
+        if (!this.showMoreWrapper.isVisible() && this.getLoaded() < this.podcast.getReviews().size()) {
+            this.showMoreWrapper.setVisible(true);
+            this.showMoreWrapper.setStyle("-fx-pref-width: 140; -fx-pref-height: 22;");
+        }
     }
 
     public void removeReviewFromLocalList(Review review) throws IOException {
         boolean result = this.loadedReviews.remove(review);
         if (result)
             reloadReviewList();
+    }
+
+    private int getLoaded() {
+        int toAdd = this.ownReview.getTitle() != null ? 1 : 0;
+        return this.loadedReviews.size() + toAdd;
     }
 
     public void initialize() throws IOException {
@@ -533,6 +589,9 @@ public class ReviewPageController {
         this.podcast.setId(StageManager.getObjectIdentifier());
         this.loadedReviews = new ArrayList<>();
         this.ownReview = new Review();
+        this.limitPerQuery = 10;
+        this.selectedOrder = "createdAt";
+        this.selectedAscending = false;
 
         // actor recognition and info loading from service
         Boolean result = true;
@@ -540,7 +599,7 @@ public class ReviewPageController {
         if (!sessionType.equals("User")) {
             // only the user can write review
             this.disableForm();
-            result = this.service.loadPodcastPageForNotUser(this.podcast, this.loadedReviews, 10, "cretedAt", false);
+            result = this.service.loadPodcastPageForNotUser(this.podcast, this.loadedReviews, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // if author update the profile picture
             if (sessionType.equals("Author")) {
@@ -556,7 +615,7 @@ public class ReviewPageController {
             }
         } else {
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-            result = this.service.loadPodcastPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, 10, "cretedAt", false);
+            result = this.service.loadPodcastPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // profile picture
             User user = (User)MyPodcastDB.getInstance().getSessionActor();
@@ -574,7 +633,7 @@ public class ReviewPageController {
         }
 
         // no reviews message
-        if (!this.loadedReviews.isEmpty()) {
+        if (this.loadedReviews != null && !this.loadedReviews.isEmpty()) {
             this.noReviewsMessage.setVisible(false);
             this.noReviewsMessage.setPadding(new Insets(-20, 0, 0, 0));
         } else {
@@ -611,6 +670,12 @@ public class ReviewPageController {
             this.reviewGrid.add(newReview, column, row++);
         }
 
+        // check if are finished
+        if (this.loadedReviews.size() == this.podcast.getReviews().size()) {
+            this.showMoreWrapper.setVisible(false);
+            this.showMoreWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+        }
+
         // initialize own review
         this.ownReview = new Review();
         this.ownReview.setPodcastId(podcast.getId());
@@ -623,5 +688,6 @@ public class ReviewPageController {
         this.orderBy.getItems().add("Rating");
         this.ascending.getItems().add("Ascending");
         this.ascending.getItems().add("Descending");
+        this.ascending.setValue("Ascending");
     }
 }
