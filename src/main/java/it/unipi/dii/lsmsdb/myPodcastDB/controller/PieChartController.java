@@ -73,7 +73,7 @@ public class PieChartController {
         this.columnsName = columnsName;
         this.mainPage = mainPage;
 
-        // statistic managment
+        // statistic management
         if (statistics.size() > 10)
             statistics = statistics.subList(0, 10);
 

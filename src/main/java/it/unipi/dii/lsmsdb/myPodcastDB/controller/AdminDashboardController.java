@@ -542,7 +542,7 @@ public class AdminDashboardController {
         barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
         AnchorPane newBarChart1 = barLoader.load();
         BarChartController controller1 = barLoader.getController();
-        controller1.setDataFloat("Average age for favourite category", "Average age", averageAgeOfUsersPerFavouriteCategory);
+        controller1.setDataFloat("Average age for favourite category", new String[] {"Category", "Average age"}, "Average age", averageAgeOfUsersPerFavouriteCategory, this.mainPage);
         this.statisticsGrid.add(newBarChart1, column++, row);
 
         // create new bar chart element
@@ -550,7 +550,7 @@ public class AdminDashboardController {
         barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
         AnchorPane newBarChart2 = barLoader.load();
         BarChartController controller2 = barLoader.getController();
-        controller2.setDataPodcastInteger("Podcasts with highest number of reviews", "Number of reviews", podcastsWithHighestNumberOfReviews);
+        controller2.setDataPodcastInteger("Podcasts with highest number of reviews", new String[] {"Podcast", "Number of reviews"}, "Number of reviews", podcastsWithHighestNumberOfReviews, this.mainPage);
         this.statisticsGrid.add(newBarChart2, column++, row);
 
         // create new bar chart element
@@ -558,7 +558,7 @@ public class AdminDashboardController {
         barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
         AnchorPane newBarChart3 = barLoader.load();
         BarChartController controller3 = barLoader.getController();
-        controller3.setDataInteger("Country with highest number of podcasts\n", "Number of podcasts", countryWithHighestNumberOfPodcasts);
+        controller3.setDataInteger("Country with highest number of podcasts", new String[] {"Country", "Number of podcast"}, "Number of podcasts", countryWithHighestNumberOfPodcasts, this.mainPage);
         this.statisticsGrid.add(newBarChart3, column, row++);
         column -= 2;
 
