@@ -170,18 +170,18 @@ public class AdminService {
         MongoManager.getInstance().closeConnection();
     }
 
-    public void loadHomepage(List<Pair<Podcast, Float>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors, int limit) {
+    public void loadHomepage(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors, int limit) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
         // Loading Top Rated Podcasts
-        List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
-        resultsTopRated.add(new Pair<>(new Podcast("9e3816413fb3430e714c91fc", "Run Amok with Rex and Chuck", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/a6/e0/06/a6e006e3-869d-8d05-bdfd-f3bc7282b5f0/mza_5306896777310247561.jpg/600x600bb.jpg"), 4.0f));
-        resultsTopRated.add(new Pair<>(new Podcast("fce2e20fe832f5f5e6148987", "Ingenious Basterds", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts3/v4/3d/16/af/3d16af60-2e1d-69bd-c3d3-b83bebdc0bd3/mza_5286960706166095957.jpg/600x600bb.jpg"), 5.0f));
-        resultsTopRated.add(new Pair<>(new Podcast("ed70b4056b9415b7b43b4a52", "Strangers in Space", "https://is1-ssl.mzstatic.com/image/thumb/Podcasts115/v4/5f/9d/d4/5f9dd483-a0fc-e81c-ce59-aeaea09be6c3/mza_8658599441396400725.jpg/600x600bb.jpg"), 4.7f));
-        resultsTopRated.add(new Pair<>(new Podcast("35628503b2788fdcb7a1e145", "Orchard Recording Studio Podcast", "https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/b9/3c/48/b93c4823-474e-edf5-c9ad-73025a01176e/mza_2537085863686121083.jpg/600x600bb.jpg"), 4.5f));
-        resultsTopRated.add(new Pair<>(new Podcast("b8f759d95d3ed9d1e12f9430", "To The Batpoles! Batman 1966", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/f8/f8/a1/f8f8a158-24b8-091a-fc43-213739b4bbb1/mza_16028619290499021301.jpg/600x600bb.jpg"), 4.65f));
-        resultsTopRated.add(new Pair<>(new Podcast("6b70d0098bb6c382ff41a274", "Hurtscast", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts6/v4/e3/83/18/e38318f0-98c1-db5f-de31-a2d937401bbe/mza_2491539306600660338.jpg/600x600bb.jpg"), 4.87f));
+        List<Triplet<Podcast, Float, Boolean>> resultsTopRated = new ArrayList<>();
+        resultsTopRated.add(new Triplet<>(new Podcast("9e3816413fb3430e714c91fc", "Run Amok with Rex and Chuck", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts115/v4/a6/e0/06/a6e006e3-869d-8d05-bdfd-f3bc7282b5f0/mza_5306896777310247561.jpg/600x600bb.jpg"), 4.0f, false));
+        resultsTopRated.add(new Triplet<>(new Podcast("fce2e20fe832f5f5e6148987", "Ingenious Basterds", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts3/v4/3d/16/af/3d16af60-2e1d-69bd-c3d3-b83bebdc0bd3/mza_5286960706166095957.jpg/600x600bb.jpg"), 5.0f, false));
+        resultsTopRated.add(new Triplet<>(new Podcast("ed70b4056b9415b7b43b4a52", "Strangers in Space", "https://is1-ssl.mzstatic.com/image/thumb/Podcasts115/v4/5f/9d/d4/5f9dd483-a0fc-e81c-ce59-aeaea09be6c3/mza_8658599441396400725.jpg/600x600bb.jpg"), 4.7f, false));
+        resultsTopRated.add(new Triplet<>(new Podcast("35628503b2788fdcb7a1e145", "Orchard Recording Studio Podcast", "https://is1-ssl.mzstatic.com/image/thumb/Podcasts113/v4/b9/3c/48/b93c4823-474e-edf5-c9ad-73025a01176e/mza_2537085863686121083.jpg/600x600bb.jpg"), 4.5f, false));
+        resultsTopRated.add(new Triplet<>(new Podcast("b8f759d95d3ed9d1e12f9430", "To The Batpoles! Batman 1966", "https://is2-ssl.mzstatic.com/image/thumb/Podcasts125/v4/f8/f8/a1/f8f8a158-24b8-091a-fc43-213739b4bbb1/mza_16028619290499021301.jpg/600x600bb.jpg"), 4.65f, false));
+        resultsTopRated.add(new Triplet<>(new Podcast("6b70d0098bb6c382ff41a274", "Hurtscast", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts6/v4/e3/83/18/e38318f0-98c1-db5f-de31-a2d937401bbe/mza_2491539306600660338.jpg/600x600bb.jpg"), 4.87f, false));
 
         if (resultsTopRated != null)
             topRated.addAll(resultsTopRated);

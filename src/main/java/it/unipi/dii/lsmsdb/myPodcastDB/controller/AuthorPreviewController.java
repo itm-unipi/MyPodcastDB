@@ -15,6 +15,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -36,6 +37,12 @@ public class AuthorPreviewController {
 
     @FXML
     private Label nameAuthorFollowed;
+
+    @FXML
+    private HBox boxCounterFollowers;
+
+    @FXML
+    private Label counterFollowersLabel;
 
     @FXML
     void onAuthor(MouseEvent event) {
@@ -111,9 +118,15 @@ public class AuthorPreviewController {
             if (btnFollowAuthor.getText().equals("Follow")) {
                 authorService.followAuthor(author.getName());
                 btnFollowAuthor.setText("Unfollow");
+
+                // Increment followers counter
+                updateFollowerCounter(true);
             } else {
                 authorService.unfollowAuthor(author.getName());
                 btnFollowAuthor.setText("Follow");
+
+                // Decrement followers counter
+                updateFollowerCounter(false);
             }
         } else if (actorType.equals("User")) {
             UserService userService = new UserService();
@@ -121,9 +134,13 @@ public class AuthorPreviewController {
             if (btnFollowAuthor.getText().equals("Follow")) {
                 userService.followAuthor(author.getName());
                 btnFollowAuthor.setText("Unfollow");
+
+                updateFollowerCounter(true);
             } else {
                 userService.unfollowAuthor(author.getName());
                 btnFollowAuthor.setText("Follow");
+
+                updateFollowerCounter(false);
             }
 
         } else {
@@ -131,7 +148,18 @@ public class AuthorPreviewController {
         }
     }
 
-    public void setData(Author author, boolean follow) {
+    void updateFollowerCounter(boolean increment) {
+        int followers = Integer.parseInt(counterFollowersLabel.getText());
+
+        if (increment)
+            followers++;
+        else
+            followers--;
+
+        counterFollowersLabel.setText(String.valueOf(followers));
+    }
+
+    public void setData(Author author, boolean follow, int typeLabel, String valueLabel) {
         this.author = author;
         nameAuthorFollowed.setText(author.getName());
 
@@ -141,5 +169,11 @@ public class AuthorPreviewController {
         this.followed = follow;
         if (followed)
             this.btnFollowAuthor.setText("Unfollow");
+
+        if (typeLabel == 1) {
+            boxCounterFollowers.setVisible(true);
+            boxCounterFollowers.setStyle("-fx-pref-height: 20;");
+            counterFollowersLabel.setText(valueLabel);
+        }
     }
 }

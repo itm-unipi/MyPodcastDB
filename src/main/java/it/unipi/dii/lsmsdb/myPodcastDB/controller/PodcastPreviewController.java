@@ -12,8 +12,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
 import java.io.IOException;
 
 public class PodcastPreviewController {
@@ -34,6 +34,24 @@ public class PodcastPreviewController {
 
     @FXML
     private VBox podcastContainer;
+
+    @FXML
+    private HBox boxLikes;
+
+    @FXML
+    private Label counterLikeLabel;
+
+    @FXML
+    private HBox boxRating;
+
+    @FXML
+    private Label ratingLabel;
+
+    @FXML
+    private HBox boxTopCountry;
+
+    @FXML
+    private Label ratingCountryLabel;
 
     @FXML
     void onClick(MouseEvent event) {
@@ -68,16 +86,37 @@ public class PodcastPreviewController {
         podcastName.setStyle("-fx-font-size: 10; -fx-font-weight: bold");
     }
 
+    public void setData(Podcast podcast, int typeLabel, String valueLabel) {
+        // TypeLabel can be
+        // 0: no label
+        // 1: likes
+        // 2: rating
+        // 3: star
 
-    public void setData(Podcast podcast) {
         this.podcastPreview = podcast;
 
+        // Setting GUI elements
         Image image = ImageCache.getImageFromLocalPath("/img/loading.jpg");
         this.podcastImage.setImage(image);
         this.podcastName.setText(podcast.getName());
         this.podcastToolTip.setText(podcast.getName());
         podcastImage.setImage(image);
         podcastName.setText(podcast.getName());
+
+        // Setting label in the podcast preview
+        if (typeLabel == 1) {
+            // Counter likes
+            boxLikes.setVisible(true);
+            counterLikeLabel.setText(valueLabel);
+        } else if (typeLabel == 2) {
+            // Average rating
+            boxRating.setVisible(true);
+            ratingLabel.setText(valueLabel);
+        } else if (typeLabel == 3) {
+            // Top country podcast
+            boxTopCountry.setVisible(true);
+            ratingCountryLabel.setText(valueLabel);
+        }
 
         Platform.runLater(() -> {
             Image imageLoaded = ImageCache.getImageFromURL(podcast.getArtworkUrl600());

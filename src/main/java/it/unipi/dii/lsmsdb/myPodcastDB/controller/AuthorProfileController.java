@@ -435,7 +435,7 @@ public class AuthorProfileController {
 
             AnchorPane newFollowedAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(followedAuthor.getValue0(), followedAuthor.getValue1());
+            controller.setData(followedAuthor.getValue0(), followedAuthor.getValue1(), 0, null);
 
             gridAuthorsFollowed.add(newFollowedAuthor, column++, row);
         }

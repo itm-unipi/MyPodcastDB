@@ -329,7 +329,7 @@ public class HomePageController {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         // Declaring lists in order to contain queries results
-        List<Pair<Podcast, Float>> topRated = new ArrayList<>();
+        List<Triplet<Podcast, Float, Boolean>> topRated = new ArrayList<>();
         List<Pair<Podcast, Integer>> mostLikedPodcasts = new ArrayList<>();
         List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors = new ArrayList<>();
 
@@ -408,7 +408,7 @@ public class HomePageController {
 
                 AnchorPane newPodcast = fxmlLoader.load();
                 PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast);
+                controller.setData(podcast, 0, null);
 
                 gridWatchlist.add(newPodcast, column++, row);
             }
@@ -423,7 +423,7 @@ public class HomePageController {
 
                 AnchorPane newPodcast = fxmlLoader.load();
                 PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast);
+                controller.setData(podcast, 0, null);
 
                 gridSuggestedForCategory.add(newPodcast, column++, row);
             }
@@ -438,7 +438,7 @@ public class HomePageController {
 
                 AnchorPane newPodcast = fxmlLoader.load();
                 PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast);
+                controller.setData(podcast, 0, null);
 
                 gridSuggestedForUser.add(newPodcast, column++, row);
             }
@@ -453,7 +453,7 @@ public class HomePageController {
 
                 AnchorPane newPodcast = fxmlLoader.load();
                 PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast);
+                controller.setData(podcast, 0, null);
 
                 gridPodcastsBasedOnWatchlist.add(newPodcast, column++, row);
             }
@@ -467,7 +467,7 @@ public class HomePageController {
 
                 AnchorPane newAuthor = fxmlLoader.load();
                 AuthorPreviewController controller = fxmlLoader.getController();
-                controller.setData(author.getValue0(), author.getValue1());
+                controller.setData(author.getValue0(), author.getValue1(), 0, null);
 
                 gridSuggestedAuthors.add(newAuthor, column++, row);
             }
@@ -497,14 +497,16 @@ public class HomePageController {
         int row = 0;
         int column = 0;
 
-        for (Pair<Podcast, Float> podcast : topRated){
+        for (Triplet<Podcast, Float, Boolean> podcast : topRated){
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            // TODO: passare il rating
-            controller.setData(podcast.getValue0());
+            if (podcast.getValue2())
+                controller.setData(podcast.getValue0(), 3, podcast.getValue1().toString());
+            else
+                controller.setData(podcast.getValue0(), 2, podcast.getValue1().toString());
 
             gridTopRated.add(newPodcast, column++, row);
         }
@@ -519,7 +521,7 @@ public class HomePageController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast.getValue0());
+            controller.setData(podcast.getValue0(), 1, podcast.getValue1().toString());
 
             gridMostLikedPodcasts.add(newPodcast, column++, row);
         }
@@ -535,7 +537,7 @@ public class HomePageController {
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(author.getValue0(), author.getValue2());
+            controller.setData(author.getValue0(), author.getValue2(), 1, author.getValue1().toString());
 
             gridMostFollowedAuthors.add(newAuthor, column++, row);
         }

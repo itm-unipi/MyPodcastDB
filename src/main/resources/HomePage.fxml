@@ -331,7 +331,7 @@
                                           <Image url="@img/backArrow.png" />
                                        </image>
                                     </ImageView>
-                                    <ScrollPane fx:id="scrollMostFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="180.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                    <ScrollPane fx:id="scrollMostFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="197.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                        <content>
                                           <GridPane fx:id="gridMostFollowedAuthors" alignment="CENTER_LEFT" hgap="30.0" prefHeight="0.0" prefWidth="0.0">
                                              <rowConstraints>
