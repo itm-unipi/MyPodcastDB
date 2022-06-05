@@ -575,7 +575,7 @@ public class AdminDashboardController {
         pieLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
         AnchorPane newPieChart1 = pieLoader.load();
         PieChartController controller5 = pieLoader.getController();
-        controller5.setDataInteger("Most numerous category", mostNumerousCategories);
+        controller5.setData("Most numerous category", new String[] {"Category", "Number of podcasts"}, mostNumerousCategories, this.mainPage);
         this.statisticsGrid.add(newPieChart1, column++, row);
 
         // create new pie chart element
@@ -583,7 +583,7 @@ public class AdminDashboardController {
         pieLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
         AnchorPane newPieChart2 = pieLoader.load();
         PieChartController controller6 = pieLoader.getController();
-        controller6.setDataInteger("Most appreciated category", mostAppreciatedCategory);
+        controller6.setData("Most appreciated category", new String[] {"Category", "Number of likes"}, mostAppreciatedCategory, this.mainPage);
         this.statisticsGrid.add(newPieChart2, column, row);
     }
 }

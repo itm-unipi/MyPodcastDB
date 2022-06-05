@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
@@ -16,7 +17,7 @@
          <center>
             <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <Label fx:id="title" alignment="CENTER" prefWidth="300.0" text="Title" textFill="#636366">
+                  <Label fx:id="title" alignment="CENTER" onMouseClicked="#onTitleClick" prefWidth="300.0" text="Title" textFill="#636366">
                      <font>
                         <Font name="Corbel Bold" size="22.0" />
                      </font>
@@ -26,6 +27,9 @@
                      <tooltip>
                         <Tooltip fx:id="titleTooltip" text="Empty Tooltip" />
                      </tooltip>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </Label>
                   <Separator maxWidth="-Infinity" prefWidth="400.0" />
                   <PieChart fx:id="pieChart" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" />
