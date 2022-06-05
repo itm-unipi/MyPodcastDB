@@ -23,6 +23,10 @@ public class PieChartController {
     private Tooltip titleTooltip;
 
     public void setDataFloat(String title, List<Pair<String, Float>> statistics) {
+        // statistic managment
+        if (statistics.size() > 10)
+            statistics = statistics.subList(0, 10);
+
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         for (Pair<String, Float> stat : statistics)
             data.add(new PieChart.Data(stat.getValue0(), stat.getValue1()));
@@ -32,6 +36,10 @@ public class PieChartController {
     }
 
     public void setDataInteger(String title, List<Pair<String, Integer>> statistics) {
+        // statistic managment
+        if (statistics.size() > 10)
+            statistics = statistics.subList(0, 10);
+
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
         for (Pair<String, Integer> stat : statistics)
             data.add(new PieChart.Data(stat.getValue0(), stat.getValue1()));

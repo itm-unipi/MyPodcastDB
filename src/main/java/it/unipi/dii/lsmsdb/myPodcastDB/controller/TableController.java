@@ -39,14 +39,11 @@ public class TableController {
         this.table.getColumns().add(col2);
         this.table.getColumns().add(col3);
 
-        int sizeList0 = statistics.getValue0().size();
-        int sizeList1 = statistics.getValue1().size();
-        int sizeList2 = statistics.getValue2().size();
-        int maxSize = sizeList0;
-        if (maxSize < sizeList1)
-            maxSize = sizeList1;
-        if (maxSize < sizeList2)
-            maxSize = sizeList2;
+        // take the maximum size
+        int sizeList0 = Math.min(statistics.getValue0().size(), 10);
+        int sizeList1 = Math.min(statistics.getValue1().size(), 10);
+        int sizeList2 = Math.min(statistics.getValue2().size(), 10);
+        int maxSize = Math.max(sizeList0, Math.max(sizeList1, sizeList2));
 
         ObservableList<Map<String, Object>> items = FXCollections.<Map<String, Object>>observableArrayList();
         for (int i = 0; i < maxSize; i++) {

@@ -24,6 +24,10 @@ public class BarChartController {
     private Label title;
 
     public void setDataFloat(String title, String typeOfData, List<Pair<String, Float>> statistics) {
+        // statistic managment
+        if (statistics.size() > 10)
+            statistics = statistics.subList(0, 10);
+
         // creation of axis
         CategoryAxis xaxis = new CategoryAxis();
         NumberAxis yaxis = new NumberAxis(0.1,2,0.1);
@@ -46,6 +50,10 @@ public class BarChartController {
     }
 
     public void setDataInteger(String title, String typeOfData, List<Pair<String, Integer>> statistics) {
+        // statistic managment
+        if (statistics.size() > 10)
+            statistics = statistics.subList(0, 10);
+
         // creation of axis
         CategoryAxis xaxis = new CategoryAxis();
         NumberAxis yaxis = new NumberAxis(0.1,2,0.1);
@@ -68,6 +76,10 @@ public class BarChartController {
     }
 
     public void setDataPodcastInteger(String title, String typeOfData, List<Pair<Podcast, Integer>> statistics) {
+        // statistic managment
+        if (statistics.size() > 10)
+            statistics = statistics.subList(0, 10);
+
         // creation of axis
         CategoryAxis xaxis = new CategoryAxis();
         NumberAxis yaxis = new NumberAxis(0.1,2,0.1);
