@@ -282,7 +282,7 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate10(MouseEvent event) {
-        Logger.info("Update 9");
+        Logger.info("Update 10");
     }
 
     @FXML

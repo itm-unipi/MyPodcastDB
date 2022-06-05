@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import org.javatuples.Pair;
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
@@ -367,19 +368,19 @@ public class PodcastMongoTest {
 
     void showPodcastsWithHighestAverageRatingTest() {
         System.out.println("showPodcastsWithHighestAverageRatingTest:");
-        for (Triplet<String, String, Float> record : this.podcastMongo.showPodcastsWithHighestAverageRating(3))
+        for (Pair<Podcast, Float> record : this.podcastMongo.showPodcastsWithHighestAverageRating(3))
             System.out.println(record);
     }
 
     void showPodcastsWithHighestAverageRatingPerCountryTest() {
         System.out.println("showPodcastsWithHighestAverageRatingPerCountryTest:");
-        for (Quartet<String, String, String, Float> record : this.podcastMongo.showPodcastsWithHighestAverageRatingPerCountry(3))
+        for (Triplet<Podcast, String, Float> record : this.podcastMongo.showPodcastsWithHighestAverageRatingPerCountry(3))
             System.out.println(record);
     }
 
     void showPodcastsWithHighestNumberOfReviewsTest() {
         System.out.println("showPodcastsWithHighestNumberOfReviewsTest:");
-        for (Triplet<String, String, Integer> record : this.podcastMongo.showPodcastsWithHighestNumberOfReviews(3))
+        for (Pair<Podcast, Integer> record : this.podcastMongo.showPodcastsWithHighestNumberOfReviews(3))
             System.out.println(record);
     }
 

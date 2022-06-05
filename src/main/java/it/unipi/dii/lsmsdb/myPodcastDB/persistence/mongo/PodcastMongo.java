@@ -11,6 +11,7 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+import org.javatuples.Pair;
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
@@ -622,23 +623,26 @@ public class PodcastMongo {
         }
     }
 
-    public List<Triplet<String, String, Float>> showPodcastsWithHighestAverageRating(int limit) {
+    public List<Pair<Podcast, Float>> showPodcastsWithHighestAverageRating(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
             Bson project = project(fields(
                     computed("name", "$podcastName"),
+                    computed("artwork", "$artworkUrl600"),
                     computed("meanRating", computed("$avg", "$reviews.rating")))
             );
             Bson sort = sort(Sorts.descending("meanRating"));
             Bson lim = limit(limit);
 
-            List<Triplet<String, String, Float>> results = new ArrayList<>();
+            List<Pair<Podcast, Float>> results = new ArrayList<>();
             for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
                 String id = result.getObjectId("_id").toString();
                 String name = result.getString("name");
+                String artwork = result.getString("artwork");
                 double meanRating = result.getDouble("meanRating");
-                Triplet<String, String, Float> record = new Triplet<>(id, name, (float)meanRating);
+                Podcast podcast = new Podcast(id, name, artwork);
+                Pair<Podcast, Float> record = new Pair<>(podcast, (float)meanRating);
                 results.add(record);
             }
 
@@ -652,12 +656,13 @@ public class PodcastMongo {
         }
     }
 
-    public List<Quartet<String, String, String, Float>> showPodcastsWithHighestAverageRatingPerCountry(int limit) {
+    public List<Triplet<Podcast, String, Float>> showPodcastsWithHighestAverageRatingPerCountry(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
             Bson project = project(fields(
                     computed("name", "$podcastName"),
+                    computed("artwork", "$artworkUrl600"),
                     include("country"),
                     computed("meanRating", computed("$avg", "$reviews.rating")))
             );
@@ -665,17 +670,20 @@ public class PodcastMongo {
             Bson group = group("$country",
                     Accumulators.first("podcastId", "$_id"),
                     Accumulators.first("podcastName", "$name"),
+                    Accumulators.first("artwork", "$artwork"),
                     Accumulators.first("meanRating", "$meanRating")
             );
             Bson lim = limit(limit);
 
-            List<Quartet<String, String, String, Float>> results = new ArrayList<>();
+            List<Triplet<Podcast, String, Float>> results = new ArrayList<>();
             for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, group, lim))) {
                 String id = result.getObjectId("podcastId").toString();
                 String name = result.getString("podcastName");
+                String artwork = result.getString("artwork");
                 String country = result.getString("_id");
+                Podcast podcast = new Podcast(id, name, artwork);
                 double meanRating = result.getDouble("meanRating");
-                Quartet<String, String, String, Float> record = new Quartet<>(id, name, country, (float)meanRating);
+                Triplet<Podcast, String, Float> record = new Triplet<>(podcast, country, (float)meanRating);
                 results.add(record);
             }
 
@@ -689,23 +697,26 @@ public class PodcastMongo {
         }
     }
 
-    public List<Triplet<String, String, Integer>> showPodcastsWithHighestNumberOfReviews(int limit) {
+    public List<Pair<Podcast, Integer>> showPodcastsWithHighestNumberOfReviews(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
             Bson project = project(fields(
                     computed("name", "$podcastName"),
+                    computed("artwork", "$artworkUrl600"),
                     computed("numReviews", computed("$size", "$reviews")))
             );
             Bson sort = sort(Sorts.descending("numReviews"));
             Bson lim = limit(limit);
 
-            List<Triplet<String, String, Integer>> results = new ArrayList<>();
+            List<Pair<Podcast, Integer>> results = new ArrayList<>();
             for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
                 String id = result.getObjectId("_id").toString();
                 String name = result.getString("name");
+                String artwork = result.getString("artwork");
                 int numReviews = result.getInteger("numReviews");
-                Triplet<String, String, Integer> record = new Triplet<>(id, name, numReviews);
+                Podcast podcast = new Podcast(id, name, artwork);
+                Pair<Podcast, Integer> record = new Pair<>(podcast, numReviews);
                 results.add(record);
             }
 

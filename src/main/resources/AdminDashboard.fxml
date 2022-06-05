@@ -338,7 +338,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="188.0" layoutY="520.0" maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Label prefWidth="800.0" text="Podcasts with highest avarage rating in a country">
+                              <Label prefWidth="800.0" text="Podcasts with highest avarage rating per country">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />
                                  </font>
