@@ -3,8 +3,10 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -94,6 +96,9 @@ public class AdminDashboardController {
     @FXML
     private Button updateInfo;
 
+    @FXML
+    private AnchorPane adminAnchorPane;
+
     private Admin admin;
 
     @FXML
@@ -156,7 +161,7 @@ public class AdminDashboardController {
         this.emailTextField.setText(this.admin.getEmail());
         this.emailTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
-        this.passwordTextField.setText("********************");
+        this.passwordTextField.setText(this.admin.getPassword());
         this.passwordTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
         this.modifyInfo.setVisible(true);
@@ -185,7 +190,6 @@ public class AdminDashboardController {
         this.nameTextField.setDisable(false);
         this.emailTextField.setStyle("-fx-background-color: white");
         this.nameTextField.setDisable(false);
-        this.passwordTextField.setText("");
         this.passwordTextField.setStyle("-fx-background-color: white");
         this.nameTextField.setDisable(false);
         this.modifyInfo.setVisible(false);
@@ -198,10 +202,51 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate(MouseEvent event) {
+
+        Logger.info("update button clicked");
+
+        Admin newAdmin = new Admin();
         // update admin
-        this.admin.setName(this.nameTextField.getText());
-        this.admin.setEmail(this.emailTextField.getText());
-        this.admin.setPassword(this.passwordTextField.getText());
+        newAdmin.setId(this.admin.getId());
+        newAdmin.setName(this.nameTextField.getText());
+        newAdmin.setEmail(this.emailTextField.getText());
+        newAdmin.setPassword(this.passwordTextField.getText());
+
+        AdminService service = new AdminService();
+        int res = service.updateAdmin(this.admin, newAdmin);
+        String logMsg = "";
+        String dialogMsg = "";
+        switch (res){
+
+            case 0:
+                Logger.success("update admin success");
+                break;
+            case 1:
+                Logger.success("nothing to update");
+                break;
+            case 2:
+                logMsg = "admin not exists on mongo";
+                dialogMsg = "operation failed";
+                break;
+            case 3:
+                logMsg = "admin with the same name already exists";
+                dialogMsg = "admin with the same name already exists";
+                break;
+            case 4:
+                logMsg = "operation on mongo failed";
+                dialogMsg = "operation failed";
+                break;
+            case -1:
+                logMsg = "unknown error";
+                dialogMsg = "unknown error";
+                break;
+        }
+
+        if(res > 1){
+            Logger.error(logMsg);
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
+            return;
+        }
 
         // hide buttons and disable text fields
         this.nameTextField.setText(this.admin.getName());
@@ -210,7 +255,6 @@ public class AdminDashboardController {
         this.emailTextField.setText(this.admin.getEmail());
         this.emailTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
-        this.passwordTextField.setText("********************");
         this.passwordTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
         this.modifyInfo.setVisible(true);
@@ -441,6 +485,6 @@ public class AdminDashboardController {
         this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
         this.nameTextField.setText(this.admin.getName());
         this.emailTextField.setText(this.admin.getEmail());
-        this.passwordTextField.setText("********************");
+        this.passwordTextField.setText(this.admin.getPassword());
     }
 }

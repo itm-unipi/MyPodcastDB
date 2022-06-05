@@ -119,20 +119,23 @@ public class UserService {
 
     public int updateUserPageOwner(User oldUser, User newUser){
         int res = -1;
+
+        //check if there is something to update
+        if(oldUser.getUsername().equals(newUser.getUsername()) &&
+                oldUser.getCountry().equals(newUser.getCountry()) &&
+                oldUser.getGender().equals(newUser.getGender()) &&
+                oldUser.getName().equals(newUser.getName()) &&
+                oldUser.getSurname().equals(newUser.getSurname()) &&
+                oldUser.getEmail().equals(newUser.getEmail()) &&
+                oldUser.getAge() == newUser.getAge()
+        )
+            return 1;
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        if(oldUser.getUsername().equals(newUser.getUsername()) &&
-            oldUser.getCountry().equals(newUser.getCountry()) &&
-            oldUser.getGender().equals(newUser.getGender()) &&
-            oldUser.getName().equals(newUser.getName()) &&
-            oldUser.getSurname().equals(newUser.getSurname()) &&
-            oldUser.getEmail().equals(newUser.getEmail()) &&
-            oldUser.getAge() == newUser.getAge()
-        )
-            res = 1;
         //check if oldUser exists in mongo
-        else if(userMongoManager.findUserByUsername(oldUser.getUsername()) == null)
+        if(userMongoManager.findUserByUsername(oldUser.getUsername()) == null)
             res = 2;
         //check if oldUser exists in neo4j
         else if(!userNeo4jManager.findUserByUsername(oldUser.getUsername()))
