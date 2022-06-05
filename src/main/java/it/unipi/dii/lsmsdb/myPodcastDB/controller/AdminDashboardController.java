@@ -39,6 +39,36 @@ public class AdminDashboardController {
     private Button addAdmin;
 
     @FXML
+    private HBox box1;
+
+    @FXML
+    private HBox box2;
+
+    @FXML
+    private HBox box3;
+
+    @FXML
+    private HBox box4;
+
+    @FXML
+    private HBox box5;
+
+    @FXML
+    private HBox box6;
+
+    @FXML
+    private HBox box7;
+
+    @FXML
+    private HBox box8;
+
+    @FXML
+    private HBox box9;
+
+    @FXML
+    private HBox box10;
+
+    @FXML
     private Button cancelInfo;
 
     @FXML
@@ -392,6 +422,56 @@ public class AdminDashboardController {
     }
 
     @FXML
+    void mouseOnBox1(MouseEvent event) {
+        this.box1.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox2(MouseEvent event) {
+        this.box2.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox3(MouseEvent event) {
+        this.box3.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox4(MouseEvent event) {
+        this.box4.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox5(MouseEvent event) {
+        this.box5.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox6(MouseEvent event) {
+        this.box6.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox7(MouseEvent event) {
+        this.box7.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox8(MouseEvent event) {
+        this.box8.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox9(MouseEvent event) {
+        this.box9.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOnBox10(MouseEvent event) {
+        this.box10.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 10");
+    }
+
+    @FXML
     void mouseOnDelete(MouseEvent event) {
         this.delete.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
@@ -459,6 +539,56 @@ public class AdminDashboardController {
     @FXML
     void mouseOutAddAdmin(MouseEvent event) {
         this.addAdmin.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
+    }
+
+    @FXML
+    void mouseOutBox1(MouseEvent event) {
+        this.box1.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox2(MouseEvent event) {
+        this.box2.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox3(MouseEvent event) {
+        this.box3.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox4(MouseEvent event) {
+        this.box4.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox5(MouseEvent event) {
+        this.box5.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox6(MouseEvent event) {
+        this.box6.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox7(MouseEvent event) {
+        this.box7.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox8(MouseEvent event) {
+        this.box8.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox9(MouseEvent event) {
+        this.box9.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
+    }
+
+    @FXML
+    void mouseOutBox10(MouseEvent event) {
+        this.box10.setStyle("-fx-background-color: transparent; -fx-background-radius: 10");
     }
 
     @FXML
