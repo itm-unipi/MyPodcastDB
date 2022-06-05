@@ -24,6 +24,7 @@ import org.javatuples.Triplet;
 import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -279,7 +280,7 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate9(MouseEvent event) {
-        int result = this.service.updatePodcastsWithHighestAverageRating(10);
+        int result = this.service.updatePodcastsWithHighestAverageRating(new Date(), 10);
         if (result == 0) {
 
         } else {
