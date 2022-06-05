@@ -29,10 +29,10 @@ import java.util.Map.Entry;
 public class AdminDashboardController {
 
     @FXML
-    private Button addAdmin;
+    private ImageView actorPicture;
 
     @FXML
-    private ImageView actorPicture;
+    private Button addAdmin;
 
     @FXML
     private Button cancelInfo;
@@ -56,6 +56,9 @@ public class AdminDashboardController {
     private Button modifyInfo;
 
     @FXML
+    private HBox modifyInfoWrapper;
+
+    @FXML
     private TextField nameTextField;
 
     @FXML
@@ -77,6 +80,9 @@ public class AdminDashboardController {
     private Button update1;
 
     @FXML
+    private Button update10;
+
+    @FXML
     private Button update2;
 
     @FXML
@@ -90,6 +96,18 @@ public class AdminDashboardController {
 
     @FXML
     private Button update6;
+
+    @FXML
+    private Button update7;
+
+    @FXML
+    private Button update8;
+
+    @FXML
+    private Button update9;
+
+    @FXML
+    private HBox updateCancelWrapper;
 
     @FXML
     private Button updateInfo;
@@ -159,12 +177,10 @@ public class AdminDashboardController {
         this.passwordTextField.setText("********************");
         this.passwordTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
-        this.modifyInfo.setVisible(true);
-        this.updateInfo.setVisible(false);
-        this.cancelInfo.setVisible(false);
-        this.modifyInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-margin-right: 10; -fx-max-height: 20;");
-        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px; -fx-max-height: 20;");
-        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px; -fx-max-height: 20;");
+        this.modifyInfoWrapper.setVisible(true);
+        this.updateCancelWrapper.setVisible(false);
+        this.modifyInfoWrapper.setStyle("-fx-max-height: 40;");
+        this.updateCancelWrapper.setStyle("-fx-max-height: 0;");
     }
 
     @FXML
@@ -188,12 +204,10 @@ public class AdminDashboardController {
         this.passwordTextField.setText("");
         this.passwordTextField.setStyle("-fx-background-color: white");
         this.nameTextField.setDisable(false);
-        this.modifyInfo.setVisible(false);
-        this.updateInfo.setVisible(true);
-        this.cancelInfo.setVisible(true);
-        this.modifyInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px; -fx-max-height: 0;");
-        this.updateInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-margin-right: 10; -fx-max-height: 20;");
-        this.cancelInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #f4511e; -fx-background-radius: 10; -fx-margin-right: 10; -fx-max-height: 20;");
+        this.modifyInfoWrapper.setVisible(false);
+        this.updateCancelWrapper.setVisible(true);
+        this.modifyInfoWrapper.setStyle("-fx-pref-height: 0; -fx-max-height: 0;");
+        this.updateCancelWrapper.setStyle("-fx-pref-height: 39; -fx-max-height: 40;");
     }
 
     @FXML
@@ -252,8 +266,28 @@ public class AdminDashboardController {
     }
 
     @FXML
+    void clickOnUpdate7(MouseEvent event) {
+        Logger.info("Update 7");
+    }
+
+    @FXML
+    void clickOnUpdate8(MouseEvent event) {
+        Logger.info("Update 8");
+    }
+
+    @FXML
+    void clickOnUpdate9(MouseEvent event) {
+        Logger.info("Update 9");
+    }
+
+    @FXML
+    void clickOnUpdate10(MouseEvent event) {
+        Logger.info("Update 9");
+    }
+
+    @FXML
     void mouseOnCancel(MouseEvent event) {
-        this.cancelInfo.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.cancelInfo.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;-fx-cursor: hand;");
     }
 
     @FXML
@@ -268,42 +302,62 @@ public class AdminDashboardController {
 
     @FXML
     void mouseOnModify(MouseEvent event) {
-        this.modifyInfo.setStyle("-fx-border-color: #008CBA; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.modifyInfo.setStyle("-fx-border-color: #008CBA; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate(MouseEvent event) {
-        this.updateInfo.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.updateInfo.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate1(MouseEvent event) {
-        this.update1.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.update1.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate2(MouseEvent event) {
-        this.update2.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.update2.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate3(MouseEvent event) {
-        this.update3.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.update3.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate4(MouseEvent event) {
-        this.update4.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.update4.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate5(MouseEvent event) {
-        this.update5.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.update5.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
     void mouseOnUpdate6(MouseEvent event) {
-        this.update6.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: hand;");
+        this.update6.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
+    }
+
+    @FXML
+    void mouseOnUpdate7(MouseEvent event) {
+        this.update7.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
+    }
+
+    @FXML
+    void mouseOnUpdate8(MouseEvent event) {
+        this.update8.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
+    }
+
+    @FXML
+    void mouseOnUpdate9(MouseEvent event) {
+        this.update9.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
+    }
+
+    @FXML
+    void mouseOnUpdate10(MouseEvent event) {
+        this.update10.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
 
     @FXML
@@ -313,7 +367,7 @@ public class AdminDashboardController {
 
     @FXML
     void mouseOutCancel(MouseEvent event) {
-        this.cancelInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #f44336; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.cancelInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #f44336; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
@@ -323,42 +377,62 @@ public class AdminDashboardController {
 
     @FXML
     void mouseOutModify(MouseEvent event) {
-        this.modifyInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.modifyInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate(MouseEvent event) {
-        this.updateInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.updateInfo.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate1(MouseEvent event) {
-        this.update1.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.update1.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate2(MouseEvent event) {
-        this.update2.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.update2.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate3(MouseEvent event) {
-        this.update3.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.update3.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate4(MouseEvent event) {
-        this.update4.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.update4.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate5(MouseEvent event) {
-        this.update5.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.update5.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     @FXML
     void mouseOutUpdate6(MouseEvent event) {
-        this.update6.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-max-height: 20; -fx-cursor: default;");
+        this.update6.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
+    }
+
+    @FXML
+    void mouseOutUpdate7(MouseEvent event) {
+        this.update7.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
+    }
+
+    @FXML
+    void mouseOutUpdate8(MouseEvent event) {
+        this.update8.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
+    }
+
+    @FXML
+    void mouseOutUpdate9(MouseEvent event) {
+        this.update9.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
+    }
+
+    @FXML
+    void mouseOutUpdate10(MouseEvent event) {
+        this.update10.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
     public void initialize() throws IOException {
@@ -435,10 +509,10 @@ public class AdminDashboardController {
         this.statisticsGrid.add(newPieChart2, column, row);
 
         // settings buttons and texts
-        this.updateInfo.setVisible(false);
-        this.cancelInfo.setVisible(false);
-        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
-        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+//        this.modifyInfoWrapper.setVisible(true);
+//        this.updateCancelWrapper.setVisible(false);
+//        this.modifyInfoWrapper.setStyle("-fx-max-height: 40;");
+//        this.updateCancelWrapper.setStyle("-fx-max-height: 0;");
         this.nameTextField.setText(this.admin.getName());
         this.emailTextField.setText(this.admin.getEmail());
         this.passwordTextField.setText("********************");
