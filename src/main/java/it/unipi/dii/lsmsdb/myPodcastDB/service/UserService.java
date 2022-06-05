@@ -33,8 +33,10 @@ public class UserService {
         MongoManager.getInstance().openConnection();
 
         User newUser = userMongoManager.findUserByUsername(user.getUsername());
-        if(newUser == null || !user.getPassword().equals(newUser.getPassword()))
+        if(newUser == null)
             res = 1;
+        else if(!user.getPassword().equals(newUser.getPassword()))
+            res = 2;
         else {
             user.copy(newUser);
             res = 0;
@@ -127,7 +129,8 @@ public class UserService {
                 oldUser.getName().equals(newUser.getName()) &&
                 oldUser.getSurname().equals(newUser.getSurname()) &&
                 oldUser.getEmail().equals(newUser.getEmail()) &&
-                oldUser.getAge() == newUser.getAge()
+                oldUser.getAge() == newUser.getAge() &&
+                oldUser.getPicturePath().equals(newUser.getPicturePath())
         )
             return 1;
 

@@ -205,7 +205,7 @@ public class UserPageController {
 
     @FXML
     void scrollWatchlistButtonRightClick(MouseEvent event) throws IOException {
-        Logger.info("watchlist right button pressed");
+        Logger.info("Watchlist right button pressed");
         int column = userPageWatchlistGrid.getColumnCount();
         if(column < wPodcasts.size())
             loadWatchlaterPodcast(false);
@@ -219,7 +219,7 @@ public class UserPageController {
 
     @FXML
     void scrollWatchlistButtonLeftClick(MouseEvent event) {
-        Logger.info("watchlist left button pressed");
+        Logger.info("Watchlist left button pressed");
 
         double scrollValue = 0.2;
         if(userPageWatchlistScrollPane.getHvalue() == 0.0)
@@ -230,7 +230,7 @@ public class UserPageController {
 
     @FXML
     void scrollLikedButtonRightClick(MouseEvent event) throws IOException {
-        Logger.info("liked right button pressed");
+        Logger.info("Liked right button pressed");
         int column = userPageLikedGrid.getColumnCount();
         if(column < lPodcasts.size())
             loadLikedPodcast(false);
@@ -243,7 +243,7 @@ public class UserPageController {
 
     @FXML
     void scrollLikedButtonLeftClick(MouseEvent event) {
-        Logger.info("liked left button pressed");
+        Logger.info("Liked left button pressed");
         double scrollValue = 0.2;
         if(userPageLikedScrollPane.getHvalue() == 0.0)
             return;
@@ -252,7 +252,7 @@ public class UserPageController {
 
     @FXML
     void scrollAuthorsButtonRightClick(MouseEvent event) throws IOException {
-        Logger.info("authors right button pressed");
+        Logger.info("Authors right button pressed");
         int column = userPageAuthorsGrid.getColumnCount();
         if(column < authors.size())
             loadAuthor(false);
@@ -265,7 +265,7 @@ public class UserPageController {
 
     @FXML
     void scrollAuthorsButtonLeftClick(MouseEvent event) {
-        Logger.info("authors left button pressed");
+        Logger.info("Authors left button pressed");
 
         double scrollValue = 0.125;
         if(userPageAuthorsScrollPane.getHvalue() == 0.0)
@@ -275,7 +275,7 @@ public class UserPageController {
 
     @FXML
     void scrollUsersButtonRightClick(MouseEvent event) throws IOException {
-        Logger.info("users right button pressed");
+        Logger.info("Users right button pressed");
         int column = userPageUsersGrid.getColumnCount();
         if(column < users.size())
             loadUser(false);
@@ -288,7 +288,7 @@ public class UserPageController {
 
     @FXML
     void scrollUsersButtonLeftClick(MouseEvent event) {
-        Logger.info("users left button pressed");
+        Logger.info("Users left button pressed");
 
         double scrollValue = 0.13;
         if(userPageUsersScrollPane.getHvalue() == 0.0)
@@ -298,7 +298,7 @@ public class UserPageController {
 
     @FXML
     void homeButtonClick(MouseEvent event) throws IOException {
-        Logger.info("home button pressed");
+        Logger.info("Home button pressed");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
@@ -332,7 +332,7 @@ public class UserPageController {
 
     @FXML
     void followButtonClick(MouseEvent event) {
-        Logger.info("follow button pressed");
+        Logger.info("Follow button pressed");
         UserService service = new UserService();
         String owner = pageOwner.getUsername();
         String visitor = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
@@ -344,7 +344,7 @@ public class UserPageController {
                 isFollowed = false;
             }
         }
-        else if(!isFollowed) {
+        else{
             res = service.updateFollowUser(visitor, owner, true);
             if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
@@ -355,43 +355,43 @@ public class UserPageController {
         String dialogMsg = "";
         switch(res){
             case 0:
-                Logger.success("update follow relation success");
+                Logger.success("Update follow relation success");
                 break;
             case 1:
-                logMsg = "visitor account not exists in mongo";
-                dialogMsg = "your account not exists";
+                logMsg = "Visitor account not exists on mongo";
+                dialogMsg = "Your account not exists";
                 break;
             case 2:
-                logMsg = "visitor account not exists in neo4j";
-                dialogMsg = "your account not exists";
+                logMsg = "Visitor account not exists on neo4j";
+                dialogMsg = "Your account not exists";
                 break;
             case 3:
-                logMsg = "owner not exists in mongo";
-                dialogMsg = "user not exists";
+                logMsg = "Owner not exists on mongo";
+                dialogMsg = "User not exists";
                 break;
             case 4:
-                logMsg = "owner not exists in neo4j";
-                dialogMsg = "user not exists";
+                logMsg = "Owner not exists on neo4j";
+                dialogMsg = "User not exists";
                 break;
             case 5:
-                logMsg = "follow relation already exists";
-                dialogMsg = "you already followed user";
+                logMsg = "Follow relation already exists";
+                dialogMsg = "You already followed user";
                 break;
             case 6:
-                logMsg = "add follow operation failed";
-                dialogMsg = "operation failed";
+                logMsg = "Adding follow relation failed";
+                dialogMsg = "Operation failed";
                 break;
             case 7:
-                logMsg = "follow relation already not exists";
-                dialogMsg = "your already unfollowed user";
+                logMsg = "Follow relation already not exists";
+                dialogMsg = "Your already unfollowed user";
                 break;
             case 8:
-                logMsg = "delete follow operation failed";
-                dialogMsg = "operation failed";
+                logMsg = "Deleting follow relation failed";
+                dialogMsg = "Operation failed";
                 break;
             case -1:
-                logMsg = "unknown error";
-                dialogMsg = "unknown error";
+                logMsg = "Unknown error";
+                dialogMsg = "Unknown error";
                 break;
         }
 
@@ -403,7 +403,7 @@ public class UserPageController {
 
     @FXML
     void settingsButtonClick(MouseEvent event) {
-        Logger.info("settings button clicked");
+        Logger.info("Settings button clicked");
         enableTextFields(true);
         userPageSettingsButton.setVisible(false);
         userPageConfirmButton.setVisible(true);
@@ -420,7 +420,7 @@ public class UserPageController {
 
     @FXML
     void crossButtonClick(MouseEvent event) {
-        Logger.info("cross button clicked");
+        Logger.info("Cross button clicked");
         enableTextFields(false);
         restoreTextFields();
         userPageSettingsButton.setVisible(true);
@@ -439,11 +439,11 @@ public class UserPageController {
     @FXML
     void confirmButtonClick(MouseEvent event) {
 
-        Logger.info("confirm button clicked");
+        Logger.info("Confirm button clicked");
         User newUser = getDataFromTextFields();
 
         if(newUser.getUsername().isEmpty() || newUser.getEmail().isEmpty() || (Integer)newUser.getAge() < 0){
-            Logger.error("invalid inputs typed");
+            Logger.error("Invalid inputs typed");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid inputs");
             return;
         }
@@ -455,34 +455,34 @@ public class UserPageController {
         String dialogMsg = "";
         switch(res){
             case 0 :
-                Logger.success("updating user success");
+                Logger.success("Updating user success");
                 break;
             case 1 :
-                Logger.success("no operation needed");
+                Logger.success("No operation needed");
                 break;
             case 2 :
-                logMsg = "user not exists in mongo";
-                dialogMsg = "update failed";
+                logMsg = "User not exists on mongo";
+                dialogMsg = "Updating failed";
                 break;
             case 3 :
-                logMsg = "user not exists in neo4j";
-                dialogMsg = "update failed";
+                logMsg = "User not exists on neo4j";
+                dialogMsg = "Updating failed";
                 break;
             case 4 :
-                logMsg = "user with the same username already exists";
-                dialogMsg = "username already in use";
+                logMsg = "User with the same username already exists";
+                dialogMsg = "Username already in use";
                 break;
             case 5 :
-                logMsg = "mongo operation failed";
-                dialogMsg = "update failed";
+                logMsg = "Mongo operation failed";
+                dialogMsg = "Updating failed";
                 break;
             case 6 :
-                logMsg = "neo4j operation failed";
-                dialogMsg = "update failed";
+                logMsg = "Neo4j operation failed";
+                dialogMsg = "Updating failed";
                 break;
             case -1:
-                logMsg = "unknown error";
-                dialogMsg = "unknown error";
+                logMsg = "Unknown error";
+                dialogMsg = "Unknown error";
                 break;
 
         }
@@ -514,7 +514,7 @@ public class UserPageController {
 
     @FXML
     void actorPageButtonClick(MouseEvent event) throws IOException {
-        Logger.info("actor page button clicked");
+        Logger.info("Actor page button clicked");
         String actorType = MyPodcastDB.getInstance().getSessionType();
         if(actorType.equals("User"))
             StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
@@ -528,14 +528,14 @@ public class UserPageController {
 
     @FXML
     void logoutButtonClick(MouseEvent event) throws IOException{
-        Logger.info("logout button clicked");
+        Logger.info("Logout button clicked");
         MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML
     void deleteButtonClick(MouseEvent event) throws  IOException{
-        Logger.info("delete button clicked");
+        Logger.info("Delete button clicked");
 
         if(DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, "Really Delete your account?")) {
             UserService service = new UserService();
@@ -544,27 +544,27 @@ public class UserPageController {
             String dialogMsg = "";
             switch(res){
                 case 0:
-                    Logger.success("delete account success");
+                    Logger.success("Delete account success");
                     break;
                 case 1:
-                    logMsg = "user not exists in mongo";
-                    dialogMsg = "your account not exists";
+                    logMsg = "User not exists on mongo";
+                    dialogMsg = "Your account not exists";
                     break;
                 case 2:
-                    logMsg = "user not exists in neo4j";
-                    dialogMsg = "your account not exists";
+                    logMsg = "User not exists on neo4j";
+                    dialogMsg = "Your account not exists";
                     break;
                 case 3:
-                    logMsg = "delete operation failed in mongo";
-                    dialogMsg = "operation failed";
+                    logMsg = "Delete operation failed on mongo";
+                    dialogMsg = "Operation failed";
                     break;
                 case 4:
-                    logMsg = "delete opration failed in neo4j";
-                    dialogMsg = "operation failed";
+                    logMsg = "Delete operation failed on neo4j";
+                    dialogMsg = "Operation failed";
                     break;
                 case -1:
-                    logMsg = "unknown error";
-                    dialogMsg = "unknown error";
+                    logMsg = "Unknown error";
+                    dialogMsg = "Unknown error";
                     break;
             }
             if(res > 0 || res == -1){
@@ -603,7 +603,7 @@ public class UserPageController {
 
     @FXML
     private void imageRightButtonClick(MouseEvent event){
-        Logger.info("image right button clicked");
+        Logger.info("Image right button clicked");
         if(imageNumber == maxUserImages - 1 )
             imageNumber = 0;
         else
@@ -616,7 +616,7 @@ public class UserPageController {
     @FXML
     private void imageLeftButtonClick(MouseEvent event){
 
-        Logger.info("image left button clicked");
+        Logger.info("Image left button clicked");
         if(imageNumber == 0 )
             imageNumber = maxUserImages - 1;
         else
@@ -639,7 +639,7 @@ public class UserPageController {
         else if(actorType.equals("Author"))
             sessionActorName = ((Author)MyPodcastDB.getInstance().getSessionActor()).getName();
 
-        Logger.info("session user: " + actorType);
+        Logger.info("Session user: " + actorType);
 
         String pageUsername = StageManager.getObjectIdentifier();
 
@@ -664,15 +664,15 @@ public class UserPageController {
         UserService service = new UserService();
         int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 100);
         if(res == 0)
-            Logger.success("load user success");
+            Logger.success("Load user success");
         else if(res == 1){
-            Logger.error("user not exists");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "user not exists");
+            Logger.error("User not exists");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
             return;
         }
         else{
-            Logger.error("unknown error");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
+            Logger.error("Unknown error");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Unknown error");
             return;
         }
 
@@ -691,14 +691,14 @@ public class UserPageController {
 
         if(actorType.equals("User") && pageOwner.getUsername().equals(sessionActorName)) {
 
-            Logger.info("owner mode");
+            Logger.info("Owner mode");
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(true);
             userPageSettingsButton.setVisible(true);
 
         }
         else if (actorType.equals("User")){
-            Logger.info("user visitor mode");
+            Logger.info("User visitor mode");
             UserService followService = new UserService();
             int result = followService.checkFollowUser(sessionActorName, pageOwner.getUsername());
             String logMsg = "";
@@ -706,26 +706,30 @@ public class UserPageController {
             switch (res){
                 case 0 :
                 case 1 :
-                    Logger.success("check relation success");
+                    Logger.success("Check relation success");
                     break;
                 case 2 :
-                    logMsg = "your account not exists in mongo";
-                    dialogMsg = "your account not exists";
+                    logMsg = "Your account not exists on mongo";
+                    dialogMsg = "Your account not exists";
                     break;
                 case 3 :
-                    logMsg = "your account not exists in neo4j";
-                    dialogMsg = "your account not exists";
+                    logMsg = "Your account not exists on neo4j";
+                    dialogMsg = "Your account not exists";
                     break;
                 case 4 :
-                    logMsg = "user not exists in mongo";
-                    dialogMsg = "user not exists";
+                    logMsg = "User not exists on mongo";
+                    dialogMsg = "User not exists";
                     break;
                 case 5 :
-                    logMsg = "user not exists in neo4j";
-                    dialogMsg = "user not exists";
+                    logMsg = "User not exists on neo4j";
+                    dialogMsg = "User not exists";
+                    break;
+                case -1:
+                    logMsg = "Unknown error";
+                    dialogMsg = "Unknown error";
                     break;
             }
-            if(res == 0) {
+            if(res == 0 || res == -1) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
                 isFollowed = true;
             }
@@ -734,7 +738,7 @@ public class UserPageController {
                 isFollowed = false;
             }
             else if (res == -1){
-                Logger.error("unknown error");
+                Logger.error("Unknown error");
                 DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
                 return;
             }
@@ -749,7 +753,7 @@ public class UserPageController {
             userPageDeleteButton.setVisible(false);
         }
         else if(actorType.equals("Author")){
-            Logger.info("author visitor mode");
+            Logger.info("Author visitor mode");
 
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(false);
@@ -757,7 +761,7 @@ public class UserPageController {
             userPageDeleteButton.setVisible(false);
         }
         else{
-            Logger.info("admin mode");
+            Logger.info("Admin mode");
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(true);
             userPageSettingsButton.setVisible(false);

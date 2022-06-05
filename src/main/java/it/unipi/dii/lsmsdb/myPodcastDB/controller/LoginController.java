@@ -71,7 +71,7 @@ public class LoginController {
     void loginLoginButtonClick(MouseEvent event) throws IOException {
         if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty()) {
 
-            String msg = "invalid values";
+            String msg = "Invalid values";
             Logger.error("Login clicked: " + msg);
             DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
             return;
@@ -82,7 +82,7 @@ public class LoginController {
 
     @FXML
     void loginLoginButtonIn(MouseEvent event){
-        Logger.info("login button pressed");
+        Logger.info("Login button in");
         loginLoginButton.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-border-color: #4CAF50;" +
@@ -95,7 +95,7 @@ public class LoginController {
 
     @FXML
     void loginLoginButtonOut(MouseEvent event){
-        Logger.info("login buttod released");
+        Logger.info("Login buttod out");
         loginLoginButton.setStyle(
                 "-fx-background-color: #4CAF50;" +
                         "-fx-border-color:  transparent;" +
@@ -108,7 +108,7 @@ public class LoginController {
 
     @FXML
     void loginSignUpButtonIn(MouseEvent event){
-        Logger.info("sugnup butto pressed");
+        Logger.info("Signup button in");
         loginSignUpButton.setStyle(
                 "-fx-background-color:  white;" +
                         "-fx-border-color:  #f4511e;" +
@@ -121,7 +121,7 @@ public class LoginController {
 
     @FXML
     void loginSgnUpButtonOut(MouseEvent event){
-        Logger.info("login button released");
+        Logger.info("Login button out");
         loginSignUpButton.setStyle(
                 "-fx-background-color:  #f4511e;" +
                         "-fx-border-color:  transparent;" +
@@ -180,7 +180,7 @@ public class LoginController {
         if(loginUsernameTextField.getText().isEmpty() || loginPasswordTextField.getText().isEmpty())
             return;
 
-        Logger.info("enter pressed");
+        Logger.info("Enter pressed");
         login();
 
 
@@ -200,18 +200,26 @@ public class LoginController {
             //user = (User)simActorService(actorName, password, actorType);
             UserService service = new UserService();
             int res = service.getUserLogin(user);
-            if(res == 0){
-                Logger.success("login user success");
-                MyPodcastDB.getInstance().setSession(user, actorType);
+            String msg = "";
+            switch (res){
+                case 0:
+                    Logger.success("Login user success");
+                    MyPodcastDB.getInstance().setSession(user, actorType);
+                    break;
+                case 1:
+                    msg = "User not registered";
+                    break;
+                case 2:
+                    msg = "Incorrect password";
+                    break;
+                case -1:
+                    msg = "Unknown error";
+                    break;
             }
-            else if(res == 1){
-                Logger.error("user not registered");
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "user not registered");
+            if(res > 0 || res == -1){
+                Logger.error(msg);
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
                 return;
-            }
-            else{
-                Logger.error("unknown error");
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "unknown error");
             }
         }
         else if(loginAuthorRadioButton.isSelected()) {
@@ -223,17 +231,25 @@ public class LoginController {
             //author = (Author)simActorService(actorName, password, actorType);
             AuthorService service = new AuthorService();
             int res = service.getAuthorLogin(author);
-            if(res == 0){
-                Logger.success("login author success");
-                MyPodcastDB.getInstance().setSession(author, actorType);
-            }else if(res == 1){
-                Logger.error("author not registered");
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane,"author not registered");
-                return;
+            String msg = "";
+            switch (res){
+                case 0:
+                    Logger.success("Login author success");
+                    MyPodcastDB.getInstance().setSession(author, actorType);
+                    break;
+                case 1:
+                    msg = "Author not registered";
+                    break;
+                case 2:
+                    msg = "Incorrect password";
+                    break;
+                case -1:
+                    msg = "Unknown error";
+                    break;
             }
-            else{
-                Logger.error("unknown error");
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane,"unknown error");
+            if(res > 0 || res == -1){
+                Logger.error(msg);
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
                 return;
             }
         }
@@ -246,18 +262,25 @@ public class LoginController {
             //admin = (Admin)simActorService(actorName, password, actorType);
             AdminService service = new AdminService();
             int res = service.getAdminLogin(admin);
-            if(res == 0) {
-                MyPodcastDB.getInstance().setSession(admin, actorType);
-                Logger.success("login admin success");
+            String msg = "";
+            switch (res){
+                case 0:
+                    Logger.success("Login admin success");
+                    MyPodcastDB.getInstance().setSession(admin, actorType);
+                    break;
+                case 1:
+                    msg = "Admin not registered";
+                    break;
+                case 2:
+                    msg = "Incorrect password";
+                    break;
+                case -1:
+                    msg = "Unknown error";
+                    break;
             }
-            else if(res == 1){
-                Logger.error("admin not registered");
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "admin not registered");
-                return;
-            }
-            else{
-                Logger.error("unknown error");
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, "unknown error");
+            if(res > 0 || res == -1){
+                Logger.error(msg);
+                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
                 return;
             }
         }

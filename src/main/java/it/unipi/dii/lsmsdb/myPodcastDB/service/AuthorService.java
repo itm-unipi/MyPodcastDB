@@ -25,8 +25,10 @@ public class AuthorService {
         int res = -1;
         MongoManager.getInstance().openConnection();
         Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
-        if(newAuthor == null || !author.getPassword().equals(newAuthor.getPassword()))
+        if(newAuthor == null)
             res = 1;
+        else if(!author.getPassword().equals(newAuthor.getPassword()))
+            res = 2;
         else {
             author.copy(newAuthor);
             res = 0;

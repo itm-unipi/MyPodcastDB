@@ -148,8 +148,8 @@ public class SignUpController {
             String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
 
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
-                Logger.error("invalid values");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "invalid values");
+                Logger.error("Invalid values");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
                 return;
             }
 
@@ -159,20 +159,41 @@ public class SignUpController {
 
             UserService service = new UserService();
             int res = service.addUserSignUp(user);
-            if(res == 0){
-                Logger.success("user account created");
-                DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
+            String logMsg = "";
+            String dialogMsg = "";
+            switch (res){
+                case 0:
+                    Logger.success("User account created");
+                    DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "User account created");
+                    break;
+                case 1:
+                    logMsg = "A user with the same username already exists on mongo";
+                    dialogMsg = "A user with the same username already exists";
+                    break;
+                case 2:
+                    logMsg = "A user with the same username already exists on neo4j";
+                    dialogMsg = "A user with the same username already exists";
+                    break;
+                case 3:
+                    logMsg = "Operation failed on mongo";
+                    dialogMsg = "Operation failed";
+                    break;
+                case 4:
+                    logMsg = "Operation failed on neo4j";
+                    dialogMsg = "Operation failed";
+                    break;
+                case -1:
+                    logMsg = "Unknown error";
+                    dialogMsg = "Unknown error";
+                    break;
             }
-            else if(res == 1){
-                Logger.error("Adding user failed");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Adding user failed");
+
+            if(res > 0 || res == -1){
+                Logger.error(logMsg);
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, dialogMsg);
                 return;
             }
-            else{
-                Logger.error("unknown error");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "unknown error");
-                return;
-            }
+
         }
         else{
             String name = signUpUsernameTextField.getText();
@@ -182,8 +203,8 @@ public class SignUpController {
             String picturePath = "/img/authors/author" + (Integer)imageNumber + ".png";
 
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
-                Logger.error("invalid values");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "invalid values");
+                Logger.error("Invalid values");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
                 return;
             }
 
@@ -192,18 +213,38 @@ public class SignUpController {
 
             AuthorService service = new AuthorService();
             int res = service.addAuthorSignUp(author);
-            if(res == 0){
-                Logger.success("author account created");
-                DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Account created");
+            String logMsg = "";
+            String dialogMsg = "";
+            switch (res){
+                case 0:
+                    Logger.success("Author account created");
+                    DialogManager.getInstance().createInformationAlert(signUpAnchorPane, "Author account created");
+                    break;
+                case 1:
+                    logMsg = "An author with the same name already exists on mongo";
+                    dialogMsg = "A author with the same name already exists";
+                    break;
+                case 2:
+                    logMsg = "An author with the same name already exists on neo4j";
+                    dialogMsg = "An author with the same name already exists";
+                    break;
+                case 3:
+                    logMsg = "Operation failed on mongo";
+                    dialogMsg = "Operation failed";
+                    break;
+                case 4:
+                    logMsg = "Operation failed on neo4j";
+                    dialogMsg = "Operation failed";
+                    break;
+                case -1:
+                    logMsg = "Unknown error";
+                    dialogMsg = "Unknown error";
+                    break;
             }
-            else if(res == 1){
-                Logger.error("Adding author failed");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Adding author failed");
-                return;
-            }
-            else{
-                Logger.error("unknown error");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "unknown error");
+
+            if(res > 0 || res == -1){
+                Logger.error(logMsg);
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, dialogMsg);
                 return;
             }
 
@@ -213,7 +254,7 @@ public class SignUpController {
 
     @FXML
     void signUpSignUpButtonIn(MouseEvent event){
-        Logger.info("signup button pressed");
+        Logger.info("Signup button pressed");
         signUpSignUpButton.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-border-color: #4CAF50;" +
@@ -226,7 +267,7 @@ public class SignUpController {
 
     @FXML
     void signUpSignUpButtonOut(MouseEvent event){
-        Logger.info("signup button released");
+        Logger.info("Signup button released");
         signUpSignUpButton.setStyle(
                 "-fx-background-color: #4CAF50;" +
                         "-fx-border-color:  transparent;" +
@@ -239,13 +280,13 @@ public class SignUpController {
 
     @FXML
     void signUpBackButtonClick(MouseEvent event) throws IOException {
-        Logger.info("back button clicked");
+        Logger.info("Back button clicked");
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML
     void signUpSwitchClicked(MouseEvent event) throws IOException{
-        Logger.info("switch button clicked");
+        Logger.info("Switch button clicked");
         if(actorType.equals("User")){
             signUpSwitchButton.setImage(ImageCache.getImageFromLocalPath("/img/switch_on_80px.png"));
             signUpLabelAuthor.setStyle("-fx-font-weight: bold;");
@@ -278,7 +319,7 @@ public class SignUpController {
 
     @FXML
     void leftButtonClick(MouseEvent event){
-        Logger.info("left button clicked");
+        Logger.info("Left button clicked");
         if(imageNumber == 0 && actorType.equals("User"))
             imageNumber = maxUserImages - 1;
         else if(imageNumber == 0 && actorType.equals("Author"))
@@ -298,7 +339,7 @@ public class SignUpController {
 
     @FXML
     void rightButtonClick(MouseEvent event){
-        Logger.info("right button clicked");
+        Logger.info("Right button clicked");
         if(actorType.equals("User") && imageNumber == maxUserImages - 1 )
             imageNumber = 0;
         else if(actorType.equals("Author") && imageNumber == maxAuthorImages - 1)
