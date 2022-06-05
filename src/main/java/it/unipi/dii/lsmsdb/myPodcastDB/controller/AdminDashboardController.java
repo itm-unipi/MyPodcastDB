@@ -173,8 +173,38 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnDelete(MouseEvent event) {
-        Logger.info("Delete Admin");
+    void clickOnDelete(MouseEvent event) throws IOException {
+
+        Logger.info("Delete Admin button clicked");
+        AdminService service = new AdminService();
+        int res = service.deleteAdmin(this.admin);
+        String logMsg = "";
+        String dialogMsg = "";
+        switch (res){
+            case 0:
+                Logger.success("Admin account removed");
+                DialogManager.getInstance().createInformationAlert(adminAnchorPane, "Admin account removed");
+                break;
+            case 1:
+                logMsg = "Admin account not exists";
+                dialogMsg = "Your account not exists";
+                break;
+            case 2:
+                logMsg = "Operation failed on mongo";
+                dialogMsg = "operation failed";
+                break;
+            case -1:
+                logMsg = "Unknown error";
+                dialogMsg = "Unknown error";
+                break;
+
+        }
+        if(res > 0 || res == -1){
+            Logger.error(logMsg);
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
+            return;
+        }
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML
@@ -203,7 +233,7 @@ public class AdminDashboardController {
     @FXML
     void clickOnUpdate(MouseEvent event) {
 
-        Logger.info("update button clicked");
+        Logger.info("Update button clicked");
 
         Admin newAdmin = new Admin();
         // update admin
@@ -219,30 +249,30 @@ public class AdminDashboardController {
         switch (res){
 
             case 0:
-                Logger.success("update admin success");
+                Logger.success("Update admin success");
                 break;
             case 1:
-                Logger.success("nothing to update");
+                Logger.success("Nothing to update");
                 break;
             case 2:
-                logMsg = "admin not exists on mongo";
-                dialogMsg = "operation failed";
+                logMsg = "Admin not exists on mongo";
+                dialogMsg = "Your account not exists";
                 break;
             case 3:
-                logMsg = "admin with the same name already exists";
-                dialogMsg = "admin with the same name already exists";
+                logMsg = "Admin with the same name already exists";
+                dialogMsg = "Admin with the same name already exists";
                 break;
             case 4:
-                logMsg = "operation on mongo failed";
-                dialogMsg = "operation failed";
+                logMsg = "Operation on mongo failed";
+                dialogMsg = "Operation failed";
                 break;
             case -1:
-                logMsg = "unknown error";
-                dialogMsg = "unknown error";
+                logMsg = "Unknown error";
+                dialogMsg = "Unknown error";
                 break;
         }
 
-        if(res > 1){
+        if(res > 1 || res == -1){
             Logger.error(logMsg);
             DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
             return;

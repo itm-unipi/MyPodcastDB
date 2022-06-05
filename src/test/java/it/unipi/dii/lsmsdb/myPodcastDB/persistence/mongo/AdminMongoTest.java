@@ -92,7 +92,7 @@ public class AdminMongoTest {
         this.adminMongo.addAdmin(admin3);
 
         String id = admin1.getId();
-        this.adminMongo.deleteAuthorById(id);
+        this.adminMongo.deleteAdminById(id);
         Admin testAdmin = this.adminMongo.findAdminById(id);
         if (testAdmin == null)
             System.out.println("[+] deleteAdminById");
@@ -100,7 +100,7 @@ public class AdminMongoTest {
             System.err.println("[-] deleteAdminById");
 
         String name = admin2.getName();
-        this.adminMongo.deleteAuthorByName(name);
+        this.adminMongo.deleteAdminByName(name);
         testAdmin = this.adminMongo.findAdminByName(name);
         if (testAdmin == null)
             System.out.println("[+] deleteAdminByName");
@@ -108,7 +108,7 @@ public class AdminMongoTest {
             System.err.println("[-] deleteAdminByName");
 
         String email = admin3.getEmail();
-        this.adminMongo.deleteAuthorByEmail(email);
+        this.adminMongo.deleteAdminByEmail(email);
         testAdmin = this.adminMongo.findAdminByEmail(email);
         if (testAdmin == null)
             System.out.println("[+] deleteAdminByEmail");

@@ -20,8 +20,10 @@ public class AdminService {
         MongoManager.getInstance().openConnection();
 
         Admin newAdmin = adminMongoManager.findAdminByName(admin.getName());
-        if(newAdmin == null || !admin.getPassword().equals(newAdmin.getPassword()))
+        if(newAdmin == null)
             res = 1;
+        else if(!admin.getPassword().equals(newAdmin.getPassword()))
+            res = 2;
         else {
             admin.copy(newAdmin);
             res = 0;
@@ -73,6 +75,22 @@ public class AdminService {
         MongoManager.getInstance().closeConnection();
         if(res == 0)
             oldAdmin.copy(newAdmin);
+        return res;
+    }
+
+    public int deleteAdmin(Admin admin){
+        int res = -1;
+        MongoManager.getInstance().openConnection();
+        //check if admin exists
+        if(adminMongoManager.findAdminByName(admin.getName()) == null)
+            res = 1;
+        //check failure mongo operation
+        else if (!adminMongoManager.deleteAdminById(admin.getId()))
+            res = 2;
+        else
+            res = 0;
+        MongoManager.getInstance().closeConnection();
+
         return res;
     }
     //-----------------------------------------------

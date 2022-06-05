@@ -61,7 +61,7 @@
             </Label>
             <Pane prefHeight="49.0" prefWidth="400.0">
                <children>
-                  <PasswordField fx:id="adminEmailTextFiled" alignment="CENTER" layoutX="90.0" layoutY="7.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
+                  <TextField fx:id="adminEmailTextFiled" alignment="CENTER" layoutX="88.0" layoutY="12.0" prefHeight="25.0" prefWidth="224.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: #636366;" />
                </children>
             </Pane>
             <Pane prefHeight="20.0" prefWidth="400.0" />
