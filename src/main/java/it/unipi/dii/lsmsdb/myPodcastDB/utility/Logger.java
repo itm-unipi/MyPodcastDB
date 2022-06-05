@@ -51,7 +51,11 @@ public class Logger {
         if (logMode.equals("deploy"))
             return;
 
-        String log = "[+] " + message;
+        String page = "INIT";
+        if(ConfigManager.isInitialized())
+            page = MyPodcastDB.getInstance().getSessionPage();
+
+        String log = "[+] {" + page + "} " + message;
         System.out.println(log);
 
         try {
@@ -64,7 +68,11 @@ public class Logger {
     }
 
     public static void error(String message) {
-        String log = "[-] " + message;
+        String page = "INIT";
+        if(ConfigManager.isInitialized())
+            page = MyPodcastDB.getInstance().getSessionPage();
+
+        String log = "[-] {" + page + "} " + message;
         System.err.println(log);
 
         try {
