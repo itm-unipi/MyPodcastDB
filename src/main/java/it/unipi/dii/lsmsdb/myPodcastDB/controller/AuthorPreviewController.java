@@ -41,7 +41,7 @@ public class AuthorPreviewController {
     void onAuthor(MouseEvent event) {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if (actorType.equals("Author") || actorType.equals("User")) {
+        if ((actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(author.getName())) || actorType.equals("User")) {
             boxAuthorImage.setStyle("-fx-background-color:  #eaeaea; -fx-background-radius: 100px; -fx-border-color: #eaeaea; -fx-border-radius: 100px;");
             FadeTransition fadeBackground = new FadeTransition(Duration.seconds(1), boxAuthorImage);
             fadeBackground.play();
@@ -65,7 +65,7 @@ public class AuthorPreviewController {
     void outAuthor(MouseEvent event) {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if (actorType.equals("Author") || actorType.equals("User")) {
+        if ((actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(author.getName())) || actorType.equals("User")) {
             boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100px; -fx-border-color: #eaeaea; -fx-border-radius: 100px;");
             FadeTransition fadeBackground = new FadeTransition(Duration.seconds(0.3), boxAuthorImage);
             fadeBackground.play();
@@ -138,8 +138,8 @@ public class AuthorPreviewController {
         Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
         authorPicture.setImage(image);
 
-        followed = follow;
-        if(followed)
-            btnFollowAuthor.setText("Unfollow");
+        this.followed = follow;
+        if (followed)
+            this.btnFollowAuthor.setText("Unfollow");
     }
 }

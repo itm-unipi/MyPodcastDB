@@ -222,43 +222,6 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox fx:id="boxBasedOnAuthors" alignment="CENTER">
-                                 <children>
-                                    <Label prefHeight="56.0" prefWidth="1045.0" text="Podcasts based on your authors">
-                                       <font>
-                                          <Font name="Corbel Light" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label prefHeight="56.0" prefWidth="1045.0" text="Podcasts based on authors that you follow.">
-                                       <font>
-                                          <Font name="Corbel Light" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox alignment="CENTER" prefHeight="250.0">
-                                       <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedAuthor" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/backArrow.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ScrollPane fx:id="scrollSuggestedForAuthor" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-                                             <content>
-                                                <GridPane fx:id="gridSuggestedForAuthor" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
-                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                                   </rowConstraints>
-                                                </GridPane>
-                                             </content>
-                                          </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedAuthor" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/forwardArrow.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
                               <VBox fx:id="boxBasedOnUsers" alignment="CENTER">
                                  <children>
                                     <Label prefHeight="56.0" prefWidth="1045.0" text="Podcasts based on your friends">
@@ -384,43 +347,6 @@
                                     </ImageView>
                                  </children>
                               </HBox>
-                              <VBox fx:id="boxTopCountry" alignment="CENTER">
-                                 <children>
-                                    <Label fx:id="topCountryLabel" prefHeight="56.0" prefWidth="1045.0" text="Top &lt;your_country&gt;">
-                                       <font>
-                                          <Font name="Corbel Light" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <Label prefHeight="56.0" prefWidth="1045.0" text="Podcasts with highest avarage rating in your country.">
-                                       <font>
-                                          <Font name="Corbel Light" size="16.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
-                                       <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backTopCountry" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/backArrow.png" />
-                                             </image>
-                                          </ImageView>
-                                          <ScrollPane fx:id="scrollTopCountry" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-                                             <content>
-                                                <GridPane fx:id="gridTopCountry" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
-                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                                   </rowConstraints>
-                                                </GridPane>
-                                             </content>
-                                          </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextTopCountry" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/forwardArrow.png" />
-                                             </image>
-                                          </ImageView>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
                               <VBox fx:id="boxPodcastsBasedOnWatchlist" alignment="CENTER">
                                  <children>
                                     <Label prefHeight="56.0" prefWidth="1045.0" text="Podcasts you might like">
