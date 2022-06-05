@@ -397,14 +397,14 @@ public class PodcastMongoTest {
     }
 
     void showCountriesWithHighestNumberOfPodcastsTest() {
-        List<String> countries = new ArrayList<>();
+        List<Pair<String, Integer>> countries = new ArrayList<>();
         countries = this.podcastMongo.showCountriesWithHighestNumberOfPodcasts(4);
 
         if (countries != null) {
             System.out.println("[+] showCountriesWithHighestNumberOfPodcasts");
-            //for (String s: countries) {
-                //System.out.println(s);
-            //}
+            for (Pair<String, Integer> s: countries) {
+                System.out.println(s);
+            }
         } else {
             System.err.println("[-] showCountriesWithHighestNumberOfPodcasts");
         }

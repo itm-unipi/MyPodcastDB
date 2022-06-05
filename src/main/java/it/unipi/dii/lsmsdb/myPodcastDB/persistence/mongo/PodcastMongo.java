@@ -592,7 +592,7 @@ public class PodcastMongo {
 
     // ------------------------------- AGGREGATION QUERY -------------------------------- //
 
-    public List<String> showCountriesWithHighestNumberOfPodcasts(int lim) {
+    public List<Pair<String, Integer>> showCountriesWithHighestNumberOfPodcasts(int lim) {
         MongoManager manager = MongoManager.getInstance();
 
         /*db.podcasts.aggregate([
@@ -604,14 +604,14 @@ public class PodcastMongo {
 
         try {
             Bson group = group("$country", sum("totalPodcasts", 1));
-            Bson projectionsFields = fields(excludeId(), computed("country", "$_id"), computed("totalPodcasts", "$sum"));
+            Bson projectionsFields = fields(excludeId(), computed("country", "$_id"), computed("totalPodcasts", "$sum"), include("totalPodcasts"));
             Bson projection = project(projectionsFields);
             Bson sort = sort(descending("totalPodcasts"));
             Bson limit = limit(lim);
 
-            List<String> countries = new ArrayList<String>();
+            List<Pair<String, Integer>> countries = new ArrayList<>();
             for (Document doc :manager.getCollection("podcast").aggregate(Arrays.asList(group, sort, projection, limit)))
-                countries.add(doc.getString("country"));
+                countries.add(new Pair<>(doc.getString("country"), doc.getInteger("totalPodcasts")));
 
             if (countries.isEmpty())
                 return null;

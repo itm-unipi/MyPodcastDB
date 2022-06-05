@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -113,6 +114,7 @@ public class AdminDashboardController {
     private Button updateInfo;
 
     private Admin admin;
+    private AdminService service;
 
     @FXML
     void clickOnAddAdmin(MouseEvent event) throws IOException {
@@ -277,7 +279,12 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate9(MouseEvent event) {
-        Logger.info("Update 9");
+        int result = this.service.updatePodcastsWithHighestAverageRating(10);
+        if (result == 0) {
+
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
@@ -438,7 +445,7 @@ public class AdminDashboardController {
     public void initialize() throws IOException {
         Admin admin = (Admin)MyPodcastDB.getInstance().getSessionActor();
         this.admin = admin;
-        Logger.info("Admin logged : " + this.admin.getName());
+        this.service = new AdminService();
         this.title.setText("Welcome " + this.admin.getName());
 
         // example statistic
