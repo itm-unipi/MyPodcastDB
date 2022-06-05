@@ -69,23 +69,277 @@ public class QueryMongo {
         return null;
     }
 
-//    public String getPodcastsWithHighestNumberOfReviews(List<Pair<Podcast, Integer>> readValues) {}
-//
-//    public String getCountryWithHighestNumberOfPodcasts(List<Pair<String, Integer>> readValues) {}
-//
-//    public String getFavouriteCategoryForGender(List<String> female, List<String> male, List<String> notBinary) {}
-//
-//    public String getMostNumerousCategory(List<Entry<String, Integer>> readValues) {}
-//
-//    public String getMostAppreciatedCategory(List<Entry<String, Integer>> readValues) {}
-//
-//    public String getPodcastsWithHighestAverageRating(List<Pair<Podcast, Float>> readValues) {}
-//
-//    public String getPodcastWithHighestAverageRatingPerCountry(List<Triplet<Podcast, String, Float>> readValues) {}
-//
-//    public String getMostFollowedAuthor(List<Pair<Author, Integer>> readValues) {}
-//
-//    public String getMostLikedPodcast(List<Entry<Podcast, Integer>> readValues) {}
+    public String getPodcastsWithHighestNumberOfReviews(List<Pair<Podcast, Integer>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "PodcastsWithHighestNumberOfReviews")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String podcastId = result.getString("podcastId");
+                    String podcastName = result.getString("podcastName");
+                    String podcastArtwork = result.getString("podcastArtwork");
+                    Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
+                    int numReviews = result.getInteger("numReviews");
+                    Pair<Podcast, Integer> r = new Pair<>(podcast, numReviews);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getCountryWithHighestNumberOfPodcasts(List<Pair<String, Integer>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "CountryWithHighestNumberOfPodcasts")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String country = result.getString("country");
+                    int numPodcasts = result.getInteger("numPodcasts");
+                    Pair<String, Integer> r = new Pair<>(country, numPodcasts);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getFavouriteCategoryForGender(List<String> female, List<String> male, List<String> notBinary) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "FavouriteCategoryForGender")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get the three lists
+                female.addAll(query.getList("resultsFemale", String.class));
+                male.addAll(query.getList("resultsMale", String.class));
+                notBinary.addAll(query.getList("resultsNotBinary", String.class));
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getMostNumerousCategory(List<Pair<String, Integer>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "MostNumerousCategory")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String category = result.getString("category");
+                    int numPodcasts = result.getInteger("numPodcasts");
+                    Pair<String, Integer> r = new Pair<>(category, numPodcasts);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getMostAppreciatedCategory(List<Pair<String, Integer>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "MostAppreciatedCategory")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String category = result.getString("category");
+                    int numPodcasts = result.getInteger("numLikes");
+                    Pair<String, Integer> r = new Pair<>(category, numPodcasts);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getPodcastsWithHighestAverageRating(List<Pair<Podcast, Float>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "PodcastsWithHighestAverageRating")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String podcastId = result.getString("podcastId");
+                    String podcastName = result.getString("podcastName");
+                    String podcastArtwork = result.getString("podcastArtwork");
+                    Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
+                    float meanRating = (float)(double)result.getDouble("meanRating");
+                    Pair<Podcast, Float> r = new Pair<>(podcast, meanRating);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getPodcastWithHighestAverageRatingPerCountry(List<Triplet<Podcast, String, Float>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "PodcastWithHighestAverageRatingPerCountry")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String podcastId = result.getString("podcastId");
+                    String podcastName = result.getString("podcastName");
+                    String podcastArtwork = result.getString("podcastArtwork");
+                    Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
+                    String country = result.getString("country");
+                    float meanRating = (float)(double)result.getDouble("meanRating");
+                    Triplet<Podcast, String, Float> r = new Triplet<>(podcast, country, meanRating);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getMostFollowedAuthor(List<Pair<Author, Integer>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "MostFollowedAuthor")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String authorName = result.getString("authorName");
+                    String picturePath = result.getString("picturePath");
+                    Author author = new Author("", authorName, picturePath);
+                    int followers = result.getInteger("followers");
+                    Pair<Author, Integer> r = new Pair<>(author, followers);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public String getMostLikedPodcast(List<Pair<Podcast, Integer>> readValues) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(eq("queryName", "MostLikedPodcast")).iterator()) {
+            if (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String updateTime = query.getString("lastUpdate");
+
+                // get all the results
+                List<Document> results = query.getList("results", Document.class);
+                for (Document result : results) {
+                    String podcastId = result.getString("podcastId");
+                    String podcastName = result.getString("podcastName");
+                    String podcastArtwork = result.getString("podcastArtwork");
+                    Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
+                    int numLikes = result.getInteger("numLikes");
+                    Pair<Podcast, Integer> r = new Pair<>(podcast, numLikes);
+                    readValues.add(r);
+                }
+
+                return updateTime;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
 
     // --------- UPDATE --------- //
 
@@ -156,7 +410,7 @@ public class QueryMongo {
         List<Document> results = new ArrayList<>();
         for (Pair<String, Integer> value : newValues) {
             Document newResult = new Document()
-                    .append("category", value.getValue0())
+                    .append("country", value.getValue0())
                     .append("numPodcasts", value.getValue1());
             results.add(newResult);
         }
@@ -208,7 +462,7 @@ public class QueryMongo {
         for (Entry<String, Integer> value : newValues) {
             Document newResult = new Document()
                     .append("category", value.getKey())
-                    .append("numPodcast", value.getValue());
+                    .append("numPodcasts", value.getValue());
             results.add(newResult);
         }
 

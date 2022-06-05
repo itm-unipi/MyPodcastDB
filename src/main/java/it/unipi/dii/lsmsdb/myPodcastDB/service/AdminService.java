@@ -45,9 +45,47 @@ public class AdminService {
     public void loadAdminPage() {
         MongoManager.getInstance().openConnection();
 
-        List<Pair<String, Float>> test = new ArrayList<>();
-        String updateTime = this.queryMongo.getAverageAgeOfUsersPerFavouriteCategory(test);
-        Logger.info(updateTime + " : " + test);
+        List<Pair<String, Float>> test1 = new ArrayList<>();
+        String updateTime = this.queryMongo.getAverageAgeOfUsersPerFavouriteCategory(test1);
+        Logger.info("1." + updateTime + " : " + test1);
+
+        List<Pair<Podcast, Integer>> test2 = new ArrayList<>();
+        updateTime = this.queryMongo.getPodcastsWithHighestNumberOfReviews(test2);
+        Logger.info("2." + updateTime + " : " + test2);
+
+        List<Pair<String, Integer>> test3 = new ArrayList<>();
+        updateTime = this.queryMongo.getCountryWithHighestNumberOfPodcasts(test3);
+        Logger.info("3." + updateTime + " : " + test3);
+
+        List<String> test41 = new ArrayList<>();
+        List<String> test42 = new ArrayList<>();
+        List<String> test43 = new ArrayList<>();
+        updateTime = this.queryMongo.getFavouriteCategoryForGender(test41, test42, test43);
+        Logger.info("4." + updateTime + " : " + test41 + " | " + test42 + " | " + test43);
+
+        List<Pair<String, Integer>> test5 = new ArrayList<>();
+        updateTime = this.queryMongo.getMostNumerousCategory(test5);
+        Logger.info("5." + updateTime + " : " + test5);
+
+        List<Pair<String, Integer>> test6 = new ArrayList<>();
+        updateTime = this.queryMongo.getMostAppreciatedCategory(test6);
+        Logger.info("6." + updateTime + " : " + test6);
+
+        List<Pair<Podcast, Float>> test7 = new ArrayList<>();
+        updateTime = this.queryMongo.getPodcastsWithHighestAverageRating(test7);
+        Logger.info("7." + updateTime + " : " + test7);
+
+        List<Triplet<Podcast, String, Float>> test8 = new ArrayList<>();
+        updateTime = this.queryMongo.getPodcastWithHighestAverageRatingPerCountry(test8);
+        Logger.info("8." + updateTime + " : " + test8);
+
+        List<Pair<Author, Integer>> test9 = new ArrayList<>();
+        updateTime = this.queryMongo.getMostFollowedAuthor(test9);
+        Logger.info("9." + updateTime + " : " + test9);
+
+        List<Pair<Podcast, Integer>> test10 = new ArrayList<>();
+        updateTime = this.queryMongo.getMostLikedPodcast(test10);
+        Logger.info("10." + updateTime + " : " + test10);
 
         MongoManager.getInstance().closeConnection();
     }
