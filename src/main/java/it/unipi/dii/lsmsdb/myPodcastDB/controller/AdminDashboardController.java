@@ -116,6 +116,7 @@ public class AdminDashboardController {
 
     private Admin admin;
     private AdminService service;
+    private int limit;
 
     @FXML
     void clickOnAddAdmin(MouseEvent event) throws IOException {
@@ -240,49 +241,98 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate1(MouseEvent event) {
-        Logger.info("Update 1");
+        Date updateTime = new Date();
+        int result = this.service.updateAverageAgeOfUsersPerFavouriteCategory(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate2(MouseEvent event) {
-        Logger.info("Update 2");
+        Date updateTime = new Date();
+        int result = this.service.updatePodcastsWithHighestNumberOfReviews(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate3(MouseEvent event) {
-        Logger.info("Update 3");
+        Date updateTime = new Date();
+        int result = this.service.updateCountryWithHighestNumberOfPodcasts(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate4(MouseEvent event) {
-        Logger.info("Update 4");
+        Date updateTime = new Date();
+        int result = this.service.updateFavouriteCategoryForGender(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate5(MouseEvent event) {
-        Logger.info("Update 5");
+        Date updateTime = new Date();
+        int result = this.service.updateMostNumerousCategory(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate6(MouseEvent event) {
-        Logger.info("Update 6");
+        Date updateTime = new Date();
+        int result = this.service.updateMostAppreciatedCategory(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate7(MouseEvent event) {
-        Logger.info("Update 7");
+        Date updateTime = new Date();
+        int result = this.service.updateMostFollowedAuthor(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate8(MouseEvent event) {
-        Logger.info("Update 8");
+        Date updateTime = new Date();
+        int result = this.service.updateMostLikedPodcast(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
     void clickOnUpdate9(MouseEvent event) {
-        int result = this.service.updatePodcastsWithHighestAverageRating(new Date(), 10);
+        Date updateTime = new Date();
+        int result = this.service.updatePodcastsWithHighestAverageRating(updateTime, this.limit);
         if (result == 0) {
-
+            // TODO: update date
         } else {
             // TODO: alert
         }
@@ -290,7 +340,13 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate10(MouseEvent event) {
-        Logger.info("Update 10");
+        Date updateTime = new Date();
+        int result = this.service.updatePodcastWithHighestAverageRatingPerCountry(updateTime, this.limit);
+        if (result == 0) {
+            // TODO: update date
+        } else {
+            // TODO: alert
+        }
     }
 
     @FXML
@@ -448,6 +504,7 @@ public class AdminDashboardController {
         this.admin = admin;
         this.service = new AdminService();
         this.title.setText("Welcome " + this.admin.getName());
+        this.limit = 10;
 
         // example statistic
         List<Entry<String, Object>> statistics1 = new ArrayList<>();

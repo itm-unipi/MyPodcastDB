@@ -155,13 +155,18 @@
                         </Label>
                         <HBox alignment="CENTER_LEFT" maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Label prefWidth="800.0" text="Average age of users per favourite category">
+                              <Label text="Average age of users per favourite category">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />
                                  </font>
                                  <HBox.margin>
                                     <Insets />
                                  </HBox.margin>
+                              </Label>
+                              <Label fx:id="data1" alignment="CENTER_RIGHT" layoutX="10.0" layoutY="18.0" prefWidth="452.0" textFill="#a4a4a4">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
                               </Label>
                               <Button fx:id="update1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate1" onMouseEntered="#mouseOnUpdate1" onMouseExited="#mouseOutUpdate1" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
                                  <font>
@@ -298,7 +303,7 @@
                         </HBox>
                         <HBox alignment="CENTER_LEFT" layoutX="188.0" layoutY="917.0" maxWidth="-Infinity" prefWidth="920.0">
                            <children>
-                              <Label prefWidth="800.0" text="Authors with highest average rating">
+                              <Label prefWidth="800.0" text="Most liked podcast">
                                  <font>
                                     <Font name="Corbel Light" size="20.0" />
                                  </font>

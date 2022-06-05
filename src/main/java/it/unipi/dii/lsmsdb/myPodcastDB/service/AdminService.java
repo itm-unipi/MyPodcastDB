@@ -183,7 +183,7 @@ public class AdminService {
         return result;
     }
 
-    private int updateMostAppreciatedCategory(Date updateTime, int limit) {
+    public int updateMostAppreciatedCategory(Date updateTime, int limit) {
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
