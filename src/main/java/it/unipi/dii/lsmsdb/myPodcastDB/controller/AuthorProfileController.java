@@ -32,6 +32,7 @@ import java.util.List;
 
 public class AuthorProfileController {
     private Author author;
+
     @FXML
     private BorderPane MainPage;
 
@@ -77,6 +78,15 @@ public class AuthorProfileController {
     private Label podcastLabel;
 
     @FXML
+    private HBox boxFollowedAuthors;
+
+    @FXML
+    private VBox noFollowersFound;
+
+    @FXML
+    private VBox noPodcasts;
+
+    @FXML
     private GridPane gridAuthorPodcasts;
 
     @FXML
@@ -84,6 +94,9 @@ public class AuthorProfileController {
 
     @FXML
     private ScrollPane scrollFollowedAuthors;
+
+    @FXML
+    private ScrollPane scrollPodcasts;
 
     /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
@@ -429,7 +442,7 @@ public class AuthorProfileController {
         // Authors followed by the author
         int row = 0;
         int column = 0;
-        for (Pair<Author, Boolean> followedAuthor: followedAuthors){
+        for (Pair<Author, Boolean> followedAuthor: followedAuthors) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
@@ -443,7 +456,8 @@ public class AuthorProfileController {
         // Getting author podcasts
         row = 0;
         column = 0;
-        for (Podcast podcast: author.getOwnPodcasts()){
+
+        for (Podcast podcast: author.getOwnPodcasts()) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
@@ -452,6 +466,20 @@ public class AuthorProfileController {
             controller.setData(author.getId(), podcast.getId(), podcast.getName(), podcast.getReleaseDate(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
 
             gridAuthorPodcasts.add(newPodcast, column, row++);
+        }
+
+        if (author.getOwnPodcasts().isEmpty()) {
+            scrollPodcasts.setVisible(false);
+
+            noPodcasts.setVisible(true);
+            noPodcasts.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        }
+
+        if (followedAuthors.isEmpty()) {
+            boxFollowedAuthors.setVisible(false);
+
+            noFollowersFound.setVisible(true);
+            noFollowersFound.setPrefHeight(130);
         }
     }
 }

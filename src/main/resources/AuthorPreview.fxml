@@ -38,7 +38,7 @@
                   </Button>
                </children>
             </VBox>
-            <Label fx:id="nameAuthorFollowed" alignment="CENTER" onMouseClicked="#onClickAuthorName" text="Giovanotti">
+            <Label fx:id="nameAuthorFollowed" alignment="CENTER" onMouseClicked="#onClickAuthorName" text="&lt;author_name&gt;">
                <font>
                   <Font name="Corbel Light" size="18.0" />
                </font>

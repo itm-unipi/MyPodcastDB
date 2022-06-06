@@ -29,7 +29,7 @@
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label fx:id="podcastName" onMouseClicked="#onClickReducedPodcast" text="FootNotes">
+                        <Label fx:id="podcastName" onMouseClicked="#onClickReducedPodcast" text="&lt;podcast_name&gt;">
                            <font>
                               <Font name="Corbel Light" size="20.0" />
                            </font>
@@ -60,7 +60,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="Business">
+                  <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="&lt;category&gt;">
                      <font>
                         <Font name="Corbel Light" size="14.0" />
                      </font>
@@ -72,7 +72,7 @@
             </VBox>
             <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="88.0" text="2018-08-10">
                <font>
-                  <Font name="Corbel Light" size="14.0" />
+                  <Font name="Dubai Light" size="13.0" />
                </font>
                <padding>
                   <Insets right="5.0" />

@@ -315,20 +315,24 @@ public class AuthorService {
         return deleteResult;
     }
 
-    public void search(String searchText, List<Podcast> podcastsMatch, List<Pair<Author, Boolean>> authorsMatch, List<Pair<User, Boolean>> usersMatch, int limit) {
+    public void search(String searchText, List<Podcast> podcastsMatch, List<Pair<Author, Boolean>> authorsMatch, List<Pair<User, Boolean>> usersMatch, int limit, Triplet<Boolean, Boolean, Boolean> filters) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
         // Searching for podcasts
-        List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit);
-        if (podcasts != null)
-            podcastsMatch.addAll(podcasts);
+        if (filters.getValue0()) {
+            List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit);
+            if (podcasts != null)
+                podcastsMatch.addAll(podcasts);
+        }
 
         // Searching for authors
-        List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
-        for (Author authorFound: authors) {
-            boolean followingAuthor = authorNeo4jManager.findAuthorFollowsAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName(), authorFound.getName());
-            authorsMatch.add(new Pair<>(authorFound, followingAuthor));
+        if (filters.getValue1()) {
+            List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
+            for (Author authorFound : authors) {
+                boolean followingAuthor = authorNeo4jManager.findAuthorFollowsAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), authorFound.getName());
+                authorsMatch.add(new Pair<>(authorFound, followingAuthor));
+            }
         }
 
         Neo4jManager.getInstance().closeConnection();

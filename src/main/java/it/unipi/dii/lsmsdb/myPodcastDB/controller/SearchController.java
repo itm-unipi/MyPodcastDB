@@ -14,24 +14,34 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.javatuples.Pair;
+import org.javatuples.Triplet;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchController {
+    private String actorType;
+
+    private List<Podcast> podcastsMatch;
+
+    private List<Pair<Author, Boolean>> authorsMatch;
+
+    private List<Pair<User, Boolean>> usersMatch;
+
+    private Triplet<Boolean, Boolean, Boolean> filters;
+
+    @FXML
+    private BorderPane MainPage;
+
     @FXML
     private ImageView home;
 
@@ -78,6 +88,12 @@ public class SearchController {
     private Label usersFound;
 
     @FXML
+    private VBox boxPodcastsFound;
+
+    @FXML
+    private VBox boxAuthorsFound;
+
+    @FXML
     private VBox boxUsersFound;
 
     @FXML
@@ -88,6 +104,23 @@ public class SearchController {
 
     @FXML
     private Label noUsersFound;
+
+    @FXML
+    private CheckBox usersFilter;
+
+    @FXML
+    private CheckBox authorsFilter;
+
+    @FXML
+    private CheckBox podcastsFilter;
+
+    public SearchController() {
+        this.actorType = MyPodcastDB.getInstance().getSessionType();;
+        this.podcastsMatch = new ArrayList<>();
+        this.authorsMatch = new ArrayList<>();
+        this.usersMatch = new ArrayList<>();
+        this.filters = new Triplet<>(true, true, true);
+    }
 
     /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
@@ -104,14 +137,32 @@ public class SearchController {
         else
             Logger.error("Unidentified Actor Type!");
     }
+
     @FXML
     void onClickSearch(MouseEvent event) throws IOException {
+
         if (!searchText.getText().isEmpty()) {
             String text = searchText.getText();
-            Logger.info("Searching for " + text);
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
+
+            clearData();
+            this.filters = new Triplet<>(podcastsFilter.isSelected(), authorsFilter.isSelected(), usersFilter.isSelected());
+
+            if (!filters.getValue0() && !filters.getValue1() && !filters.getValue2()) {
+                Logger.error("No filter isn't allowed!");
+                // TODO: alert
+            } else {
+                search(text);
+                loadResult();
+            }
         } else {
             Logger.error("Field cannot be empty!");
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(MainPage.getScene().getWindow());
+            alert.setTitle("Search Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Search field cannot be empty!");
+            alert.setGraphic(null);;
+            alert.showAndWait();
         }
     }
 
@@ -120,10 +171,27 @@ public class SearchController {
         if (event.getCode() == KeyCode.ENTER) {
             if (!searchText.getText().isEmpty()) {
                 String text = searchText.getText();
-                Logger.info("Searching for " + text);
-                StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
+
+                clearData();
+                this.filters = new Triplet<>(podcastsFilter.isSelected(), authorsFilter.isSelected(), usersFilter.isSelected());
+
+                if (!filters.getValue0() && !filters.getValue1() && !filters.getValue2()) {
+                    Logger.error("No filter isn't allowed!");
+                    // TODO: alert
+                } else {
+                    search(text);
+                    loadResult();
+                }
+
             } else {
                 Logger.error("Field cannot be empty!");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(MainPage.getScene().getWindow());
+                alert.setTitle("Search Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Search field cannot be empty!");
+                alert.setGraphic(null);;
+                alert.showAndWait();
             }
         }
     }
@@ -144,78 +212,40 @@ public class SearchController {
 
     /**********************************************************/
 
-    public void initialize() throws IOException {
-        List<Podcast> podcastsMatch = new ArrayList<>();
-        List<Pair<Author, Boolean>> authorsMatch = new ArrayList<>();
-        List<Pair<User, Boolean>> usersMatch = new ArrayList<>();
+    void search(String text) {
 
-        // Load information about the actor of the session
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Author")) {
-            Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
-            Logger.info("I'm an actor: " + sessionActor.getName());
-
-            // Setting GUI params
-            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-            actorPicture.setImage(image);
-
-            // Author search service
-            AuthorService authorService = new AuthorService();
-            authorService.search(StageManager.getObjectIdentifier(), podcastsMatch, authorsMatch, usersMatch, 15);
-
-        } else if (actorType.equals("User")) {
-            User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
-            Logger.info("I'm an user: " + sessionActor.getUsername());
-
-            // Setting GUI params
-            Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-            actorPicture.setImage(image);
-
-            // Registered User search service
-            UserService userService = new UserService();
-            userService.searchRegistered(StageManager.getObjectIdentifier(), podcastsMatch, authorsMatch, usersMatch, 15);
-
-        } else if (actorType.equals("Admin")) {
-            Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
-            Logger.info("I'm an administrator: " + sessionActor.getName());
-
-            // Setting GUI params
-            Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
-            actorPicture.setImage(image);
-
-            // Admin search service
-            AdminService adminService = new AdminService();
-            adminService.search(StageManager.getObjectIdentifier(), podcastsMatch, authorsMatch, usersMatch, 15);
-
-        } else if (actorType.equals("Unregistered")) {
-            Logger.info("I'm an unregistered user");
-
-            // Disabling User Profile Page and Logout Button
-            boxActorProfile.setVisible(false);
-            boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
-
-            boxLogout.setVisible(false);
-            boxLogout.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
-
-            // Unregistered User Search Service
-            UserService userService = new UserService();
-            userService.searchUnregistered(StageManager.getObjectIdentifier(), podcastsMatch, authorsMatch, usersMatch, 15);
-
-        } else {
-            Logger.error("Unidentified Actor Type");
+        switch (this.actorType) {
+            case "Author" -> {
+                // Author search service
+                AuthorService authorService = new AuthorService();
+                authorService.search(text, podcastsMatch, authorsMatch, usersMatch, 8, filters);
+            }
+            case "User" -> {
+                // Registered User search service
+                UserService userService = new UserService();
+                userService.searchRegistered(text, podcastsMatch, authorsMatch, usersMatch, 8, filters);
+            }
+            case "Admin" -> {
+                // Admin search service
+                AdminService adminService = new AdminService();
+                adminService.search(text, podcastsMatch, authorsMatch, usersMatch, 8, filters);
+            }
+            case "Unregistered" -> {
+                // Unregistered User Search Service
+                UserService userService = new UserService();
+                userService.searchUnregistered(text, podcastsMatch, authorsMatch, usersMatch, 8, filters);
+            }
         }
+    }
 
+    void loadResult() throws IOException {
 
-        // Load word searched
-        this.searchingForText.setText("Searching for \"" + StageManager.getObjectIdentifier() + "\"");
-
-        if (podcastsMatch.isEmpty()) {
-            this.gridFoundPodcasts.setVisible(false);
-            this.noPodcastsText.setVisible(true);
-        } else {
+        /*********** PODCAST SEARCH ***********/
+        if (!podcastsMatch.isEmpty()) {
             this.noPodcastsText.setVisible(false);
-            this.noPodcastsText.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            this.noPodcastsText.setMinHeight(0);
+            this.noPodcastsText.setPrefHeight(0);
+            this.noPodcastsText.setMaxHeight(0);
 
             int row = 0;
             int column = 0;
@@ -231,16 +261,18 @@ public class SearchController {
             }
         }
 
-        this.podcastsFound.setText("Podcasts (" + podcastsMatch.size() + ")");
+        if (filters.getValue0()) {
+            this.boxPodcastsFound.setVisible(true);
+            this.boxPodcastsFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            this.podcastsFound.setText("Podcasts (" + podcastsMatch.size() + ")");
+        }
 
-        /********************************************************************************/
-
-        if (authorsMatch.isEmpty()) {
-            this.gridFoundAuthors.setVisible(false);
-            this.noAuthorsText.setVisible(true);
-        } else {
+        /*********** AUTHOR SEARCH ***********/
+        if (!authorsMatch.isEmpty()) {
             this.noAuthorsText.setVisible(false);
-            this.noAuthorsText.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+            this.noAuthorsText.setMinHeight(0);
+            this.noAuthorsText.setPrefHeight(0);
+            this.noAuthorsText.setMaxHeight(0);
 
             int row = 0;
             int column = 0;
@@ -256,18 +288,20 @@ public class SearchController {
             }
         }
 
-        this.authorsFound.setText("Authors (" + authorsMatch.size() + ")");
+        if (filters.getValue1()) {
+            this.boxAuthorsFound.setVisible(true);
+            this.boxAuthorsFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            this.authorsFound.setText("Authors (" + authorsMatch.size() + ")");
+        }
 
-        /********************************************************************************/
-        // User found
+        /*********** USER SEARCH ***********/
         if (!actorType.equals("Author") && !actorType.equals("Unregistered")) {
 
-            if (usersMatch.isEmpty()) {
-                this.gridFoundUsers.setVisible(false);
-                this.noUsersFound.setVisible(true);
-            } else {
+            if (!usersMatch.isEmpty()) {
                 this.noUsersFound.setVisible(false);
-                this.noUsersFound.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
+                this.noUsersFound.setMinHeight(0);
+                this.noUsersFound.setPrefHeight(0);
+                this.noUsersFound.setMaxHeight(0);
 
                 int row = 0;
                 int column = 0;
@@ -283,9 +317,100 @@ public class SearchController {
                 }
             }
 
-            this.usersFound.setText("Users (" + usersMatch.size() + ")");
+            if (filters.getValue2()) {
+                this.boxUsersFound.setVisible(true);
+                this.boxUsersFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                this.usersFound.setText("Users (" + usersMatch.size() + ")");
+            }
+
         } else {
             this.boxUsersFound.setVisible(false);
         }
+    }
+
+    void clearData() {
+        this.podcastsMatch.clear();
+        this.authorsMatch.clear();
+        this.usersMatch.clear();
+
+        this.gridFoundUsers.getChildren().clear();
+        this.gridFoundAuthors.getChildren().clear();
+        this.gridFoundPodcasts.getChildren().clear();
+
+        // Resetting visibility of some gui elements
+        this.boxPodcastsFound.setVisible(false);
+        this.boxPodcastsFound.setPrefHeight(0);
+
+        this.noPodcastsText.setVisible(true);
+        this.noPodcastsText.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        this.noPodcastsText.setMaxHeight(Region.USE_COMPUTED_SIZE);
+
+        this.boxAuthorsFound.setVisible(false);
+        this.boxAuthorsFound.setPrefHeight(0);
+
+        this.noUsersFound.setVisible(true);
+        this.noUsersFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        this.noUsersFound.setMaxHeight(Region.USE_COMPUTED_SIZE);
+
+        this.boxUsersFound.setVisible(false);
+        this.boxUsersFound.setPrefHeight(0);
+
+        this.noAuthorsText.setVisible(true);
+        this.noAuthorsText.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        this.noAuthorsText.setMaxHeight(Region.USE_COMPUTED_SIZE);
+    }
+
+    public void initialize() throws IOException {
+        // Load information about the actor of the session
+
+        switch (this.actorType) {
+            case "Author" -> {
+                Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an actor: " + sessionActor.getName());
+
+                // Setting GUI params
+                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
+                actorPicture.setImage(image);
+
+                // Disabling users filter
+                usersFilter.setVisible(false);
+                usersFilter.setPrefWidth(0);
+
+            }
+            case "User" -> {
+                User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an user: " + sessionActor.getUsername());
+
+                // Setting GUI params
+                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
+                actorPicture.setImage(image);
+
+            }
+            case "Admin" -> {
+                Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an administrator: " + sessionActor.getName());
+
+                // Setting GUI params
+                Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
+                actorPicture.setImage(image);
+
+            }
+            case "Unregistered" -> {
+                Logger.info("I'm an unregistered user");
+
+                // Disabling User Profile Page, Logout Button and Users Filter
+                boxActorProfile.setVisible(false);
+                boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+                boxLogout.setVisible(false);
+                boxLogout.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+                usersFilter.setVisible(false);
+                usersFilter.setPrefWidth(0);
+            }
+            default -> Logger.error("Unidentified Actor Type");
+        }
+
+        search(StageManager.getObjectIdentifier());
+        this.searchingForText.setText("Searching for \"" + StageManager.getObjectIdentifier() + "\"");
+        loadResult();
     }
 }

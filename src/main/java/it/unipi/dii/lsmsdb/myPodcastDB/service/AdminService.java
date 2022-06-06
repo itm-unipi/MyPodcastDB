@@ -149,23 +149,29 @@ public class AdminService {
         return deleteResult;
     }
 
-    public void search(String searchText, List<Podcast> podcastsMatch, List<Pair<Author, Boolean>> authorsMatch, List<Pair<User, Boolean>> usersMatch, int limit) {
+    public void search(String searchText, List<Podcast> podcastsMatch, List<Pair<Author, Boolean>> authorsMatch, List<Pair<User, Boolean>> usersMatch, int limit, Triplet<Boolean, Boolean, Boolean> filters) {
         MongoManager.getInstance().openConnection();
 
         // Searching for podcasts
-        List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit);
-        if (podcasts != null)
-            podcastsMatch.addAll(podcasts);
+        if (filters.getValue0()) {
+            List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit);
+            if (podcasts != null)
+                podcastsMatch.addAll(podcasts);
+        }
 
         // Searching for authors
-        List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
-        for (Author authorFound: authors)
-            authorsMatch.add(new Pair<>(authorFound, false));
+        if (filters.getValue1()) {
+            List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
+            for (Author authorFound : authors)
+                authorsMatch.add(new Pair<>(authorFound, false));
+        }
 
         // Searching for users
-        List<User> users = userMongoManager.searchUser(searchText, limit);
-        for (User userFound: users)
-            usersMatch.add(new Pair<>(userFound, false));
+        if (filters.getValue2()) {
+            List<User> users = userMongoManager.searchUser(searchText, limit);
+            for (User userFound : users)
+                usersMatch.add(new Pair<>(userFound, false));
+        }
 
         MongoManager.getInstance().closeConnection();
     }

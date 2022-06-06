@@ -26,7 +26,7 @@
             </VBox>
             <VBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="855.0">
                <children>
-                  <Label fx:id="userFound" alignment="TOP_LEFT" text="Giovanotti">
+                  <Label fx:id="userFound" alignment="TOP_LEFT" text="&lt;user_name&gt;">
                      <font>
                         <Font name="Corbel Light" size="18.0" />
                      </font>

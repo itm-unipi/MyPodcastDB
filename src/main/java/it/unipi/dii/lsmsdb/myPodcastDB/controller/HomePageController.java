@@ -14,6 +14,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -23,8 +24,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Box;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import java.io.IOException;
@@ -32,8 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageController {
-
     private User userPreview;
+
+    @FXML
+    private BorderPane MainPage;
 
     @FXML
     private ImageView home;
@@ -131,6 +136,12 @@ public class HomePageController {
     @FXML
     private VBox boxWatchlist;
 
+    @FXML
+    private VBox boxMostLikedPodcasts;
+
+    @FXML
+    private VBox boxMostFollowedAuthors;
+
     /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
     void onClickActorProfile(MouseEvent event) throws IOException {
@@ -154,7 +165,13 @@ public class HomePageController {
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
         } else {
             Logger.error("Field cannot be empty!");
-            // TODO: alert
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(MainPage.getScene().getWindow());
+            alert.setTitle("Search Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Search field cannot be empty!");
+            alert.setGraphic(null);;
+            alert.showAndWait();
         }
     }
 
@@ -167,6 +184,13 @@ public class HomePageController {
                 StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
             } else {
                 Logger.error("Field cannot be empty!");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(MainPage.getScene().getWindow());
+                alert.setTitle("Search Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Search field cannot be empty!");
+                alert.setGraphic(null);;
+                alert.showAndWait();
             }
         }
     }
@@ -473,26 +497,6 @@ public class HomePageController {
             }
         }
 
-
-        if (actorType.equals("Admin") || actorType.equals("Author") || actorType.equals("Unregistered")) {
-
-            /**** VBOX TO HIDE TO THE UNREGISTERED USER/ADMIN ****/
-            boxBasedOnUsers.setVisible(false);
-            boxBasedOnUsers.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
-
-            boxSuggestedAuthors.setVisible(false);
-            boxSuggestedAuthors.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
-
-            boxWatchlist.setVisible(false);
-            boxWatchlist.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
-
-            boxTopGenres.setVisible(false);
-            boxTopGenres.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
-
-            boxPodcastsBasedOnWatchlist.setVisible(false);
-            boxPodcastsBasedOnWatchlist.setStyle("-fx-min-height: 0; -fx-pref-height: 0px");
-        }
-
         /******************************* TOP RATED PODCASTS *******************************/
         int row = 0;
         int column = 0;
@@ -540,6 +544,47 @@ public class HomePageController {
             controller.setData(author.getValue0(), author.getValue2(), 1, author.getValue1().toString());
 
             gridMostFollowedAuthors.add(newAuthor, column++, row);
+        }
+
+        // Hide section if empty
+        if (topRated.isEmpty()) {
+            boxTopRated.setVisible(false);
+            boxTopRated.setStyle("-fx-pref-height: 0");
+        }
+
+        if (mostLikedPodcasts.isEmpty()) {
+            boxMostLikedPodcasts.setVisible(false);
+            boxMostLikedPodcasts.setStyle("-fx-pref-height: 0");
+        }
+
+        if (mostFollowedAuthors.isEmpty()) {
+            boxMostFollowedAuthors.setVisible(false);
+            boxMostFollowedAuthors.setStyle("-fx-pref-height: 0");
+        }
+
+        if (watchlist.isEmpty()) {
+            boxWatchlist.setVisible(false);
+            boxWatchlist.setStyle("-fx-pref-height: 0");
+        }
+
+        if (topGenres.isEmpty()) {
+            boxTopGenres.setVisible(false);
+            boxTopGenres.setStyle("-fx-pref-height: 0");
+        }
+
+        if (basedOnFriends.isEmpty()) {
+            boxBasedOnUsers.setVisible(false);
+            boxBasedOnUsers.setStyle("-fx-pref-height: 0");
+        }
+
+        if (basedOnWatchlist.isEmpty()) {
+            boxPodcastsBasedOnWatchlist.setVisible(false);
+            boxPodcastsBasedOnWatchlist.setStyle("-fx-pref-height: 0");
+        }
+
+        if (suggestedAuthors.isEmpty()) {
+            boxSuggestedAuthors.setVisible(false);
+            boxSuggestedAuthors.setStyle("-fx-pref-height: 0");
         }
     }
 }

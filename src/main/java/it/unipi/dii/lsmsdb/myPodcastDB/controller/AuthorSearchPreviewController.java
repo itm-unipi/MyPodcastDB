@@ -84,12 +84,12 @@ public class AuthorSearchPreviewController {
     }
     @FXML
     void onMouseExitedFollowButton(MouseEvent event) {
-        this.btnFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
+        this.btnFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #c9c9c9; -fx-border-radius: 10; -fx-background-insets: 0");
     }
 
     @FXML
     void onMouseHoverFollowButton(MouseEvent event) {
-        btnFollowAuthor.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
+        btnFollowAuthor.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 10; -fx-border-color: #c9c9c9; -fx-border-radius: 10; -fx-background-insets: 0;");
     }
 
     public void setData(Author author, boolean follow) {
