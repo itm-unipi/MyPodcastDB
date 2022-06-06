@@ -51,6 +51,12 @@ public class AddPodcastController {
     @FXML
     private DialogPane dialogPane;
 
+    @FXML
+    private Button btnApply;
+
+    @FXML
+    private Button btnCancel;
+
     /********** RESET BORDER EMPTY FIELDS **********/
 
     @FXML
@@ -69,6 +75,26 @@ public class AddPodcastController {
     }
 
     /*********************************************/
+
+    @FXML
+    void onHoverBtnApply(MouseEvent event) {
+        btnApply.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnCancel(MouseEvent event) {
+        btnCancel.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnApply(MouseEvent event) {
+        btnApply.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnCancel(MouseEvent event) {
+        btnCancel.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
 
     @FXML
     void btnAddPodcast(ActionEvent event) throws IOException {

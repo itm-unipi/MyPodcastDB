@@ -37,6 +37,8 @@ public class AuthorProfileController {
 
     private final List<Pair<Author, Boolean>> followedAuthors;
 
+    private boolean followingAuthor;
+
     private int row;
 
     private int column;
@@ -47,19 +49,31 @@ public class AuthorProfileController {
     @FXML
     private Label authorName;
 
+
+    @FXML
+    private Tooltip tooltipAuthorName;
+
     @FXML
     private ImageView searchButton;
 
     @FXML
     private HBox authorButtons;
 
+
     @FXML
-    private Button deleteAuthorButton;
+    private Button btnAddPodcast;
+
+    @FXML
+    private Button btnDeleteAuthor;
 
     @FXML
     private Button btnFollowAuthor;
 
-    private boolean followingAuthor;
+    @FXML
+    private Button btnSettings;
+
+    @FXML
+    private ImageView bin;
 
     @FXML
     private ImageView actorPicture;
@@ -317,6 +331,50 @@ public class AuthorProfileController {
             scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() - scrollValue);
     }
 
+    /********* BUTTONS HOVER AND MOUSE EXITED **********/
+
+    @FXML
+    void onHoverBtnDeleteAuthor(MouseEvent event) {
+        btnDeleteAuthor.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+        bin.setStyle("-fx-blend-mode: multiply");
+    }
+
+    @FXML
+    void onExitedBtnDeleteAuthor(MouseEvent event) {
+        btnDeleteAuthor.setStyle("-fx-background-color:  #555555; -fx-text-fill: white; -fx-border-color:  #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+        bin.setStyle("-fx-blend-mode: add");
+    }
+
+    @FXML
+    void onHoverBtnFollowAuthor(MouseEvent event) {
+        btnFollowAuthor.setStyle("-fx-background-color: #DA70D6; -fx-border-color: #DA70D6; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnFollowAuthor(MouseEvent event) {
+        btnFollowAuthor.setStyle("-fx-background-color: #db55e7; -fx-border-color: #db55e7; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnAddPodcast(MouseEvent event) {
+        btnAddPodcast.setStyle("-fx-background-color: whitesmoke; -fx-border-color: #bbbbbb; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnAddPodcast(MouseEvent event) {
+        btnAddPodcast.setStyle("-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnSettings(MouseEvent event) {
+        btnSettings.setStyle("-fx-background-color: whitesmoke; -fx-border-color: #bbbbbb; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnSettings(MouseEvent event) {
+        btnSettings.setStyle("-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
     /******* LOAD GRIDS ******/
     void clearIndexes() {
         this.row = 0;
@@ -387,12 +445,13 @@ public class AuthorProfileController {
                     ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(this.author);
 
                     authorName.setText(sessionActor.getName());
+                    tooltipAuthorName.setText(sessionActor.getName());
                     authorFollowing.setText("Authors you follow");
                     podcastLabel.setText("Your podcasts");
 
                     // Hiding unnecessary button for the author
-                    deleteAuthorButton.setVisible(false);
-                    deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                    btnDeleteAuthor.setVisible(false);
+                    btnDeleteAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                     btnFollowAuthor.setVisible(false);
                     btnFollowAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
 
@@ -403,6 +462,7 @@ public class AuthorProfileController {
 
                     // Setting GUI information about the author visited
                     authorName.setText(this.author.getName());
+                    tooltipAuthorName.setText(this.author.getName());
                     authorFollowing.setText("Authors followed by " + this.author.getName());
                     podcastLabel.setText("Podcasts");
 
@@ -410,8 +470,8 @@ public class AuthorProfileController {
                         btnFollowAuthor.setText("Unfollow");
 
                     // Hiding unnecessary button
-                    deleteAuthorButton.setVisible(false);
-                    deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                    btnDeleteAuthor.setVisible(false);
+                    btnDeleteAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                     authorButtons.setVisible(false);
                     authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                 }
@@ -431,6 +491,7 @@ public class AuthorProfileController {
 
                 // Setting GUI information about the author visited
                 this.authorName.setText(author.getName());
+                this.tooltipAuthorName.setText(this.author.getName());
                 this.authorFollowing.setText("Authors followed by " + this.author.getName());
                 this.podcastLabel.setText("Podcasts");
 
@@ -438,8 +499,8 @@ public class AuthorProfileController {
                     btnFollowAuthor.setText("Unfollow");
 
                 // Hiding unnecessary button for the user
-                deleteAuthorButton.setVisible(false);
-                deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                btnDeleteAuthor.setVisible(false);
+                btnDeleteAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                 authorButtons.setVisible(false);
                 authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
             }
@@ -458,6 +519,7 @@ public class AuthorProfileController {
 
                 // Setting GUI information of the author visited
                 this.authorName.setText(this.author.getName());
+                this.tooltipAuthorName.setText(this.author.getName());
                 this.authorFollowing.setText("Authors followed by " + this.author.getName());
                 this.podcastLabel.setText("Podcasts");
 
@@ -476,14 +538,15 @@ public class AuthorProfileController {
                 userService.loadAuthorProfileUnregistered(this.author, this.followedAuthors, 10);
 
                 this.authorName.setText(this.author.getName());
+                this.tooltipAuthorName.setText(this.author.getName());
                 this.authorFollowing.setText("Authors followed by " + this.author.getName());
                 this.podcastLabel.setText("Podcasts");
 
                 // Hiding buttons
                 boxActorProfile.setVisible(false);
                 boxActorProfile.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0; -fx-start-margin: 0; -fx-end-margin: 0");
-                deleteAuthorButton.setVisible(false);
-                deleteAuthorButton.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
+                btnDeleteAuthor.setVisible(false);
+                btnDeleteAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                 btnFollowAuthor.setVisible(false);
                 btnFollowAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
                 authorButtons.setVisible(false);

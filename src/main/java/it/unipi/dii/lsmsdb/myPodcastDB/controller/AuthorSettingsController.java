@@ -7,16 +7,26 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+import javafx.util.Duration;
+
 import java.io.IOException;
 
 public class AuthorSettingsController {
+    @FXML
+    private DialogPane dialogPane;
+
     private Author author;
 
     private Label authorNameProfile;
@@ -41,7 +51,16 @@ public class AuthorSettingsController {
     private int counterImage;
 
     @FXML
-    private DialogPane dialogPane;
+    private Button btnApply;
+
+    @FXML
+    private Button btnCancel;
+
+    @FXML
+    private Button btnDelete;
+
+    @FXML
+    private ImageView bin;
 
     /******* AUTHOR PICTURE SLIDE *******/
     @FXML
@@ -56,7 +75,7 @@ public class AuthorSettingsController {
     }
 
     @FXML
-    void previousAuthorPicture(MouseEvent event) {
+    void backAuthorPicture(MouseEvent event) {
 
         if (this.counterImage == 0)
             this.counterImage = 19; // MAX_NUMBER_IMAGE
@@ -77,7 +96,41 @@ public class AuthorSettingsController {
         ((PasswordField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
     }
 
-    /*********************************************/
+    /******** BUTTONS HOVER AND MOUSE EXIT *********/
+
+    @FXML
+    void onExitedBtnApply(MouseEvent event) {
+        btnApply.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnCancel(MouseEvent event) {
+        btnCancel.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnDelete(MouseEvent event) {
+        btnDelete.setStyle("-fx-background-color:  #555555; -fx-text-fill: white; -fx-border-color:  #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+        bin.setStyle("-fx-blend-mode: add");
+    }
+
+    @FXML
+    void onHoverBtnApply(MouseEvent event) {
+        btnApply.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnCancel(MouseEvent event) {
+        btnCancel.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnDelete(MouseEvent event) {
+        btnDelete.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+        bin.setStyle("-fx-blend-mode: multiply");
+    }
+
+    /******************************/
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException {
@@ -269,19 +322,6 @@ public class AuthorSettingsController {
         }
     }
 
-    public void setData(Author author, Label authorNameLabel, ImageView actorPictureImage) {
-        this.author = author;
-        this.authorNameProfile = authorNameLabel;
-        this.actorPictureProfile = actorPictureImage;
-        this.counterImage = Integer.parseInt(author.getPicturePath().replaceAll("\\D+",""));
-
-        authorName.setText(author.getName());
-        authorEmail.setText(author.getEmail());
-        authorPassword.setText("");
-        authorNewPassword.setText("");
-        imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
-    }
-
     @FXML
     void exit(ActionEvent event) {
         closeStage(event);
@@ -297,4 +337,19 @@ public class AuthorSettingsController {
         Stage stage = (Stage)source.getScene().getWindow();
         stage.close();
     }
+
+    void setData(Author author, Label authorNameLabel, ImageView actorPictureImage) {
+        this.author = author;
+        this.authorNameProfile = authorNameLabel;
+        this.actorPictureProfile = actorPictureImage;
+        this.counterImage = Integer.parseInt(author.getPicturePath().replaceAll("\\D+",""));
+
+        authorName.setText(author.getName());
+        authorEmail.setText(author.getEmail());
+        authorPassword.setText("");
+        authorNewPassword.setText("");
+        imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
+        btnApply.requestFocus();
+    }
+
 }
