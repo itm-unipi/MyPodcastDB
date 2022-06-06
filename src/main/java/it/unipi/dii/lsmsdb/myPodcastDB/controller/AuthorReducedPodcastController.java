@@ -110,7 +110,6 @@ public class AuthorReducedPodcastController {
                 alert.setGraphic(null);;
                 alert.showAndWait();
             }
-
         } else {
             Logger.info("Operation aborted");
         }
@@ -151,7 +150,7 @@ public class AuthorReducedPodcastController {
 
     /*************************************/
 
-    public void setData(String authorId, String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String ArtworkUrl600 ) {
+    public void setData(String authorId, String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String artworkUrl600 ) {
         this.authorId = authorId;
         this.podcastId = podcastId;
         this.podcastName.setText(podcastName);
@@ -167,7 +166,7 @@ public class AuthorReducedPodcastController {
         podcastImage.setImage(image);
 
         Platform.runLater(() -> {
-            Image imageLoaded = ImageCache.getImageFromURL(ArtworkUrl600);
+            Image imageLoaded = ImageCache.getImageFromURL(artworkUrl600);
             this.podcastImage.setImage(imageLoaded);
         });
     }

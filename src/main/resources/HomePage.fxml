@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -234,44 +235,6 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox fx:id="boxBasedOnUsers" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity">
-                                 <children>
-                                    <Label prefWidth="1045.0" text="Podcasts based on your friends">
-                                       <font>
-                                          <Font name="Corbel Light" size="22.0" />
-                                       </font>
-                                    </Label>
-                                    <HBox alignment="CENTER" prefHeight="250.0">
-                                       <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedUser" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/backArrow.png" />
-                                             </image>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </ImageView>
-                                          <ScrollPane fx:id="scrollSuggestedForUser" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
-                                             <content>
-                                                <GridPane fx:id="gridSuggestedForUser" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
-                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                                   </rowConstraints>
-                                                </GridPane>
-                                             </content>
-                                          </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedUser" pickOnBounds="true" preserveRatio="true">
-                                             <image>
-                                                <Image url="@img/forwardArrow.png" />
-                                             </image>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </ImageView>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
                               <VBox fx:id="boxTopRated" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity">
                                  <children>
                                     <Label prefWidth="1045.0" text="Top Rated">
@@ -483,7 +446,63 @@
                                     </HBox>
                                  </children>
                                  <VBox.margin>
-                                    <Insets bottom="20.0" />
+                                    <Insets />
+                                 </VBox.margin>
+                              </VBox>
+                              <HBox fx:id="boxBtnShowMoreSuggested" alignment="CENTER" minHeight="-Infinity" prefHeight="0.0" visible="false">
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                                 <children>
+                                    <Button fx:id="btnShowMoreSuggested" alignment="CENTER" focusTraversable="false" minHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#onClickShowBasedOnFollowedUsers" onMouseEntered="#onHoverBtnShow" onMouseExited="#onExitedBtnShow" style="-fx-background-color: #5b9bd2; -fx-background-radius: 10; -fx-background-insets: 0;" text="Show more suggestions" textFill="WHITE" visible="false">
+                                       <font>
+                                          <Font name="Corbel" size="18.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="boxBasedOnUsers" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="0.0" visible="false">
+                                 <children>
+                                    <Label prefWidth="1045.0" text="Podcasts based on your friends">
+                                       <font>
+                                          <Font name="Corbel Light" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedUser" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/backArrow.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                          <ScrollPane fx:id="scrollSuggestedForUser" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                             <content>
+                                                <GridPane fx:id="gridSuggestedForUser" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                                   </rowConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedUser" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/forwardArrow.png" />
+                                             </image>
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets bottom="4.0" top="4.0" />
                                  </VBox.margin>
                               </VBox>
                            </children>

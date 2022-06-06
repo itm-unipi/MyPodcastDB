@@ -14,19 +14,15 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Box;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
@@ -35,7 +31,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageController {
+
     private User userPreview;
+
+    private final String actorType;
+
+    // Declaring lists in order to contain queries results
+    private List<Triplet<Podcast, Float, Boolean>> topRated;
+
+    private List<Pair<Podcast, Integer>> mostLikedPodcasts;
+
+    private List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors;
+
+    private List<Podcast> watchlist;
+
+    private List<Podcast> topGenres;
+
+    private List<Podcast> basedOnFollowedUsers;
+
+    private List<Podcast> basedOnWatchlist;
+
+    private List<Pair<Author, Boolean>> suggestedAuthors;
+
+    private int limit;
+
+    private int row;
+
+    private int column;
 
     @FXML
     private BorderPane MainPage;
@@ -142,21 +164,45 @@ public class HomePageController {
     @FXML
     private VBox boxMostFollowedAuthors;
 
+    @FXML
+    private Button btnShowMoreSuggested;
+
+    @FXML
+    private HBox boxBtnShowMoreSuggested;
+
+    public HomePageController() {
+        // Load information about the actor of the session
+        this.actorType = MyPodcastDB.getInstance().getSessionType();
+
+        // Declaring lists in order to contain queries results
+        this.topRated = new ArrayList<>();
+        this.mostLikedPodcasts = new ArrayList<>();
+        this.mostFollowedAuthors = new ArrayList<>();
+        this.watchlist = new ArrayList<>();
+        this.topGenres = new ArrayList<>();
+        this.basedOnFollowedUsers = new ArrayList<>();
+        this.basedOnWatchlist = new ArrayList<>();
+        this.suggestedAuthors = new ArrayList<>();
+
+        // Limit for each query
+        this.limit = 5;
+    }
+
     /*********** Navigator Events (Profile, Home, Search) *************/
+
     @FXML
     void onClickActorProfile(MouseEvent event) throws IOException {
-        Logger.info("Actor profile clicked");
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
-        else if (actorType.equals("User"))
-            StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
-        else if (actorType.equals("Admin"))
-            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-        else
-            Logger.error("Unidentified Actor Type!");
+        switch (this.actorType) {
+            case "Author" ->
+                    StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
+            case "User" ->
+                    StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User) MyPodcastDB.getInstance().getSessionActor()).getUsername());
+            case "Admin" ->
+                    StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+            default -> Logger.error("Unidentified Actor Type!");
+        }
     }
+
     @FXML
     void onClickSearch(MouseEvent event) throws IOException {
         if (!searchText.getText().isEmpty()) {
@@ -198,7 +244,6 @@ public class HomePageController {
     @FXML
     void onClickHome(MouseEvent event) throws IOException {
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
-        Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
     }
 
     @FXML
@@ -209,7 +254,7 @@ public class HomePageController {
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
-    /**********************************************************/
+    /***** ARROWS NEXT AND BACK *****/
 
     @FXML
     void nextMostLikedPodcasts(MouseEvent event) {
@@ -269,15 +314,6 @@ public class HomePageController {
     }
 
     @FXML
-    void nextSuggestedCategory(MouseEvent event) {
-        Logger.info("next suggested category");
-        double scrollValue = 1;
-        if (scrollSuggestedForCategory.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollSuggestedForCategory.setHvalue(scrollSuggestedForCategory.getHvalue() + scrollValue);
-    }
-
-    @FXML
     void backSuggestedCategory(MouseEvent event) {
         Logger.info("back podcast category");
         double scrollValue = 1;
@@ -285,15 +321,6 @@ public class HomePageController {
             scrollSuggestedForCategory.setHvalue(1.0);
         else
             scrollSuggestedForCategory.setHvalue(scrollSuggestedForCategory.getHvalue() - scrollValue);
-    }
-
-    @FXML
-    void nextSuggestedUser(MouseEvent event) {
-        Logger.info("next suggested user");
-        double scrollValue = 1;
-        if (scrollSuggestedForUser.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollSuggestedForUser.setHvalue(scrollSuggestedForUser.getHvalue() + scrollValue);
     }
 
     @FXML
@@ -346,207 +373,32 @@ public class HomePageController {
         Logger.info("Clicked on next suggested authors");
     }
 
-    /***************************************************/
+    @FXML
+    void nextSuggestedCategory(MouseEvent event) {
+        Logger.info("next suggested category");
+        double scrollValue = 1;
+        if (scrollSuggestedForCategory.getHvalue() == 1.0)
+            scrollValue = -1;
+        scrollSuggestedForCategory.setHvalue(scrollSuggestedForCategory.getHvalue() + scrollValue);
+    }
 
-    public void initialize() throws IOException {
-        // Load information about the actor of the session
-        String actorType = MyPodcastDB.getInstance().getSessionType();
+    @FXML
+    void nextSuggestedUser(MouseEvent event) {
+        Logger.info("next suggested user");
+        double scrollValue = 1;
+        if (scrollSuggestedForUser.getHvalue() == 1.0)
+            scrollValue = -1;
+        scrollSuggestedForUser.setHvalue(scrollSuggestedForUser.getHvalue() + scrollValue);
+    }
 
-        // Declaring lists in order to contain queries results
-        List<Triplet<Podcast, Float, Boolean>> topRated = new ArrayList<>();
-        List<Pair<Podcast, Integer>> mostLikedPodcasts = new ArrayList<>();
-        List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors = new ArrayList<>();
+    /********* LOADING GRIDS *********/
 
-        // User lists
-        List<Podcast> watchlist = new ArrayList<>();
-        List<Podcast> topGenres = new ArrayList<>();
-        List<Podcast> basedOnFriends = new ArrayList<>();
-        List<Podcast> basedOnWatchlist = new ArrayList<>();
-        List<Pair<Author, Boolean>> suggestedAuthors = new ArrayList<>();
+    void clearIndexes() {
+        this.row = 0;
+        this.column = 0;
+    }
 
-        switch (actorType) {
-            case "Author" -> {
-                Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
-                Logger.info("I'm an actor: " + sessionActor.getName());
-
-                // Setting GUI parameters
-                this.username.setText("Welcome " + sessionActor.getName() + "!");
-                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-                actorPicture.setImage(image);
-
-                // Homepage load as author
-                AuthorService authorService = new AuthorService();
-                authorService.loadHomepage(topRated, mostLikedPodcasts, mostFollowedAuthors, 5);
-            }
-            case "User" -> {
-                User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
-                Logger.info("I'm an user: " + sessionActor.getUsername());
-
-                // Setting GUI params
-                this.username.setText("Welcome " + sessionActor.getUsername() + "!");
-                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-                actorPicture.setImage(image);
-
-                // Homepage load as user
-                UserService userService = new UserService();
-                userService.loadHomepageRegistered(topRated, mostLikedPodcasts, mostFollowedAuthors, watchlist, topGenres, basedOnFriends, basedOnWatchlist, suggestedAuthors, 5);
-            }
-            case "Admin" -> {
-                Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
-                Logger.info("I'm an administrator: " + sessionActor.getName());
-
-                // Setting GUI params
-                this.username.setText("Welcome " + sessionActor.getName() + " (admin)!");
-                Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
-                actorPicture.setImage(image);
-
-                // Homepage load as admin
-                AdminService adminService = new AdminService();
-                adminService.loadHomepage(topRated, mostLikedPodcasts, mostFollowedAuthors, 5);
-            }
-            case "Unregistered" -> {
-                this.username.setText("Welcome to MyPodcastDB!");
-                Logger.info("I'm an unregistered user");
-
-                // Disabling User Profile Page and Logout Button
-                boxActorProfile.setVisible(false);
-                boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
-
-                // Homepage load as unregistered user
-                UserService userService = new UserService();
-                userService.loadHomepageUnregistered(topRated, mostLikedPodcasts, mostFollowedAuthors, 5);
-            }
-            default -> Logger.error("Unidentified Actor Type");
-        }
-
-        /************************************************************************************/
-
-        if (actorType.equals("User")) {
-            /*********** WATCHLIST ***********/
-            int row = 0;
-            int column = 0;
-
-            for (Podcast podcast : watchlist){
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-                AnchorPane newPodcast = fxmlLoader.load();
-                PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast, 0, null);
-
-                gridWatchlist.add(newPodcast, column++, row);
-            }
-
-            /*********** SUGGESTED ON "CATEGORY" YOU LIKED ************/
-            row = 0;
-            column = 0;
-
-            for (Podcast podcast : topGenres){
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-                AnchorPane newPodcast = fxmlLoader.load();
-                PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast, 0, null);
-
-                gridSuggestedForCategory.add(newPodcast, column++, row);
-            }
-
-            /*********** SUGGESTED ON USERS YOU FOLLOW ************/
-            row = 0;
-            column = 0;
-
-            for (Podcast podcast : basedOnFriends){
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-                AnchorPane newPodcast = fxmlLoader.load();
-                PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast, 0, null);
-
-                gridSuggestedForUser.add(newPodcast, column++, row);
-            }
-
-            /*********** SUGGEST BASED ON THE AUTHORS IN YOUR WATCHLIST ************/
-            row = 0;
-            column = 0;
-
-            for (Podcast podcast : basedOnWatchlist){
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-                AnchorPane newPodcast = fxmlLoader.load();
-                PodcastPreviewController controller = fxmlLoader.getController();
-                controller.setData(podcast, 0, null);
-
-                gridPodcastsBasedOnWatchlist.add(newPodcast, column++, row);
-            }
-
-            /*********** SUGGEST AUTHORS BASED ON USER YOU FOLLOW ************/
-            row = 0;
-            column = 0;
-            for (Pair<Author, Boolean> author : suggestedAuthors) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
-
-                AnchorPane newAuthor = fxmlLoader.load();
-                AuthorPreviewController controller = fxmlLoader.getController();
-                controller.setData(author.getValue0(), author.getValue1(), 0, null);
-
-                gridSuggestedAuthors.add(newAuthor, column++, row);
-            }
-        }
-
-        /******************************* TOP RATED PODCASTS *******************************/
-        int row = 0;
-        int column = 0;
-
-        for (Triplet<Podcast, Float, Boolean> podcast : topRated){
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-            AnchorPane newPodcast = fxmlLoader.load();
-            PodcastPreviewController controller = fxmlLoader.getController();
-            if (podcast.getValue2())
-                controller.setData(podcast.getValue0(), 3, podcast.getValue1().toString());
-            else
-                controller.setData(podcast.getValue0(), 2, podcast.getValue1().toString());
-
-            gridTopRated.add(newPodcast, column++, row);
-        }
-
-        /******* MOST LIKED PODCASTS (AVAILABLE TO EVERYONE) ********/
-        row = 0;
-        column = 0;
-
-        for (Pair<Podcast, Integer> podcast : mostLikedPodcasts){
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
-
-            AnchorPane newPodcast = fxmlLoader.load();
-            PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast.getValue0(), 1, podcast.getValue1().toString());
-
-            gridMostLikedPodcasts.add(newPodcast, column++, row);
-        }
-
-        /*********** MOST FOLLOWED AUTHORS (AVAILABLE TO EVERYONE) ************/
-
-        row = 0;
-        column = 0;
-
-        for (Triplet<Author, Integer, Boolean> author : mostFollowedAuthors) {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
-
-            AnchorPane newAuthor = fxmlLoader.load();
-            AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(author.getValue0(), author.getValue2(), 1, author.getValue1().toString());
-
-            gridMostFollowedAuthors.add(newAuthor, column++, row);
-        }
-
-        // Hide section if empty
+    void hideEmptyGrids() {
         if (topRated.isEmpty()) {
             boxTopRated.setVisible(false);
             boxTopRated.setStyle("-fx-pref-height: 0");
@@ -572,11 +424,6 @@ public class HomePageController {
             boxTopGenres.setStyle("-fx-pref-height: 0");
         }
 
-        if (basedOnFriends.isEmpty()) {
-            boxBasedOnUsers.setVisible(false);
-            boxBasedOnUsers.setStyle("-fx-pref-height: 0");
-        }
-
         if (basedOnWatchlist.isEmpty()) {
             boxPodcastsBasedOnWatchlist.setVisible(false);
             boxPodcastsBasedOnWatchlist.setStyle("-fx-pref-height: 0");
@@ -586,5 +433,235 @@ public class HomePageController {
             boxSuggestedAuthors.setVisible(false);
             boxSuggestedAuthors.setStyle("-fx-pref-height: 0");
         }
+    }
+
+    // Show podcasts in the user watchlist
+    void loadWatchlistGrid() throws IOException {
+        clearIndexes();
+        for (Podcast podcast : this.watchlist){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            controller.setData(podcast, 0, null);
+
+            this.gridWatchlist.add(newPodcast, this.column++, this.row);
+        }
+    }
+
+    // Suggested on podcast's category user liked
+    void loadSuggestedBasedOnCategoryGrid() throws IOException {
+        clearIndexes();
+        for (Podcast podcast : this.topGenres){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            controller.setData(podcast, 0, null);
+
+            this.gridSuggestedForCategory.add(newPodcast, this.column++, this.row);
+        }
+    }
+
+    // Suggestions based on authors in user's watchlist
+    void loadSuggestedBasedOnWatchlistGrid() throws IOException {
+        clearIndexes();
+        for (Podcast podcast : this.basedOnWatchlist){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            controller.setData(podcast, 0, null);
+
+            this.gridPodcastsBasedOnWatchlist.add(newPodcast, this.column++, this.row);
+        }
+    }
+
+    // Suggest authors based on user you follow
+    void loadSuggestedAuthorsBasedOnUserGrid() throws IOException {
+        clearIndexes();
+        for (Pair<Author, Boolean> author : this.suggestedAuthors) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+
+            AnchorPane newAuthor = fxmlLoader.load();
+            AuthorPreviewController controller = fxmlLoader.getController();
+            controller.setData(author.getValue0(), author.getValue1(), 0, null);
+
+            this.gridSuggestedAuthors.add(newAuthor, this.column++, this.row);
+        }
+    }
+
+    void loadSuggestedOnFollowedUsers() throws IOException {
+        clearIndexes();
+        for (Podcast podcast : this.basedOnFollowedUsers){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            controller.setData(podcast, 0, null);
+
+            this.gridSuggestedForUser.add(newPodcast, this.column++, this.row);
+        }
+
+        // Making the grid visible
+        boxBasedOnUsers.setVisible(true);
+        boxBasedOnUsers.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+        // Disabling the "Show more suggested" button
+        boxBtnShowMoreSuggested.setVisible(false);
+        boxBtnShowMoreSuggested.setPrefHeight(0);
+
+        btnShowMoreSuggested.setVisible(false);
+        btnShowMoreSuggested.setPrefHeight(0);
+    }
+
+    // Grids available to everyone
+    void loadTopRatedPodcasts() throws IOException {
+        clearIndexes();
+        for (Triplet<Podcast, Float, Boolean> podcast : this.topRated){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            // Selecting the right controller's setData to distinguish the top rated podcast in user's country from the general top rated
+            if (podcast.getValue2())
+                controller.setData(podcast.getValue0(), 3, podcast.getValue1().toString());
+            else
+                controller.setData(podcast.getValue0(), 2, podcast.getValue1().toString());
+
+            this.gridTopRated.add(newPodcast, this.column++, this.row);
+        }
+    }
+
+    void loadMostLikedPodcasts() throws IOException {
+        clearIndexes();
+        for (Pair<Podcast, Integer> podcast : this.mostLikedPodcasts){
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            PodcastPreviewController controller = fxmlLoader.getController();
+            controller.setData(podcast.getValue0(), 1, podcast.getValue1().toString());
+
+            this.gridMostLikedPodcasts.add(newPodcast, this.column++, this.row);
+        }
+    }
+
+    void loadMostFollowedAuthors() throws IOException {
+        clearIndexes();
+        for (Triplet<Author, Integer, Boolean> author : this.mostFollowedAuthors) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+
+            AnchorPane newAuthor = fxmlLoader.load();
+            AuthorPreviewController controller = fxmlLoader.getController();
+            controller.setData(author.getValue0(), author.getValue2(), 1, author.getValue1().toString());
+
+            this.gridMostFollowedAuthors.add(newAuthor, this.column++, this.row);
+        }
+    }
+
+    @FXML
+    void onClickShowBasedOnFollowedUsers(MouseEvent event) throws IOException {
+        UserService userService = new UserService();
+        userService.loadMoreSuggested(this.basedOnFollowedUsers, this.limit);
+        loadSuggestedOnFollowedUsers();
+    }
+
+    @FXML
+    void onHoverBtnShow(MouseEvent event) {
+        this.btnShowMoreSuggested.setStyle("-fx-background-color: skyblue; -fx-background-radius: 10;  -fx-background-insets: 0; -fx-border-color: #87c7ff; -fx-border-radius: 10");
+    }
+
+    @FXML
+    void onExitedBtnShow(MouseEvent event) {
+        this.btnShowMoreSuggested.setStyle("-fx-background-color: #5b9bd2; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: transparent; -fx-border-radius: 10");
+    }
+
+    public void initialize() throws IOException {
+        switch (this.actorType) {
+            case "Author" -> {
+                Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an actor: " + sessionActor.getName());
+
+                // Setting GUI parameters
+                this.username.setText("Welcome " + sessionActor.getName() + "!");
+                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
+                this.actorPicture.setImage(image);
+
+                // Homepage load as author
+                AuthorService authorService = new AuthorService();
+                authorService.loadHomepage(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, 5);
+            }
+            case "User" -> {
+                User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an user: " + sessionActor.getUsername());
+
+                // Setting GUI params
+                this.username.setText("Welcome " + sessionActor.getUsername() + "!");
+                Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
+                this.actorPicture.setImage(image);
+
+                // Homepage load as user
+                UserService userService = new UserService();
+                userService.loadHomepageRegistered(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.watchlist, this.topGenres, this.basedOnWatchlist, this.suggestedAuthors, this.limit);
+            }
+            case "Admin" -> {
+                Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
+                Logger.info("I'm an administrator: " + sessionActor.getName());
+
+                // Setting GUI params
+                this.username.setText("Welcome " + sessionActor.getName() + "!");
+                Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
+                this.actorPicture.setImage(image);
+
+                // Homepage load as admin
+                AdminService adminService = new AdminService();
+                adminService.loadHomepage(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.limit);
+            }
+            case "Unregistered" -> {
+                this.username.setText("Welcome to MyPodcastDB!");
+                Logger.info("I'm an unregistered user");
+
+                // Disabling User Profile Page and Logout Button
+                this.boxActorProfile.setVisible(false);
+                this.boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
+
+                // Homepage load as unregistered user
+                UserService userService = new UserService();
+                userService.loadHomepageUnregistered(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.limit);
+            }
+            default -> Logger.error("Unidentified Actor Type");
+        }
+
+        // Showing grids available to every actor
+        loadTopRatedPodcasts();
+        loadMostLikedPodcasts();
+        loadMostFollowedAuthors();
+
+        if (actorType.equals("User")) {
+            // Making visible the "Show more suggested" button for the user
+            btnShowMoreSuggested.setVisible(true);
+            btnShowMoreSuggested.setPrefHeight(Region.USE_COMPUTED_SIZE);
+
+            boxBtnShowMoreSuggested.setVisible(true);
+            boxBtnShowMoreSuggested.setPrefHeight(80);
+
+            // Loading grids for registered users
+            loadWatchlistGrid();
+            loadSuggestedBasedOnCategoryGrid();
+            loadSuggestedBasedOnWatchlistGrid();
+            loadSuggestedAuthorsBasedOnUserGrid();
+        }
+
+        // Hiding the empty grids
+        hideEmptyGrids();
+        Logger.success("Homepage loading done!");
     }
 }

@@ -29,7 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchController {
-    private String actorType;
+    private final String actorType;
+
+    private int row;
+
+    private int column;
 
     private List<Podcast> podcastsMatch;
 
@@ -125,22 +129,19 @@ public class SearchController {
     /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
     void onClickActorProfile(MouseEvent event) throws IOException {
-        Logger.info("Actor profile clicked");
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
-        else if (actorType.equals("User"))
-            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
-        else if (actorType.equals("Admin"))
-            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-        else
-            Logger.error("Unidentified Actor Type!");
+        switch (this.actorType) {
+            case "Author" ->
+                    StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
+            case "User" ->
+                    StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+            case "Admin" ->
+                    StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+            default -> Logger.error("Unidentified Actor Type!");
+        }
     }
 
     @FXML
     void onClickSearch(MouseEvent event) throws IOException {
-
         if (!searchText.getText().isEmpty()) {
             String text = searchText.getText();
 
@@ -152,7 +153,7 @@ public class SearchController {
                 // TODO: alert
             } else {
                 search(text);
-                loadResult();
+                loadResults();
             }
         } else {
             Logger.error("Field cannot be empty!");
@@ -180,7 +181,7 @@ public class SearchController {
                     // TODO: alert
                 } else {
                     search(text);
-                    loadResult();
+                    loadResults();
                 }
 
             } else {
@@ -199,13 +200,11 @@ public class SearchController {
     @FXML
     void onClickHome(MouseEvent event) throws IOException {
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
-        Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
     }
 
     @FXML
     void onClickLogout(MouseEvent event) throws IOException {
-        Logger.info("Logout button clicked");
-        // TODO: clear the session
+        // Clear the session and exit
         MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
@@ -240,18 +239,48 @@ public class SearchController {
         }
     }
 
-    void loadResult() throws IOException {
+    void clearIndexes() {
+        this.row = 0;
+        this.column = 0;
+    }
 
-        /*********** PODCAST SEARCH ***********/
+    void loadUsersFoundGrid() throws IOException {
+        if (!usersMatch.isEmpty()) {
+            this.noUsersFound.setVisible(false);
+            this.noUsersFound.setMinHeight(0);
+            this.noUsersFound.setPrefHeight(0);
+            this.noUsersFound.setMaxHeight(0);
+
+            clearIndexes();
+            for (Pair<User, Boolean> user : this.usersMatch) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserSearchPreview.fxml"));
+
+                AnchorPane newUser = fxmlLoader.load();
+                UserSearchPreviewController controller = fxmlLoader.getController();
+                controller.setData(user.getValue0(), user.getValue1());
+
+                gridFoundUsers.add(newUser, this.column, this.row++);
+            }
+        }
+
+        // If filters include user the "user's Box" make it visible
+        if (filters.getValue2()) {
+            this.boxUsersFound.setVisible(true);
+            this.boxUsersFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            this.usersFound.setText("Users (" + usersMatch.size() + ")");
+        }
+    }
+
+    void loadPodcastsFoundGrid() throws IOException {
         if (!podcastsMatch.isEmpty()) {
             this.noPodcastsText.setVisible(false);
             this.noPodcastsText.setMinHeight(0);
             this.noPodcastsText.setPrefHeight(0);
             this.noPodcastsText.setMaxHeight(0);
 
-            int row = 0;
-            int column = 0;
-            for (Podcast entry : podcastsMatch) {
+            clearIndexes();
+            for (Podcast entry : this.podcastsMatch) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
@@ -259,7 +288,7 @@ public class SearchController {
                 AuthorReducedPodcastController controller = fxmlLoader.getController();
                 controller.setData(entry.getAuthorId(), entry.getId(), entry.getName(), entry.getReleaseDate(), entry.getPrimaryCategory(), entry.getArtworkUrl600());
 
-                gridFoundPodcasts.add(newPodcast, column, row++);
+                gridFoundPodcasts.add(newPodcast, this.column, this.row++);
             }
         }
 
@@ -268,17 +297,17 @@ public class SearchController {
             this.boxPodcastsFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
             this.podcastsFound.setText("Podcasts (" + podcastsMatch.size() + ")");
         }
+    }
 
-        /*********** AUTHOR SEARCH ***********/
-        if (!authorsMatch.isEmpty()) {
+    void loadAuthorsFoundGrid() throws IOException {
+        if (!this.authorsMatch.isEmpty()) {
             this.noAuthorsText.setVisible(false);
             this.noAuthorsText.setMinHeight(0);
             this.noAuthorsText.setPrefHeight(0);
             this.noAuthorsText.setMaxHeight(0);
 
-            int row = 0;
-            int column = 0;
-            for (Pair<Author, Boolean> author : authorsMatch) {
+            clearIndexes();
+            for (Pair<Author, Boolean> author : this.authorsMatch) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSearchPreview.fxml"));
 
@@ -286,7 +315,7 @@ public class SearchController {
                 AuthorSearchPreviewController controller = fxmlLoader.getController();
                 controller.setData(author.getValue0(), author.getValue1());
 
-                gridFoundAuthors.add(newAuthor, column, row++);
+                gridFoundAuthors.add(newAuthor, this.column, this.row++);
             }
         }
 
@@ -295,39 +324,17 @@ public class SearchController {
             this.boxAuthorsFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
             this.authorsFound.setText("Authors (" + authorsMatch.size() + ")");
         }
+    }
 
-        /*********** USER SEARCH ***********/
-        if (!actorType.equals("Author") && !actorType.equals("Unregistered")) {
+    void loadResults() throws IOException {
+        // Load all the grids
+        loadPodcastsFoundGrid();
+        loadAuthorsFoundGrid();
 
-            if (!usersMatch.isEmpty()) {
-                this.noUsersFound.setVisible(false);
-                this.noUsersFound.setMinHeight(0);
-                this.noUsersFound.setPrefHeight(0);
-                this.noUsersFound.setMaxHeight(0);
-
-                int row = 0;
-                int column = 0;
-                for (Pair<User, Boolean> user : usersMatch) {
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserSearchPreview.fxml"));
-
-                    AnchorPane newUser = fxmlLoader.load();
-                    UserSearchPreviewController controller = fxmlLoader.getController();
-                    controller.setData(user.getValue0(), user.getValue1());
-
-                    gridFoundUsers.add(newUser, column, row++);
-                }
-            }
-
-            if (filters.getValue2()) {
-                this.boxUsersFound.setVisible(true);
-                this.boxUsersFound.setPrefHeight(Region.USE_COMPUTED_SIZE);
-                this.usersFound.setText("Users (" + usersMatch.size() + ")");
-            }
-
-        } else {
+        if (this.actorType.equals("User") || this.actorType.equals("Admin"))
+            loadUsersFoundGrid();
+        else
             this.boxUsersFound.setVisible(false);
-        }
     }
 
     void clearData() {
@@ -363,8 +370,6 @@ public class SearchController {
     }
 
     public void initialize() throws IOException {
-        // Load information about the actor of the session
-
         switch (this.actorType) {
             case "Author" -> {
                 Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
@@ -412,6 +417,6 @@ public class SearchController {
         }
 
         search(StageManager.getObjectIdentifier());
-        loadResult();
+        loadResults();
     }
 }

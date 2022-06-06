@@ -2,7 +2,6 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
@@ -22,7 +21,7 @@ import java.io.IOException;
 public class AuthorSearchPreviewController {
     private Author author;
 
-    private boolean followed;
+    private final String actorType;
 
     @FXML
     private Label authorFound;
@@ -36,9 +35,12 @@ public class AuthorSearchPreviewController {
     @FXML
     private Button btnFollowAuthor;
 
+    public AuthorSearchPreviewController() {
+        this.actorType = MyPodcastDB.getInstance().getSessionType();
+    }
+
     @FXML
     void onClickAuthor(MouseEvent event) throws IOException {
-        Logger.info("Clicked on author " + this.author.getName());
         StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
     }
 
@@ -55,9 +57,8 @@ public class AuthorSearchPreviewController {
     /****** Events on follow button ******/
     @FXML
     void onClickBtnFollowAuthor(MouseEvent event) {
-        String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if (actorType.equals("Author")) {
+        if (this.actorType.equals("Author")) {
             AuthorService authorService = new AuthorService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
@@ -67,7 +68,7 @@ public class AuthorSearchPreviewController {
                 authorService.unfollowAuthor(author.getName());
                 btnFollowAuthor.setText("Follow");
             }
-        } else if (actorType.equals("User")) {
+        } else if (this.actorType.equals("User")) {
             UserService userService = new UserService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
@@ -100,14 +101,11 @@ public class AuthorSearchPreviewController {
         this.authorPicture.setImage(image);
 
         // Disabling follow button for unregistered users, admin and if author founds himself
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Admin") || actorType.equals("Unregistered")
-                || (actorType.equals("Author") && ((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(author.getName()))) {
+        if (this.actorType.equals("Admin") || this.actorType.equals("Unregistered")
+                || (this.actorType.equals("Author") && ((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName()))) {
             this.btnFollowAuthor.setVisible(false);
         } else {
-            this.followed = follow;
-            if (followed)
+            if (follow)
                 this.btnFollowAuthor.setText("Unfollow");
         }
     }

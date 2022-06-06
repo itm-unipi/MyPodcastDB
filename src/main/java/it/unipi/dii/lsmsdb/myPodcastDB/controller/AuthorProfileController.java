@@ -31,7 +31,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorProfileController {
-    private Author author;
+    private final Author author;
+
+    private final String actorType;
+
+    private final List<Pair<Author, Boolean>> followedAuthors;
+
+    private int row;
+
+    private int column;
 
     @FXML
     private BorderPane MainPage;
@@ -98,21 +106,27 @@ public class AuthorProfileController {
     @FXML
     private ScrollPane scrollPodcasts;
 
+    public AuthorProfileController() {
+        this.actorType = MyPodcastDB.getInstance().getSessionType();
+        this.followingAuthor = false;
+        this.author = new Author();
+        this.followedAuthors = new ArrayList<>();
+    }
+
     /*********** Navigator Events (Profile, Home, Search) *************/
     @FXML
     void onClickActorProfile(MouseEvent event) throws IOException {
-        Logger.info("Actor profile clicked");
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
-        else if (actorType.equals("User"))
-            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
-        else if (actorType.equals("Admin"))
-            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-        else
-            Logger.error("Unidentified Actor Type!");
+        switch (this.actorType) {
+            case "Author" ->
+                    StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author) MyPodcastDB.getInstance().getSessionActor()).getName());
+            case "User" ->
+                    StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+            case "Admin" ->
+                    StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+            default -> Logger.error("Unidentified Actor Type!");
+        }
     }
+
     @FXML
     void onClickSearch(MouseEvent event) throws IOException {
         if (!searchText.getText().isEmpty()) {
@@ -121,6 +135,7 @@ public class AuthorProfileController {
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
         } else {
             Logger.error("Field cannot be empty!");
+            // TODO: alert
         }
     }
 
@@ -133,6 +148,7 @@ public class AuthorProfileController {
                 StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
             } else {
                 Logger.error("Field cannot be empty!");
+                // TODO: alert
             }
         }
     }
@@ -140,13 +156,11 @@ public class AuthorProfileController {
     @FXML
     void onClickHome(MouseEvent event) throws IOException {
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
-        Logger.info(MyPodcastDB.getInstance().getSessionType() +  " Home Clicked");
     }
 
     @FXML
     void onClickLogout(MouseEvent event) throws IOException {
-        Logger.info("Logout button clicked");
-        // TODO: clear the session
+        // Clear the session and exit
         MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
@@ -154,9 +168,8 @@ public class AuthorProfileController {
     /********* Author Operations (Add podcast, Update Author, Delete Author, Follow Author) ***********/
     @FXML
     void onClickBtnFollowAuthor(MouseEvent event) {
-        String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if (actorType.equals("Author")) {
+        if (this.actorType.equals("Author")) {
             AuthorService authorService = new AuthorService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
@@ -167,7 +180,7 @@ public class AuthorProfileController {
                 btnFollowAuthor.setText("Follow");
             }
 
-        } else if (actorType.equals("User")) {
+        } else if (this.actorType.equals("User")) {
             UserService userService = new UserService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
@@ -185,7 +198,6 @@ public class AuthorProfileController {
 
     @FXML
     void addPodcast(MouseEvent event) throws IOException {
-        Logger.info("Add podcast button clicked");
 
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         MainPage.setEffect(blur);
@@ -305,18 +317,60 @@ public class AuthorProfileController {
             scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() - scrollValue);
     }
 
-    /*****************************************************/
+    /******* LOAD GRIDS ******/
+    void clearIndexes() {
+        this.row = 0;
+        this.column = 0;
+    }
+
+    // Load followed authors followed by the visited author
+    void loadFollowedAuthors() throws IOException {
+        clearIndexes();
+        for (Pair<Author, Boolean> followedAuthor: this.followedAuthors) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+
+            AnchorPane newFollowedAuthor = fxmlLoader.load();
+            AuthorPreviewController controller = fxmlLoader.getController();
+            controller.setData(followedAuthor.getValue0(), followedAuthor.getValue1(), 0, null);
+
+            this.gridAuthorsFollowed.add(newFollowedAuthor, this.column++, this.row);
+        }
+    }
+
+    // Load author's podcasts
+    void loadPodcasts() throws IOException {
+        clearIndexes();
+        for (Podcast podcast: this.author.getOwnPodcasts()) {
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
+
+            AnchorPane newPodcast = fxmlLoader.load();
+            AuthorReducedPodcastController controller = fxmlLoader.getController();
+            controller.setData(author.getId(), podcast.getId(), podcast.getName(), podcast.getReleaseDate(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
+
+            this.gridAuthorPodcasts.add(newPodcast, this.column, this.row++);
+        }
+    }
+
+    void hideEmptyGrids() {
+        if (this.author.getOwnPodcasts().isEmpty()) {
+            scrollPodcasts.setVisible(false);
+
+            noPodcasts.setVisible(true);
+            noPodcasts.setPrefHeight(Region.USE_COMPUTED_SIZE);
+        }
+
+        if (this.followedAuthors.isEmpty()) {
+            boxFollowedAuthors.setVisible(false);
+
+            noFollowersFound.setVisible(true);
+            noFollowersFound.setPrefHeight(130);
+        }
+    }
 
     public void initialize() throws IOException {
-        // Load information about the actor of the session
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-        this.followingAuthor = false;
-
-        // Declaring object in order to contain author's information
-        List<Pair<Author, Boolean>> followedAuthors = new ArrayList<>();
-        this.author = new Author();
-
-        switch (actorType) {
+        switch (this.actorType) {
             case "Author" -> {
                 Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
 
@@ -324,13 +378,13 @@ public class AuthorProfileController {
                 Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
                 actorPicture.setImage(image);
 
+                AuthorService authorService = new AuthorService();
                 if (StageManager.getObjectIdentifier().equals(sessionActor.getName())) {
                     // Session author coincides with the author profile requested
-                    AuthorService authorService = new AuthorService();
                     author.setName(sessionActor.getName());
-                    authorService.loadAuthorOwnProfile(author, followedAuthors, 10);
-                    // TODO: rimuovere dopo il rebase
-                    ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(author);
+                    authorService.loadAuthorOwnProfile(this.author, this.followedAuthors, 10);
+                    // TODO: rimuovere dopo il rebase (è stato fatto solo perchè il login crea un utente di sessione fittizio)
+                    ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(this.author);
 
                     authorName.setText(sessionActor.getName());
                     authorFollowing.setText("Authors you follow");
@@ -344,13 +398,12 @@ public class AuthorProfileController {
 
                 } else {
                     // Author profile requested is different form the session author
-                    AuthorService authorService = new AuthorService();
-                    author.setName(StageManager.getObjectIdentifier());
-                    this.followingAuthor = authorService.loadAuthorProfile(author, followedAuthors, 10);
+                    this.author.setName(StageManager.getObjectIdentifier());
+                    this.followingAuthor = authorService.loadAuthorProfile(this.author, this.followedAuthors, 10);
 
                     // Setting GUI information about the author visited
-                    authorName.setText(author.getName());
-                    authorFollowing.setText("Authors followed by " + author.getName());
+                    authorName.setText(this.author.getName());
+                    authorFollowing.setText("Authors followed by " + this.author.getName());
                     podcastLabel.setText("Podcasts");
 
                     if (this.followingAuthor)
@@ -369,17 +422,17 @@ public class AuthorProfileController {
 
                 // Setting user GUI parameters of the user
                 Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
-                actorPicture.setImage(image);
+                this.actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
-                author.setName(StageManager.getObjectIdentifier());
+                this.author.setName(StageManager.getObjectIdentifier());
                 UserService userService = new UserService();
-                this.followingAuthor = userService.loadAuthorProfileRegistered(author, followedAuthors, 10);
+                this.followingAuthor = userService.loadAuthorProfileRegistered(this.author, this.followedAuthors, 10);
 
                 // Setting GUI information about the author visited
-                authorName.setText(author.getName());
-                authorFollowing.setText("Authors followed by " + author.getName());
-                podcastLabel.setText("Podcasts");
+                this.authorName.setText(author.getName());
+                this.authorFollowing.setText("Authors followed by " + this.author.getName());
+                this.podcastLabel.setText("Podcasts");
 
                 if (this.followingAuthor)
                     btnFollowAuthor.setText("Unfollow");
@@ -396,17 +449,17 @@ public class AuthorProfileController {
 
                 // Setting GUI parameters of the admin
                 Image image = ImageCache.getImageFromLocalPath("/img/userPicture.png");
-                actorPicture.setImage(image);
+                this.actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
                 AdminService adminService = new AdminService();
-                author.setName(StageManager.getObjectIdentifier());
-                adminService.loadAuthorProfile(author, followedAuthors, 10);
+                this.author.setName(StageManager.getObjectIdentifier());
+                adminService.loadAuthorProfile(this.author, this.followedAuthors, 10);
 
                 // Setting GUI information of the author visited
-                authorName.setText(author.getName());
-                authorFollowing.setText("Authors followed by " + author.getName());
-                podcastLabel.setText("Podcasts");
+                this.authorName.setText(this.author.getName());
+                this.authorFollowing.setText("Authors followed by " + this.author.getName());
+                this.podcastLabel.setText("Podcasts");
 
                 // Hiding unnecessary button for the admin
                 btnFollowAuthor.setVisible(false);
@@ -418,13 +471,13 @@ public class AuthorProfileController {
                 Logger.info("I'm an unregistered user");
 
                 // Requesting the author's information from the database
-                author.setName(StageManager.getObjectIdentifier());
+                this.author.setName(StageManager.getObjectIdentifier());
                 UserService userService = new UserService();
-                userService.loadAuthorProfileUnregistered(author, followedAuthors, 10);
+                userService.loadAuthorProfileUnregistered(this.author, this.followedAuthors, 10);
 
-                authorName.setText(author.getName());
-                authorFollowing.setText("Authors followed by " + author.getName());
-                podcastLabel.setText("Podcasts");
+                this.authorName.setText(this.author.getName());
+                this.authorFollowing.setText("Authors followed by " + this.author.getName());
+                this.podcastLabel.setText("Podcasts");
 
                 // Hiding buttons
                 boxActorProfile.setVisible(false);
@@ -439,48 +492,13 @@ public class AuthorProfileController {
             default -> Logger.error("Unidentified Actor Type");
         }
 
-        // Authors followed by the author
-        int row = 0;
-        int column = 0;
-        for (Pair<Author, Boolean> followedAuthor: followedAuthors) {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
+        // Load grids
+        loadFollowedAuthors();
+        loadPodcasts();
 
-            AnchorPane newFollowedAuthor = fxmlLoader.load();
-            AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(followedAuthor.getValue0(), followedAuthor.getValue1(), 0, null);
-
-            gridAuthorsFollowed.add(newFollowedAuthor, column++, row);
-        }
-
-        // Getting author podcasts
-        row = 0;
-        column = 0;
-
-        for (Podcast podcast: author.getOwnPodcasts()) {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
-
-            AnchorPane newPodcast = fxmlLoader.load();
-            AuthorReducedPodcastController controller = fxmlLoader.getController();
-            controller.setData(author.getId(), podcast.getId(), podcast.getName(), podcast.getReleaseDate(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
-
-            gridAuthorPodcasts.add(newPodcast, column, row++);
-        }
-
-        if (author.getOwnPodcasts().isEmpty()) {
-            scrollPodcasts.setVisible(false);
-
-            noPodcasts.setVisible(true);
-            noPodcasts.setPrefHeight(Region.USE_COMPUTED_SIZE);
-        }
-
-        if (followedAuthors.isEmpty()) {
-            boxFollowedAuthors.setVisible(false);
-
-            noFollowersFound.setVisible(true);
-            noFollowersFound.setPrefHeight(130);
-        }
+        // Hiding the empty grids
+        hideEmptyGrids();
+        Logger.success("Author's profile loading done!");
     }
 }
 

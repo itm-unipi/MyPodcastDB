@@ -22,12 +22,12 @@ public class UserService {
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------
-    private AuthorMongo authorMongoManager;
-    private AuthorNeo4j authorNeo4jManager;
-    private UserNeo4j userNeo4jManager;
-    private UserMongo userMongoManager;
-    private PodcastMongo podcastMongoManager;
-    private PodcastNeo4j podcastNeo4jManager;
+    private final AuthorMongo authorMongoManager;
+    private final AuthorNeo4j authorNeo4jManager;
+    private final UserNeo4j userNeo4jManager;
+    private final UserMongo userMongoManager;
+    private final PodcastMongo podcastMongoManager;
+    private final PodcastNeo4j podcastNeo4jManager;
 
     public UserService() {
         this.authorMongoManager = new AuthorMongo();
@@ -51,10 +51,12 @@ public class UserService {
         boolean followingAuthor = userNeo4jManager.findUserFollowsAuthor(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
 
         // Getting the authors followed by the author visited
-        List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit);
-        for (Author a: followedAuthor) {
-            boolean following = userNeo4jManager.findUserFollowsAuthor(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), a.getName());
-            followed.add(new Pair<>(a, following));
+        List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit);
+        if (followedAuthors != null) {
+            for (Author followedAuthor: followedAuthors) {
+                boolean following = userNeo4jManager.findUserFollowsAuthor(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), followedAuthor.getName());
+                followed.add(new Pair<>(followedAuthor, following));
+            }
         }
 
         MongoManager.getInstance().closeConnection();
@@ -72,9 +74,11 @@ public class UserService {
         author.copy(foundAuthor);
 
         // Getting the authors followed by the author visited
-        List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit);
-        for (Author a: followedAuthor)
-            followed.add(new Pair<>(a, false));
+        List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit);
+        if (followedAuthors != null) {
+            for (Author followedAuthor: followedAuthors)
+                followed.add(new Pair<>(followedAuthor, false));
+        }
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
@@ -123,8 +127,6 @@ public class UserService {
             }
         }
 
-        Logger.info("Authors found: " + authorsMatch);
-
         // Searching for users
         if (filters.getValue2()) {
             List<User> users = userMongoManager.searchUser(searchText, limit);
@@ -133,8 +135,6 @@ public class UserService {
                 usersMatch.add(new Pair<>(userFound, followingUser));
             }
         }
-
-        Logger.info("Users found: " + usersMatch);
 
         Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
@@ -182,7 +182,7 @@ public class UserService {
         Neo4jManager.getInstance().closeConnection();
     }
 
-    public void loadHomepageRegistered(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors, List<Podcast> watchlist, List<Podcast> topGenres, List<Podcast> basedOnFriends, List<Podcast> basedOnWatchlist, List<Pair<Author, Boolean>> suggestedAuthors, int limit) {
+    public void loadHomepageRegistered(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors, List<Podcast> watchlist, List<Podcast> topGenres, List<Podcast> basedOnWatchlist, List<Pair<Author, Boolean>> suggestedAuthors, int limit) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
@@ -229,8 +229,8 @@ public class UserService {
             mostFollowedAuthors.add(new Triplet<>(author.getValue0(), author.getValue1(), following));
         }
 
-        List<Podcast> podcasts = new ArrayList<>();
-        List<Author> authors = new ArrayList<>();
+        List<Podcast> podcasts;
+        List<Author> authors;
 
         // Load podcasts in watchlist
         podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()), limit);
@@ -242,21 +242,13 @@ public class UserService {
         if(podcasts != null)
             topGenres.addAll(podcasts);
 
-        // Load podcasts liked by followed users
-        //podcasts = podcastNeo4jManager.showSuggestedPodcastsLikedByFollowedUsers(((User)MyPodcastDB.getInstance().getSessionActor()), limit);
-        podcasts = null;
-        if(podcasts != null)
-            basedOnFriends.addAll(podcasts);
-
         // Load podcasts based on author in user's watchlist
-        //podcasts = podcastNeo4jManager.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()), limit);
-        podcasts = null;
+        podcasts = podcastNeo4jManager.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()), limit);
         if(podcasts != null)
             basedOnWatchlist.addAll(podcasts);
 
         // Load suggested authors
         authors = authorNeo4jManager.showSuggestedAuthorsFollowedByFollowedUser(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), 6);
-
         if (authors != null) {
             for (Author author : authors) {
                 boolean following = userNeo4jManager.findUserFollowsAuthor(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
@@ -266,6 +258,17 @@ public class UserService {
 
         Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
+    }
+
+    public void loadMoreSuggested(List<Podcast> basedOnFriends, int limit) {
+        Neo4jManager.getInstance().openConnection();
+
+        // Load podcasts liked by followed users
+        List<Podcast> podcasts = podcastNeo4jManager.showSuggestedPodcastsLikedByFollowedUsers(((User)MyPodcastDB.getInstance().getSessionActor()), limit);
+        if(podcasts != null)
+            basedOnFriends.addAll(podcasts);
+
+        Neo4jManager.getInstance().closeConnection();
     }
 
     public void loadHomepageUnregistered(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors, int limit) {

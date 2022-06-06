@@ -13,11 +13,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -156,7 +153,6 @@ public class AddPodcastController {
                 alert.setContentText("Something went wrong during the adding of the podcast.");
                 alert.setGraphic(null);
                 alert.showAndWait();
-
             }
         }
     }

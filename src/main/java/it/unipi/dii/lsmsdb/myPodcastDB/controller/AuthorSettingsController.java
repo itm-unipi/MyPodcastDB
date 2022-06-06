@@ -44,7 +44,6 @@ public class AuthorSettingsController {
     private DialogPane dialogPane;
 
     /******* AUTHOR PICTURE SLIDE *******/
-
     @FXML
     void nextAuthorPicture(MouseEvent event) {
 
@@ -68,7 +67,6 @@ public class AuthorSettingsController {
     }
 
     /********** RESET BORDER EMPTY FIELDS **********/
-
     @FXML
     void restoreBorderTextField(MouseEvent event) {
         ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
