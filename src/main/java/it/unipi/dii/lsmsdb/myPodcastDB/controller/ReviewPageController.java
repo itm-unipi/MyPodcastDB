@@ -327,6 +327,12 @@ public class ReviewPageController {
         String title = this.textTitle.getText();
         String content = this.textContent.getText();
 
+        // check if there are empty fields
+        if (title.equals("") || content.equals("")) {
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "You must fill all review's fields");
+            return;
+        }
+
         // fill the review
         this.ownReview.setTitle(title);
         this.ownReview.setContent(content);

@@ -82,7 +82,7 @@ public class ReviewController {
         alert.initOwner(this.mainPage.getScene().getWindow());
         alert.setTitle("Delete Podcast");
         alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this podcast?");
+        alert.setContentText("Do you really want to delete this review?");
         alert.setGraphic(null);
         alert.showAndWait();
 
