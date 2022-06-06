@@ -184,6 +184,8 @@ public class AdminDashboardController {
     private AdminService service;
     private int limit;
 
+    /**************************** Click and Enter Events ****************************/
+
     @FXML
     void clickOnAddAdmin(MouseEvent event) throws IOException {
         Logger.info("Add admin");
@@ -204,37 +206,6 @@ public class AdminDashboardController {
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
         dialog.showAndWait();
         this.mainPage.setEffect(null);
-    }
-    @FXML
-    void onClickActorProfile(MouseEvent event) throws IOException {
-        Logger.info("Click on profile");
-        StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-    }
-
-    @FXML
-    void onClickHome(MouseEvent event) throws IOException {
-        Logger.info("Click on home");
-        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
-    }
-
-    @FXML
-    void onClickSearch(MouseEvent event) throws IOException {
-        Logger.info("Click on search");
-
-        if (!this.searchText.getText().equals("")) {
-            String searchString = this.searchText.getText();
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
-        }
-    }
-
-    @FXML
-    void onEnterPressedSearch(KeyEvent event) throws IOException {
-        Logger.info("Enter on search");
-
-        if (event.getCode().equals(KeyCode.ENTER) && !this.searchText.getText().equals("")) {
-            String searchString = this.searchText.getText();
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
-        }
     }
 
     @FXML
@@ -261,6 +232,12 @@ public class AdminDashboardController {
     }
 
     @FXML
+    void clickOnHome(MouseEvent event) throws IOException {
+        Logger.info("Click on home");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+    }
+
+    @FXML
     void clickOnLogout(MouseEvent event) throws IOException {
         MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
@@ -280,6 +257,16 @@ public class AdminDashboardController {
         this.updateCancelWrapper.setVisible(true);
         this.modifyInfoWrapper.setStyle("-fx-pref-height: 0; -fx-max-height: 0;");
         this.updateCancelWrapper.setStyle("-fx-pref-height: 39; -fx-max-height: 40;");
+    }
+
+    @FXML
+    void clickOnSearch(MouseEvent event) throws IOException {
+        Logger.info("Click on search");
+
+        if (!this.searchText.getText().equals("")) {
+            String searchString = this.searchText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
     }
 
     @FXML
@@ -440,6 +427,24 @@ public class AdminDashboardController {
     }
 
     @FXML
+    void clickOnUser(MouseEvent event) throws IOException {
+        Logger.info("Click on profile");
+        StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+    }
+
+    @FXML
+    void enterOnSearch(KeyEvent event) throws IOException {
+        Logger.info("Enter on search");
+
+        if (event.getCode().equals(KeyCode.ENTER) && !this.searchText.getText().equals("")) {
+            String searchString = this.searchText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
+    }
+
+    /******************************** Mouse on Event ********************************/
+
+    @FXML
     void mouseOnCancel(MouseEvent event) {
         this.cancelInfo.setStyle("-fx-border-color: #f44336; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10;-fx-cursor: hand;");
     }
@@ -563,6 +568,8 @@ public class AdminDashboardController {
     void mouseOnUpdate10(MouseEvent event) {
         this.update10.setStyle("-fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-color: white; -fx-background-radius: 10; -fx-text-fill: black; -fx-border-radius: 10; -fx-cursor: hand;");
     }
+
+    /******************************* Mouse out Event ********************************/
 
     @FXML
     void mouseOutAddAdmin(MouseEvent event) {
@@ -689,6 +696,8 @@ public class AdminDashboardController {
         this.update10.setStyle("-fx-border-color: transparent; -fx-background-insets: 0; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-text-fill: white; -fx-border-radius: 10; -fx-cursor: default;");
     }
 
+    /***************************** Initialize e Utility *****************************/
+
     public void initialize() throws IOException {
         Admin admin = (Admin)MyPodcastDB.getInstance().getSessionActor();
         this.admin = admin;
@@ -722,10 +731,10 @@ public class AdminDashboardController {
         this.data10.setText("Last update: " + updateTimes.get(9) + "  ");
 
         // settings buttons and texts
-//        this.modifyInfoWrapper.setVisible(true);
-//        this.updateCancelWrapper.setVisible(false);
-//        this.modifyInfoWrapper.setStyle("-fx-max-height: 40;");
-//        this.updateCancelWrapper.setStyle("-fx-max-height: 0;");
+        this.modifyInfoWrapper.setVisible(true);
+        this.updateCancelWrapper.setVisible(false);
+        this.modifyInfoWrapper.setStyle("-fx-max-height: 40; -fx-pref-height: 39");
+        this.updateCancelWrapper.setStyle("-fx-max-height: 0; -fx-pref-height: 0");
     }
 
     private List<String> loadCharts() throws IOException {
