@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" style="-fx-border-color: #5e5e5e;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.EpisodeEditController">
+<DialogPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" style="-fx-border-color: #a6a6a6;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.EpisodeEditController">
    <content>
       <AnchorPane maxHeight="-Infinity">
          <children>

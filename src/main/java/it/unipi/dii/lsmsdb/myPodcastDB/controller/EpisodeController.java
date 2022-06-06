@@ -53,19 +53,13 @@ public class EpisodeController {
 
     @FXML
     void clickOnDelete(MouseEvent event) throws IOException {
-        // create the alert
+        // create the blur
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(this.mainPage.getScene().getWindow());
-        alert.setTitle("Delete Episode");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this episode?");
-        alert.setGraphic(null);
-        alert.showAndWait();
 
         // button handling
-        if (alert.getResult() == ButtonType.OK) {
+        boolean confirm = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Do you really want to delete this episode?");
+        if (confirm) {
             int result = this.service.deleteEpisode(this.podcast, this.episode);
 
             // if delete is succesfull remove episode from grid

@@ -75,19 +75,13 @@ public class ReviewController {
 
     @FXML
     void clickOnDeleteReview(MouseEvent event) throws IOException {
-        // create the alert
+        // create the blur
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(this.mainPage.getScene().getWindow());
-        alert.setTitle("Delete Podcast");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this review?");
-        alert.setGraphic(null);
-        alert.showAndWait();
 
-        // button handling
-        if (alert.getResult() == ButtonType.OK) {
+        // create the dialog
+        boolean confirm = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Do you really want to delete this review?");
+        if (confirm) {
             // delete review
             int result = this.service.deleteReview(this.review);
 

@@ -210,43 +210,33 @@ public class PodcastPageController {
 
     @FXML
     void clickOnDeletePodcast(MouseEvent event) throws IOException {
-        // create the alert
+        // create the blur
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(this.mainPage.getScene().getWindow());
-        alert.setTitle("Delete Podcast");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this podcast?");
-        alert.setGraphic(null);
-        alert.showAndWait();
 
-        // button handling
+        // create the dialog
         int result = 0;
-        if (alert.getResult() == ButtonType.OK)
+        boolean confirm = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Do you really want to delete this podcast?");
+        if (confirm)
             result = this.service.deletePodcast(this.podcast);
 
         this.mainPage.setEffect(null);
 
-        // if successful go to author/admin page
-        if (result == 0) {
-            if (MyPodcastDB.getInstance().getSessionType().equals("Author"))
-                StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
-            else
-                StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-        }
+        if (confirm) {
+            // if successful go to author/admin page
+            if (result == 0) {
+                if (MyPodcastDB.getInstance().getSessionType().equals("Author"))
+                    StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+                else
+                    StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+            }
 
-        // if failed show an alert
-        else {
-            this.mainPage.setEffect(blur);
-            alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(this.mainPage.getScene().getWindow());
-            alert.setTitle("Delete Podcast");
-            alert.setHeaderText(null);
-            alert.setContentText("Error in removing Podcast");
-            alert.setGraphic(null);
-            alert.showAndWait();
-            this.mainPage.setEffect(null);
+            // if failed show an alert
+            else {
+                this.mainPage.setEffect(blur);
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Error in removing Podcast");
+                this.mainPage.setEffect(null);
+            }
         }
     }
 
