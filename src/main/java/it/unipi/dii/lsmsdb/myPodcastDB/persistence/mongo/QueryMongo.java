@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.UpdateOptions;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
@@ -21,8 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
-import static com.mongodb.client.model.Filters.eq;
-import static com.mongodb.client.model.Filters.not;
+import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
 import static com.mongodb.client.model.Updates.set;
 
@@ -341,6 +341,33 @@ public class QueryMongo {
         return null;
     }
 
+    public List<Pair<String, String>> getUpdateTimes(String[] queries) {
+        MongoManager manager = MongoManager.getInstance();
+
+        // create the filter based on requested queries
+        List<Bson> queryNames = new ArrayList<>();
+        for (String name : queries)
+            queryNames.add(eq("queryName", name));
+        Bson filter = or(queryNames);
+
+        try (MongoCursor<Document> cursor = manager.getCollection("query").find(filter).iterator()) {
+            List<Pair<String, String>> updateTimes = new ArrayList<>();
+            while (cursor.hasNext()) {
+                Document query = cursor.next();
+
+                // get the update time
+                String queryName = query.getString("queryName");
+                String updateTime = query.getString("lastUpdate");
+                updateTimes.add(new Pair<>(queryName, updateTime));
+            }
+
+            return updateTimes;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     // --------- UPDATE --------- //
 
     public boolean updateAverageAgeOfUsersPerFavouriteCategory(List<Entry<String, Float>> newValues, Date updateTime) {
@@ -512,6 +539,67 @@ public class QueryMongo {
         }
     }
 
+    public boolean updateMostFollowedAuthor(List<Pair<Author, Integer>> newValues, Date updateTime) {
+        MongoManager manager = MongoManager.getInstance();
+
+        // create the results
+        List<Document> results = new ArrayList<>();
+        for (Pair<Author, Integer> value : newValues) {
+            Document newResult = new Document()
+                    .append("authorName", value.getValue0().getName())
+                    .append("picturePath", value.getValue0().getPicturePath())
+                    .append("followers", value.getValue1());
+            results.add(newResult);
+        }
+
+        try {
+            Bson filter = eq("queryName", "MostFollowedAuthor");
+            Bson update = combine(
+                    set("queryName", "MostFollowedAuthor"),
+                    set("lastUpdate", dateAsString(updateTime)),
+                    set("results", results)
+            );
+            UpdateOptions options = new UpdateOptions().upsert(true);
+            UpdateResult result = manager.getCollection("query").updateOne(filter, update, options);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateMostLikedPodcast(List<Entry<Podcast, Integer>> newValues, Date updateTime) {
+        MongoManager manager = MongoManager.getInstance();
+
+        // create the results
+        List<Document> results = new ArrayList<>();
+        for (Entry<Podcast, Integer> value : newValues) {
+            Document newResult = new Document()
+                    .append("podcastId", value.getKey().getId())
+                    .append("podcastName", value.getKey().getName())
+                    .append("podcastArtwork", value.getKey().getArtworkUrl600())
+                    .append("numLikes", value.getValue());
+            results.add(newResult);
+        }
+
+        try {
+            Bson filter = eq("queryName", "MostLikedPodcast");
+            Bson update = combine(
+                    set("queryName", "MostLikedPodcast"),
+                    set("lastUpdate", dateAsString(updateTime)),
+                    set("results", results)
+            );
+            UpdateOptions options = new UpdateOptions().upsert(true);
+            UpdateResult result = manager.getCollection("query").updateOne(filter, update, options);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean updatePodcastsWithHighestAverageRating(List<Pair<Podcast, Float>> newValues, Date updateTime) {
         MongoManager manager = MongoManager.getInstance();
 
@@ -562,67 +650,6 @@ public class QueryMongo {
             Bson filter = eq("queryName", "PodcastWithHighestAverageRatingPerCountry");
             Bson update = combine(
                     set("queryName", "PodcastWithHighestAverageRatingPerCountry"),
-                    set("lastUpdate", dateAsString(updateTime)),
-                    set("results", results)
-            );
-            UpdateOptions options = new UpdateOptions().upsert(true);
-            UpdateResult result = manager.getCollection("query").updateOne(filter, update, options);
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateMostFollowedAuthor(List<Pair<Author, Integer>> newValues, Date updateTime) {
-        MongoManager manager = MongoManager.getInstance();
-
-        // create the results
-        List<Document> results = new ArrayList<>();
-        for (Pair<Author, Integer> value : newValues) {
-            Document newResult = new Document()
-                    .append("authorName", value.getValue0().getName())
-                    .append("picturePath", value.getValue0().getPicturePath())
-                    .append("followers", value.getValue1());
-            results.add(newResult);
-        }
-
-        try {
-            Bson filter = eq("queryName", "MostFollowedAuthor");
-            Bson update = combine(
-                    set("queryName", "MostFollowedAuthor"),
-                    set("lastUpdate", dateAsString(updateTime)),
-                    set("results", results)
-            );
-            UpdateOptions options = new UpdateOptions().upsert(true);
-            UpdateResult result = manager.getCollection("query").updateOne(filter, update, options);
-
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public boolean updateMostLikedPodcast(List<Entry<Podcast, Integer>> newValues, Date updateTime) {
-        MongoManager manager = MongoManager.getInstance();
-
-        // create the results
-        List<Document> results = new ArrayList<>();
-        for (Entry<Podcast, Integer> value : newValues) {
-            Document newResult = new Document()
-                    .append("podcastId", value.getKey().getId())
-                    .append("podcastName", value.getKey().getName())
-                    .append("podcastArtwork", value.getKey().getArtworkUrl600())
-                    .append("numLikes", value.getValue());
-            results.add(newResult);
-        }
-
-        try {
-            Bson filter = eq("queryName", "MostLikedPodcast");
-            Bson update = combine(
-                    set("queryName", "MostLikedPodcast"),
                     set("lastUpdate", dateAsString(updateTime)),
                     set("results", results)
             );

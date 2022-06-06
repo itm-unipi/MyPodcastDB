@@ -13,10 +13,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AdminService {
 
@@ -44,8 +41,9 @@ public class AdminService {
 
     public List<String> loadAdminPage(List<Pair<String, Float>> averageAgeOfUsersPerFavouriteCategory, List<Pair<Podcast, Integer>> podcastsWithHighestNumberOfReviews, List<Pair<String, Integer>> countryWithHighestNumberOfPodcasts, Triplet<List<String>, List<String>, List<String>> topFavouriteCategoriesPerGender, List<Pair<String, Integer>> mostNumerousCategories, List<Pair<String, Integer>> mostAppreciatedCategory) {
         MongoManager.getInstance().openConnection();
-
         List<String> updateTimes = new ArrayList<>();
+
+        // load the statistics and their last update time
         String updateTime = this.queryMongo.getAverageAgeOfUsersPerFavouriteCategory(averageAgeOfUsersPerFavouriteCategory);
         updateTimes.add(updateTime);
         updateTime = this.queryMongo.getPodcastsWithHighestNumberOfReviews(podcastsWithHighestNumberOfReviews);
@@ -58,14 +56,22 @@ public class AdminService {
         updateTimes.add(updateTime);
         updateTime = this.queryMongo.getMostAppreciatedCategory(mostAppreciatedCategory);
         updateTimes.add(updateTime);
-        updateTime = this.queryMongo.getMostFollowedAuthor(new ArrayList<>());
-        updateTimes.add(updateTime);
-        updateTime = this.queryMongo.getMostLikedPodcast(new ArrayList<>());
-        updateTimes.add(updateTime);
-        updateTime = this.queryMongo.getPodcastsWithHighestAverageRating(new ArrayList<>());
-        updateTimes.add(updateTime);
-        updateTime = this.queryMongo.getPodcastWithHighestAverageRatingPerCountry(new ArrayList<>());
-        updateTimes.add(updateTime);
+
+        // request last update time of the remaining heavy query
+        String[] otherQueries = new String[] {"MostFollowedAuthor", "MostLikedPodcast", "PodcastsWithHighestAverageRating", "PodcastWithHighestAverageRatingPerCountry" };
+        List<Pair<String, String>> requestedTimes = this.queryMongo.getUpdateTimes(otherQueries);
+        String[] toAddTimes = new String[4];
+        for (Pair<String, String> time : requestedTimes) {
+            if (time.getValue0().equals("MostFollowedAuthor"))
+                toAddTimes[0] = time.getValue1();
+            else if (time.getValue0().equals("MostLikedPodcast"))
+                toAddTimes[1] = time.getValue1();
+            else if (time.getValue0().equals("PodcastsWithHighestAverageRating"))
+                toAddTimes[2] = time.getValue1();
+            else if (time.getValue0().equals("PodcastWithHighestAverageRatingPerCountry"))
+                toAddTimes[3] = time.getValue1();
+        }
+        updateTimes.addAll(Arrays.stream(toAddTimes).toList());
 
         MongoManager.getInstance().closeConnection();
         return updateTimes;
