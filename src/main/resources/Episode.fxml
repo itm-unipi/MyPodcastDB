@@ -24,6 +24,9 @@
                      <font>
                         <Font name="Dubai Regular" size="14.0" />
                      </font>
+                     <padding>
+                        <Insets bottom="-7.0" />
+                     </padding>
                   </Label>
                   <HBox alignment="CENTER_LEFT">
                      <children>
@@ -78,7 +81,7 @@
                         <Font name="Dubai Light" size="16.0" />
                      </font>
                      <VBox.margin>
-                        <Insets />
+                        <Insets top="-5.0" />
                      </VBox.margin>
                   </Text>
                   <Label fx:id="time" layoutX="10.0" layoutY="10.0" scaleY="1.06" text="# Min" textFill="#636366">
@@ -88,6 +91,9 @@
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
+                     <padding>
+                        <Insets top="-5.0" />
+                     </padding>
                   </Label>
                   <Separator prefWidth="200.0">
                      <VBox.margin>

@@ -580,6 +580,8 @@ public class PodcastPageController {
         List<String> secondaryCategories = podcast.getCategories();
         if (secondaryCategories.contains(podcast.getPrimaryCategory()))
             secondaryCategories.remove(podcast.getPrimaryCategory());
+        if (secondaryCategories.isEmpty())
+            secondaryCategories.add("None");
         this.secondaryCategory.setText(String.join(", ", secondaryCategories));
         this.secondaryCatTooltip.setText(String.join(", ", secondaryCategories));
         this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");

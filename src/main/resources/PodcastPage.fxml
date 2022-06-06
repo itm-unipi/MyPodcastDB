@@ -160,7 +160,7 @@
                                     </HBox>
                                     <HBox>
                                        <VBox.margin>
-                                          <Insets top="8.0" />
+                                          <Insets top="2.0" />
                                        </VBox.margin>
                                        <children>
                                           <Label prefHeight="22.0" prefWidth="61.0" text="Others:">
@@ -182,18 +182,21 @@
                               </VBox>
                               <Separator prefWidth="200.0">
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="8.0" />
                                  </VBox.margin>
                               </Separator>
                               <HBox alignment="BOTTOM_LEFT" prefWidth="200.0">
                                  <children>
-                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefHeight="67.0" prefWidth="49.0" text="#.#">
+                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefWidth="49.0" text="#.#">
                                        <font>
                                           <Font name="Dubai Light" size="38.0" />
                                        </font>
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
+                                       <padding>
+                                          <Insets bottom="-17.0" top="-10.0" />
+                                       </padding>
                                     </Label>
                                     <Label fx:id="numReviews" scaleY="1.06" text=" out of 5.0 on # reviews">
                                        <font>
@@ -203,8 +206,11 @@
                                           <Insets />
                                        </opaqueInsets>
                                        <HBox.margin>
-                                          <Insets bottom="10.0" />
+                                          <Insets />
                                        </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="-6.0" />
+                                       </padding>
                                     </Label>
                                  </children>
                                  <opaqueInsets>
@@ -395,7 +401,7 @@
                                        <children>
                                           <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
                                              <font>
-                                                <Font name="Corbel Light" size="25.0" />
+                                                <Font name="Dubai Light" size="25.0" />
                                              </font>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
@@ -403,6 +409,9 @@
                                              <VBox.margin>
                                                 <Insets top="3.0" />
                                              </VBox.margin>
+                                             <padding>
+                                                <Insets bottom="-7.0" top="-6.0" />
+                                             </padding>
                                           </Label>
                                           <Label fx:id="country" scaleY="1.06" text="Country">
                                              <font>

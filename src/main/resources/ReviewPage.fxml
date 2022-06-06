@@ -158,6 +158,9 @@
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
+                                                   <padding>
+                                                      <Insets bottom="-17.0" top="-20.0" />
+                                                   </padding>
                                                 </Label>
                                                 <Label fx:id="numReviews" scaleY="1.06" text=" out of 5.0 on # reviews">
                                                    <font>
@@ -167,13 +170,19 @@
                                                       <Insets />
                                                    </opaqueInsets>
                                                    <HBox.margin>
-                                                      <Insets bottom="10.0" />
+                                                      <Insets />
                                                    </HBox.margin>
+                                                   <padding>
+                                                      <Insets bottom="-6.0" />
+                                                   </padding>
                                                 </Label>
                                              </children>
                                              <opaqueInsets>
                                                 <Insets />
                                              </opaqueInsets>
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" top="3.0" />
+                                             </VBox.margin>
                                           </HBox>
                                           <HBox>
                                              <children>
