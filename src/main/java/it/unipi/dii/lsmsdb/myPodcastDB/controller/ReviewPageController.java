@@ -119,6 +119,9 @@ public class ReviewPageController {
     private ImageView star5;
 
     @FXML
+    private Button submit;
+
+    @FXML
     private TextArea textContent;
 
     @FXML
@@ -152,6 +155,8 @@ public class ReviewPageController {
     private String selectedOrder;
     private Boolean selectedAscending;
     private int limitPerQuery;
+
+    /**************************** Click and Enter Events ****************************/
 
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
@@ -204,6 +209,12 @@ public class ReviewPageController {
     }
 
     @FXML
+    void clickOnHome(MouseEvent event) throws IOException {
+        Logger.info("Click on home");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+    }
+
+    @FXML
     void clickOnLogout(MouseEvent event) throws IOException {
         MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
@@ -226,6 +237,15 @@ public class ReviewPageController {
             } else {
                 this.reloadReviewList();
             }
+        }
+    }
+
+    @FXML
+    void clickOnSearch(MouseEvent event) throws IOException {
+        Logger.info("Click on search");
+        if (!this.searchBarText.getText().equals("")) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
         }
     }
 
@@ -265,70 +285,13 @@ public class ReviewPageController {
     }
 
     @FXML
-    void clickOnThirdStar(MouseEvent event) {
-        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
-        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
-
-        this.star1.setImage(star);
-        this.star2.setImage(star);
-        this.star3.setImage(star);
-        this.star4.setImage(outlineStar);
-        this.star5.setImage(outlineStar);
-        this.ownReview.setRating(3);
-
-        Logger.info("Rating set to " + this.ownReview.getRating());
-    }
-
-    @FXML
-    void clickOnTitle(MouseEvent event) throws IOException {
-        Logger.info("Podcast ID to load : " + this.podcast.getId());
-        StageManager.showPage("PodcastPage.fxml", this.podcast.getId());
-    }
-
-    @FXML
-    void mouseOnAuthor(MouseEvent event) {
-        this.author.setCursor(Cursor.HAND);
-        this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
-    }
-
-    @FXML
-    void mouseOnShow(MouseEvent event) {
-        this.showMore.setCursor(Cursor.HAND);
-        this.showMore.setTextFill(Color.color(0.6, 0.6, 0.6));
-    }
-
-    @FXML
-    void mouseOnTitle(MouseEvent event) {
-        this.title.setCursor(Cursor.HAND);
-        this.title.setTextFill(Color.color(0.6, 0.6, 0.6));
-    }
-
-    @FXML
-    void mouseOutAuthor(MouseEvent event) {
-        this.author.setCursor(Cursor.DEFAULT);
-        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
-    }
-
-    @FXML
-    void mouseOutShow(MouseEvent event) {
-        this.showMore.setCursor(Cursor.DEFAULT);
-        this.showMore.setTextFill(Color.color(0.0, 0.0, 1.0));
-    }
-
-    @FXML
-    void mouseOutTitle(MouseEvent event) {
-        this.title.setCursor(Cursor.DEFAULT);
-        this.title.setTextFill(Color.color(0.0, 0.0, 0.0));
-    }
-
-    @FXML
-    void onSubmit(MouseEvent event) throws IOException {
+    void clickOnSubmit(MouseEvent event) throws IOException {
         // get the text
         String title = this.textTitle.getText();
         String content = this.textContent.getText();
 
         // check if there are empty fields
-        if (title.equals("") || content.equals("")) {
+        if (this.ownReview.getRating() == 0 || title.equals("") || content.equals("")) {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "You must fill all review's fields");
             return;
         }
@@ -361,32 +324,28 @@ public class ReviewPageController {
     }
 
     @FXML
-    void onClickHome(MouseEvent event) throws IOException {
-        Logger.info("Click on home");
-        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+    void clickOnThirdStar(MouseEvent event) {
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+        this.ownReview.setRating(3);
+
+        Logger.info("Rating set to " + this.ownReview.getRating());
     }
 
     @FXML
-    void onClickSearch(MouseEvent event) throws IOException {
-        Logger.info("Click on search");
-        if (!this.searchBarText.getText().equals("")) {
-            String searchString = this.searchBarText.getText();
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
-        }
+    void clickOnTitle(MouseEvent event) throws IOException {
+        Logger.info("Podcast ID to load : " + this.podcast.getId());
+        StageManager.showPage("PodcastPage.fxml", this.podcast.getId());
     }
 
     @FXML
-    void onEnterPressed(KeyEvent event) throws IOException {
-        Logger.info("Enter on search");
-
-        if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
-            String searchString = this.searchBarText.getText();
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
-        }
-    }
-
-    @FXML
-    void userProfile(MouseEvent event) throws IOException {
+    void clickOnUser(MouseEvent event) throws IOException {
         Logger.info("Click on user");
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
@@ -401,6 +360,37 @@ public class ReviewPageController {
     }
 
     @FXML
+    void enterOnSearch(KeyEvent event) throws IOException {
+        Logger.info("Enter on search");
+
+        if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
+    }
+
+    /******************************** Mouse on Event ********************************/
+
+    @FXML
+    void mouseOnAuthor(MouseEvent event) {
+        this.author.setCursor(Cursor.HAND);
+        this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
+
+    @FXML
+    void mouseOnFifthStar(MouseEvent event) {
+        this.star5.setCursor(Cursor.HAND);
+
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(star);
+        this.star4.setImage(star);
+        this.star5.setImage(star);
+    }
+
+    @FXML
     void mouseOnFirstStar(MouseEvent event) {
         this.star1.setCursor(Cursor.HAND);
 
@@ -410,34 +400,6 @@ public class ReviewPageController {
         this.star1.setImage(star);
         this.star2.setImage(outlineStar);
         this.star3.setImage(outlineStar);
-        this.star4.setImage(outlineStar);
-        this.star5.setImage(outlineStar);
-    }
-
-    @FXML
-    void mouseOnSecondStar(MouseEvent event) {
-        this.star2.setCursor(Cursor.HAND);
-
-        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
-        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
-
-        this.star1.setImage(star);
-        this.star2.setImage(star);
-        this.star3.setImage(outlineStar);
-        this.star4.setImage(outlineStar);
-        this.star5.setImage(outlineStar);
-    }
-
-    @FXML
-    void mouseOnThirdStar(MouseEvent event) {
-        this.star3.setCursor(Cursor.HAND);
-
-        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
-        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
-
-        this.star1.setImage(star);
-        this.star2.setImage(star);
-        this.star3.setImage(star);
         this.star4.setImage(outlineStar);
         this.star5.setImage(outlineStar);
     }
@@ -457,76 +419,74 @@ public class ReviewPageController {
     }
 
     @FXML
-    void mouseOnFifthStar(MouseEvent event) {
-        this.star5.setCursor(Cursor.HAND);
+    void mouseOnReload(MouseEvent event) {
+        this.reload.setStyle("-fx-border-color: #008CBA; -fx-background-color: white; -fx-background-radius: 8; -fx-text-fill: black; -fx-border-radius: 8;");
+        this.reload.setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    void mouseOnSecondStar(MouseEvent event) {
+        this.star2.setCursor(Cursor.HAND);
 
         Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
+
+        this.star1.setImage(star);
+        this.star2.setImage(star);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+    }
+
+    @FXML
+    void mouseOnShow(MouseEvent event) {
+        this.showMore.setCursor(Cursor.HAND);
+        this.showMore.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
+
+    @FXML
+    void mouseOnSubmit(MouseEvent event) {
+        this.submit.setStyle("-fx-border-color: #4CAF50; -fx-background-color: white; -fx-background-radius: 8; -fx-text-fill: black; -fx-border-radius: 8;");
+        this.submit.setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    void mouseOnTitle(MouseEvent event) {
+        this.title.setCursor(Cursor.HAND);
+        this.title.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
+
+    @FXML
+    void mouseOnThirdStar(MouseEvent event) {
+        this.star3.setCursor(Cursor.HAND);
+
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
 
         this.star1.setImage(star);
         this.star2.setImage(star);
         this.star3.setImage(star);
-        this.star4.setImage(star);
-        this.star5.setImage(star);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
     }
 
-    private void readRating() {
-        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
-        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
+    /******************************* Mouse out Event ********************************/
 
-        if (this.ownReview.getRating() == 5) {
-            this.star1.setImage(star);
-            this.star2.setImage(star);
-            this.star3.setImage(star);
-            this.star4.setImage(star);
-            this.star5.setImage(star);
-        } else if (this.ownReview.getRating() >= 4) {
-            this.star1.setImage(star);
-            this.star2.setImage(star);
-            this.star3.setImage(star);
-            this.star4.setImage(star);
-            this.star5.setImage(outlineStar);
-        } else if (this.ownReview.getRating() >= 3) {
-            this.star1.setImage(star);
-            this.star2.setImage(star);
-            this.star3.setImage(star);
-            this.star4.setImage(outlineStar);
-            this.star5.setImage(outlineStar);
-        } else if (this.ownReview.getRating() >= 2) {
-            this.star1.setImage(star);
-            this.star2.setImage(star);
-            this.star3.setImage(outlineStar);
-            this.star4.setImage(outlineStar);
-            this.star5.setImage(outlineStar);
-        } else if (this.ownReview.getRating() >= 1) {
-            this.star1.setImage(star);
-            this.star2.setImage(outlineStar);
-            this.star3.setImage(outlineStar);
-            this.star4.setImage(outlineStar);
-            this.star5.setImage(outlineStar);
-        } else {
-            this.star1.setImage(outlineStar);
-            this.star2.setImage(outlineStar);
-            this.star3.setImage(outlineStar);
-            this.star4.setImage(outlineStar);
-            this.star5.setImage(outlineStar);
-        }
+    @FXML
+    void mouseOutAuthor(MouseEvent event) {
+        this.author.setCursor(Cursor.DEFAULT);
+        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
+
+    @FXML
+    void mouseOutFifthStar(MouseEvent event) {
+        this.star5.setCursor(Cursor.DEFAULT);
+        readRating();
     }
 
     @FXML
     void mouseOutFirstStar(MouseEvent event) {
         this.star1.setCursor(Cursor.DEFAULT);
-        readRating();
-    }
-
-    @FXML
-    void mouseOutSecondStar(MouseEvent event) {
-        this.star2.setCursor(Cursor.DEFAULT);
-        readRating();
-    }
-
-    @FXML
-    void mouseOutThirdStar(MouseEvent event) {
-        this.star3.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
@@ -537,81 +497,42 @@ public class ReviewPageController {
     }
 
     @FXML
-    void mouseOutFifthStar(MouseEvent event) {
-        this.star5.setCursor(Cursor.DEFAULT);
+    void mouseOutReload(MouseEvent event) {
+        this.reload.setStyle("-fx-border-color: transparent; -fx-background-color: #008CBA; -fx-background-radius: 8; -fx-text-fill: white; -fx-border-radius: 8;");
+        this.reload.setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    void mouseOutSecondStar(MouseEvent event) {
+        this.star2.setCursor(Cursor.DEFAULT);
         readRating();
     }
 
-    private void disableForm() {
-        // hide form
-        this.reviewForm.setVisible(false);
-        this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
+    @FXML
+    void mouseOutShow(MouseEvent event) {
+        this.showMore.setCursor(Cursor.DEFAULT);
+        this.showMore.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
-    private void enableForm() {
-        // clean parameter
-        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
-        this.star1.setImage(outlineStar);
-        this.star2.setImage(outlineStar);
-        this.star3.setImage(outlineStar);
-        this.star4.setImage(outlineStar);
-        this.star5.setImage(outlineStar);
-        this.textTitle.setText("");
-        this.textContent.setText("");
-
-        // show form
-        this.reviewForm.setVisible(true);
-        this.reviewForm.setStyle("-fx-pref-width: 918px; -fx-pref-height: 342px");
+    @FXML
+    void mouseOutSubmit(MouseEvent event) {
+        this.submit.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 8; -fx-text-fill: white; -fx-border-radius: 8;");
+        this.submit.setCursor(Cursor.DEFAULT);
     }
 
-    private void reloadReviewList() throws IOException {
-        // empty the grid
-        this.reviewGrid.getChildren().clear();
-
-        // insert reviews in grid
-        this.row = 0;
-        this.column = 0;
-        for (Review review : this.loadedReviews) {
-            // if is the own review skip
-            if (review.equals(ownReview))
-                return;
-
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
-
-            // create new review element
-            AnchorPane newReview = fxmlLoader.load();
-            ReviewController controller = fxmlLoader.getController();
-            controller.setData(review, this.mainPage, this.service, this);
-
-            // add new podcast to grid
-            this.reviewGrid.add(newReview, column, row++);
-        }
-
-        // check if the show review should be reneabled
-        if (!this.showMoreWrapper.isVisible() && this.getLoaded() < this.podcast.getReviews().size()) {
-            this.showMoreWrapper.setVisible(true);
-            this.showMoreWrapper.setStyle("-fx-pref-width: 140; -fx-pref-height: 22;");
-        }
+    @FXML
+    void mouseOutTitle(MouseEvent event) {
+        this.title.setCursor(Cursor.DEFAULT);
+        this.title.setTextFill(Color.color(0.0, 0.0, 0.0));
     }
 
-    public void removeReviewFromLocalList(Review review) throws IOException {
-        this.loadedReviews.remove(review);
-        this.reloadReviewList();
-        this.enableForm();
-
-        // reinitialize own review
-        this.ownReview = new Review();
-        this.ownReview.setPodcastId(podcast.getId());
-        if (MyPodcastDB.getInstance().getSessionType().equals("User"))
-            this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
-        this.ownReview.setRating(0);
+    @FXML
+    void mouseOutThirdStar(MouseEvent event) {
+        this.star3.setCursor(Cursor.DEFAULT);
+        readRating();
     }
 
-    private int getLoaded() {
-        int toAdd = this.ownReview.getTitle() != null ? 1 : 0;
-        return this.loadedReviews.size() + toAdd;
-    }
+    /***************************** Initialize e Utility *****************************/
 
     public void initialize() throws IOException {
         // Initialize structure
@@ -720,5 +641,119 @@ public class ReviewPageController {
         this.ascending.getItems().add("Ascending");
         this.ascending.getItems().add("Descending");
         this.ascending.setValue("Ascending");
+    }
+
+    private void readRating() {
+        Image star = ImageCache.getImageFromLocalPath("/img/star.png");
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
+
+        if (this.ownReview.getRating() == 5) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(star);
+            this.star4.setImage(star);
+            this.star5.setImage(star);
+        } else if (this.ownReview.getRating() >= 4) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(star);
+            this.star4.setImage(star);
+            this.star5.setImage(outlineStar);
+        } else if (this.ownReview.getRating() >= 3) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(star);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        } else if (this.ownReview.getRating() >= 2) {
+            this.star1.setImage(star);
+            this.star2.setImage(star);
+            this.star3.setImage(outlineStar);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        } else if (this.ownReview.getRating() >= 1) {
+            this.star1.setImage(star);
+            this.star2.setImage(outlineStar);
+            this.star3.setImage(outlineStar);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        } else {
+            this.star1.setImage(outlineStar);
+            this.star2.setImage(outlineStar);
+            this.star3.setImage(outlineStar);
+            this.star4.setImage(outlineStar);
+            this.star5.setImage(outlineStar);
+        }
+    }
+
+    private void disableForm() {
+        // hide form
+        this.reviewForm.setVisible(false);
+        this.reviewForm.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px");
+    }
+
+    private void enableForm() {
+        // clean parameter
+        Image outlineStar = ImageCache.getImageFromLocalPath("/img/outline_star.png");
+        this.star1.setImage(outlineStar);
+        this.star2.setImage(outlineStar);
+        this.star3.setImage(outlineStar);
+        this.star4.setImage(outlineStar);
+        this.star5.setImage(outlineStar);
+        this.textTitle.setText("");
+        this.textContent.setText("");
+
+        // show form
+        this.reviewForm.setVisible(true);
+        this.reviewForm.setStyle("-fx-pref-width: 918px; -fx-pref-height: 342px");
+    }
+
+    private void reloadReviewList() throws IOException {
+        // empty the grid
+        this.reviewGrid.getChildren().clear();
+
+        // insert reviews in grid
+        this.row = 0;
+        this.column = 0;
+        for (Review review : this.loadedReviews) {
+            // if is the own review skip
+            if (review.equals(ownReview))
+                return;
+
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
+
+            // create new review element
+            AnchorPane newReview = fxmlLoader.load();
+            ReviewController controller = fxmlLoader.getController();
+            controller.setData(review, this.mainPage, this.service, this);
+
+            // add new podcast to grid
+            this.reviewGrid.add(newReview, column, row++);
+        }
+
+        // check if the show review should be reneabled
+        if (!this.showMoreWrapper.isVisible() && this.getLoaded() < this.podcast.getReviews().size()) {
+            this.showMoreWrapper.setVisible(true);
+            this.showMoreWrapper.setStyle("-fx-pref-width: 140; -fx-pref-height: 22;");
+        }
+    }
+
+    public void removeReviewFromLocalList(Review review) throws IOException {
+        this.loadedReviews.remove(review);
+        this.reloadReviewList();
+        this.enableForm();
+
+        // reinitialize own review
+        this.ownReview = new Review();
+        this.ownReview.setPodcastId(podcast.getId());
+        if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+            this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        this.ownReview.setRating(0);
+    }
+
+    private int getLoaded() {
+        int toAdd = this.ownReview.getTitle() != null ? 1 : 0;
+        return this.loadedReviews.size() + toAdd;
     }
 }

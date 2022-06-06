@@ -55,7 +55,7 @@
                                     <Insets right="7.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#clickOnHome" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/home.png" />
                                  </image>
@@ -71,7 +71,7 @@
                                     <Insets />
                                  </HBox.margin>
                                  <children>
-                                    <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#clickOnUser" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/userPicture.png" />
                                        </image>
@@ -83,7 +83,7 @@
                               </VBox>
                               <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                                  <children>
-                                    <TextField fx:id="searchBarText" onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
+                                    <TextField fx:id="searchBarText" onKeyPressed="#enterOnSearch" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
                                        <HBox.margin>
                                           <Insets />
                                        </HBox.margin>
@@ -91,7 +91,7 @@
                                           <Font name="Corbel Light" size="16.0" />
                                        </font>
                                     </TextField>
-                                    <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="23.0" onMouseClicked="#onClickSearch" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="23.0" onMouseClicked="#clickOnSearch" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/search.png" />
                                        </image>
@@ -333,7 +333,7 @@
                               <Separator prefWidth="200.0" />
                               <VBox fx:id="gridWrapper">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+                                    <HBox alignment="CENTER_LEFT" maxHeight="45.0" prefHeight="45.0">
                                        <children>
                                           <Label text="Order by:">
                                              <font>
@@ -358,13 +358,16 @@
                                                 <Insets left="10.0" />
                                              </HBox.margin>
                                           </ComboBox>
-                                          <Button fx:id="reload" mnemonicParsing="false" onMouseClicked="#clickOnReload" text="Reload">
+                                          <Button fx:id="reload" mnemonicParsing="false" onMouseClicked="#clickOnReload" onMouseEntered="#mouseOnReload" onMouseExited="#mouseOutReload" style="-fx-background-color: #008CBA; -fx-background-radius: 8; -fx-border-color: transparent; -fx-border-radius: 8;" text="Reload" textFill="WHITE">
                                              <HBox.margin>
-                                                <Insets left="50.0" />
+                                                <Insets bottom="1.0" left="50.0" />
                                              </HBox.margin>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
+                                             <font>
+                                                <Font name="Corbel Bold" size="15.0" />
+                                             </font>
                                           </Button>
                                        </children>
                                        <padding>
@@ -476,10 +479,13 @@
                                              </VBox.margin>
                                           </Label>
                                           <TextArea fx:id="textContent" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="916.0" promptText="Insert content" />
-                                          <Button mnemonicParsing="false" onMouseClicked="#onSubmit" text="Submit">
+                                          <Button fx:id="submit" mnemonicParsing="false" onMouseClicked="#clickOnSubmit" onMouseEntered="#mouseOnSubmit" onMouseExited="#mouseOutSubmit" style="-fx-background-color: #4CAF50; -fx-background-radius: 8; -fx-border-color: transparent; -fx-border-radius: 8;" text="Submit" textFill="WHITE">
                                              <VBox.margin>
                                                 <Insets bottom="20.0" top="20.0" />
                                              </VBox.margin>
+                                             <font>
+                                                <Font name="Corbel Bold" size="15.0" />
+                                             </font>
                                           </Button>
                                        </children>
                                     </VBox>
