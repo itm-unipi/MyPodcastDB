@@ -37,7 +37,7 @@ public class PieChartController {
     private BorderPane mainPage;
 
     @FXML
-    void onTitleClick(MouseEvent event) throws IOException {
+    void clickOnPane(MouseEvent event) throws IOException {
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         this.mainPage.setEffect(blur);
 

@@ -11,13 +11,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="350.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #636366; -fx-border-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PieChartController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#clickOnPane" prefHeight="350.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #636366; -fx-border-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PieChartController">
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
             <VBox alignment="TOP_CENTER" BorderPane.alignment="TOP_CENTER">
                <children>
-                  <Label fx:id="title" alignment="CENTER" onMouseClicked="#onTitleClick" prefWidth="300.0" text="Title" textFill="#636366">
+                  <Label fx:id="title" alignment="CENTER" prefWidth="300.0" text="Title" textFill="#636366">
                      <font>
                         <Font name="Corbel Bold" size="22.0" />
                      </font>
@@ -27,9 +27,6 @@
                      <tooltip>
                         <Tooltip fx:id="titleTooltip" text="Empty Tooltip" />
                      </tooltip>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
                   </Label>
                   <Separator maxWidth="-Infinity" prefWidth="400.0" />
                   <PieChart fx:id="pieChart" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" />
@@ -38,4 +35,7 @@
          </center>
       </BorderPane>
    </children>
+   <cursor>
+      <Cursor fx:constant="HAND" />
+   </cursor>
 </AnchorPane>
