@@ -6,6 +6,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -307,9 +308,9 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnUpdate1(MouseEvent event) {
+    void clickOnUpdate1(MouseEvent event) throws Exception {
         Date updateTime = new Date();
-        int result = this.service.updateAverageAgeOfUsersPerFavouriteCategory(updateTime, this.limit);
+        int result = this.service.updateAverageAgeOfUsersPerFavouriteCategory(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
             this.data1.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
@@ -329,9 +330,9 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnUpdate3(MouseEvent event) {
+    void clickOnUpdate3(MouseEvent event) throws Exception {
         Date updateTime = new Date();
-        int result = this.service.updateCountryWithHighestNumberOfPodcasts(updateTime, this.limit);
+        int result = this.service.updateCountryWithHighestNumberOfPodcasts(updateTime, JsonDecode.getCountries().size());
         if (result == 0) {
             this.data3.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
@@ -340,9 +341,9 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnUpdate4(MouseEvent event) {
+    void clickOnUpdate4(MouseEvent event) throws Exception {
         Date updateTime = new Date();
-        int result = this.service.updateFavouriteCategoryForGender(updateTime, this.limit);
+        int result = this.service.updateFavouriteCategoryForGender(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
             this.data4.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
@@ -351,9 +352,9 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnUpdate5(MouseEvent event) {
+    void clickOnUpdate5(MouseEvent event) throws Exception {
         Date updateTime = new Date();
-        int result = this.service.updateMostNumerousCategory(updateTime, this.limit);
+        int result = this.service.updateMostNumerousCategory(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
             this.data5.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
@@ -362,9 +363,9 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnUpdate6(MouseEvent event) {
+    void clickOnUpdate6(MouseEvent event) throws Exception {
         Date updateTime = new Date();
-        int result = this.service.updateMostAppreciatedCategory(updateTime, this.limit);
+        int result = this.service.updateMostAppreciatedCategory(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
             this.data6.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
@@ -406,9 +407,9 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnUpdate10(MouseEvent event) {
+    void clickOnUpdate10(MouseEvent event) throws Exception {
         Date updateTime = new Date();
-        int result = this.service.updatePodcastWithHighestAverageRatingPerCountry(updateTime, this.limit);
+        int result = this.service.updatePodcastWithHighestAverageRatingPerCountry(updateTime, JsonDecode.getCountries().size());
         if (result == 0) {
             this.data10.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
@@ -701,6 +702,9 @@ public class AdminDashboardController {
     }
 
     private List<String> loadCharts() throws IOException {
+        // clear the grid
+        this.statisticsGrid.getChildren().clear();
+
         // create the lists that will contain statistics
         List<Pair<String, Float>> averageAgeOfUsersPerFavouriteCategory = new ArrayList<>();
         List<Pair<Podcast, Integer>> podcastsWithHighestNumberOfReviews = new ArrayList<>();
