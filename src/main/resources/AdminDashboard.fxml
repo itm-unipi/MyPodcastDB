@@ -170,7 +170,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate1" onMouseEntered="#mouseOnUpdate1" onMouseExited="#mouseOutUpdate1" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update1" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate1" onMouseEntered="#mouseOnUpdate1" onMouseExited="#mouseOutUpdate1" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -195,7 +195,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate2" onMouseEntered="#mouseOnUpdate2" onMouseExited="#mouseOutUpdate2" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update2" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate2" onMouseEntered="#mouseOnUpdate2" onMouseExited="#mouseOutUpdate2" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -220,7 +220,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update3" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate3" onMouseEntered="#mouseOnUpdate3" onMouseExited="#mouseOutUpdate3" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update3" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate3" onMouseEntered="#mouseOnUpdate3" onMouseExited="#mouseOutUpdate3" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -245,7 +245,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update4" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate4" onMouseEntered="#mouseOnUpdate4" onMouseExited="#mouseOutUpdate4" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update4" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate4" onMouseEntered="#mouseOnUpdate4" onMouseExited="#mouseOutUpdate4" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -270,7 +270,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update5" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate5" onMouseEntered="#mouseOnUpdate5" onMouseExited="#mouseOutUpdate5" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update5" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate5" onMouseEntered="#mouseOnUpdate5" onMouseExited="#mouseOutUpdate5" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -295,7 +295,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update6" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate6" onMouseEntered="#mouseOnUpdate6" onMouseExited="#mouseOutUpdate6" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update6" alignment="CENTER" contentDisplay="CENTER" maxHeight="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate6" onMouseEntered="#mouseOnUpdate6" onMouseExited="#mouseOutUpdate6" prefHeight="20.0" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -320,7 +320,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update7" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate7" onMouseEntered="#mouseOnUpdate7" onMouseExited="#mouseOutUpdate7" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update7" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate7" onMouseEntered="#mouseOnUpdate7" onMouseExited="#mouseOutUpdate7" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -345,7 +345,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update8" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate8" onMouseEntered="#mouseOnUpdate8" onMouseExited="#mouseOutUpdate8" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update8" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate8" onMouseEntered="#mouseOnUpdate8" onMouseExited="#mouseOutUpdate8" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -370,7 +370,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update9" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate9" onMouseEntered="#mouseOnUpdate9" onMouseExited="#mouseOutUpdate9" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update9" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate9" onMouseEntered="#mouseOnUpdate9" onMouseExited="#mouseOutUpdate9" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
@@ -395,7 +395,7 @@
                                           <Font name="Dubai Light" size="16.0" />
                                        </font>
                                     </Label>
-                                    <Button fx:id="update10" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate10" onMouseEntered="#mouseOnUpdate10" onMouseExited="#mouseOutUpdate10" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update10" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate10" onMouseEntered="#mouseOnUpdate10" onMouseExited="#mouseOutUpdate10" prefWidth="120.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent; -fx-background-insets: 0;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="20.0" />
                                        </font>
