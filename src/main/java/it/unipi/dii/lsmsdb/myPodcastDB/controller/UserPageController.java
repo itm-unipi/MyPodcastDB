@@ -22,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -194,10 +195,22 @@ public class UserPageController {
 
     private int maxUserImages = 30;
 
-    List<Podcast> wPodcasts;
-    List<Podcast> lPodcasts;
-    List<Author> authors;
-    List<User> users;
+    private List<Podcast> wPodcasts;
+    private List<Podcast> lPodcasts;
+    private List<Author> authors;
+    private List<User> users;
+
+    private int numberOfWpodcastsToAdd = 5;
+    private int numberOfLpodcastsToAdd = 5;
+    private int numberOfAuthorsToAdd = 8;
+    private int numberOfUsersToAdd = 8;
+    private int newRequest = 10;
+    private boolean getWbutton = false;
+    private boolean getLbutton = false;
+    private boolean getAbutton = false;
+    private boolean getUbutton = false;
+
+
 
     /**************/
 
@@ -205,14 +218,34 @@ public class UserPageController {
 
     @FXML
     void scrollWatchlistButtonRightClick(MouseEvent event) throws IOException {
+
         Logger.info("Watchlist right button pressed");
-        int column = userPageWatchlistGrid.getColumnCount();
-        if(column < wPodcasts.size())
-            loadWatchlaterPodcast(false);
+        if(getWbutton){
+            for(int i = 0; i < numberOfWpodcastsToAdd; i++) {
+                int column = userPageWatchlistGrid.getColumnCount();
+                if (column < wPodcasts.size())
+                    loadWatchlaterPodcast(false);
+                else{
+                    getWpodcasts();
+                    i--;
+                }
+            }
+            userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getWbutton = false;
+        }
+        else if(numberOfWpodcastsToAdd != 0 && userPageWatchlistScrollPane.getHvalue() == 1.0){
+            userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getWbutton = true;
+        }
+        else if(numberOfWpodcastsToAdd == 0 && userPageWatchlistScrollPane.getHvalue() == 1.0)
+            userPageWatchlistRightButton.setVisible(false);
+
 
         double scrollValue = 0.2;
+        userPageWatchlistLeftButton.setVisible(true);
         if(userPageWatchlistScrollPane.getHvalue() == 1.0)
             return;
+
         userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() + scrollValue);
         //Logger.info(((Double)(userPageWatchlistScrollPane.getHvalue())).toString());
     }
@@ -221,45 +254,148 @@ public class UserPageController {
     void scrollWatchlistButtonLeftClick(MouseEvent event) {
         Logger.info("Watchlist left button pressed");
 
+        userPageWatchlistRightButton.setVisible(true);
         double scrollValue = 0.2;
-        if(userPageWatchlistScrollPane.getHvalue() == 0.0)
+        if(userPageWatchlistScrollPane.getHvalue() == 0.0) {
+            userPageWatchlistLeftButton.setVisible(false);
             return;
+        }
+        if(getWbutton){
+            userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getWbutton = false;
+        }
         userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() - scrollValue);
         //Logger.info(((Double)(userPageWatchlistScrollPane.getHvalue())).toString());
     }
 
     @FXML
+    private void onWatchlistScroll(ScrollEvent event) throws IOException {
+
+        Logger.info("scroll");
+        if(numberOfWpodcastsToAdd == 0 && userPageWatchlistScrollPane.getHvalue() == 1.0)
+            userPageWatchlistRightButton.setVisible(false);
+        else
+            userPageWatchlistRightButton.setVisible(true);
+        if(userPageWatchlistScrollPane.getHvalue() == 0.0)
+            userPageWatchlistLeftButton.setVisible(false);
+        else
+            userPageWatchlistLeftButton.setVisible(true);
+
+        if(numberOfWpodcastsToAdd == 0)
+           return;
+
+       if(!getWbutton && userPageWatchlistScrollPane.getHvalue() == 1.0) {
+           userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+           getWbutton = true;
+       }
+       else if(getWbutton && userPageWatchlistScrollPane.getHvalue() < 1.0) {
+            userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getWbutton = false;
+        }
+
+    }
+    
+
+    @FXML
     void scrollLikedButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("Liked right button pressed");
-        int column = userPageLikedGrid.getColumnCount();
-        if(column < lPodcasts.size())
-            loadLikedPodcast(false);
+
+
+        if(getLbutton){
+            for(int i = 0; i < numberOfLpodcastsToAdd; i++) {
+                int column = userPageLikedGrid.getColumnCount();
+                if(column < lPodcasts.size())
+                    loadLikedPodcast(false);
+                else{
+                    getLpodcasts();
+                    i--;
+                }
+            }
+            userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getLbutton = false;
+        }
+        else if(numberOfLpodcastsToAdd != 0 && userPageLikedScrollPane.getHvalue() == 1.0){
+            userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getLbutton = true;
+        }
+        else if(numberOfLpodcastsToAdd == 0 && userPageLikedScrollPane.getHvalue() == 1.0)
+            userPageLikedRightButton.setVisible(false);
 
         double scrollValue = 0.2;
+        userPageLikedLeftButton.setVisible(true);
         if(userPageLikedScrollPane.getHvalue() == 1.0)
             return;
+
         userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() + scrollValue);
     }
 
     @FXML
     void scrollLikedButtonLeftClick(MouseEvent event) {
         Logger.info("Liked left button pressed");
+
         double scrollValue = 0.2;
-        if(userPageLikedScrollPane.getHvalue() == 0.0)
+        userPageLikedRightButton.setVisible(true);
+        if(userPageLikedScrollPane.getHvalue() == 0.0){
+            userPageLikedLeftButton.setVisible(false);
             return;
+        }
+        if(getLbutton){
+            userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getLbutton = false;
+        }
         userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() - scrollValue);
     }
 
     @FXML
+    private void onLikedScroll(ScrollEvent event) throws IOException {
+        if(numberOfLpodcastsToAdd == 0 && userPageLikedScrollPane.getHvalue() == 1.0)
+            userPageLikedRightButton.setVisible(false);
+        else
+            userPageLikedRightButton.setVisible(true);
+        if(userPageLikedScrollPane.getHvalue() == 0.0)
+            userPageLikedLeftButton.setVisible(false);
+        else
+            userPageLikedLeftButton.setVisible(true);
+
+        if(numberOfLpodcastsToAdd == 0)
+            return;
+        if(!getLbutton && userPageLikedScrollPane.getHvalue() == 1.0) {
+            userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getLbutton = true;
+        }
+        else if(getLbutton && userPageLikedScrollPane.getHvalue() < 1.0) {
+            userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getLbutton = false;
+        }
+
+    }
+    @FXML
     void scrollAuthorsButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("Authors right button pressed");
-        int column = userPageAuthorsGrid.getColumnCount();
-        if(column < authors.size())
-            loadAuthor(false);
+        if (getAbutton) {
+            for (int i = 0; i < numberOfAuthorsToAdd; i++) {
+                int column = userPageAuthorsGrid.getColumnCount();
+                if (column < authors.size())
+                    loadAuthor(false);
+                else if (getAbutton) {
+                    getAuthors();
+                    i--;
+                }
+            }
+            userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getAbutton = false;
+        } else if (numberOfAuthorsToAdd != 0 && userPageAuthorsScrollPane.getHvalue() == 1.0){
+            userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getAbutton = true;
+        }
+        else if(numberOfAuthorsToAdd == 0 && userPageAuthorsScrollPane.getHvalue() == 1.0)
+            userPageAuthorsRightButton.setVisible(false);
 
         double scrollValue = 0.125;
+        userPageAuthorsLeftButton.setVisible(true);
         if(userPageAuthorsScrollPane.getHvalue() == 1.0)
             return;
+
         userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() + scrollValue);
     }
 
@@ -268,19 +404,68 @@ public class UserPageController {
         Logger.info("Authors left button pressed");
 
         double scrollValue = 0.125;
-        if(userPageAuthorsScrollPane.getHvalue() == 0.0)
+        userPageAuthorsRightButton.setVisible(true);
+        if(userPageAuthorsScrollPane.getHvalue() == 0.0) {
+            userPageAuthorsLeftButton.setVisible(false);
             return;
+        }
+        if(getAbutton){
+            userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getAbutton = false;
+        }
+
         userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() - scrollValue);
     }
 
     @FXML
+    private void onAuthorsScroll(ScrollEvent event) throws IOException {
+
+        if(numberOfAuthorsToAdd == 0 && userPageAuthorsScrollPane.getHvalue() == 1.0)
+            userPageAuthorsRightButton.setVisible(false);
+        else
+            userPageAuthorsRightButton.setVisible(true);
+        if(userPageAuthorsScrollPane.getHvalue() == 0.0)
+            userPageAuthorsLeftButton.setVisible(false);
+        else
+            userPageAuthorsLeftButton.setVisible(true);
+
+        if(numberOfAuthorsToAdd == 0)
+            return;
+        if(!getAbutton && userPageAuthorsScrollPane.getHvalue() == 1.0) {
+            userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getAbutton = true;
+        }
+        else if(getAbutton && userPageAuthorsScrollPane.getHvalue() < 1.0) {
+            userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getAbutton = false;
+        }
+
+    }
+    @FXML
     void scrollUsersButtonRightClick(MouseEvent event) throws IOException {
         Logger.info("Users right button pressed");
-        int column = userPageUsersGrid.getColumnCount();
-        if(column < users.size())
-            loadUser(false);
+        if(getUbutton){
+            for(int i = 0; i < numberOfUsersToAdd; i++) {
+                int column = userPageUsersGrid.getColumnCount();
+                if(column < users.size())
+                    loadUser(false);
+                else if(getUbutton) {
+                    getUsers();
+                    i--;
+                }
+            }
+            userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getUbutton = false;
+        }
+        else if(numberOfUsersToAdd != 0 && userPageUsersScrollPane.getHvalue() == 1.0){
+            userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getUbutton = true;
+        }
+        else if(numberOfUsersToAdd == 0 && userPageUsersScrollPane.getHvalue() == 1.0)
+            userPageUsersRightButton.setVisible(false);
 
         double scrollValue = 0.13;
+        userPageUsersLeftButton.setVisible(true);
         if(userPageUsersScrollPane.getHvalue() == 1.0)
             return;
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() + scrollValue);
@@ -291,11 +476,43 @@ public class UserPageController {
         Logger.info("Users left button pressed");
 
         double scrollValue = 0.13;
-        if(userPageUsersScrollPane.getHvalue() == 0.0)
+        userPageUsersRightButton.setVisible(true);
+        if(userPageUsersScrollPane.getHvalue() == 0.0) {
+            userPageUsersLeftButton.setVisible(false);
             return;
+        }
+        if(getUbutton){
+            userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getUbutton = false;
+        }
+
         userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
     }
 
+    @FXML
+    private void onUsersScroll(ScrollEvent event) throws IOException {
+
+        if(numberOfUsersToAdd == 0 && userPageUsersScrollPane.getHvalue() == 1.0)
+            userPageUsersRightButton.setVisible(false);
+        else
+            userPageUsersRightButton.setVisible(true);
+        if(userPageUsersScrollPane.getHvalue() == 0.0)
+            userPageUsersLeftButton.setVisible(false);
+        else
+            userPageUsersLeftButton.setVisible(true);
+
+        if(numberOfUsersToAdd == 0)
+            return;
+        if(!getUbutton && userPageUsersScrollPane.getHvalue() == 1.0) {
+            userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            getUbutton = true;
+        }
+        else if(getUbutton && userPageUsersScrollPane.getHvalue() < 1.0) {
+            userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
+            getUbutton = false;
+        }
+
+    }
     @FXML
     void homeButtonClick(MouseEvent event) throws IOException {
         Logger.info("Home button pressed");
@@ -662,7 +879,7 @@ public class UserPageController {
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
         UserService service = new UserService();
-        int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, 100);
+        int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, newRequest);
         if(res == 0)
             Logger.success("Load user success");
         else if(res == 1){
@@ -828,6 +1045,10 @@ public class UserPageController {
         userPageLikedScrollPane.setHvalue(0.0);
         userPageAuthorsScrollPane.setHvalue(0.0);
         userPageUsersScrollPane.setHvalue(0.0);
+        userPageWatchlistLeftButton.setVisible(false);
+        userPageLikedLeftButton.setVisible(false);
+        userPageAuthorsLeftButton.setVisible(false);
+        userPageUsersLeftButton.setVisible(false);
         userPageCountryComboBox.setVisible(false);
         userPageGenderComboBox.setVisible(false);
         userPageFavGenreComboBox.setVisible(false);
@@ -964,8 +1185,8 @@ public class UserPageController {
 
         // create new podcast element
         AnchorPane newPodcast = likedfxmlLoader.load();
-        PodcastPreviewInUserPageController whatlistController = likedfxmlLoader.getController();
-        whatlistController.setData(podcast);
+        PodcastPreviewInUserPageController whatchlistController = likedfxmlLoader.getController();
+        whatchlistController.setData(podcast);
 
         // add new podcast to grid
         this.userPageWatchlistGrid.add(newPodcast, column, row);
@@ -1029,4 +1250,71 @@ public class UserPageController {
 
     }
 
+    public void getWpodcasts(){
+        UserService service = new UserService();
+        int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequest);
+        if(res == 2){
+            Logger.error("User not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
+        }
+        else if(res == 1){
+            Logger.info("No podcasts to show");
+            numberOfWpodcastsToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New Podcasts loaded");
+        else
+            Logger.error("Unknown error");
+    }
+
+    public void getLpodcasts(){
+        UserService service = new UserService();
+        int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequest);
+        if(res == 2){
+            Logger.error("User not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
+        }
+        else if(res == 1){
+            Logger.info("No podcasts to show");
+            numberOfLpodcastsToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New Podcasts loaded");
+        else
+            Logger.error("Unknown error");
+    }
+
+    public void getAuthors(){
+        UserService service = new UserService();
+        int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequest);
+        if(res == 2){
+            Logger.error("User not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
+        }
+        else if(res == 1){
+            Logger.info("No authors to show");
+            numberOfAuthorsToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New authors loaded");
+        else
+            Logger.error("Unknown error");
+    }
+
+    public void getUsers(){
+        UserService service = new UserService();
+        int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequest);
+        if(res == 2){
+            Logger.error("User not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
+        }
+        else if(res == 1){
+            Logger.info("No users to show");
+            numberOfUsersToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New users loaded");
+        else
+            Logger.error("Unknown error");
+    }
 }

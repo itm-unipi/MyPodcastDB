@@ -255,7 +255,7 @@ public class UserNeo4jTest {
     private void showFollowedUserTest() {
         User user = new User();
         user.setUsername("silverelephant716273");
-        List<User> users = this.userNeo4j.showFollowedUsers(user.getUsername(), 10);
+        List<User> users = this.userNeo4j.showFollowedUsers(user.getUsername(), 10, 0);
         if(users != null)
             System.out.println("[+] showFollowedUserTest");
         else

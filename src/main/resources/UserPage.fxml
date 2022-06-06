@@ -331,7 +331,7 @@
                                           </ImageView>
                                           <ScrollPane fx:id="userPageWatchlistScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="980.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageWatchlistGrid" hgap="11.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="240.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                                <GridPane fx:id="userPageWatchlistGrid" hgap="11.0" maxHeight="-Infinity" minHeight="-Infinity" onScroll="#onWatchlistScroll" prefHeight="240.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
                                                   <rowConstraints>
                                                       <RowConstraints minHeight="-Infinity" prefHeight="230.0" vgrow="SOMETIMES" />
                                                   </rowConstraints>
@@ -381,7 +381,7 @@
                                           </ImageView>
                                           <ScrollPane fx:id="userPageLikedScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="980.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageLikedGrid" hgap="11.0" minHeight="-Infinity" prefHeight="240.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                                <GridPane fx:id="userPageLikedGrid" hgap="11.0" minHeight="-Infinity" onScroll="#onLikedScroll" prefHeight="240.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="-Infinity" prefHeight="230.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
@@ -428,7 +428,7 @@
                                           </ImageView>
                                           <ScrollPane fx:id="userPageAuthorsScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="960.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageAuthorsGrid" hgap="17.5" minHeight="-Infinity" prefHeight="140.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                                <GridPane fx:id="userPageAuthorsGrid" hgap="17.5" minHeight="-Infinity" onScroll="#onAuthorsScroll" prefHeight="140.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="-Infinity" prefHeight="130.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
@@ -478,7 +478,7 @@
                                           </ImageView>
                                           <ScrollPane fx:id="userPageUsersScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="960.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="userPageUsersGrid" hgap="17.5" minHeight="-Infinity" prefHeight="140.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                                <GridPane fx:id="userPageUsersGrid" hgap="17.5" minHeight="-Infinity" onScroll="#onUsersScroll" prefHeight="140.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="-Infinity" prefHeight="130.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>

@@ -444,12 +444,13 @@ public class UserNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<User> showFollowedUsers(String username, int limit) {
+    public List<User> showFollowedUsers(String username, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u1:User { username: $username})-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
                 "RETURN u2" + "\n" +
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", username, "limit", limit);
+        Value params = parameters("username", username, "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {

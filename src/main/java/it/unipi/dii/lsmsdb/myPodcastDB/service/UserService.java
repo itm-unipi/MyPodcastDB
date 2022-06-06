@@ -91,22 +91,22 @@ public class UserService {
         else {
             pageOwner.copy(user);
             //load podcasts in watchlist from neo4j
-            List<Podcast> podcasts = podcastNeo4j.showPodcastsInWatchlist(pageOwner.getUsername(), limit);
+            List<Podcast> podcasts = podcastNeo4j.showPodcastsInWatchlist(pageOwner.getUsername(), limit, 0);
             if(podcasts != null)
                 wPodcasts.addAll(podcasts);
 
             //load liked podcasts
-            podcasts = podcastNeo4j.showLikedPodcastsByUser(pageOwner.getUsername(), limit);
+            podcasts = podcastNeo4j.showLikedPodcastsByUser(pageOwner.getUsername(), limit, 0);
             if(podcasts != null)
                 lPodcasts.addAll(podcasts);
 
             //load followed authors
-            List<Author> authors = authorNeo4j.showFollowedAuthorsByUser(pageOwner.getUsername(), limit);
+            List<Author> authors = authorNeo4j.showFollowedAuthorsByUser(pageOwner.getUsername(), limit, 0);
             if(authors != null)
                 followedAuthors.addAll(authors);
 
             //load followed users
-            List<User> users = userNeo4jManager.showFollowedUsers(user.getUsername(), limit);
+            List<User> users = userNeo4jManager.showFollowedUsers(user.getUsername(), limit, 0);
             if(users != null)
                 followedUsers.addAll(users);
 
@@ -114,6 +114,82 @@ public class UserService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreWatchlaterPodcasts(String pageOwner, List<Podcast> wPodcast, int limit){
+        int res = -1;
+        Neo4jManager.getInstance().openConnection();
+        if(!userNeo4jManager.findUserByUsername(pageOwner))
+            res = 2;
+        else{
+            int skip = wPodcast.size();
+            List<Podcast> podcasts = podcastNeo4j.showPodcastsInWatchlist(pageOwner, limit, skip);
+            if(podcasts != null){
+                wPodcast.addAll(podcasts);
+                res = 0;
+            }
+            else
+                res = 1;
+        }
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreLikedPodcasts(String pageOwner, List<Podcast> lPodcast, int limit){
+        int res = -1;
+        Neo4jManager.getInstance().openConnection();
+        if(!userNeo4jManager.findUserByUsername(pageOwner))
+            res = 2;
+        else{
+            int skip = lPodcast.size();
+            List<Podcast> podcasts = podcastNeo4j.showLikedPodcastsByUser(pageOwner, limit, skip);
+            if(podcasts != null){
+                lPodcast.addAll(podcasts);
+                res = 0;
+            }
+            else
+                res = 1;
+        }
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreFollowedAuthors(String pageOwner, List<Author> followedAuthors, int limit){
+        int res = -1;
+        Neo4jManager.getInstance().openConnection();
+        if(!userNeo4jManager.findUserByUsername(pageOwner))
+            res = 2;
+        else{
+            int skip = followedAuthors.size();
+            List<Author> authors = authorNeo4j.showFollowedAuthorsByUser(pageOwner, limit, skip);
+            if(authors != null) {
+                followedAuthors.addAll(authors);
+                res = 0;
+            }
+            else
+                res = 1;
+        }
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreFollowedUsers(String pageOwner, List<User> followedUsers, int limit){
+        int res = -1;
+        Neo4jManager.getInstance().openConnection();
+        if(!userNeo4jManager.findUserByUsername(pageOwner))
+            res = 2;
+        else{
+            int skip = followedUsers.size();
+            List<User> users = userNeo4jManager.showFollowedUsers(pageOwner, limit, skip);
+            if(users != null){
+                followedUsers.addAll(users);
+                res = 0;
+            }
+            else
+                res = 1;
+        }
         Neo4jManager.getInstance().closeConnection();
         return res;
     }

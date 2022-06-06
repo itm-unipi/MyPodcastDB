@@ -164,7 +164,7 @@ public class PodcastNeo4jTest {
     public void showPodcastsInWatchlistTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user.getUsername(), 10);
+        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user.getUsername(), 10, 0);
 
         if(podcasts == null) {
             System.err.println("[-] showPodcastsInWatchlist");
@@ -180,7 +180,7 @@ public class PodcastNeo4jTest {
     public void showLikedPodcastsByUserTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user.getUsername(), 10);
+        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user.getUsername(), 10, 0);
 
         if(podcasts == null) {
             System.err.println("[-] showLikedPodcastsByUser");

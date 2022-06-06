@@ -259,13 +259,14 @@ public class PodcastNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<Podcast> showPodcastsInWatchlist(String username, int limit) {
+    public List<Podcast> showPodcastsInWatchlist(String username, int limit, int skip) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
                 "RETURN p " + "\n"+
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", username, "limit", limit);
+        Value params = parameters("username", username, "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {
@@ -292,13 +293,14 @@ public class PodcastNeo4j {
         return podcasts;
     }
 
-    public List<Podcast> showLikedPodcastsByUser(String username, int limit) {
+    public List<Podcast> showLikedPodcastsByUser(String username, int limit, int skip) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:LIKES]->(p:Podcast)" + "\n"+
                 "RETURN p " + "\n"+
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", username, "limit", limit);
+        Value params = parameters("username", username, "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {
