@@ -200,11 +200,13 @@ public class UserPageController {
     private List<Author> authors;
     private List<User> users;
 
+    private int podcastRowSize = 5;
+    private int actorRowSize = 8;
     private int numberOfWpodcastsToAdd = 5;
     private int numberOfLpodcastsToAdd = 5;
     private int numberOfAuthorsToAdd = 8;
     private int numberOfUsersToAdd = 8;
-    private int newRequest = 10;
+    private int newRequest = 10;  // has to be > podcastRowSize and actorRowSize
     private boolean getWbutton = false;
     private boolean getLbutton = false;
     private boolean getAbutton = false;
@@ -271,7 +273,8 @@ public class UserPageController {
     @FXML
     private void onWatchlistScroll(ScrollEvent event) throws IOException {
 
-        Logger.info("scroll");
+        if(wPodcasts.size() <= podcastRowSize)
+            return;
         if(numberOfWpodcastsToAdd == 0 && userPageWatchlistScrollPane.getHvalue() == 1.0)
             userPageWatchlistRightButton.setVisible(false);
         else
@@ -294,7 +297,7 @@ public class UserPageController {
         }
 
     }
-    
+
 
     @FXML
     void scrollLikedButtonRightClick(MouseEvent event) throws IOException {
@@ -348,6 +351,10 @@ public class UserPageController {
 
     @FXML
     private void onLikedScroll(ScrollEvent event) throws IOException {
+
+        if(lPodcasts.size() <= podcastRowSize)
+            return;
+
         if(numberOfLpodcastsToAdd == 0 && userPageLikedScrollPane.getHvalue() == 1.0)
             userPageLikedRightButton.setVisible(false);
         else
@@ -420,6 +427,9 @@ public class UserPageController {
     @FXML
     private void onAuthorsScroll(ScrollEvent event) throws IOException {
 
+        if(authors.size() <= actorRowSize)
+            return;
+
         if(numberOfAuthorsToAdd == 0 && userPageAuthorsScrollPane.getHvalue() == 1.0)
             userPageAuthorsRightButton.setVisible(false);
         else
@@ -491,6 +501,9 @@ public class UserPageController {
 
     @FXML
     private void onUsersScroll(ScrollEvent event) throws IOException {
+
+        if(users.size() <= actorRowSize)
+            return;
 
         if(numberOfUsersToAdd == 0 && userPageUsersScrollPane.getHvalue() == 1.0)
             userPageUsersRightButton.setVisible(false);
@@ -1045,9 +1058,17 @@ public class UserPageController {
         userPageLikedScrollPane.setHvalue(0.0);
         userPageAuthorsScrollPane.setHvalue(0.0);
         userPageUsersScrollPane.setHvalue(0.0);
+        if(wPodcasts.size() <= podcastRowSize)
+            userPageWatchlistRightButton.setVisible(false);
         userPageWatchlistLeftButton.setVisible(false);
+        if(lPodcasts.size() <= podcastRowSize)
+            userPageLikedRightButton.setVisible(false);
         userPageLikedLeftButton.setVisible(false);
+        if(authors.size() <= actorRowSize)
+            userPageAuthorsRightButton.setVisible(false);
         userPageAuthorsLeftButton.setVisible(false);
+        if(users.size() <= actorRowSize)
+            userPageUsersRightButton.setVisible(false);
         userPageUsersLeftButton.setVisible(false);
         userPageCountryComboBox.setVisible(false);
         userPageGenderComboBox.setVisible(false);
