@@ -33,6 +33,7 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map.Entry;
 
 import static java.lang.Math.round;
@@ -41,6 +42,9 @@ public class PodcastPageController {
 
     @FXML
     private Button addEpisode;
+
+    @FXML
+    private VBox addEpisodeWrapper;
 
     @FXML
     private Label author;
@@ -110,6 +114,12 @@ public class PodcastPageController {
 
     @FXML
     private ImageView searchButton;
+
+    @FXML
+    private Tooltip secondaryCatTooltip;
+
+    @FXML
+    private Label secondaryCategory;
 
     @FXML
     private Label showReviews;
@@ -497,6 +507,7 @@ public class PodcastPageController {
             this.updatePodcast.setVisible(false);
             this.deletePodcast.setVisible(false);
             this.addEpisode.setVisible(false);
+            this.addEpisodeWrapper.setStyle("-fx-max-height: 0; -fx-max-width: 0; -fx-pref-height: 0; -fx-pref-width: 0; -fx-min-height: 0; -fx-min-width: 0; ");
 
             // image setup
             if (sessionType.equals("User")) {
@@ -542,6 +553,7 @@ public class PodcastPageController {
             this.watchlater.setVisible(false);
             this.updatePodcast.setVisible(false);
             this.addEpisode.setVisible(false);
+            this.addEpisodeWrapper.setStyle("-fx-max-height: 0; -fx-max-width: 0; -fx-pref-height: 0; -fx-pref-width: 0; -fx-min-height: 0; -fx-min-width: 0; ");
         }
 
         // no reviews message
@@ -565,6 +577,11 @@ public class PodcastPageController {
         Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
         this.category.setText(podcast.getPrimaryCategory());
+        List<String> secondaryCategories = podcast.getCategories();
+        if (secondaryCategories.contains(podcast.getPrimaryCategory()))
+            secondaryCategories.remove(podcast.getPrimaryCategory());
+        this.secondaryCategory.setText(String.join(", ", secondaryCategories));
+        this.secondaryCatTooltip.setText(String.join(", ", secondaryCategories));
         this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
         int ratingIntermediate = (int)(podcast.getRating() * 10);
         this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));

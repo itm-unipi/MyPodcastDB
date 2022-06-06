@@ -29,7 +29,7 @@
                      <children>
                         <Label fx:id="title" prefHeight="27.0" prefWidth="334.0" text="Title">
                            <font>
-                              <Font name="Corbel" size="22.0" />
+                              <Font name="Dubai Regular" size="22.0" />
                            </font>
                         </Label>
                         <Button fx:id="updateEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" prefWidth="142.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="      Update Episode" textFill="#464646">
@@ -78,7 +78,7 @@
                         <Font name="Dubai Light" size="16.0" />
                      </font>
                      <VBox.margin>
-                        <Insets top="4.0" />
+                        <Insets />
                      </VBox.margin>
                   </Text>
                   <Label fx:id="time" layoutX="10.0" layoutY="10.0" scaleY="1.06" text="# Min" textFill="#636366">

@@ -139,18 +139,47 @@
                                  <VBox.margin>
                                     <Insets top="10.0" />
                                  </VBox.margin></ImageView>
-                              <HBox prefWidth="200.0">
+                              <VBox>
                                  <children>
-                                    <Label fx:id="category" prefHeight="22.0" prefWidth="146.0" scaleY="1.06" text="Category">
-                                       <font>
-                                          <Font name="Corbel Light" size="18.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets top="4.0" />
-                                       </HBox.margin>
-                                    </Label>
+                                    <HBox>
+                                       <VBox.margin>
+                                          <Insets top="8.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <Label prefHeight="22.0" prefWidth="140.0" scaleY="1.06" text="Primary category:">
+                                             <font>
+                                                <Font name="Corbel" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="category" layoutX="10.0" layoutY="10.0" prefHeight="22.0" prefWidth="146.0" text="Category">
+                                             <font>
+                                                <Font name="Corbel Light" size="18.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </HBox>
+                                    <HBox>
+                                       <VBox.margin>
+                                          <Insets top="8.0" />
+                                       </VBox.margin>
+                                       <children>
+                                          <Label prefHeight="22.0" prefWidth="61.0" text="Others:">
+                                             <font>
+                                                <Font name="Corbel" size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Label fx:id="secondaryCategory" layoutX="10.0" layoutY="10.0" maxWidth="240.0" prefHeight="22.0" text="Category">
+                                             <font>
+                                                <Font name="Corbel Light" size="18.0" />
+                                             </font>
+                                             <tooltip>
+                                                <Tooltip fx:id="secondaryCatTooltip" />
+                                             </tooltip>
+                                          </Label>
+                                       </children>
+                                    </HBox>
                                  </children>
-                              </HBox>
+                              </VBox>
                               <Separator prefWidth="200.0">
                                  <VBox.margin>
                                     <Insets top="5.0" />
@@ -158,7 +187,7 @@
                               </Separator>
                               <HBox alignment="BOTTOM_LEFT" prefWidth="200.0">
                                  <children>
-                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" prefHeight="67.0" prefWidth="48.0" text="#.#">
+                                    <Label fx:id="rating" alignment="BOTTOM_LEFT" maxWidth="-Infinity" prefHeight="67.0" prefWidth="49.0" text="#.#">
                                        <font>
                                           <Font name="Dubai Light" size="38.0" />
                                        </font>
@@ -345,21 +374,25 @@
                         </VBox>
                         <VBox maxWidth="-Infinity" prefWidth="600.0">
                            <children>
-                              <HBox prefHeight="100.0" prefWidth="200.0">
+                              <HBox>
+                                 <VBox.margin>
+                                    <Insets top="5.0" />
+                                 </VBox.margin>
                                  <children>
-                                    <VBox prefWidth="410.0">
+                                    <Label fx:id="title" text="Title">
+                                       <font>
+                                          <Font name="Corbel Bold" size="25.0" />
+                                       </font>
+                                       <tooltip>
+                                          <Tooltip fx:id="titleTooltip" />
+                                       </tooltip>
+                                    </Label>
+                                 </children>
+                              </HBox>
+                              <HBox maxHeight="91.0" prefHeight="91.0" prefWidth="200.0">
+                                 <children>
+                                    <VBox maxHeight="100.0" prefHeight="100.0" prefWidth="410.0">
                                        <children>
-                                          <Label fx:id="title" text="Title">
-                                             <font>
-                                                <Font name="Corbel Bold" size="30.0" />
-                                             </font>
-                                             <VBox.margin>
-                                                <Insets top="5.0" />
-                                             </VBox.margin>
-                                             <tooltip>
-                                                <Tooltip fx:id="titleTooltip" />
-                                             </tooltip>
-                                          </Label>
                                           <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
                                              <font>
                                                 <Font name="Corbel Light" size="25.0" />
@@ -367,10 +400,13 @@
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
+                                             <VBox.margin>
+                                                <Insets top="3.0" />
+                                             </VBox.margin>
                                           </Label>
                                           <Label fx:id="country" scaleY="1.06" text="Country">
                                              <font>
-                                                <Font name="Corbel Light" size="18.0" />
+                                                <Font name="Corbel Light" size="19.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets bottom="5.0" top="6.0" />
@@ -386,7 +422,7 @@
                                           </Label>
                                        </children>
                                     </VBox>
-                                    <VBox alignment="TOP_RIGHT" prefHeight="122.0">
+                                    <VBox alignment="TOP_RIGHT">
                                        <children>
                                           <HBox alignment="TOP_RIGHT">
                                              <children>
@@ -448,29 +484,33 @@
                                                 </Button>
                                              </children>
                                           </HBox>
-                                          <Label fx:id="content" alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" prefHeight="59.0" prefWidth="190.0" scaleY="1.06" text="Content" textAlignment="RIGHT">
+                                          <Label fx:id="content" alignment="CENTER_RIGHT" maxHeight="22.0" maxWidth="1.7976931348623157E308" prefHeight="22.0" prefWidth="190.0" scaleY="1.06" text="Content" textAlignment="RIGHT">
                                              <font>
                                                 <Font name="Corbel Light" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Button fx:id="addEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#clickOnAddEpisode" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Add Episode" textFill="#464646">
-                                             <font>
-                                                <Font name="Corbel Light" size="16.0" />
-                                             </font>
-                                             <graphic>
-                                                <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
-                                                   <image>
-                                                      <Image url="@img/add.png" />
-                                                   </image>
-                                                </ImageView>
-                                             </graphic>
-                                             <padding>
-                                                <Insets bottom="6.0" right="-26.0" top="6.0" />
-                                             </padding>
-                                             <cursor>
-                                                <Cursor fx:constant="HAND" />
-                                             </cursor>
-                                          </Button>
+                                          <VBox fx:id="addEpisodeWrapper" alignment="TOP_RIGHT">
+                                             <children>
+                                                <Button fx:id="addEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#clickOnAddEpisode" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Add Episode" textFill="#464646">
+                                                   <font>
+                                                      <Font name="Corbel Light" size="16.0" />
+                                                   </font>
+                                                   <graphic>
+                                                      <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                                         <image>
+                                                            <Image url="@img/add.png" />
+                                                         </image>
+                                                      </ImageView>
+                                                   </graphic>
+                                                   <padding>
+                                                      <Insets bottom="6.0" right="-26.0" top="6.0" />
+                                                   </padding>
+                                                   <cursor>
+                                                      <Cursor fx:constant="HAND" />
+                                                   </cursor>
+                                                </Button>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </VBox>
                                  </children>
