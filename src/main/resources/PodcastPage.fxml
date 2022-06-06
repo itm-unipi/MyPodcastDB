@@ -67,7 +67,7 @@
                                           <Insets right="5.0" />
                                        </HBox.margin>
                                        <children>
-                                          <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#clickOnHome" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/home.png" />
                                              </image>
@@ -82,7 +82,7 @@
                                           <Insets />
                                        </HBox.margin>
                                        <children>
-                                          <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#userProfile" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="userPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#clickOnUser" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/userPicture.png" />
                                              </image>
@@ -94,7 +94,7 @@
                                     </VBox>
                                     <HBox alignment="CENTER" prefWidth="230.0" style="-fx-background-radius: 40; -fx-background-color: white;">
                                        <children>
-                                          <TextField fx:id="searchBarText" onKeyPressed="#onEnterPressed" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
+                                          <TextField fx:id="searchBarText" onKeyPressed="#enterOnSearch" prefWidth="180.0" promptText="Search" style="-fx-background-color: transparent;">
                                              <HBox.margin>
                                                 <Insets />
                                              </HBox.margin>
@@ -102,7 +102,7 @@
                                                 <Font name="Corbel Light" size="16.0" />
                                              </font>
                                           </TextField>
-                                          <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="23.0" onMouseClicked="#onClickSearch" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="23.0" onMouseClicked="#clickOnSearch" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/search.png" />
                                              </image>

@@ -145,6 +145,8 @@ public class PodcastPageController {
 
     private PodcastService service;
 
+    /**************************** Click and Enter Events ****************************/
+
     @FXML
     void clickOnAddEpisode(MouseEvent event) throws IOException {
         Logger.info("Add episode");
@@ -209,6 +211,12 @@ public class PodcastPageController {
     }
 
     @FXML
+    void clickOnAuthor(MouseEvent event) throws IOException {
+        Logger.info("Show author");
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorName());
+    }
+
+    @FXML
     void clickOnDeletePodcast(MouseEvent event) throws IOException {
         // create the blur
         BoxBlur blur = new BoxBlur(3, 3 , 3);
@@ -238,6 +246,36 @@ public class PodcastPageController {
                 this.mainPage.setEffect(null);
             }
         }
+    }
+
+    @FXML
+    void clickOnHome(MouseEvent event) throws IOException {
+        Logger.info("Click on home");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+    }
+
+    @FXML
+    void clickOnLike(MouseEvent event) {
+        Boolean result = this.service.setLike(this.podcast.getId(), !this.liked);
+        if (result) {
+            this.liked = !this.liked;
+
+            // update the image
+            Image likeIcon;
+            if (this.liked)
+                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+            else
+                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+            this.like.setImage(likeIcon);
+        } else {
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
+        }
+    }
+
+    @FXML
+    void clickOnLogout(MouseEvent event) throws IOException {
+        MyPodcastDB.getInstance().setSession(null, null);
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML
@@ -293,58 +331,33 @@ public class PodcastPageController {
     }
 
     @FXML
-    void mouseOnAuthor(MouseEvent event) {
-        this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
-    }
-
-    @FXML
-    void mouseOutAuthor(MouseEvent event) {
-        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
-    }
-
-    @FXML
-    void mouseOnReview(MouseEvent event) {
-        this.showReviews.setTextFill(Color.color(0.6, 0.6, 0.6));
-    }
-
-    @FXML
-    void mouseOutReview(MouseEvent event) {
-        this.showReviews.setTextFill(Color.color(0.0, 0.0, 1.0));
-    }
-
-    @FXML
-    void clickOnAuthor(MouseEvent event) throws IOException {
-        Logger.info("Show author");
-        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorName());
-    }
-
-    @FXML
     void clickOnReviews(MouseEvent event) throws IOException {
         StageManager.showPage("ReviewPage.fxml", this.podcast.getId());
     }
 
     @FXML
-    void clickOnLike(MouseEvent event) {
-        Boolean result = this.service.setLike(this.podcast.getId(), !this.liked);
-        if (result) {
-            this.liked = !this.liked;
+    void clickOnSearch(MouseEvent event) throws IOException {
+        Logger.info("Click on search");
 
-            // update the image
-            Image likeIcon;
-            if (this.liked)
-                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
-            else
-                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
-            this.like.setImage(likeIcon);
-        } else {
-            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
+        if (!this.searchBarText.getText().equals("")) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
         }
     }
 
     @FXML
-    void clickOnLogout(MouseEvent event) throws IOException {
-        MyPodcastDB.getInstance().setSession(null, null);
-        StageManager.showPage(ViewNavigator.LOGIN.getPage());
+    void clickOnUser(MouseEvent event) throws IOException {
+        Logger.info("Click on user ");
+        String actorType = MyPodcastDB.getInstance().getSessionType();
+
+        if (actorType.equals("Author"))
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+        else if (actorType.equals("User"))
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+        else if (actorType.equals("Admin"))
+            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
+        else
+            Logger.error("Unidentified Actor Type");
     }
 
     @FXML
@@ -366,6 +379,22 @@ public class PodcastPageController {
     }
 
     @FXML
+    void enterOnSearch(KeyEvent event) throws IOException {
+        // if enter is pressed go to search
+        if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
+    }
+
+    /******************************** Mouse on Event ********************************/
+
+    @FXML
+    void mouseOnAuthor(MouseEvent event) {
+        this.author.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
+
+    @FXML
     void mouseOnLike(MouseEvent event) {
         // update the image
         Image likeIcon;
@@ -377,6 +406,11 @@ public class PodcastPageController {
     }
 
     @FXML
+    void mouseOnReview(MouseEvent event) {
+        this.showReviews.setTextFill(Color.color(0.6, 0.6, 0.6));
+    }
+
+    @FXML
     void mouseOnWatchlater(MouseEvent event) {
         // update the image
         Image watchlaterIcon;
@@ -385,6 +419,13 @@ public class PodcastPageController {
         else
             watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
         this.watchlater.setImage(watchlaterIcon);
+    }
+
+    /******************************* Mouse out Event ********************************/
+
+    @FXML
+    void mouseOutAuthor(MouseEvent event) {
+        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
     @FXML
@@ -399,6 +440,11 @@ public class PodcastPageController {
     }
 
     @FXML
+    void mouseOutReview(MouseEvent event) {
+        this.showReviews.setTextFill(Color.color(0.0, 0.0, 1.0));
+    }
+
+    @FXML
     void mouseOutWatchlater(MouseEvent event) {
         // update the image
         Image watchlaterIcon;
@@ -409,45 +455,7 @@ public class PodcastPageController {
         this.watchlater.setImage(watchlaterIcon);
     }
 
-    @FXML
-    void onClickHome(MouseEvent event) throws IOException {
-        Logger.info("Click on home");
-        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
-    }
-
-    @FXML
-    void onClickSearch(MouseEvent event) throws IOException {
-        Logger.info("Click on search");
-
-        if (!this.searchBarText.getText().equals("")) {
-            String searchString = this.searchBarText.getText();
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
-        }
-    }
-
-    @FXML
-    void onEnterPressed(KeyEvent event) throws IOException {
-        // if enter is pressed go to search
-        if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
-            String searchString = this.searchBarText.getText();
-            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
-        }
-    }
-
-    @FXML
-    void userProfile(MouseEvent event) throws IOException {
-        Logger.info("Click on user ");
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
-        else if (actorType.equals("User"))
-            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
-        else if (actorType.equals("Admin"))
-            StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
-        else
-            Logger.error("Unidentified Actor Type");
-    }
+    /***************************** Initialize e Utility *****************************/
 
     public void initialize() throws IOException {
         // Get the podcast info from service
