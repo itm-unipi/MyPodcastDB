@@ -213,6 +213,8 @@ public class SearchController {
     /**********************************************************/
 
     void search(String text) {
+        // Setting text in the GUI label
+        this.searchingForText.setText("Searching for \"" + text + "\"");
 
         switch (this.actorType) {
             case "Author" -> {
@@ -410,7 +412,6 @@ public class SearchController {
         }
 
         search(StageManager.getObjectIdentifier());
-        this.searchingForText.setText("Searching for \"" + StageManager.getObjectIdentifier() + "\"");
         loadResult();
     }
 }
