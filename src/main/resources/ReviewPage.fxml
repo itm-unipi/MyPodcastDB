@@ -184,7 +184,7 @@
                                                 <Insets bottom="10.0" top="3.0" />
                                              </VBox.margin>
                                           </HBox>
-                                          <HBox>
+                                          <HBox alignment="CENTER_LEFT">
                                              <children>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -211,17 +211,17 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="fiveStars" prefHeight="7.0" prefWidth="145.0" progress="0.0" style="-fx-accent: black; -fx-padding: 0;">
+                                                <ProgressBar fx:id="fiveStars" prefHeight="10.0" prefWidth="145.0" progress="0.0" style="-fx-accent: black; -fx-padding: 0;">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
                                                    <HBox.margin>
-                                                      <Insets left="5.0" top="5.0" />
+                                                      <Insets left="5.0" />
                                                    </HBox.margin>
                                                 </ProgressBar>
                                              </children>
                                           </HBox>
-                                          <HBox prefWidth="145.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="145.0">
                                              <children>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true">
@@ -244,17 +244,17 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="fourStars" prefHeight="7.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="fourStars" prefHeight="10.0" prefWidth="145.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
                                                    <HBox.margin>
-                                                      <Insets left="5.0" top="5.0" />
+                                                      <Insets left="5.0" />
                                                    </HBox.margin>
                                                 </ProgressBar>
                                              </children>
                                           </HBox>
-                                          <HBox prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                                              <children>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
@@ -273,17 +273,17 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="threeStars" prefHeight="7.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="threeStars" prefHeight="10.0" prefWidth="145.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
                                                    <HBox.margin>
-                                                      <Insets left="5.0" top="5.0" />
+                                                      <Insets left="5.0" />
                                                    </HBox.margin>
                                                 </ProgressBar>
                                              </children>
                                           </HBox>
-                                          <HBox prefWidth="200.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="200.0">
                                              <children>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
@@ -298,17 +298,17 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="twoStars" prefHeight="7.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="twoStars" prefHeight="10.0" prefWidth="145.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
                                                    <HBox.margin>
-                                                      <Insets left="5.0" top="5.0" />
+                                                      <Insets left="5.0" />
                                                    </HBox.margin>
                                                 </ProgressBar>
                                              </children>
                                           </HBox>
-                                          <HBox prefWidth="145.0">
+                                          <HBox alignment="CENTER_LEFT" prefWidth="145.0">
                                              <children>
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
                                                 <ImageView fitHeight="15.0" fitWidth="15.0" pickOnBounds="true" preserveRatio="true" />
@@ -319,12 +319,12 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="oneStar" prefHeight="7.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="oneStar" prefHeight="10.0" prefWidth="145.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
                                                    <HBox.margin>
-                                                      <Insets left="5.0" top="5.0" />
+                                                      <Insets left="5.0" />
                                                    </HBox.margin>
                                                 </ProgressBar>
                                              </children>

@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ReviewPageController {
 
@@ -604,7 +605,32 @@ public class ReviewPageController {
         this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
         this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
 
-        // TODO: progress bars
+        // calculate the progress bar for ratings
+        int[] numReview = new int[5];
+        for (Map.Entry<String, Integer> review : this.podcast.getReviews()) {
+            switch (review.getValue()) {
+                case 1:
+                    numReview[0]++;
+                    break;
+                case 2:
+                    numReview[1]++;
+                    break;
+                case 3:
+                    numReview[2]++;
+                    break;
+                case 4:
+                    numReview[3]++;
+                    break;
+                case 5:
+                    numReview[4]++;
+                    break;
+            }
+        }
+        this.oneStar.setProgress((float)numReview[0] / this.podcast.getReviews().size());
+        this.twoStars.setProgress((float)numReview[1] / this.podcast.getReviews().size());
+        this.threeStars.setProgress((float)numReview[2] / this.podcast.getReviews().size());
+        this.fourStars.setProgress((float)numReview[3] / this.podcast.getReviews().size());
+        this.fiveStars.setProgress((float)numReview[4] / this.podcast.getReviews().size());
 
         // insert reviews in grid
         this.row = 0;
