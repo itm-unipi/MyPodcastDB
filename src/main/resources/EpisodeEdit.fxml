@@ -88,7 +88,7 @@
                               </TextField>
                               <HBox>
                                  <children>
-                                    <Button fx:id="update" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" onMouseEntered="#mouseOnUpdate" onMouseExited="#mouseOutUpdate" style="-fx-background-color: #4CAF50; -fx-background-radius: 8; -fx-border-radius: 8;" text="Update" textFill="WHITE">
+                                    <Button fx:id="update" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" onMouseEntered="#mouseOnUpdate" onMouseExited="#mouseOutUpdate" style="-fx-background-color: #4CAF50; -fx-background-radius: 8; -fx-border-radius: 8; -fx-border-color: transparent;" text="Update" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="16.0" />
                                        </font>
@@ -96,7 +96,7 @@
                                           <Insets right="8.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="cancel" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnCancel" onMouseEntered="#mouseOnCancel" onMouseExited="#mouseOutCancel" style="-fx-background-color: #f4511e; -fx-background-radius: 10; -fx-border-radius: 10;" text="Cancel" textFill="WHITE">
+                                    <Button fx:id="cancel" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#clickOnCancel" onMouseEntered="#mouseOnCancel" onMouseExited="#mouseOutCancel" style="-fx-background-color: #f4511e; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: transparent;" text="Cancel" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel Bold" size="15.0" />
                                        </font>
