@@ -6,10 +6,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -25,6 +27,9 @@ public class PieChartController {
 
     @FXML
     private PieChart pieChart;
+
+    @FXML
+    private AnchorPane mainPane;
 
     @FXML
     private Label title;
@@ -64,6 +69,18 @@ public class PieChartController {
         dialog.showAndWait();
 
         this.mainPage.setEffect(null);
+    }
+
+    @FXML
+    void mouseOnPane(MouseEvent event) {
+        this.mainPane.setStyle("-fx-background-color: #e5e5e5; -fx-background-radius: 15; -fx-border-color: #636366; -fx-border-radius: 15;");
+        this.mainPane.setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    void mouseOutPane(MouseEvent event) {
+        this.mainPane.setStyle("-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #636366; -fx-border-radius: 15;");
+        this.mainPane.setCursor(Cursor.DEFAULT);
     }
 
     public void setData(String title, String[] columnsName, List<Pair<String, Integer>> statistics, BorderPane mainPage) {

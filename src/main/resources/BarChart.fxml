@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#clickOnPane" prefHeight="350.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #636366; -fx-border-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.BarChartController">
+<AnchorPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" onMouseClicked="#clickOnPane" onMouseEntered="#mouseOnPane" onMouseExited="#mouseOutPane" prefHeight="350.0" prefWidth="400.0" style="-fx-background-color: white; -fx-background-radius: 15; -fx-border-color: #636366; -fx-border-radius: 15;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.BarChartController">
    <children>
       <BorderPane layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <center>
