@@ -24,6 +24,8 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
@@ -306,7 +308,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateAverageAgeOfUsersPerFavouriteCategory(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data1.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -317,7 +319,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updatePodcastsWithHighestNumberOfReviews(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data2.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -328,7 +330,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateCountryWithHighestNumberOfPodcasts(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data3.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -339,7 +341,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateFavouriteCategoryForGender(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data4.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -350,7 +352,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostNumerousCategory(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data5.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -361,7 +363,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostAppreciatedCategory(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data6.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -372,7 +374,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostFollowedAuthor(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data7.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -383,7 +385,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostLikedPodcast(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data8.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -394,7 +396,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updatePodcastsWithHighestAverageRating(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data9.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -405,7 +407,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updatePodcastWithHighestAverageRatingPerCountry(updateTime, this.limit);
         if (result == 0) {
-            // TODO: update date
+            this.data10.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             // TODO: alert
         }
@@ -759,5 +761,11 @@ public class AdminDashboardController {
         this.statisticsGrid.add(newPieChart2, column, row);
 
         return updateTimes;
+    }
+
+    private String dateAsString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateAsString = dateFormat.format(date);
+        return dateAsString;
     }
 }
