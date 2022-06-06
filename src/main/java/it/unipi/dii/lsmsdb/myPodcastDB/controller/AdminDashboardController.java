@@ -312,18 +312,24 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateAverageAgeOfUsersPerFavouriteCategory(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data1.setText("Last update: " + dateAsString(updateTime) + "  ");
+            if (!this.reloadSelectiveCharts(0))
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to reload the chart, reload manually the page");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
     @FXML
-    void clickOnUpdate2(MouseEvent event) {
+    void clickOnUpdate2(MouseEvent event) throws IOException {
         Date updateTime = new Date();
         int result = this.service.updatePodcastsWithHighestNumberOfReviews(updateTime, this.limit);
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data2.setText("Last update: " + dateAsString(updateTime) + "  ");
+            if (!this.reloadSelectiveCharts(1))
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to reload the chart, reload manually the page");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
@@ -334,7 +340,10 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateCountryWithHighestNumberOfPodcasts(updateTime, JsonDecode.getCountries().size());
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data3.setText("Last update: " + dateAsString(updateTime) + "  ");
+            if (!this.reloadSelectiveCharts(2))
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to reload the chart, reload manually the page");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
@@ -345,7 +354,10 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateFavouriteCategoryForGender(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data4.setText("Last update: " + dateAsString(updateTime) + "  ");
+            if (!this.reloadSelectiveCharts(3))
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to reload the chart, reload manually the page");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
@@ -356,7 +368,10 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostNumerousCategory(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data5.setText("Last update: " + dateAsString(updateTime) + "  ");
+            if (!this.reloadSelectiveCharts(4))
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to reload the chart, reload manually the page");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
@@ -367,7 +382,10 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostAppreciatedCategory(updateTime, JsonDecode.getCategories().size());
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data6.setText("Last update: " + dateAsString(updateTime) + "  ");
+            if (!this.reloadSelectiveCharts(5))
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to reload the chart, reload manually the page");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
@@ -378,6 +396,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostFollowedAuthor(updateTime, this.limit);
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data7.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
@@ -389,6 +408,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updateMostLikedPodcast(updateTime, this.limit);
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data8.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
@@ -400,6 +420,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updatePodcastsWithHighestAverageRating(updateTime, this.limit);
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data9.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
@@ -411,6 +432,7 @@ public class AdminDashboardController {
         Date updateTime = new Date();
         int result = this.service.updatePodcastWithHighestAverageRatingPerCountry(updateTime, JsonDecode.getCountries().size());
         if (result == 0) {
+            DialogManager.getInstance().createInformationAlert(this.mainPage, "Update complete");
             this.data10.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
@@ -682,6 +704,11 @@ public class AdminDashboardController {
         if (updateTimes == null)
             return;
 
+        // check if update time is null
+        for (int i = 0; i < updateTimes.size(); i++)
+            if (updateTimes.get(i) == null)
+                updateTimes.set(i, "never");
+
         // update the last update data of queries
         this.data1.setText("Last update: " + updateTimes.get(0) + "  ");
         this.data2.setText("Last update: " + updateTimes.get(1) + "  ");
@@ -774,6 +801,126 @@ public class AdminDashboardController {
         this.statisticsGrid.add(newPieChart2, column, row);
 
         return updateTimes;
+    }
+
+    private boolean reloadSelectiveCharts(int numberOfChart) throws IOException {
+        boolean result = false;
+
+        // Average Age Of Users Per Favourite Category
+        if (numberOfChart == 0) {
+            // get updated statistic
+            List<Pair<String, Float>> averageAgeOfUsersPerFavouriteCategory = new ArrayList<>();
+            result = this.service.getUpdatedStatistic(numberOfChart, (Object)averageAgeOfUsersPerFavouriteCategory);
+
+            // check result
+            if (!result)
+                return false;
+
+            // update the chart
+            FXMLLoader barLoader = new FXMLLoader();
+            barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
+            AnchorPane newBarChart1 = barLoader.load();
+            BarChartController controller1 = barLoader.getController();
+            controller1.setDataFloat("Average age for favourite category", new String[]{"Category", "Average age"}, "Average age", averageAgeOfUsersPerFavouriteCategory, this.mainPage);
+            this.statisticsGrid.add(newBarChart1, 0, 1);
+        }
+
+        // Podcasts With The Highest Number Of Reviews
+        if (numberOfChart == 1) {
+            // get updated statistic
+            List<Pair<Podcast, Integer>> podcastsWithHighestNumberOfReviews = new ArrayList<>();
+            result = this.service.getUpdatedStatistic(numberOfChart, (Object)podcastsWithHighestNumberOfReviews);
+
+            // check result
+            if (!result)
+                return false;
+
+            // update the chart
+            FXMLLoader barLoader = new FXMLLoader();
+            barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
+            AnchorPane newBarChart2 = barLoader.load();
+            BarChartController controller2 = barLoader.getController();
+            controller2.setDataPodcastInteger("Podcasts with highest number of reviews", new String[]{"Podcast", "Number of reviews"}, "Number of reviews", podcastsWithHighestNumberOfReviews, this.mainPage);
+            this.statisticsGrid.add(newBarChart2, 1, 1);
+        }
+
+        // Country With The Highest Number Of Podcasts
+        if (numberOfChart == 2) {
+            // get updated statistic
+            List<Pair<String, Integer>> countryWithHighestNumberOfPodcasts = new ArrayList<>();
+            result = this.service.getUpdatedStatistic(numberOfChart, (Object)countryWithHighestNumberOfPodcasts);
+
+            // check result
+            if (!result)
+                return false;
+
+            // update the chart
+            FXMLLoader barLoader = new FXMLLoader();
+            barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
+            AnchorPane newBarChart3 = barLoader.load();
+            BarChartController controller3 = barLoader.getController();
+            controller3.setDataInteger("Country with highest number of podcasts", new String[]{"Country", "Number of podcast"}, "Number of podcasts", countryWithHighestNumberOfPodcasts, this.mainPage);
+            this.statisticsGrid.add(newBarChart3, 2, 1);
+        }
+
+        // Top Favourite Categories Per Gender
+        if (numberOfChart == 3) {
+            // get updated statistic
+            Triplet<List<String>, List<String>, List<String>> topFavouriteCategoriesPerGender = new Triplet<>(new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+            result = this.service.getUpdatedStatistic(numberOfChart, (Object)topFavouriteCategoriesPerGender);
+
+            // check result
+            if (!result)
+                return false;
+
+            // update the chart
+            FXMLLoader tableLoader = new FXMLLoader();
+            tableLoader.setLocation(getClass().getClassLoader().getResource("Table.fxml"));
+            AnchorPane newTable = tableLoader.load();
+            TableController controller4 = tableLoader.getController();
+            controller4.setData("Top favourite categories", new String[]{"Female", "Male", "Not Binary"}, topFavouriteCategoriesPerGender);
+            this.statisticsGrid.add(newTable, 0, 2);
+        }
+
+        // Most Numerous Categories
+        if (numberOfChart == 4) {
+            // get updated statistic
+            List<Pair<String, Integer>> mostNumerousCategories = new ArrayList<>();
+            result = this.service.getUpdatedStatistic(numberOfChart, (Object)mostNumerousCategories);
+
+            // check result
+            if (!result)
+                return false;
+
+            // update the chart
+            FXMLLoader pieLoader = new FXMLLoader();
+            pieLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
+            AnchorPane newPieChart1 = pieLoader.load();
+            PieChartController controller5 = pieLoader.getController();
+            controller5.setData("Most numerous category", new String[]{"Category", "Number of podcasts"}, mostNumerousCategories, this.mainPage);
+            this.statisticsGrid.add(newPieChart1, 1, 2);
+        }
+
+        // Most Appreciated Category
+        if (numberOfChart == 5) {
+            // get updated statistic
+            List<Pair<String, Integer>> mostAppreciatedCategory = new ArrayList<>();
+            result = this.service.getUpdatedStatistic(numberOfChart, (Object)mostAppreciatedCategory);
+
+            // check result
+            if (!result)
+                return false;
+
+            // update the chart
+            FXMLLoader pieLoader = new FXMLLoader();
+            pieLoader.setLocation(getClass().getClassLoader().getResource("PieChart.fxml"));
+            AnchorPane newPieChart2 = pieLoader.load();
+            PieChartController controller6 = pieLoader.getController();
+            controller6.setData("Most appreciated category", new String[]{"Category", "Number of likes"}, mostAppreciatedCategory, this.mainPage);
+            this.statisticsGrid.add(newPieChart2, 2, 2);
+        }
+
+        return result;
     }
 
     private String dateAsString(Date date) {

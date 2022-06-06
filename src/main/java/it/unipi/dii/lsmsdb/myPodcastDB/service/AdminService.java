@@ -367,5 +367,47 @@ public class AdminService {
         return result;
     }
 
+    public boolean getUpdatedStatistic(int statisticId, Object statistic) {
+        MongoManager.getInstance().openConnection();
+
+        String result = null;
+        switch(statisticId) {
+            // Average Age Of Users Per Favourite Category
+            case 0:
+                result = this.queryMongo.getAverageAgeOfUsersPerFavouriteCategory((List<Pair<String, Float>>)statistic);
+                break;
+
+            // Podcasts With The Highest Number Of Reviews
+            case 1:
+                result = this.queryMongo.getPodcastsWithHighestNumberOfReviews((List<Pair<Podcast, Integer>>)statistic);
+                break;
+
+            // Country With The Highest Number Of Podcasts
+            case 2:
+                result = this.queryMongo.getCountryWithHighestNumberOfPodcasts((List<Pair<String, Integer>>)statistic);
+                break;
+
+
+            // Favourite Category For Gender
+            case 3:
+                result = this.queryMongo.getFavouriteCategoryForGender(((Triplet<List<String>, List<String>, List<String>>)statistic).getValue0(), ((Triplet<List<String>, List<String>, List<String>>)statistic).getValue1(), ((Triplet<List<String>, List<String>, List<String>>)statistic).getValue2());
+                break;
+
+            // Most Numerous Category
+            case 4:
+                result = this.queryMongo.getMostNumerousCategory((List<Pair<String, Integer>>)statistic);
+                break;
+
+            // Most Appreciated Category
+            case 5:
+                result = this.queryMongo.getMostAppreciatedCategory((List<Pair<String, Integer>>)statistic);
+                break;
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+
+        return result != null;
+    }
+
     //-----------------------------------------------
 }
