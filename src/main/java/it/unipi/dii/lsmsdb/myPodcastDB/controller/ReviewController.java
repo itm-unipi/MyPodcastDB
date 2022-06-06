@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -94,7 +95,7 @@ public class ReviewController {
             if (result == 0) {
                 this.controller.removeReviewFromLocalList(this.review);
             } else {
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to delete review");
             }
         }
 

@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -211,7 +212,7 @@ public class ReviewPageController {
     @FXML
     void clickOnReload(MouseEvent event) throws IOException {
         if (this.orderBy.getValue() == null || this.ascending.getValue() == null) {
-            // TODO: alert error
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Select order by and ascending field");
         } else {
             // reload local list with new parameters
             this.loadedReviews.clear();                         // empty old list
@@ -221,7 +222,7 @@ public class ReviewPageController {
 
             // if successful reload page
             if (!result) {
-                // TODO: alert error
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to load reviews");
             } else {
                 this.reloadReviewList();
             }
@@ -250,7 +251,7 @@ public class ReviewPageController {
 
         // if succesfull update the page
         if (!result) {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to load other reviews");
         } else {
             // add new review to list
             this.reloadReviewList();
@@ -349,7 +350,7 @@ public class ReviewPageController {
 
             this.reviewGrid.add(newReview, this.column, this.row++);
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add new review");
         }
     }
 
@@ -362,16 +363,17 @@ public class ReviewPageController {
     @FXML
     void onClickSearch(MouseEvent event) throws IOException {
         Logger.info("Click on search");
-
-        String searchString = this.searchBarText.getText();
-        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        if (!this.searchBarText.getText().equals("")) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
     }
 
     @FXML
     void onEnterPressed(KeyEvent event) throws IOException {
         Logger.info("Enter on search");
 
-        if (event.getCode().equals(KeyCode.ENTER)) {
+        if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
             String searchString = this.searchBarText.getText();
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
         }
@@ -652,7 +654,7 @@ public class ReviewPageController {
 
         // check service result
         if (!result) {
-            // TODO: Alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
         }
 
         // no reviews message

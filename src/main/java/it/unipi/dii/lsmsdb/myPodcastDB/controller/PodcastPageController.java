@@ -8,6 +8,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -200,7 +201,7 @@ public class PodcastPageController {
 
             // error
             else if (result != 0) {
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add episode");
             }
         }
 
@@ -294,7 +295,7 @@ public class PodcastPageController {
 
             // error in update
             else if (result != 0) {
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update podcast");
             }
         }
 
@@ -346,7 +347,7 @@ public class PodcastPageController {
                 likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
             this.like.setImage(likeIcon);
         } else {
-            // TODO: Alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
         }
     }
 
@@ -370,7 +371,7 @@ public class PodcastPageController {
                 watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
             this.watchlater.setImage(watchlaterIcon);
         } else {
-            // TODO: Alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
         }
     }
 
@@ -428,15 +429,16 @@ public class PodcastPageController {
     void onClickSearch(MouseEvent event) throws IOException {
         Logger.info("Click on search");
 
-        String searchString = this.searchBarText.getText();
-        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        if (!this.searchBarText.getText().equals("")) {
+            String searchString = this.searchBarText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
     }
 
     @FXML
     void onEnterPressed(KeyEvent event) throws IOException {
         // if enter is pressed go to search
-        // TODO: search solo se il campo di ricerca non è vuoto
-        if (event.getCode().equals(KeyCode.ENTER)) {
+        if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
             String searchString = this.searchBarText.getText();
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
         }
@@ -473,20 +475,18 @@ public class PodcastPageController {
                 this.watchLatered = status[0];
                 this.liked = status[1];
             } else {
-                // TODO: errore se il caricamento fallisce
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
             }
         } else {
             result = this.service.loadPodcastPageForNotUser(podcast);
             if (!result) {
-                // TODO: errore se il caricamento fallisce
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
             }
         }
 
         // check service result
         if (result) {
             this.podcast = podcast;
-        } else {
-            // TODO: Alert
         }
 
         // actor specific action

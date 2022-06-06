@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -71,7 +72,7 @@ public class EpisodeController {
             if (result == 0) {
                 this.podcastPageController.updatePodcastPage();
             } else {
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong!");
             }
         }
 
@@ -143,10 +144,10 @@ public class EpisodeController {
                     // update page
                     setData(modifiedEpisode, this.podcast, this.mainPage, this.service, this.podcastPageController);
                 } else {
-                    // TODO: alert
+                    DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update episode");
                 }
             } else {
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update episode");
             }
         }
 

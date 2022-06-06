@@ -220,15 +220,17 @@ public class AdminDashboardController {
     void onClickSearch(MouseEvent event) throws IOException {
         Logger.info("Click on search");
 
-        String searchString = this.searchText.getText();
-        StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        if (!this.searchText.getText().equals("")) {
+            String searchString = this.searchText.getText();
+            StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
+        }
     }
 
     @FXML
     void onEnterPressedSearch(KeyEvent event) throws IOException {
         Logger.info("Enter on search");
 
-        if (event.getCode().equals(KeyCode.ENTER)) {
+        if (event.getCode().equals(KeyCode.ENTER) && !this.searchText.getText().equals("")) {
             String searchString = this.searchText.getText();
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
         }
