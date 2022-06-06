@@ -6,6 +6,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.util.Optional;
@@ -18,7 +20,7 @@ public class DialogManager {
 
     }
 
-    public boolean createConfirmationAlert(AnchorPane mainPage, String msg){
+    public boolean createConfirmationAlert(BorderPane mainPage, String msg){
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "", new ButtonType("OK"),new ButtonType("CANCEL"));
         Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
@@ -40,7 +42,7 @@ public class DialogManager {
         }
     }
 
-    public void createErrorAlert(AnchorPane mainPage, String msg){
+    public void createErrorAlert(BorderPane mainPage, String msg){
 
         Alert alert = new Alert(Alert.AlertType.ERROR);
         Stage stage = (Stage)alert.getDialogPane().getScene().getWindow();
@@ -56,7 +58,7 @@ public class DialogManager {
         mainPage.setEffect(null);
     }
 
-    public void createInformationAlert(AnchorPane mainPage, String msg){
+    public void createInformationAlert(BorderPane mainPage, String msg){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));

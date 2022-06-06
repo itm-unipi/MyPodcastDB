@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -310,7 +311,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data1.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -321,7 +322,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data2.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -332,7 +333,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data3.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -343,7 +344,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data4.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -354,7 +355,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data5.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -365,7 +366,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data6.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -376,7 +377,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data7.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -387,7 +388,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data8.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -398,7 +399,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data9.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -409,7 +410,7 @@ public class AdminDashboardController {
         if (result == 0) {
             this.data10.setText("Last update: " + dateAsString(updateTime) + "  ");
         } else {
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Update failed");
         }
     }
 
@@ -669,9 +670,14 @@ public class AdminDashboardController {
         this.service = new AdminService();
         this.title.setText("Welcome " + this.admin.getName());
         this.limit = 10;
+        this.nameTextField.setText(this.admin.getName());
+        this.emailTextField.setText(this.admin.getEmail());
+        this.passwordTextField.setText("********************");
 
         // load chart
         List<String> updateTimes = this.loadCharts();
+        if (updateTimes == null)
+            return;
 
         // update the last update data of queries
         this.data1.setText("Last update: " + updateTimes.get(0) + "  ");
@@ -690,9 +696,6 @@ public class AdminDashboardController {
 //        this.updateCancelWrapper.setVisible(false);
 //        this.modifyInfoWrapper.setStyle("-fx-max-height: 40;");
 //        this.updateCancelWrapper.setStyle("-fx-max-height: 0;");
-        this.nameTextField.setText(this.admin.getName());
-        this.emailTextField.setText(this.admin.getEmail());
-        this.passwordTextField.setText("********************");
     }
 
     private List<String> loadCharts() throws IOException {
@@ -706,6 +709,10 @@ public class AdminDashboardController {
 
         // load them from service
         List<String> updateTimes = this.service.loadAdminPage(averageAgeOfUsersPerFavouriteCategory, podcastsWithHighestNumberOfReviews, countryWithHighestNumberOfPodcasts, topFavouriteCategoriesPerGender, mostNumerousCategories, mostAppreciatedCategory);
+        if (updateTimes == null) {
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something gone wrong!");
+            return null;
+        }
 
         // statistics creation
         int row = 1;
