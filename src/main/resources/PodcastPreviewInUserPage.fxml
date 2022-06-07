@@ -36,7 +36,7 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <Pane fx:id="trashButtonArea" layoutX="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                  <Pane fx:id="trashButtonArea" layoutX="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                      <children>
                         <ImageView fx:id="trashButton" fitHeight="30.0" fitWidth="30.0" layoutY="1.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>

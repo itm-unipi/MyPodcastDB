@@ -475,53 +475,7 @@ public class UserPageService {
         return res;
     }
 
-    public int removePodcast(String owner, String podcastId, String listType){
 
-        int res = -1;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        Logger.error("DA IMPLEMENTARE");
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
-
-    public int removeActor(String owner, String actorName, String actorType){
-
-        int res = -1;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        Logger.error("DA IMPLEMENTARE");
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
-
-    public int addPodcast(String owner, String podcastId, String listType){
-
-        int res = -1;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        Logger.error("DA IMPLEMENTARE");
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
-
-    public int addActor(String owner, String actorName, String actorType){
-
-        int res = -1;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        Logger.error("DA IMPLEMENTARE");
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
     //-----------------------------------------------
 
     //----------------- BIAGIO ----------------------

@@ -138,6 +138,7 @@ public class PodcastPreviewInUserPageController {
             case -1:
                 logMsg = "Unknown error";
                 dialogMsg = "Unknown error";
+                break;
         }
         if(res != 0){
             Logger.error(logMsg);
@@ -214,6 +215,7 @@ public class PodcastPreviewInUserPageController {
             case -1:
                 logMsg = "Unknown error";
                 dialogMsg = "Unknown error";
+                break;
         }
         if(res != 0){
             Logger.error(logMsg);
@@ -242,21 +244,115 @@ public class PodcastPreviewInUserPageController {
     void trashClick(MouseEvent event){
         if(!disableClick){
             Logger.info("Trash button clicked");
+            UserPageService service = new UserPageService();
+            int res = -1;
+            if(listType.equals("watchlist"))
+                res = service.updateWatchlist(actorName, podcastPreview.getId(), false);
+            else if(listType.equals("liked"))
+                res = service.updateLiked(actorName, podcastPreview.getId(), false);
+
+            String logMsg = "";
+            String dialogMsg = "";
+            switch(res){
+                case 0:
+                    Logger.success("Updating " + listType + " success");
+                    break;
+                case 1:
+                    logMsg = "User account not exists on Neo4j";
+                    dialogMsg = "Your account not exists";
+                    break;
+                case 2:
+                    logMsg = "Podcast not found in neo4j";
+                    dialogMsg = "Podcast not found";
+                    break;
+                case 3:
+                    logMsg = "It's already in the " + listType + " list";
+                    dialogMsg = "it's already in your " + listType;
+                    break;
+                case 4:
+                    logMsg = "Adding in " + listType + " failed";
+                    dialogMsg = "Operation failed";
+                    break;
+                case 5:
+                    logMsg = "It's not exits in " + listType + " list";
+                    dialogMsg = "it's not in your " + listType;
+                    break;
+                case 6:
+                    logMsg = "Removing from " + listType + " failed";
+                    dialogMsg = "Operation failed";
+                    break;
+                case -1:
+                    logMsg = "Unknown error";
+                    dialogMsg = "Unknown error";
+                    break;
+            }
+            if(res != 0){
+                Logger.error(logMsg);
+                DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
+                return;
+            }
             blockClickEvent = true;
             disableClick = true;
             podcastAnchorPane.setOpacity(0.2);
-            UserPageService service = new UserPageService();
-            service.removePodcast(actorName, podcastPreview.getId(), listType);
             trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
+
+
         }
         else{
             Logger.info("Refresh button clicked");
+            UserPageService service = new UserPageService();
+            int res = -1;
+            if(listType.equals("watchlist"))
+                res = service.updateWatchlist(actorName, podcastPreview.getId(), true);
+            else if(listType.equals("liked"))
+                res = service.updateLiked(actorName, podcastPreview.getId(), true);
+
+            String logMsg = "";
+            String dialogMsg = "";
+            switch(res){
+                case 0:
+                    Logger.success("Updating " + listType + " success");
+                    break;
+                case 1:
+                    logMsg = "User account not exists on Neo4j";
+                    dialogMsg = "Your account not exists";
+                    break;
+                case 2:
+                    logMsg = "Podcast not found in neo4j";
+                    dialogMsg = "Podcast not found";
+                    break;
+                case 3:
+                    logMsg = "It's already in the " + listType + " list";
+                    dialogMsg = "it's already in your " + listType;
+                    break;
+                case 4:
+                    logMsg = "Adding in " + listType + " failed";
+                    dialogMsg = "Operation failed";
+                    break;
+                case 5:
+                    logMsg = "It's not exits in " + listType + " list";
+                    dialogMsg = "it's not in your " + listType;
+                    break;
+                case 6:
+                    logMsg = "Removing from " + listType + " failed";
+                    dialogMsg = "Operation failed";
+                    break;
+                case -1:
+                    logMsg = "Unknown error";
+                    dialogMsg = "Unknown error";
+                    break;
+            }
+            if(res != 0){
+                Logger.error(logMsg);
+                DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
+                return;
+            }
             blockClickEvent = true;
             disableClick = false;
             podcastAnchorPane.setOpacity(1.0);
-            UserPageService service = new UserPageService();
-            service.addPodcast(actorName, podcastPreview.getId(), listType);
             trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
+
         }
     }
 
