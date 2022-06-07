@@ -177,7 +177,7 @@ public class PodcastPageController {
         dialog.initOwner(this.mainPage.getScene().getWindow());
         dialog.setDialogPane(episodeEditDialogPane);
         dialog.setTitle("Update Podcast");
-        editController.setData(episode, true);
+        editController.setData(episode, true, this.mainPage);
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
@@ -211,7 +211,13 @@ public class PodcastPageController {
 
             // error
             else if (result != 0) {
-                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add episode");
+                // already used title
+                if (result == -2)
+                    DialogManager.getInstance().createErrorAlert(this.mainPage, "this title has already been used");
+                // other error
+                else
+                    DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add episode");
+
             }
         }
 

@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.time.Instant;
@@ -44,6 +46,8 @@ public class EpisodeEditController {
     private Episode episode;
     private Boolean newEpisode;
 
+    private BorderPane mainPage;
+
     @FXML
     void clickOnCancel(MouseEvent event) {
         Logger.info("Cancel");
@@ -56,7 +60,7 @@ public class EpisodeEditController {
         if (this.newEpisode) {
             // null controll
             if (this.title.getText() == "" || this.description.getText() == "" || this.releaseDate.getValue() == null || this.duration.getText() == "") {
-                Logger.error("Invalid Input");
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Some field are empty");
                 return;
             }
 
@@ -116,10 +120,11 @@ public class EpisodeEditController {
         this.update.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 8; -fx-text-fill: white; -fx-border-radius: 8; -fx-cursor: default;");
     }
 
-    public void setData(Episode episode, Boolean creation) {
+    public void setData(Episode episode, Boolean creation, BorderPane mainPage) {
         // set local status
         this.episode = episode;
         this.newEpisode = creation;
+        this.mainPage = mainPage;
 
         // if are creating a new episode modify title and button
         if (creation) {

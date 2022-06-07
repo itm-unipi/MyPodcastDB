@@ -98,7 +98,7 @@ public class EpisodeController {
         dialog.initOwner(this.mainPage.getScene().getWindow());
         dialog.setDialogPane(episodeEditDialogPane);
         dialog.setTitle("Update Podcast");
-        editController.setData(modifiedEpisode, false);
+        editController.setData(modifiedEpisode, false, this.mainPage);
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
