@@ -1,7 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -54,11 +53,11 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void onClick(MouseEvent event) throws IOException {
-        Logger.info(podcastPreview.getId() + " : " + this.podcastPreview.getName() + " selected");
         if(blockClickEvent){
             blockClickEvent = false;
             return;
         }
+        Logger.info(podcastPreview.getId() + " : " + this.podcastPreview.getName() + " selected");
         StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), this.podcastPreview.getId());
     }
 
@@ -76,7 +75,7 @@ public class PodcastPreviewInUserPageController {
     void watchClick(MouseEvent event){
         blockClickEvent = true;
         Logger.info("Watch button clicked");
-        UserService service = new UserService();
+        UserPageService service = new UserPageService();
         int res = -1;
         if(watchStatus) {
             res = service.updateWatchlist(actorName, podcastPreview.getId(), false);
@@ -112,8 +111,16 @@ public class PodcastPreviewInUserPageController {
                 dialogMsg = "it's already liked";
                 break;
             case 4:
+                logMsg = "Adding likes relation failed";
+                dialogMsg = "Operation failed";
+                break;
+            case 5:
                 logMsg = "LIKES relation already not exists";
                 dialogMsg = "it's not liked";
+                break;
+            case 6:
+                logMsg = "Removing likes relation failed";
+                dialogMsg = "Operation failed";
                 break;
             case -1:
                 logMsg = "Unknown error";
@@ -145,7 +152,7 @@ public class PodcastPreviewInUserPageController {
     void likeClick(MouseEvent event){
         Logger.info("Like button clicked");
         blockClickEvent = true;
-        UserService service = new UserService();
+        UserPageService service = new UserPageService();
         int res = -1;
         if(likeStatus) {
             res = service.updateLiked(actorName, podcastPreview.getId(), false);
@@ -180,8 +187,16 @@ public class PodcastPreviewInUserPageController {
                 dialogMsg = "it's already in your watchlist";
                 break;
             case 4:
+                logMsg = "Adding watch later relation failed";
+                dialogMsg = "Operation failed";
+                break;
+            case 5:
                 logMsg = "WATCH_LATER relation already not exists";
                 dialogMsg = "it's not in your watchlist";
+                break;
+            case 6:
+                logMsg = "Removing waatch later relation failed";
+                dialogMsg = "Operation failed";
                 break;
             case -1:
                 logMsg = "Unknown error";

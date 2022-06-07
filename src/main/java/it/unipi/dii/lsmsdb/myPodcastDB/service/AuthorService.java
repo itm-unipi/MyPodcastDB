@@ -7,6 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 
 import java.util.List;
 
@@ -15,10 +16,12 @@ public class AuthorService {
     //---------------- GIANLUCA ---------------------
     private AuthorMongo authorMongoManager;
     private AuthorNeo4j authorNeo4jManager;
+    private UserNeo4j userNeo4jManager;
 
     public AuthorService() {
         this.authorMongoManager = new AuthorMongo();
         this.authorNeo4jManager = new AuthorNeo4j();
+        this.userNeo4jManager = new UserNeo4j();
     }
 
     public int getAuthorLogin(Author author){
@@ -67,6 +70,7 @@ public class AuthorService {
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
+
 
      //-----------------------------------------------
 

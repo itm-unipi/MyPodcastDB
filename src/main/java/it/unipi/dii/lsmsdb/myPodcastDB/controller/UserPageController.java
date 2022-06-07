@@ -2,8 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -217,6 +216,7 @@ public class UserPageController {
     private boolean getLbutton = false;
     private boolean getAbutton = false;
     private boolean getUbutton = false;
+    UserPageService service = new UserPageService();
 
 
 
@@ -576,7 +576,6 @@ public class UserPageController {
     @FXML
     void followButtonClick(MouseEvent event) {
         Logger.info("Follow button pressed");
-        UserService service = new UserService();
         String owner = pageOwner.getUsername();
         String visitor = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         int res = -1;
@@ -621,7 +620,15 @@ public class UserPageController {
                 dialogMsg = "You already followed user";
                 break;
             case 6:
+                logMsg = "Adding following relation failed";
+                dialogMsg = "Operation failed";
+                break;
+            case 7:
                 logMsg = "Follow relation already not exists";
+                dialogMsg = "Operation failed";
+                break;
+            case 8:
+                logMsg = "Removing following relation failed";
                 dialogMsg = "Operation failed";
                 break;
             case -1:
@@ -683,8 +690,6 @@ public class UserPageController {
             return;
         }
         Logger.info(newUser.toString());
-
-        UserService service = new UserService();
         int res = service.updateUserPageOwner(pageOwner, newUser);
         String logMsg = "";
         String dialogMsg = "";
@@ -773,7 +778,6 @@ public class UserPageController {
         Logger.info("Delete button clicked");
 
         if(DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, "Really Delete your account?")) {
-            UserService service = new UserService();
             int res = service.deleteUserPageOwner(pageOwner);
             String logMsg = "";
             String dialogMsg = "";
@@ -900,7 +904,6 @@ public class UserPageController {
         userPageGenderComboBox.setEditable(false);
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
-        UserService service = new UserService();
         int res = service.loadUserPageProfile(
                 actorType,
                 sessionActorName,
@@ -908,6 +911,7 @@ public class UserPageController {
                 wPodcastsByVisitor, lPodcastsByVisitor, authorsByVisitor, usersByVisitor,
                 newRequestPodcast, newRequestActor
                 );
+        Logger.info(usersByVisitor.toString());
         if(res == 0)
             Logger.success("Load user profile success");
         else if(res == 1){
@@ -959,8 +963,7 @@ public class UserPageController {
         }
         else if (actorType.equals("User")){
             Logger.info("User visitor mode");
-            UserService followService = new UserService();
-            int result = followService.checkFollowUser(sessionActorName, pageOwner.getUsername());
+            int result = service.checkFollowUser(sessionActorName, pageOwner.getUsername());
             String logMsg = "";
             String dialogMsg = "";
             switch (res){
@@ -1306,16 +1309,16 @@ public class UserPageController {
         boolean isFollowed = false;
         if(MyPodcastDB.getInstance().getSessionType().equals("Author") ||
                 (MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername()))){
-            if(authorsByVisitor.contains(author.getId()))
+            if(authorsByVisitor.contains(author.getName()))
                 isFollowed = true;
 
             if(MyPodcastDB.getInstance().getSessionType().equals("Author"))
-                authorController.setData(author, "Author", ((Author)(MyPodcastDB.getInstance().getSessionActor())).getName(), isFollowed);
+                authorController.setData(userPageAnchorPane, author, "Author", ((Author)(MyPodcastDB.getInstance().getSessionActor())).getName(), isFollowed);
             else
-                authorController.setData(author, "User", ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
+                authorController.setData(userPageAnchorPane, author, "User", ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
         }
         else
-            authorController.setData(author);
+            authorController.setData(userPageAnchorPane,author);
         this.userPageAuthorsGrid.add(newAuthor, column, row);
         column++;
     }
@@ -1335,19 +1338,18 @@ public class UserPageController {
         ActorPreviewController actorController = userfxmlLoader.getController();
         boolean isFollowed = false;
         if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
-            if(usersByVisitor.contains(user.getId()))
+            if(usersByVisitor.contains(user.getUsername()))
                 isFollowed = true;
 
-            actorController.setData(user, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
+            actorController.setData(userPageAnchorPane, user, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
         }
         else
-            actorController.setData(user);
+            actorController.setData(userPageAnchorPane, user);
         this.userPageUsersGrid.add(newUser, column, row);
 
     }
 
     public void getWpodcasts(){
-        UserService service = new UserService();
         int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
         if(res == 2){
             Logger.error("User not exists on neo4j");
@@ -1364,7 +1366,6 @@ public class UserPageController {
     }
 
     public void getLpodcasts(){
-        UserService service = new UserService();
         int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequestPodcast);
         if(res == 2){
             Logger.error("User not exists on neo4j");
@@ -1381,7 +1382,6 @@ public class UserPageController {
     }
 
     public void getAuthors(){
-        UserService service = new UserService();
         int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
         if(res == 2){
             Logger.error("User not exists on neo4j");
@@ -1398,7 +1398,6 @@ public class UserPageController {
     }
 
     public void getUsers(){
-        UserService service = new UserService();
         int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
         if(res == 2){
             Logger.error("User not exists on neo4j");
