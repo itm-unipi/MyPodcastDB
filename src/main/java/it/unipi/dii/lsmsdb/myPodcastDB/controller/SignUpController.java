@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.SignUpService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
@@ -97,6 +98,8 @@ public class SignUpController {
 
     private int imageNumber;
 
+    private SignUpService service = new SignUpService();
+
     private int maxAuthorImages = 20;
 
     private int maxUserImages = 30;
@@ -157,7 +160,6 @@ public class SignUpController {
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, age, gender);
             Logger.info(user.toString());
 
-            UserService service = new UserService();
             int res = service.addUserSignUp(user);
             String logMsg = "";
             String dialogMsg = "";
@@ -211,7 +213,6 @@ public class SignUpController {
             Author author = new Author("", name, password, email, picturePath);
             Logger.info(author.toString());
 
-            AuthorService service = new AuthorService();
             int res = service.addAuthorSignUp(author);
             String logMsg = "";
             String dialogMsg = "";

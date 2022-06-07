@@ -6,6 +6,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.LoginService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
@@ -57,6 +58,8 @@ public class LoginController {
     @FXML
     private AnchorPane loginAnchorPane;
 
+
+    private LoginService service = new LoginService();
     @FXML
     public void initialize(){
 
@@ -198,7 +201,6 @@ public class LoginController {
             user.setUsername(actorName);
             user.setPassword(password);
             //user = (User)simActorService(actorName, password, actorType);
-            UserService service = new UserService();
             int res = service.getUserLogin(user);
             String msg = "";
             switch (res){
@@ -229,7 +231,6 @@ public class LoginController {
             author.setName(actorName);
             author.setPassword(password);
             //author = (Author)simActorService(actorName, password, actorType);
-            AuthorService service = new AuthorService();
             int res = service.getAuthorLogin(author);
             String msg = "";
             switch (res){
@@ -260,7 +261,6 @@ public class LoginController {
             admin.setName(actorName);
             admin.setPassword(password);
             //admin = (Admin)simActorService(actorName, password, actorType);
-            AdminService service = new AdminService();
             int res = service.getAdminLogin(admin);
             String msg = "";
             switch (res){

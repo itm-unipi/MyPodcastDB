@@ -14,25 +14,6 @@ public class AdminService {
         adminMongoManager = new AdminMongo();
     }
 
-    public int getAdminLogin(Admin admin){
-
-        int res = -1;
-        MongoManager.getInstance().openConnection();
-
-        Admin newAdmin = adminMongoManager.findAdminByName(admin.getName());
-        if(newAdmin == null)
-            res = 1;
-        else if(!admin.getPassword().equals(newAdmin.getPassword()))
-            res = 2;
-        else {
-            admin.copy(newAdmin);
-            res = 0;
-        }
-
-        MongoManager.getInstance().closeConnection();
-        return res;
-    }
-
     public int addAdmin(Admin admin){
 
         int res = -1;
