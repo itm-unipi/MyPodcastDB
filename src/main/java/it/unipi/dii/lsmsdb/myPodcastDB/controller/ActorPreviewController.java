@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
@@ -34,6 +35,15 @@ public class ActorPreviewController {
 
     @FXML
     private ImageView followButton;
+
+    @FXML
+    private Pane followButtonArea;
+
+    @FXML
+    private Pane trashButtonArea;
+
+    @FXML
+    private ImageView trashButton;
 
     private Author authorPreview;
     private User userPreview;
@@ -163,12 +173,28 @@ public class ActorPreviewController {
         }
     }
 
+    @FXML
+    void trashClick(MouseEvent event){
+        Logger.info("Trash button clicked");
+        blockClickEvent = true;
+    }
+
+    @FXML
+    void trashIn(MouseEvent event){
+        trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
+    }
+
+    @FXML
+    void trashOut(MouseEvent event){
+        trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
+    }
+
     /**************************/
     public ActorPreviewController() {
     }
 
 
-    public void setData(AnchorPane mainPage, Author author) {
+    public void setData(AnchorPane mainPage, Author author, String visitorType) {
         this.actorType = "Author";
         this.authorPreview = author;
         this.mainPage = mainPage;
@@ -178,7 +204,12 @@ public class ActorPreviewController {
         this.actorName.setText(author.getName());
         this.actorToolTip.setText(author.getName());
 
-        followButton.setVisible(false);
+        followButtonArea.setVisible(false);
+        if(!visitorType.equals("Admin"))
+            trashButtonArea.setVisible(true);
+        else
+            trashButtonArea.setVisible(false);
+
     }
     public void setData(AnchorPane mainPage, Author author, String visitorType, String visitorName, boolean isFollowed) {
         this.actorType = "Author";
@@ -192,13 +223,14 @@ public class ActorPreviewController {
         this.actorName.setText(author.getName());
         this.actorToolTip.setText(author.getName());
 
-        followButton.setVisible(true);
+        followButtonArea.setVisible(true);
+        trashButtonArea.setVisible(false);
         if(isFollowed){
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
             followStatus = true;
         }
     }
-    public void setData(AnchorPane mainPage, User user) {
+    public void setData(AnchorPane mainPage, User user, String visitorType) {
         this.actorType = "User";
         this.userPreview = user;
         this.mainPage = mainPage;
@@ -208,7 +240,11 @@ public class ActorPreviewController {
         this.actorName.setText(user.getUsername());
         this.actorToolTip.setText(user.getUsername());
 
-        followButton.setVisible(false);
+        followButtonArea.setVisible(false);
+        if(!visitorType.equals("Admin"))
+            trashButtonArea.setVisible(true);
+        else
+            trashButtonArea.setVisible(false);
     }
 
     public void setData(AnchorPane mainPage, User user, String visitorName, boolean isFollowed) {
@@ -223,7 +259,8 @@ public class ActorPreviewController {
         this.actorName.setText(user.getUsername());
         this.actorToolTip.setText(user.getUsername());
 
-        followButton.setVisible(true);
+        followButtonArea.setVisible(true);
+        trashButtonArea.setVisible(false);
         if(isFollowed){
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
             followStatus = true;

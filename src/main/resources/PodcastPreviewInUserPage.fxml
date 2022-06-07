@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
@@ -18,7 +19,7 @@
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="165.0">
                <children>
                   <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" />
-                  <HBox fx:id="buttonArea" layoutX="99.0" layoutY="1.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                  <HBox fx:id="buttonArea" layoutX="6.0" layoutY="-1.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                      <children>
                         <ImageView fx:id="watchlistButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#watchClick" onMouseEntered="#watchIn" onMouseExited="#watchOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
@@ -35,6 +36,18 @@
                         </ImageView>
                      </children>
                   </HBox>
+                  <Pane fx:id="trashButtonArea" layoutX="135.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white; -fx-background-radius: 10;">
+                     <children>
+                        <ImageView fx:id="trashButton" fitHeight="30.0" fitWidth="30.0" layoutY="1.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@img/delete_elem1.png" />
+                           </image>
+                           <viewport>
+                              <Rectangle2D />
+                           </viewport>
+                        </ImageView>
+                     </children>
+                  </Pane>
                </children>
             </Pane>
             <Label fx:id="PodcastName" alignment="CENTER" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">

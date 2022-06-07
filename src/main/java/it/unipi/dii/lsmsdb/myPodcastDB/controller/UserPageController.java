@@ -1252,7 +1252,7 @@ public class UserPageController {
             whatchlistController.setData(userPageAnchorPane, podcast,((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isInWatchlist, isLiked);
         }
         else
-            whatchlistController.setData(userPageAnchorPane, podcast);
+            whatchlistController.setData(userPageAnchorPane, podcast, MyPodcastDB.getInstance().getSessionType());
 
         // add new podcast to grid
         this.userPageWatchlistGrid.add(newPodcast, column, row);
@@ -1287,7 +1287,7 @@ public class UserPageController {
             likedController.setData(userPageAnchorPane, podcast, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isInWatchlist, isLiked);
         }
         else
-            likedController.setData(userPageAnchorPane, podcast);
+            likedController.setData(userPageAnchorPane, podcast, MyPodcastDB.getInstance().getSessionType());
 
         // add new podcast to grid
         this.userPageLikedGrid.add(newPodcast, column, row);
@@ -1318,7 +1318,7 @@ public class UserPageController {
                 authorController.setData(userPageAnchorPane, author, "User", ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
         }
         else
-            authorController.setData(userPageAnchorPane,author);
+            authorController.setData(userPageAnchorPane,author, MyPodcastDB.getInstance().getSessionType());
         this.userPageAuthorsGrid.add(newAuthor, column, row);
         column++;
     }
@@ -1344,7 +1344,7 @@ public class UserPageController {
             actorController.setData(userPageAnchorPane, user, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
         }
         else
-            actorController.setData(userPageAnchorPane, user);
+            actorController.setData(userPageAnchorPane, user, MyPodcastDB.getInstance().getSessionType());
         this.userPageUsersGrid.add(newUser, column, row);
 
     }

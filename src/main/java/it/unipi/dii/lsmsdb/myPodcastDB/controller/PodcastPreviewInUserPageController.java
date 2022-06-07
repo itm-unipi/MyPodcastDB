@@ -13,10 +13,7 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 
@@ -44,6 +41,12 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     private HBox buttonArea;
+
+    @FXML
+    private ImageView trashButton;
+
+    @FXML
+    private Pane trashButtonArea;
 
     private String actorName = "";
     boolean likeStatus = false;
@@ -225,9 +228,24 @@ public class PodcastPreviewInUserPageController {
             likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
     }
 
+    @FXML
+    void trashClick(MouseEvent event){
+        Logger.info("Trash button clicked");
+        blockClickEvent = true;
+    }
+
+    @FXML
+    void trashIn(MouseEvent event){
+        trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
+    }
+
+    @FXML
+    void trashOut(MouseEvent event){
+        trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
+    }
     /************************/
 
-    public void setData(AnchorPane mainPage, Podcast podcast) {
+    public void setData(AnchorPane mainPage, Podcast podcast, String visitorType) {
         this.mainPage = mainPage;
         this.podcastPreview = podcast;
 
@@ -242,6 +260,11 @@ public class PodcastPreviewInUserPageController {
         });
 
        buttonArea.setVisible(false);
+       if(!visitorType.equals("Admin"))
+           trashButtonArea.setVisible(true);
+       else
+           trashButtonArea.setVisible(false);
+
     }
 
     public void setData(AnchorPane mainPage, Podcast podcast, String actorName, boolean ifInWatchlist, boolean ifLiked) {
@@ -259,6 +282,7 @@ public class PodcastPreviewInUserPageController {
         });
 
         buttonArea.setVisible(true);
+        trashButtonArea.setVisible(false);
         this.actorName = actorName;
         if(ifInWatchlist) {
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
