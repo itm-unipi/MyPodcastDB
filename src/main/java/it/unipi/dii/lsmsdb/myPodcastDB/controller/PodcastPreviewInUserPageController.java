@@ -240,25 +240,43 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void trashClick(MouseEvent event){
-        Logger.info("Trash button clicked");
-        blockClickEvent = true;
-        disableClick = true;
-        podcastAnchorPane.setOpacity(0.2);
-        UserPageService service = new UserPageService();
-        service.removePodcast(actorName, podcastPreview.getId(), listType);
+        if(!disableClick){
+            Logger.info("Trash button clicked");
+            blockClickEvent = true;
+            disableClick = true;
+            podcastAnchorPane.setOpacity(0.2);
+            UserPageService service = new UserPageService();
+            service.removePodcast(actorName, podcastPreview.getId(), listType);
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
+        }
+        else{
+            Logger.info("Refresh button clicked");
+            blockClickEvent = true;
+            disableClick = false;
+            podcastAnchorPane.setOpacity(1.0);
+            UserPageService service = new UserPageService();
+            service.addPodcast(actorName, podcastPreview.getId(), listType);
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
+        }
     }
 
     @FXML
     void trashIn(MouseEvent event){
-        if(disableClick)
+        if(disableClick) {
+            podcastAnchorPane.setOpacity(1.0);
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh2.png"));
             return;
+        }
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
     }
 
     @FXML
     void trashOut(MouseEvent event){
-        if(disableClick)
+        if(disableClick) {
+            podcastAnchorPane.setOpacity(0.2);
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
             return;
+        }
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
     }
     /************************/

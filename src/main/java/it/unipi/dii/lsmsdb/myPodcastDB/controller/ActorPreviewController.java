@@ -182,28 +182,49 @@ public class ActorPreviewController {
 
     @FXML
     void trashClick(MouseEvent event){
-        Logger.info("Trash button clicked");
-        blockClickEvent = true;
-        disableClick = true;
-        actorAnchorPane.setOpacity(0.2);
-        UserPageService service = new UserPageService();
-        if(actorType.equals("Author"))
-            service.removeActor(visitorName, authorPreview.getName(), actorType );
-        else
-            service.removeActor(visitorName, userPreview.getUsername(), actorType );
+        if(!disableClick) {
+            Logger.info("Trash button clicked");
+            blockClickEvent = true;
+            disableClick = true;
+            actorAnchorPane.setOpacity(0.2);
+            UserPageService service = new UserPageService();
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
+            if (actorType.equals("Author"))
+                service.removeActor(visitorName, authorPreview.getName(), actorType);
+            else
+                service.removeActor(visitorName, userPreview.getUsername(), actorType);
+        }
+        else{
+            Logger.info("Trash button clicked");
+            blockClickEvent = true;
+            disableClick = false;
+            actorAnchorPane.setOpacity(1.0);
+            UserPageService service = new UserPageService();
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
+            if (actorType.equals("Author"))
+                service.addActor(visitorName, authorPreview.getName(), actorType);
+            else
+                service.addActor(visitorName, userPreview.getUsername(), actorType);
+        }
     }
 
     @FXML
     void trashIn(MouseEvent event){
-        if(disableClick)
+        if(disableClick) {
+            actorAnchorPane.setOpacity(1.0);
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh2.png"));
             return;
+        }
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
     }
 
     @FXML
     void trashOut(MouseEvent event){
-        if(disableClick)
+        if(disableClick) {
+            actorAnchorPane.setOpacity(0.2);
+            trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
             return;
+        }
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
     }
 
