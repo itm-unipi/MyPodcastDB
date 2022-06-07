@@ -3,8 +3,11 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -12,12 +15,29 @@
    <children>
       <VBox fx:id="podcastContainer" onMouseClicked="#onClick" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" prefHeight="230.0" prefWidth="185.0" style="-fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-               <VBox.margin>
-                  <Insets />
-               </VBox.margin>
-            </ImageView>
-            <Label fx:id="PodcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="165.0">
+               <children>
+                  <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" />
+                  <HBox fx:id="buttonArea" layoutX="99.0" layoutY="1.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                     <children>
+                        <ImageView fx:id="watchlistButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#watchClick" onMouseEntered="#watchIn" onMouseExited="#watchOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@img/star_64px.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fx:id="likeButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#likeClick" onMouseEntered="#likeIn" onMouseExited="#likeOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@img/following_30px.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+               </children>
+            </Pane>
+            <Label fx:id="PodcastName" alignment="CENTER" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
                <font>
                   <Font name="Corbel Bold" size="15.0" />
                </font>

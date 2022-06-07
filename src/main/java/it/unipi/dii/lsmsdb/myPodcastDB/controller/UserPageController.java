@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import org.javatuples.Pair;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -199,6 +200,10 @@ public class UserPageController {
     private List<Podcast> lPodcasts;
     private List<Author> authors;
     private List<User> users;
+    private List<String> wPodcastsByVisitor;
+    private List<String> lPodcastsByVisitor;
+    private List<String> authorsByVisitor;
+    private List<String> usersByVisitor;
 
     private int podcastRowSize = 5;
     private int actorRowSize = 8;
@@ -616,15 +621,7 @@ public class UserPageController {
                 dialogMsg = "You already followed user";
                 break;
             case 6:
-                logMsg = "Adding follow relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case 7:
                 logMsg = "Follow relation already not exists";
-                dialogMsg = "Your already unfollowed user";
-                break;
-            case 8:
-                logMsg = "Deleting follow relation failed";
                 dialogMsg = "Operation failed";
                 break;
             case -1:
@@ -885,6 +882,10 @@ public class UserPageController {
         lPodcasts = new ArrayList<>();
         authors = new ArrayList<>();
         users = new ArrayList<>();
+        wPodcastsByVisitor = new ArrayList<>();
+        lPodcastsByVisitor = new ArrayList<>();
+        authorsByVisitor = new ArrayList<>();
+        usersByVisitor = new ArrayList<>();
         pageOwner = new User();
         ObservableList<String> countryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCountries());
         ObservableList<String> categoryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCategories());
@@ -900,12 +901,33 @@ public class UserPageController {
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
         UserService service = new UserService();
-        int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, newRequestPodcast, newRequestActor);
+        int res = service.loadUserPageProfile(
+                actorType,
+                sessionActorName,
+                pageOwner, wPodcasts, lPodcasts, authors, users,
+                wPodcastsByVisitor, lPodcastsByVisitor, authorsByVisitor, usersByVisitor,
+                newRequestPodcast, newRequestActor
+                );
         if(res == 0)
-            Logger.success("Load user success");
+            Logger.success("Load user profile success");
         else if(res == 1){
-            Logger.error("User not exists");
+            Logger.error("User not exists on mongo");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
+            return;
+        }
+        else if(res == 2){
+            Logger.error("User not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
+            return;
+        }
+        else if(res == 3){
+            Logger.error("User visitor not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Your user account not exists");
+            return;
+        }
+        else if(res == 4){
+            Logger.error("Author visitor not exists on neo4j");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Your author account not exists");
             return;
         }
         else{
@@ -1215,7 +1237,19 @@ public class UserPageController {
         // create new podcast element
         AnchorPane newPodcast = likedfxmlLoader.load();
         PodcastPreviewInUserPageController whatchlistController = likedfxmlLoader.getController();
-        whatchlistController.setData(podcast);
+
+        boolean isInWatchlist = false;
+        boolean isLiked = false;
+        if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
+            if(wPodcastsByVisitor.contains(podcast.getId()))
+                isInWatchlist = true;
+            if(lPodcastsByVisitor.contains(podcast.getId()))
+                isLiked = true;
+
+            whatchlistController.setData(userPageAnchorPane, podcast,((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isInWatchlist, isLiked);
+        }
+        else
+            whatchlistController.setData(userPageAnchorPane, podcast);
 
         // add new podcast to grid
         this.userPageWatchlistGrid.add(newPodcast, column, row);
@@ -1238,7 +1272,19 @@ public class UserPageController {
         // create new podcast element
         AnchorPane newPodcast = likedfxmlLoader.load();
         PodcastPreviewInUserPageController likedController = likedfxmlLoader.getController();
-        likedController.setData(podcast);
+
+        boolean isInWatchlist = false;
+        boolean isLiked = false;
+        if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
+            if(wPodcastsByVisitor.contains(podcast.getId()))
+                isInWatchlist = true;
+            if(lPodcastsByVisitor.contains(podcast.getId()))
+                isLiked = true;
+
+            likedController.setData(userPageAnchorPane, podcast, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isInWatchlist, isLiked);
+        }
+        else
+            likedController.setData(userPageAnchorPane, podcast);
 
         // add new podcast to grid
         this.userPageLikedGrid.add(newPodcast, column, row);
@@ -1256,7 +1302,20 @@ public class UserPageController {
         authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
         AnchorPane newAuthor = authorfxmlLoader.load();
         ActorPreviewController authorController = authorfxmlLoader.getController();
-        authorController.setData(author);
+
+        boolean isFollowed = false;
+        if(MyPodcastDB.getInstance().getSessionType().equals("Author") ||
+                (MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername()))){
+            if(authorsByVisitor.contains(author.getId()))
+                isFollowed = true;
+
+            if(MyPodcastDB.getInstance().getSessionType().equals("Author"))
+                authorController.setData(author, "Author", ((Author)(MyPodcastDB.getInstance().getSessionActor())).getName(), isFollowed);
+            else
+                authorController.setData(author, "User", ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
+        }
+        else
+            authorController.setData(author);
         this.userPageAuthorsGrid.add(newAuthor, column, row);
         column++;
     }
@@ -1274,7 +1333,15 @@ public class UserPageController {
         userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
         AnchorPane newUser = userfxmlLoader.load();
         ActorPreviewController actorController = userfxmlLoader.getController();
-        actorController.setData(user);
+        boolean isFollowed = false;
+        if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
+            if(usersByVisitor.contains(user.getId()))
+                isFollowed = true;
+
+            actorController.setData(user, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
+        }
+        else
+            actorController.setData(user);
         this.userPageUsersGrid.add(newUser, column, row);
 
     }

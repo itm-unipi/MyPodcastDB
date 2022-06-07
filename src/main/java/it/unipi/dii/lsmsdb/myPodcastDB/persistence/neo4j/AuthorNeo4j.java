@@ -185,12 +185,41 @@ public class AuthorNeo4j {
         return authors;
     }
 
-    public List<Author> showFollowedAuthorsByAuthor(String name, int limit) {
+
+    public List<Author> showFollowedAuthorsByUser(String username) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = " MATCH (u:User { username: $username})-[r:FOLLOWS]->(a:Author)" + "\n" +
+                "RETURN a";
+        Value params = parameters("username", username);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Author> authors = new ArrayList<>();
+        for (Record record : result) {
+            String name = record.get(0).get("name").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+            Author author = new Author("", name, picturePath);
+            authors.add(author);
+        }
+
+        return authors;
+    }
+
+    public List<Author> showFollowedAuthorsByAuthor(String name, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author)" + "\n" +
                 "RETURN a2" + "\n" +
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("name", name, "limit", limit);
+        Value params = parameters("name", name, "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {
@@ -212,6 +241,8 @@ public class AuthorNeo4j {
 
         return authors;
     }
+
+
 
     public List<Author> showSuggestedAuthorsFollowedByFollowedUser(String username, int limit) {
         Neo4jManager manager = Neo4jManager.getInstance();

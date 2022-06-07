@@ -79,7 +79,7 @@ public class AuthorService {
         Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
         author.copy(foundAuthor);
 
-        List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit);
+        List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
         if (followedAuthor != null && !followedAuthor.isEmpty())
             followed.addAll(followedAuthor);
 

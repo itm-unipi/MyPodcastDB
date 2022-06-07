@@ -47,8 +47,26 @@ public class ActorPreviewController {
         this.actorName.setText(author.getName());
         this.actorToolTip.setText(author.getName());
     }
+    public void setData(Author author, String actorType, String actorName, boolean isFollowed) {
+        actorType = "Author";
+        this.authorPreview = author;
 
+        Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
+        this.actorImage.setImage(image);
+        this.actorName.setText(author.getName());
+        this.actorToolTip.setText(author.getName());
+    }
     public void setData(User user) {
+        actorType = "User";
+        this.userPreview = user;
+
+        Image image = ImageCache.getImageFromLocalPath(user.getPicturePath());
+        this.actorImage.setImage(image);
+        this.actorName.setText(user.getUsername());
+        this.actorToolTip.setText(user.getUsername());
+    }
+
+    public void setData(User user, String actorName, boolean isFollowed) {
         actorType = "User";
         this.userPreview = user;
 
