@@ -157,7 +157,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="250.0">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backWatchlist" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="leftArrowWatchlist" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backWatchlist" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -167,14 +167,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollWatchlist" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridWatchlist" alignment="CENTER_LEFT" hgap="7.0" prefHeight="230.0" prefWidth="1054.0">
+                                                <GridPane fx:id="gridWatchlist" alignment="CENTER_LEFT" hgap="7.0" onScroll="#onScrollWatchlist" prefHeight="230.0" prefWidth="1054.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextWatchlist" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rightArrowWatchlist" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextWatchlist" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -203,7 +203,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedCategory" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="leftArrowTopGenres" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedCategory" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -213,14 +213,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollSuggestedForCategory" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridSuggestedForCategory" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                                <GridPane fx:id="gridSuggestedForCategory" alignment="CENTER_LEFT" hgap="7.0" onScroll="#onScrollTopGenres" prefWidth="1045.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedCategory" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rightArrowTopGenres" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedCategory" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -249,7 +249,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="250.0">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backTopRated" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="leftArrowTopRated" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backTopRated" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -259,14 +259,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollTopRated" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridTopRated" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                                <GridPane fx:id="gridTopRated" alignment="CENTER_LEFT" hgap="7.0" onScroll="#onScrollTopRated" prefWidth="1045.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextTopRated" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rightArrowTopRated" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextTopRated" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -287,7 +287,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backMostLikedPodcasts" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="leftArrowMostLiked" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backMostLikedPodcasts" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -297,14 +297,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollMostLikedPodcasts" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridMostLikedPodcasts" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                                <GridPane fx:id="gridMostLikedPodcasts" alignment="CENTER_LEFT" hgap="7.0" onScroll="#onScrollMostLiked" prefWidth="1045.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextMostLikedPodcasts" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rightArrowMostLiked" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextMostLikedPodcasts" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -325,7 +325,7 @@
                                     </Label>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backMostFollowedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-20.0">
+                                          <ImageView fx:id="leftArrowMostFollowedAuthors" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backMostFollowedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-20.0">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -335,14 +335,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollMostFollowedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="197.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridMostFollowedAuthors" alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0">
+                                                <GridPane fx:id="gridMostFollowedAuthors" alignment="CENTER_LEFT" onScroll="#onScrollMostFollowed" prefHeight="0.0" prefWidth="0.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextMostFollowedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-20.0">
+                                          <ImageView fx:id="rightArrowMostFollowedAuthors" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextMostFollowedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-20.0">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -371,7 +371,7 @@
                                     </Label>
                                     <HBox alignment="CENTER" prefHeight="250.0" prefWidth="1025.0">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backPodcastsBasedOnWatchlist" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="leftArrowBasedOnWatchlist" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backPodcastsBasedOnWatchlist" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -381,14 +381,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollPodcastsBasedOnWatchlist" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridPodcastsBasedOnWatchlist" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                                <GridPane fx:id="gridPodcastsBasedOnWatchlist" alignment="CENTER_LEFT" hgap="7.0" onScroll="#onScrollBasedOnWatchlist" prefWidth="1045.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextPodcastsBasedOnWatchlist" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rightArrowBasedOnWatchlist" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextPodcastsBasedOnWatchlist" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -414,7 +414,7 @@
                                     </Label>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
+                                          <ImageView fx:id="leftArrowAuthorsBasedOnUser" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -424,14 +424,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollSuggestedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="180.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridSuggestedAuthors" alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0">
+                                                <GridPane fx:id="gridSuggestedAuthors" alignment="CENTER_LEFT" onScroll="#onScrollAuthorsBasedOnUsers" prefHeight="0.0" prefWidth="0.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
+                                          <ImageView fx:id="rightArrowAuthorsBasedOnUser" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedAuthors" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>
@@ -471,9 +471,14 @@
                                           <Font name="Corbel Light" size="22.0" />
                                        </font>
                                     </Label>
+                                    <Label prefWidth="1045.0" text="Podcasts liked by your followed users.">
+                                       <font>
+                                          <Font name="Corbel Light" size="16.0" />
+                                       </font>
+                                    </Label>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedUser" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="leftArrowAuthorsBasedOnFollowedUsers" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backSuggestedUser" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/backArrow.png" />
                                              </image>
@@ -483,14 +488,14 @@
                                           </ImageView>
                                           <ScrollPane fx:id="scrollSuggestedForUser" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="250.0" prefHeight="252.0" prefWidth="1064.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
-                                                <GridPane fx:id="gridSuggestedForUser" alignment="CENTER_LEFT" hgap="7.0" prefWidth="1045.0">
+                                                <GridPane fx:id="gridSuggestedForUser" alignment="CENTER_LEFT" hgap="7.0" onScroll="#onScrollBasedOnFollowedUsers" prefWidth="1045.0">
                                                    <rowConstraints>
                                                       <RowConstraints minHeight="10.0" prefHeight="30.0" />
                                                    </rowConstraints>
                                                 </GridPane>
                                              </content>
                                           </ScrollPane>
-                                          <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedUser" pickOnBounds="true" preserveRatio="true">
+                                          <ImageView fx:id="rightArrowAuthorsBasedOnFollowedUsers" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextSuggestedUser" pickOnBounds="true" preserveRatio="true">
                                              <image>
                                                 <Image url="@img/forwardArrow.png" />
                                              </image>

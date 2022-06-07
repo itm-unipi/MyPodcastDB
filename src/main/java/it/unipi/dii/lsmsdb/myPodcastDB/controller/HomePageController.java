@@ -14,16 +14,14 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Box;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import java.io.IOException;
@@ -53,11 +51,21 @@ public class HomePageController {
 
     private List<Pair<Author, Boolean>> suggestedAuthors;
 
-    private int limit;
-
     private int row;
 
     private int column;
+
+    /*** Variables to manage the scroll behavior ****/
+    private final int podcastsToRetrieve;
+    private final int podcastsToLoadInGrid;
+    private boolean noMorePodcastsWatchlist;
+    private boolean noMorePodcastsTopGenres;
+    private boolean noMoreBasedOnWatchlist;
+    private final int authorsToRetrieve;
+    private final int authorsToLoadInGrid;
+    private boolean noMoreSuggestedAuthors;
+    private boolean noMoreBasedOnUsers;
+    /***********************************************/
 
     @FXML
     private BorderPane MainPage;
@@ -117,6 +125,9 @@ public class HomePageController {
     private ScrollPane scrollMostLikedPodcasts;
 
     @FXML
+    private ScrollPane scrollWatchlist;
+
+    @FXML
     private ScrollPane scrollPodcastsBasedOnWatchlist;
 
     @FXML
@@ -130,9 +141,6 @@ public class HomePageController {
 
     @FXML
     private ScrollPane scrollTopRated;
-
-    @FXML
-    private ScrollPane scrollWatchlist;
 
     @FXML
     private VBox boxActorProfile;
@@ -170,6 +178,53 @@ public class HomePageController {
     @FXML
     private HBox boxBtnShowMoreSuggested;
 
+    @FXML
+    private ImageView leftArrowWatchlist;
+
+    @FXML
+    private ImageView rightArrowWatchlist;
+
+    @FXML
+    private ImageView leftArrowTopGenres;
+
+    @FXML
+    private ImageView rightArrowTopGenres;
+
+    @FXML
+    private ImageView leftArrowTopRated;
+
+    @FXML
+    private ImageView rightArrowTopRated;
+
+    @FXML
+    private ImageView leftArrowMostLiked;
+
+    @FXML
+    private ImageView rightArrowMostLiked;
+
+    @FXML
+    private ImageView leftArrowMostFollowedAuthors;
+
+    @FXML
+    private ImageView rightArrowMostFollowedAuthors;
+
+    @FXML
+    private ImageView leftArrowBasedOnWatchlist;
+
+    @FXML
+    private ImageView rightArrowBasedOnWatchlist;
+
+    @FXML
+    private ImageView leftArrowAuthorsBasedOnUser;
+
+    @FXML
+    private ImageView rightArrowAuthorsBasedOnUser;
+    @FXML
+    private ImageView leftArrowAuthorsBasedOnFollowedUsers;
+
+    @FXML
+    private ImageView rightArrowAuthorsBasedOnFollowedUsers;
+
     public HomePageController() {
         // Load information about the actor of the session
         this.actorType = MyPodcastDB.getInstance().getSessionType();
@@ -184,8 +239,20 @@ public class HomePageController {
         this.basedOnWatchlist = new ArrayList<>();
         this.suggestedAuthors = new ArrayList<>();
 
-        // Limit for each query
-        this.limit = 5;
+        // Podcasts retrieved from the databases in one request (corresponds to the "limit")
+        this.podcastsToRetrieve = 30;
+        // Podcasts to add to the grid at each "scroll finished" (taken from the "podcasts in memory" retrieved)
+        this.podcastsToLoadInGrid = 6;
+
+        this.authorsToRetrieve = 30;
+        this.authorsToLoadInGrid = 8;
+
+        // Used to avoid useless call to the services
+        this.noMorePodcastsWatchlist = false;
+        this.noMorePodcastsTopGenres = false;
+        this.noMoreBasedOnWatchlist = false;
+        this.noMoreSuggestedAuthors = false;
+        this.noMoreBasedOnUsers = false;
     }
 
     /*********** Navigator Events (Profile, Home, Search) *************/
@@ -259,68 +326,38 @@ public class HomePageController {
     @FXML
     void nextMostLikedPodcasts(MouseEvent event) {
         Logger.info("next podcast in mostLikedPodcasts");
-        double scrollValue = 1;
-        if (scrollMostLikedPodcasts.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollMostLikedPodcasts.setHvalue(scrollMostLikedPodcasts.getHvalue() + scrollValue);
     }
 
     @FXML
     void backMostLikedPodcasts(MouseEvent event) {
         Logger.info("back podcast in mostLikedPodcasts");
-        double scrollValue = 1;
-        if (scrollMostLikedPodcasts.getHvalue() == 0.0)
-            scrollMostLikedPodcasts.setHvalue(1.0);
-        else
-            scrollMostLikedPodcasts.setHvalue(scrollMostLikedPodcasts.getHvalue() - scrollValue);
     }
 
     @FXML
     void nextSuggestedAuthor(MouseEvent event) {
         Logger.info("next suggested author");
-        double scrollValue = 1;
-        if (scrollSuggestedForAuthor.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollSuggestedForAuthor.setHvalue(scrollSuggestedForAuthor.getHvalue() + scrollValue);
     }
 
     @FXML
     void backSuggestedAuthor(MouseEvent event) {
         Logger.info("back podcast author");
         double scrollValue = 1;
-        if (scrollSuggestedForAuthor.getHvalue() == 0.0)
-            scrollSuggestedForAuthor.setHvalue(1.0);
-        else
-            scrollSuggestedForAuthor.setHvalue(scrollSuggestedForAuthor.getHvalue() - scrollValue);
     }
 
     @FXML
     void nextWatchlist(MouseEvent event) {
         Logger.info("next podcast in watchlist");
-        double scrollValue = 1;
-        if (scrollWatchlist.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollWatchlist.setHvalue(scrollWatchlist.getHvalue() + scrollValue);
     }
 
     @FXML
     void backWatchlist(MouseEvent event) {
         Logger.info("back podcast in watchlist");
-        double scrollValue = 1;
-        if (scrollWatchlist.getHvalue() == 0.0)
-            scrollWatchlist.setHvalue(1.0);
-        else
-            scrollWatchlist.setHvalue(scrollWatchlist.getHvalue() - scrollValue);
     }
 
     @FXML
     void backSuggestedCategory(MouseEvent event) {
         Logger.info("back podcast category");
         double scrollValue = 1;
-        if (scrollSuggestedForCategory.getHvalue() == 0.0)
-            scrollSuggestedForCategory.setHvalue(1.0);
-        else
-            scrollSuggestedForCategory.setHvalue(scrollSuggestedForCategory.getHvalue() - scrollValue);
     }
 
     @FXML
@@ -376,26 +413,25 @@ public class HomePageController {
     @FXML
     void nextSuggestedCategory(MouseEvent event) {
         Logger.info("next suggested category");
-        double scrollValue = 1;
-        if (scrollSuggestedForCategory.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollSuggestedForCategory.setHvalue(scrollSuggestedForCategory.getHvalue() + scrollValue);
     }
 
     @FXML
     void nextSuggestedUser(MouseEvent event) {
         Logger.info("next suggested user");
-        double scrollValue = 1;
-        if (scrollSuggestedForUser.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollSuggestedForUser.setHvalue(scrollSuggestedForUser.getHvalue() + scrollValue);
     }
 
     /********* LOADING GRIDS *********/
-
-    void clearIndexes() {
-        this.row = 0;
-        this.column = 0;
+    void clearIndexes(boolean newAuthors, boolean newPodcasts, GridPane grid) {
+        if (newPodcasts) {
+            this.row = 0;
+            this.column = grid.getColumnCount();
+        } else if (newAuthors) {
+            this.row = 0;
+            this.column = grid.getColumnCount();
+        } else {
+            this.row = 0;
+            this.column = 0;
+        }
     }
 
     void hideEmptyGrids() {
@@ -436,9 +472,12 @@ public class HomePageController {
     }
 
     // Show podcasts in the user watchlist
-    void loadWatchlistGrid() throws IOException {
-        clearIndexes();
-        for (Podcast podcast : this.watchlist){
+    void loadWatchlistGrid(boolean newLoad) throws IOException {
+        clearIndexes(false, newLoad, gridWatchlist);
+
+        int maxValue = Math.min(this.watchlist.size(), (gridWatchlist.getColumnCount() + this.podcastsToLoadInGrid));
+
+        for (Podcast podcast : this.watchlist.subList(this.gridWatchlist.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
@@ -451,9 +490,12 @@ public class HomePageController {
     }
 
     // Suggested on podcast's category user liked
-    void loadSuggestedBasedOnCategoryGrid() throws IOException {
-        clearIndexes();
-        for (Podcast podcast : this.topGenres){
+    void loadSuggestedBasedOnCategoryGrid(boolean newLoad) throws IOException {
+        clearIndexes(false, newLoad, gridSuggestedForCategory);
+
+        int maxValue = Math.min(this.topGenres.size(), (gridSuggestedForCategory.getColumnCount() + this.podcastsToLoadInGrid));
+
+        for (Podcast podcast : this.topGenres.subList(gridSuggestedForCategory.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
@@ -466,9 +508,12 @@ public class HomePageController {
     }
 
     // Suggestions based on authors in user's watchlist
-    void loadSuggestedBasedOnWatchlistGrid() throws IOException {
-        clearIndexes();
-        for (Podcast podcast : this.basedOnWatchlist){
+    void loadSuggestedBasedOnWatchlistGrid(boolean newLoad) throws IOException {
+        clearIndexes(false, newLoad, gridPodcastsBasedOnWatchlist);
+
+        int maxValue = Math.min(this.basedOnWatchlist.size(), (gridPodcastsBasedOnWatchlist.getColumnCount() + this.podcastsToLoadInGrid));
+
+        for (Podcast podcast : this.basedOnWatchlist.subList(gridPodcastsBasedOnWatchlist.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
@@ -481,9 +526,12 @@ public class HomePageController {
     }
 
     // Suggest authors based on user you follow
-    void loadSuggestedAuthorsBasedOnUserGrid() throws IOException {
-        clearIndexes();
-        for (Pair<Author, Boolean> author : this.suggestedAuthors) {
+    void loadSuggestedAuthorsBasedOnUserGrid(boolean newLoad) throws IOException {
+        clearIndexes(newLoad, false, gridSuggestedAuthors);
+
+        int maxValue = Math.min(this.suggestedAuthors.size(), (gridSuggestedAuthors.getColumnCount() + this.authorsToLoadInGrid));
+
+        for (Pair<Author, Boolean> author : this.suggestedAuthors.subList(gridSuggestedAuthors.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
@@ -495,9 +543,11 @@ public class HomePageController {
         }
     }
 
-    void loadSuggestedOnFollowedUsers() throws IOException {
-        clearIndexes();
-        for (Podcast podcast : this.basedOnFollowedUsers){
+    void loadSuggestedOnFollowedUsers(boolean newLoad) throws IOException {
+        clearIndexes(false, newLoad, gridSuggestedForUser);
+
+        int maxValue = Math.min(this.basedOnFollowedUsers.size(), (gridSuggestedForUser.getColumnCount() + this.podcastsToLoadInGrid));
+        for (Podcast podcast : this.basedOnFollowedUsers.subList(gridSuggestedForUser.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
@@ -521,9 +571,11 @@ public class HomePageController {
     }
 
     // Grids available to everyone
-    void loadTopRatedPodcasts() throws IOException {
-        clearIndexes();
-        for (Triplet<Podcast, Float, Boolean> podcast : this.topRated){
+    void loadTopRatedPodcasts(boolean newLoad) throws IOException {
+        clearIndexes(false, newLoad, gridTopRated);
+
+        int maxValue = Math.min(this.topRated.size(), (gridTopRated.getColumnCount() + this.podcastsToLoadInGrid));
+        for (Triplet<Podcast, Float, Boolean> podcast : this.topRated.subList(gridTopRated.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
@@ -539,9 +591,11 @@ public class HomePageController {
         }
     }
 
-    void loadMostLikedPodcasts() throws IOException {
-        clearIndexes();
-        for (Pair<Podcast, Integer> podcast : this.mostLikedPodcasts){
+    void loadMostLikedPodcasts(boolean newLoad) throws IOException {
+        clearIndexes(false, newLoad, gridMostLikedPodcasts);
+
+        int maxValue = Math.min(this.mostLikedPodcasts.size(), (gridMostLikedPodcasts.getColumnCount() + this.podcastsToLoadInGrid));
+        for (Pair<Podcast, Integer> podcast : this.mostLikedPodcasts.subList(gridMostLikedPodcasts.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("PodcastPreview.fxml"));
 
@@ -553,9 +607,11 @@ public class HomePageController {
         }
     }
 
-    void loadMostFollowedAuthors() throws IOException {
-        clearIndexes();
-        for (Triplet<Author, Integer, Boolean> author : this.mostFollowedAuthors) {
+    void loadMostFollowedAuthors(boolean newLoad) throws IOException {
+        clearIndexes(newLoad, false, gridMostFollowedAuthors);
+
+        int maxValue = Math.min(this.mostFollowedAuthors.size(), (gridMostFollowedAuthors.getColumnCount() + this.authorsToLoadInGrid));
+        for (Triplet<Author, Integer, Boolean> author : this.mostFollowedAuthors.subList(gridMostFollowedAuthors.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
@@ -570,8 +626,8 @@ public class HomePageController {
     @FXML
     void onClickShowBasedOnFollowedUsers(MouseEvent event) throws IOException {
         UserService userService = new UserService();
-        userService.loadMoreSuggested(this.basedOnFollowedUsers, this.limit);
-        loadSuggestedOnFollowedUsers();
+        this.noMoreBasedOnUsers = userService.loadMoreSuggested(this.basedOnFollowedUsers, this.podcastsToRetrieve, 0);
+        loadSuggestedOnFollowedUsers(false);
     }
 
     @FXML
@@ -582,6 +638,211 @@ public class HomePageController {
     @FXML
     void onExitedBtnShow(MouseEvent event) {
         this.btnShowMoreSuggested.setStyle("-fx-background-color: #5b9bd2; -fx-background-radius: 10; -fx-background-insets: 0; -fx-border-color: transparent; -fx-border-radius: 10");
+    }
+
+    /**** SCROLL EVENTS *****/
+    @FXML
+    void onScrollAuthorsBasedOnUsers(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowAuthorsBasedOnUser.setVisible(scrollSuggestedAuthors.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowAuthorsBasedOnUser.setVisible(scrollSuggestedAuthors.getHvalue() != 1.0);
+        updateAuthorsBasedOnUserGrid();
+    }
+
+    void updateAuthorsBasedOnUserGrid() throws IOException {
+        if (scrollSuggestedAuthors.getHvalue() == 1) {
+            Logger.info("Authors loaded and ready to be shown in the grid: " + (this.suggestedAuthors.size() - gridSuggestedAuthors.getColumnCount()));
+
+            if ((this.suggestedAuthors.size() - gridSuggestedAuthors.getColumnCount()) == 0 && !this.noMoreSuggestedAuthors) {
+                Logger.info("(Call to the service) Trying to load new " + this.authorsToRetrieve + " authors in memory");
+
+                UserService userService = new UserService();
+                this.noMoreSuggestedAuthors = userService.loadSuggestedAuthors(this.suggestedAuthors, this.authorsToRetrieve, this.suggestedAuthors.size());
+
+                Logger.info("(End call service) Total authors loaded in memory: " + this.suggestedAuthors.size() + " | Authors available to be shown: " + (this.suggestedAuthors.size() - this.gridSuggestedAuthors.getColumnCount()));
+                loadSuggestedAuthorsBasedOnUserGrid(true);
+
+            } else {
+                Logger.info("Authors loaded in the grid: " + this.gridSuggestedAuthors.getColumnCount() + " | Authors in memory: " + this.suggestedAuthors.size());
+                // Show authors already retrieved from the database
+                loadSuggestedAuthorsBasedOnUserGrid(true);
+            }
+        }
+    }
+
+    @FXML
+    void onScrollBasedOnFollowedUsers(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowAuthorsBasedOnFollowedUsers.setVisible(scrollSuggestedForUser.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowAuthorsBasedOnFollowedUsers.setVisible(scrollSuggestedForUser.getHvalue() != 1.0);
+        updateAuthorsBasedOnFollowdUsersGrid();
+    }
+
+    void updateAuthorsBasedOnFollowdUsersGrid() throws IOException {
+        if (scrollSuggestedForUser.getHvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.basedOnWatchlist.size() - gridSuggestedForUser.getColumnCount()));
+
+            if ((this.basedOnFollowedUsers.size() - gridSuggestedForUser.getColumnCount()) == 0 && !this.noMoreBasedOnUsers) {
+                Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
+
+                UserService userService = new UserService();
+                this.noMoreBasedOnUsers = userService.loadMoreSuggested(this.basedOnFollowedUsers, this.podcastsToRetrieve, this.basedOnFollowedUsers.size());
+
+                Logger.info("(End call service) Total podcasts loaded in memory: " + this.basedOnFollowedUsers.size() + " | Podcasts available to be shown: " + (this.basedOnFollowedUsers.size() - this.gridSuggestedForUser.getColumnCount()));
+                loadSuggestedOnFollowedUsers(true);
+
+            } else {
+                Logger.info("Podcasts loaded in the grid: " + this.gridSuggestedForUser.getColumnCount() + " | Podcasts in memory: " + this.basedOnFollowedUsers.size());
+                // Show podcasts already retrieved from the database
+                loadSuggestedOnFollowedUsers(true);
+            }
+        }
+    }
+
+    @FXML
+    void onScrollBasedOnWatchlist(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowBasedOnWatchlist.setVisible(scrollPodcastsBasedOnWatchlist.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowBasedOnWatchlist.setVisible(scrollPodcastsBasedOnWatchlist.getHvalue() != 1.0);
+        updateBasedOnWatchlistGrid();
+    }
+
+    void updateBasedOnWatchlistGrid() throws IOException {
+        if (scrollPodcastsBasedOnWatchlist.getHvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.basedOnWatchlist.size() - gridPodcastsBasedOnWatchlist.getColumnCount()));
+
+            if ((this.basedOnWatchlist.size() - gridPodcastsBasedOnWatchlist.getColumnCount()) == 0 && !this.noMoreBasedOnWatchlist) {
+                Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
+
+                UserService userService = new UserService();
+                this.noMoreBasedOnWatchlist = userService.loadBasedOnWatchlist(this.basedOnWatchlist, this.podcastsToRetrieve, this.basedOnWatchlist.size());
+
+                Logger.info("(End call service) Total podcasts loaded in memory: " + this.basedOnWatchlist.size() + " | Podcasts available to be shown: " + (this.basedOnWatchlist.size() - this.gridPodcastsBasedOnWatchlist.getColumnCount()));
+                loadSuggestedBasedOnWatchlistGrid(true);
+
+            } else {
+                Logger.info("Podcasts loaded in the grid: " + this.gridPodcastsBasedOnWatchlist.getColumnCount() + " | Podcasts in memory: " + this.basedOnWatchlist.size());
+                // Show podcasts already retrieved from the database
+                loadSuggestedBasedOnWatchlistGrid(true);
+            }
+        }
+    }
+
+    @FXML
+    void onScrollMostFollowed(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowMostFollowedAuthors.setVisible(scrollMostFollowedAuthors.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowMostFollowedAuthors.setVisible(scrollMostFollowedAuthors.getHvalue() != 1.0);
+        updateMostFollowedGrid();
+    }
+
+    void updateMostFollowedGrid() throws IOException {
+        if (scrollMostFollowedAuthors.getHvalue() == 1) {
+            Logger.info("Authors loaded and ready to be shown in the grid: " + (this.mostFollowedAuthors.size() - gridMostFollowedAuthors.getColumnCount()));
+            Logger.info("Authors loaded in the grid: " + this.gridMostFollowedAuthors.getColumnCount() + " | Authors in memory: " + this.mostFollowedAuthors.size());
+            // Show podcasts already retrieved from the database
+            loadMostFollowedAuthors(true);
+        }
+    }
+
+    @FXML
+    void onScrollMostLiked(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowMostLiked.setVisible(scrollMostLikedPodcasts.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowMostLiked.setVisible(scrollMostLikedPodcasts.getHvalue() != 1.0);
+        updateMostLikedGrid();
+    }
+
+    void updateMostLikedGrid() throws IOException {
+        if (scrollMostLikedPodcasts.getHvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.mostLikedPodcasts.size() - gridMostLikedPodcasts.getColumnCount()));
+            Logger.info("Podcasts loaded in the grid: " + this.gridMostLikedPodcasts.getColumnCount() + " | Podcasts in memory: " + this.mostLikedPodcasts.size());
+            // Show podcasts already retrieved from the database
+            loadMostLikedPodcasts(true);
+        }
+    }
+
+    @FXML
+    void onScrollTopGenres(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowTopGenres.setVisible(scrollSuggestedForCategory.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowTopGenres.setVisible(scrollSuggestedForCategory.getHvalue() != 1.0);
+        updateTopGenresGrid();
+    }
+
+    void updateTopGenresGrid() throws IOException {
+        if (scrollSuggestedForCategory.getHvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.topGenres.size() - gridSuggestedForCategory.getColumnCount()));
+
+            if ((this.topGenres.size() - gridSuggestedForCategory.getColumnCount()) == 0 && !this.noMorePodcastsTopGenres) {
+                Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
+
+                UserService userService = new UserService();
+                this.noMorePodcastsTopGenres = userService.loadTopGenres(this.topGenres, this.podcastsToRetrieve, this.topGenres.size());
+
+                Logger.info("(End call service) Total podcasts loaded in memory: " + this.topGenres.size() + " | Podcasts available to be shown: " + (this.topGenres.size() - this.gridSuggestedForCategory.getColumnCount()));
+                loadSuggestedBasedOnCategoryGrid(true);
+
+            } else {
+                Logger.info("Podcasts loaded in the grid: " + this.gridSuggestedForCategory.getColumnCount() + " | Podcasts in memory: " + this.topGenres.size());
+                // Show podcasts already retrieved from the database
+                loadSuggestedBasedOnCategoryGrid(true);
+            }
+        }
+    }
+
+    @FXML
+    void onScrollTopRated(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowTopRated.setVisible(scrollTopRated.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowTopRated.setVisible(scrollTopRated.getHvalue() != 1.0);
+        updateTopRatedGrid();
+    }
+
+    void updateTopRatedGrid() throws IOException {
+        if (scrollTopRated.getHvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.topRated.size() - gridTopRated.getColumnCount()));
+            Logger.info("Podcasts loaded in the grid: " + this.gridTopRated.getColumnCount() + " | Podcasts in memory: " + this.topRated.size());
+            // Show podcasts already retrieved from the database
+            loadTopRatedPodcasts(true);
+        }
+    }
+
+    @FXML
+    void onScrollWatchlist(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrowWatchlist.setVisible(scrollWatchlist.getHvalue() != 0);
+        // Hide right arrow
+        rightArrowWatchlist.setVisible(scrollWatchlist.getHvalue() != 1.0);
+        updateWatchlistGrid();
+    }
+
+    void updateWatchlistGrid() throws IOException {
+        if (scrollWatchlist.getHvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.watchlist.size() - gridWatchlist.getColumnCount()));
+
+            if ((this.watchlist.size() - gridWatchlist.getColumnCount()) == 0 && !this.noMorePodcastsWatchlist) {
+                Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
+
+                UserService userService = new UserService();
+                this.noMorePodcastsWatchlist = userService.loadWatchlist(this.watchlist, this.podcastsToRetrieve, this.watchlist.size());
+
+                Logger.info("(End call service) Total podcasts loaded in memory: " + this.watchlist.size() + " | Podcasts available to be shown: " + (this.watchlist.size() - this.gridWatchlist.getColumnCount()));
+                loadWatchlistGrid(true);
+
+            } else {
+                Logger.info("Podcasts loaded in the grid: " + this.gridWatchlist.getColumnCount() + " | Podcasts in memory: " + this.watchlist.size());
+                // Show podcasts already retrieved from the database
+                loadWatchlistGrid(true);
+            }
+        }
     }
 
     public void initialize() throws IOException {
@@ -597,7 +858,7 @@ public class HomePageController {
 
                 // Homepage load as author
                 AuthorService authorService = new AuthorService();
-                authorService.loadHomepage(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, 5);
+                authorService.loadHomepage(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.authorsToRetrieve);
             }
             case "User" -> {
                 User sessionActor = (User) MyPodcastDB.getInstance().getSessionActor();
@@ -610,7 +871,8 @@ public class HomePageController {
 
                 // Homepage load as user
                 UserService userService = new UserService();
-                userService.loadHomepageRegistered(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.watchlist, this.topGenres, this.basedOnWatchlist, this.suggestedAuthors, this.limit);
+                // TODO: modificare limit
+                userService.loadHomepageRegistered(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.watchlist, this.topGenres, this.basedOnWatchlist, this.suggestedAuthors, this.podcastsToRetrieve);
             }
             case "Admin" -> {
                 Admin sessionActor = (Admin) MyPodcastDB.getInstance().getSessionActor();
@@ -623,7 +885,8 @@ public class HomePageController {
 
                 // Homepage load as admin
                 AdminService adminService = new AdminService();
-                adminService.loadHomepage(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.limit);
+                // TODO: sistemare il limit
+                adminService.loadHomepage(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.podcastsToRetrieve);
             }
             case "Unregistered" -> {
                 this.username.setText("Welcome to MyPodcastDB!");
@@ -635,15 +898,16 @@ public class HomePageController {
 
                 // Homepage load as unregistered user
                 UserService userService = new UserService();
-                userService.loadHomepageUnregistered(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.limit);
+                // TODO: sistemare il limit
+                userService.loadHomepageUnregistered(this.topRated, this.mostLikedPodcasts, this.mostFollowedAuthors, this.podcastsToRetrieve);
             }
             default -> Logger.error("Unidentified Actor Type");
         }
 
         // Showing grids available to every actor
-        loadTopRatedPodcasts();
-        loadMostLikedPodcasts();
-        loadMostFollowedAuthors();
+        loadTopRatedPodcasts(false);
+        loadMostLikedPodcasts(false);
+        loadMostFollowedAuthors(false);
 
         if (actorType.equals("User")) {
             // Making visible the "Show more suggested" button for the user
@@ -654,10 +918,17 @@ public class HomePageController {
             boxBtnShowMoreSuggested.setPrefHeight(80);
 
             // Loading grids for registered users
-            loadWatchlistGrid();
-            loadSuggestedBasedOnCategoryGrid();
-            loadSuggestedBasedOnWatchlistGrid();
-            loadSuggestedAuthorsBasedOnUserGrid();
+            this.noMorePodcastsWatchlist = this.watchlist.size() < this.podcastsToRetrieve;
+            loadWatchlistGrid(false);
+
+            this.noMorePodcastsTopGenres = this.topGenres.size() < this.podcastsToRetrieve;
+            loadSuggestedBasedOnCategoryGrid(false);
+
+            this.noMoreBasedOnWatchlist = this.basedOnWatchlist.size() < this.podcastsToRetrieve;
+            loadSuggestedBasedOnWatchlistGrid(false);
+
+            this.noMoreSuggestedAuthors = this.suggestedAuthors.size() < this.authorsToRetrieve;
+            loadSuggestedAuthorsBasedOnUserGrid(false);
         }
 
         // Hiding the empty grids

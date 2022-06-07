@@ -154,7 +154,7 @@ public class PodcastNeo4jTest {
     }
 
     public void showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLikedTest() {
-        List<Podcast> results = this.podcastNeo4j.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked("yellowtiger876274", 10);
+        List<Podcast> results = this.podcastNeo4j.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked("yellowtiger876274", 10, 0);
         if (results.get(0).getId().equals("50e391e1e88310022fb76600") && results.get(0).getName().equals("Leominster Church of Christ Sermons"))
             System.out.println("[+] showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked");
         else
@@ -164,7 +164,7 @@ public class PodcastNeo4jTest {
     public void showPodcastsInWatchlistTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user, 10);
+        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user, 10, 0);
 
         if(podcasts == null) {
             System.err.println("[-] showPodcastsInWatchlist");
@@ -195,7 +195,7 @@ public class PodcastNeo4jTest {
     public void showSuggestedPodcastsLikedByFollowedUsersTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Podcast> podcasts = this.podcastNeo4j.showSuggestedPodcastsLikedByFollowedUsers(user, 10);
+        List<Podcast> podcasts = this.podcastNeo4j.showSuggestedPodcastsLikedByFollowedUsers(user, 10, 0);
 
         if(podcasts == null) {
             System.err.println("[-] showSuggestedPodcastsLikedByFollowedUsers");
@@ -211,7 +211,7 @@ public class PodcastNeo4jTest {
     public void showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlistTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Podcast> podcasts = this.podcastNeo4j.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(user, 10);
+        List<Podcast> podcasts = this.podcastNeo4j.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(user, 10, 0);
 
         if(podcasts == null) {
             System.err.println("[-] showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist");

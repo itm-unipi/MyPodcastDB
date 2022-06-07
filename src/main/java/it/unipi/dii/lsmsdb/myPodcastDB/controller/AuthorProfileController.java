@@ -21,6 +21,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -43,6 +44,12 @@ public class AuthorProfileController {
 
     private int column;
 
+    /*** Variables to manage the scroll behavior ****/
+    private final int authorsToRetrieve;
+    private final int authorToLoadInGrid;
+    private boolean noMoreAuthors;
+    /***********************************************/
+
     @FXML
     private BorderPane MainPage;
 
@@ -58,7 +65,6 @@ public class AuthorProfileController {
 
     @FXML
     private HBox authorButtons;
-
 
     @FXML
     private Button btnAddPodcast;
@@ -109,6 +115,12 @@ public class AuthorProfileController {
     private VBox noPodcasts;
 
     @FXML
+    private ImageView leftArrow;
+
+    @FXML
+    private ImageView rightArrow;
+
+    @FXML
     private GridPane gridAuthorPodcasts;
 
     @FXML
@@ -125,6 +137,13 @@ public class AuthorProfileController {
         this.followingAuthor = false;
         this.author = new Author();
         this.followedAuthors = new ArrayList<>();
+
+        // Authors retrieved from the databases in one request (corresponds to the "limit")
+        this.authorsToRetrieve = 16;
+        // Authors to add to the grid at each "scroll finished" (taken from the "authors in memory" retrieved)
+        this.authorToLoadInGrid = 8;
+        // Used to avoid useless call to the services
+        this.noMoreAuthors = false;
     }
 
     /*********** Navigator Events (Profile, Home, Search) *************/
@@ -311,28 +330,7 @@ public class AuthorProfileController {
 
     }
 
-    /****************** Author Followed ******************/
-    @FXML
-    void nextFollowedAuthor(MouseEvent event) {
-        Logger.info("next followed author");
-        double scrollValue = 1;
-        if (scrollFollowedAuthors.getHvalue() == 1.0)
-            scrollValue = -1;
-        scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() + scrollValue);
-    }
-
-    @FXML
-    void backFollowedAuthor(MouseEvent event) {
-        Logger.info("back followed authors");
-        double scrollValue = 1;
-        if (scrollFollowedAuthors.getHvalue() == 0.0)
-            scrollFollowedAuthors.setHvalue(1.0);
-        else
-            scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() - scrollValue);
-    }
-
     /********* BUTTONS HOVER AND MOUSE EXITED **********/
-
     @FXML
     void onHoverBtnDeleteAuthor(MouseEvent event) {
         btnDeleteAuthor.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
@@ -376,15 +374,26 @@ public class AuthorProfileController {
     }
 
     /******* LOAD GRIDS ******/
-    void clearIndexes() {
-        this.row = 0;
-        this.column = 0;
+    void clearIndexes(boolean newFollowedAuthors, boolean newPodcasts) {
+        if (newPodcasts) {
+            this.row = this.gridAuthorPodcasts.getRowCount();
+            this.column = 0;
+        } else if (newFollowedAuthors) {
+            this.row = 0;
+            this.column = this.gridAuthorsFollowed.getColumnCount();
+        } else {
+            this.row = 0;
+            this.column = 0;
+        }
     }
 
     // Load followed authors followed by the visited author
-    void loadFollowedAuthors() throws IOException {
-        clearIndexes();
-        for (Pair<Author, Boolean> followedAuthor: this.followedAuthors) {
+    void loadFollowedAuthors(boolean newLoad) throws IOException {
+        clearIndexes(newLoad, false);
+
+        int maxValue = Math.min(this.followedAuthors.size(), (gridAuthorsFollowed.getColumnCount() + this.authorToLoadInGrid));
+
+        for (Pair<Author, Boolean> followedAuthor: this.followedAuthors.subList(gridAuthorsFollowed.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
@@ -397,8 +406,10 @@ public class AuthorProfileController {
     }
 
     // Load author's podcasts
-    void loadPodcasts() throws IOException {
-        clearIndexes();
+    void loadPodcasts(boolean newPodcasts) throws IOException {
+        clearIndexes(false, newPodcasts);
+
+        // TODO: create sublist
         for (Podcast podcast: this.author.getOwnPodcasts()) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
@@ -427,7 +438,135 @@ public class AuthorProfileController {
         }
     }
 
+    /******* TEST SCROLL ******/
+
+    @FXML
+    void scrollStarted(ScrollEvent event) {
+        Logger.info(event.toString());
+    }
+
+    @FXML
+    void onScrollGridPane(ScrollEvent event) throws IOException {
+        // Hide left arrow
+        leftArrow.setVisible(scrollFollowedAuthors.getHvalue() != 0);
+
+        // Hide right arrow
+        rightArrow.setVisible(scrollFollowedAuthors.getHvalue() != 1.0);
+
+        /*
+        if (scrollFollowedAuthors.getHvalue() == 1) {
+            //Logger.info("Authors loaded and ready to be shown in the grid: " + (this.followedAuthors.size() - gridAuthorsFollowed.getColumnCount()));
+
+            if (this.followedAuthors.size() - this.gridAuthorsFollowed.getColumnCount() == 0) {
+                rightArrow.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+            } else {
+                updateAuthorsGrid();
+            }
+
+        }
+        */
+
+        updateAuthorsGrid();
+    }
+
+    void updateAuthorsGrid() throws IOException {
+        if (scrollFollowedAuthors.getHvalue() == 1) {
+            Logger.info("Authors loaded and ready to be shown in the grid: " + (this.followedAuthors.size() - gridAuthorsFollowed.getColumnCount()));
+
+            if ((this.followedAuthors.size() - gridAuthorsFollowed.getColumnCount()) == 0 && !this.noMoreAuthors) {
+                Logger.info("(Call to the service) Trying to load new " + this.authorsToRetrieve + " authors in memory");
+
+                switch (this.actorType) {
+                    case "Author" -> {
+                        AuthorService authorService = new AuthorService();
+
+                        // Need to distinguish if the session author is also the visited author
+                        if (StageManager.getObjectIdentifier().equals(this.author.getName())) {
+                            this.noMoreAuthors = authorService.loadOwnFollowedAuthors(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                        } else {
+                            this.noMoreAuthors = authorService.loadFollowedAuthors(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                        }
+                    }
+                    case "User" -> {
+                        UserService userService = new UserService();
+                        this.noMoreAuthors = userService.loadFollowedAuthorsRegistered(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                    }
+                    case "Admin" -> {
+                        AdminService adminService = new AdminService();
+                        this.noMoreAuthors = adminService.loadFollowedAuthors(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                    }
+                    case "Unregistered" -> {
+                        UserService userService = new UserService();
+                        this.noMoreAuthors = userService.loadFollowedAuthorsUnregistered(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                    }
+                    default -> Logger.error("Unidentified Actor Type");
+                }
+
+                Logger.info("(End call service) Total authors loaded in memory: " + this.followedAuthors.size() + " | Authors available to be shown: " + (this.followedAuthors.size() - this.gridAuthorsFollowed.getColumnCount()));
+                loadFollowedAuthors(true);
+
+            } else {
+                Logger.info("Authors loaded in the grid: " + this.gridAuthorsFollowed.getColumnCount() + " | Authors in memory: " + this.followedAuthors.size());
+                // Show authors already retrieved from the database
+                loadFollowedAuthors(true);
+            }
+        }
+    }
+
+    void setupScrollArrows() {
+
+        if (this.followedAuthors.size() >= this.authorToLoadInGrid) {
+            this.rightArrow.setVisible(true);
+            Logger.info("There are authors to load");
+        } else {
+            // All authors are loaded
+            this.rightArrow.setVisible(false);
+            Logger.info("(Disabling right arrow) No other authors to load");
+        }
+
+        this.leftArrow.setVisible(false);
+    }
+
+    @FXML
+    void nextFollowedAuthor(MouseEvent event) throws IOException {
+        /*
+        double scrollValue = 1.0 / (gridAuthorsFollowed.getColumnCount() - this.authorToLoadInGrid + 1.0);
+        scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() + scrollValue);
+
+        leftArrow.setVisible(true);
+
+        updateAuthorsGrid();
+
+        if (scrollFollowedAuthors.getHvalue() == 1.0)
+            rightArrow.setVisible(false);
+        else
+            rightArrow.setVisible(true);
+
+        updateAuthorsGrid();
+        */
+    }
+
+    @FXML
+    void backFollowedAuthor(MouseEvent event) throws IOException {
+        /*
+        double scrollValue = 1.0 / (gridAuthorsFollowed.getColumnCount() - this.authorToLoadInGrid + 1.0);
+        scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() - scrollValue);
+
+        rightArrow.setVisible(true);
+
+        updateAuthorsGrid();
+
+        if (scrollFollowedAuthors.getHvalue() == 0)
+            leftArrow.setVisible(false);
+        else
+            leftArrow.setVisible(true);
+         */
+    }
+
+    /********************/
+
     public void initialize() throws IOException {
+
         switch (this.actorType) {
             case "Author" -> {
                 Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();
@@ -440,7 +579,7 @@ public class AuthorProfileController {
                 if (StageManager.getObjectIdentifier().equals(sessionActor.getName())) {
                     // Session author coincides with the author profile requested
                     author.setName(sessionActor.getName());
-                    authorService.loadAuthorOwnProfile(this.author, this.followedAuthors, 10);
+                    authorService.loadAuthorOwnProfile(this.author, this.followedAuthors, this.authorsToRetrieve);
                     // TODO: rimuovere dopo il rebase (è stato fatto solo perchè il login crea un utente di sessione fittizio)
                     ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(this.author);
 
@@ -458,7 +597,7 @@ public class AuthorProfileController {
                 } else {
                     // Author profile requested is different form the session author
                     this.author.setName(StageManager.getObjectIdentifier());
-                    this.followingAuthor = authorService.loadAuthorProfile(this.author, this.followedAuthors, 10);
+                    this.followingAuthor = authorService.loadAuthorProfile(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                     // Setting GUI information about the author visited
                     authorName.setText(this.author.getName());
@@ -487,7 +626,7 @@ public class AuthorProfileController {
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
                 UserService userService = new UserService();
-                this.followingAuthor = userService.loadAuthorProfileRegistered(this.author, this.followedAuthors, 10);
+                this.followingAuthor = userService.loadAuthorProfileRegistered(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                 // Setting GUI information about the author visited
                 this.authorName.setText(author.getName());
@@ -515,7 +654,7 @@ public class AuthorProfileController {
                 // Requesting the author's information from the database
                 AdminService adminService = new AdminService();
                 this.author.setName(StageManager.getObjectIdentifier());
-                adminService.loadAuthorProfile(this.author, this.followedAuthors, 10);
+                adminService.loadAuthorProfile(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                 // Setting GUI information of the author visited
                 this.authorName.setText(this.author.getName());
@@ -535,7 +674,7 @@ public class AuthorProfileController {
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
                 UserService userService = new UserService();
-                userService.loadAuthorProfileUnregistered(this.author, this.followedAuthors, 10);
+                userService.loadAuthorProfileUnregistered(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                 this.authorName.setText(this.author.getName());
                 this.tooltipAuthorName.setText(this.author.getName());
@@ -556,11 +695,16 @@ public class AuthorProfileController {
         }
 
         // Load grids
-        loadFollowedAuthors();
-        loadPodcasts();
+        this.noMoreAuthors = this.followedAuthors.size() < this.authorsToRetrieve;
+        loadFollowedAuthors(false);
+        loadPodcasts(false);
 
         // Hiding the empty grids
         hideEmptyGrids();
+
+        // Setting scrollbar arrows
+        setupScrollArrows();
+
         Logger.success("Author's profile loading done!");
     }
 }

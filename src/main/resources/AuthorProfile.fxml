@@ -334,7 +334,7 @@
                   </VBox>
                   <HBox fx:id="boxFollowedAuthors" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="1040.0">
                      <children>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backFollowedAuthor" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
+                        <ImageView fx:id="leftArrow" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backFollowedAuthor" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
                            <image>
                               <Image url="@img/backArrow.png" />
                            </image>
@@ -342,19 +342,19 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </ImageView>
-                        <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" hbarPolicy="NEVER" minViewportHeight="180.0" prefWidth="1050.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                        <ScrollPane fx:id="scrollFollowedAuthors" fitToHeight="true" hbarPolicy="NEVER" minViewportHeight="180.0" prefWidth="1060.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
                            <content>
-                              <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" prefHeight="0.0" prefWidth="0.0">
+                              <GridPane fx:id="gridAuthorsFollowed" alignment="CENTER_LEFT" onScroll="#onScrollGridPane" prefHeight="0.0" prefWidth="0.0">
                                  <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="0.0" />
                                  </rowConstraints>
                               </GridPane>
                            </content>
                         </ScrollPane>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextFollowedAuthor" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
+                        <ImageView fx:id="rightArrow" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextFollowedAuthor" pickOnBounds="true" preserveRatio="true" translateY="-11.0">
                            <image>
                               <Image url="@img/forwardArrow.png" />
                            </image>

@@ -133,7 +133,7 @@ public class AuthorNeo4jTest {
     }
 
     public void showSuggestedAuthorsFollowedByFollowedUserTest() {
-        List<Author> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10);
+        List<Author> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10, 0);
 
         if (authors != null && authors.size() == 10)
             System.out.println("[+] showSuggestedAuthorsFollowedByFollowedUser");
