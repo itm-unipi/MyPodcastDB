@@ -2,10 +2,8 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -230,7 +228,7 @@ public class ReviewPageController {
             this.loadedReviews.clear();                         // empty old list
             this.selectedOrder = this.orderBy.getValue().equals("Date of creation") ? "createdAt" : "rating";
             this.selectedAscending = this.ascending.getValue().equals("Ascending");
-            Boolean result = this.service.loadOtherReview(this.podcast, this.loadedReviews, this.loadedReviews.size(), this.limitPerQuery, this.selectedOrder, this.selectedAscending);
+            Boolean result = this.service.loadOtherReview(this.podcast, this.ownReview, this.loadedReviews, this.loadedReviews.size(), this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // if successful reload page
             if (!result) {
@@ -268,7 +266,7 @@ public class ReviewPageController {
     @FXML
     void clickOnShow(MouseEvent event) throws IOException {
         // load other reviews
-        Boolean result = this.service.loadOtherReview(this.podcast, this.loadedReviews, this.loadedReviews.size(), this.limitPerQuery, this.selectedOrder, this.selectedAscending);
+        Boolean result = this.service.loadOtherReview(this.podcast, this.ownReview, this.loadedReviews, this.loadedReviews.size(), this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
         // if succesfull update the page
         if (!result) {
@@ -541,7 +539,6 @@ public class ReviewPageController {
         this.podcast = new Podcast();
         this.podcast.setId(StageManager.getObjectIdentifier());
         this.loadedReviews = new ArrayList<>();
-        this.ownReview = new Review();
         this.limitPerQuery = 10;
         this.selectedOrder = "createdAt";
         this.selectedAscending = false;
@@ -551,8 +548,9 @@ public class ReviewPageController {
         String sessionType = MyPodcastDB.getInstance().getSessionType();
         if (!sessionType.equals("User")) {
             // only the user can write review
+            this.ownReview = null;
             this.disableForm();
-            result = this.service.loadPodcastPageForNotUser(this.podcast, this.loadedReviews, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
+            result = this.service.loadReviewPageForNotUser(this.podcast, this.loadedReviews, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // if author update the profile picture
             if (sessionType.equals("Author")) {
@@ -567,8 +565,9 @@ public class ReviewPageController {
                 this.userPictureWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
             }
         } else {
+            this.ownReview = new Review();
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-            result = this.service.loadPodcastPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
+            result = this.service.loadReviewPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // profile picture
             User user = (User)MyPodcastDB.getInstance().getSessionActor();
@@ -576,6 +575,7 @@ public class ReviewPageController {
             userPicture.setImage(picture);
 
             // if user has already writter a review, disable form
+            Logger.info(this.ownReview.toString() + " : " + this.ownReview.getTitle());
             if (this.ownReview != null && this.ownReview.getTitle() != null)
                 this.disableForm();
         }

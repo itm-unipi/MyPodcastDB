@@ -73,6 +73,14 @@ public class ReviewMongoTest {
             System.err.println("[-] addReview");
     }
 
+    public void findSpecificTest() {
+        Review review = this.reviewMongo.findSpecificReviewByAuthorName("000000000000000000000000", "Mariorossi123456");
+        if (review != null)
+            System.out.println("[+] findSpecificReviewByAuthorName");
+        else
+            System.err.println("[-] findSpecificReviewByAuthorName");
+    }
+
     public void findByAuthorUsernameTest() {
         List<Review> reviews = this.reviewMongo.findReviewsByAuthorUsername("Mariorossi123456", 1, "", true);
         if (reviews.size() != 1)
@@ -164,6 +172,7 @@ public class ReviewMongoTest {
 
         test.addTest();
         test.findByIdTest();
+        test.findSpecificTest();
         test.findByAuthorUsernameTest();
         test.findByPodcastIdTest();
         test.deleteReviewByIdTest();

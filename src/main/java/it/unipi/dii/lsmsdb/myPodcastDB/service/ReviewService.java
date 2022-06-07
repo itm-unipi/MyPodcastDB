@@ -5,7 +5,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class ReviewService {
         this.reviewMongo  = new ReviewMongo();
     }
 
-    public Boolean loadPodcastPageForUser(Podcast podcast, String username, List<Review> reviews, Review ownReview, int limit, String attributeToOrder, Boolean ascending) {
+    public Boolean loadReviewPageForUser(Podcast podcast, String username, List<Review> reviews, Review ownReview, int limit, String attributeToOrder, Boolean ascending) {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
@@ -45,9 +44,9 @@ public class ReviewService {
         List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending);
 
         // load own review if exists
-        List<Review> owns = this.reviewMongo.findReviewsByAuthorUsername(username, 1, "createdAt", false);
-        if (owns != null && owns.size() != 0) {
-            ownReview.copy(owns.get(0));
+        Review own = this.reviewMongo.findSpecificReviewByAuthorName(podcast.getId(), username);
+        if (own != null) {
+            ownReview.copy(own);
             loaded.remove(ownReview);
         } else {
             ownReview.setTitle(null);
@@ -58,7 +57,7 @@ public class ReviewService {
         return result;
     }
 
-    public Boolean loadPodcastPageForNotUser(Podcast podcast, List<Review> reviews, int limit, String attributeToOrder, Boolean ascending) {
+    public Boolean loadReviewPageForNotUser(Podcast podcast, List<Review> reviews, int limit, String attributeToOrder, Boolean ascending) {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
@@ -83,8 +82,8 @@ public class ReviewService {
         int result = 0;
 
         // check if the user has already written a review
-        List<Review> reviews = this.reviewMongo.findReviewsByAuthorUsername(review.getAuthorUsername(), 1, "cretedAt", false);
-        if (reviews != null && !reviews.isEmpty()) {
+        Review reviewCheck = this.reviewMongo.findSpecificReviewByAuthorName(review.getPodcastId(), review.getAuthorUsername());
+        if (reviewCheck != null) {
             Logger.error("User has already written a review");
             result = -1;
         } else {
@@ -103,7 +102,6 @@ public class ReviewService {
                 if (!addEmb) {
                     Logger.error("Failed to add rating embedded to podcast");
                     result = -3;
-                    // TODO: rollback?
                 } else {
                     Logger.success("Review successfully added");
                 }
@@ -149,7 +147,7 @@ public class ReviewService {
         return result;
     }
 
-    public boolean loadOtherReview(Podcast podcast, List<Review> reviews, int skip, int limit, String attributeToOrder, Boolean ascending) {
+    public boolean loadOtherReview(Podcast podcast, Review own, List<Review> reviews, int skip, int limit, String attributeToOrder, Boolean ascending) {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
@@ -163,7 +161,10 @@ public class ReviewService {
         }
 
         // load the podcast's reviews
-        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), skip, limit, attributeToOrder, ascending));
+        List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), skip, limit, attributeToOrder, ascending);
+        if (own != null && loaded.contains(own))
+            loaded.remove(own);
+        reviews.addAll(loaded);
 
         MongoManager.getInstance().closeConnection();
         return result;

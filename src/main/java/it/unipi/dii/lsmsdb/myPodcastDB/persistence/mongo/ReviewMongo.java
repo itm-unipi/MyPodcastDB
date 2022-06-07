@@ -2,12 +2,15 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+
+import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Updates.set;
 import static com.mongodb.client.model.Updates.combine;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Sorts.descending;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import com.mongodb.client.MongoCursor;
@@ -129,6 +132,33 @@ public class ReviewMongo {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public Review findSpecificReviewByAuthorName(String podcastId, String authorUsername) {
+        MongoManager manager = MongoManager.getInstance();
+
+        Bson filter = and(eq("podcastId", new ObjectId(podcastId)), eq("authorUsername", authorUsername));
+        try (MongoCursor<Document> cursor = manager.getCollection("review").find(filter).iterator()) {
+            if (cursor.hasNext()) {
+                Document review = cursor.next();
+
+                // review attributes
+                String id = review.getObjectId("_id").toString();
+                String title = review.getString("title");
+                String content = review.getString("content");
+                int rating = review.getInteger("rating");
+                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
+                Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
+
+                Review newReview = new Review(id, podcastId, authorUsername, title, content, rating, createdAt);
+                return newReview;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
     }
 
     public List<Review> findReviewsByAuthorUsername(String authorUsername, int limit, String attributeToOrder, boolean ascending) {
