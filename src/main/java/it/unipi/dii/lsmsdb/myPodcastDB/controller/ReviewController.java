@@ -140,9 +140,9 @@ public class ReviewController {
 
         // actor recognition
         String sessionType = MyPodcastDB.getInstance().getSessionType();
-        if (sessionType.equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(this.review.getAuthorUsername()))
+        if ((sessionType.equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(this.review.getAuthorUsername())) || sessionType.equals("Admin"))
             this.deleteReview.setVisible(true);
-        else if (!sessionType.equals("admin"))
+        else
             this.deleteReview.setVisible(false);
 
         // if is the owner hide the author name
