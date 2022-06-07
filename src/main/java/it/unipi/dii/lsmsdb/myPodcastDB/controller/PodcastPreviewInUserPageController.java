@@ -53,6 +53,18 @@ public class PodcastPreviewInUserPageController {
     @FXML
     private Pane trashButtonArea;
 
+    @FXML
+    private Label likeTip;
+
+    @FXML
+    private Label watchTip;
+
+    @FXML
+    private Label removeTip;
+
+    @FXML
+    private Label cancelTip;
+
     private String actorName = "";
     private String actorType = "";
     boolean likeStatus = false;
@@ -86,6 +98,12 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void watchClick(MouseEvent event){
+
+        likeTip.setVisible(false);
+        watchTip.setVisible(false);
+        removeTip.setVisible(false);
+        cancelTip.setVisible(false);
+
         blockClickEvent = true;
         Logger.info("Watch button clicked");
         UserPageService service = new UserPageService();
@@ -148,14 +166,20 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void watchIn(MouseEvent event){
-        if(watchStatus)
+        watchTip.setVisible(true);
+        if(watchStatus) {
+            watchTip.setText("UnWatch");
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
-        else
+        }
+        else {
+            watchTip.setText("Watch later");
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
+        }
     }
 
     @FXML
     void watchOut(MouseEvent event){
+        watchTip.setVisible(false);
         if(!watchStatus)
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
         else
@@ -164,6 +188,12 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void likeClick(MouseEvent event){
+
+        likeTip.setVisible(false);
+        watchTip.setVisible(false);
+        removeTip.setVisible(false);
+        cancelTip.setVisible(false);
+
         Logger.info("Like button clicked");
         blockClickEvent = true;
         UserPageService service = new UserPageService();
@@ -226,14 +256,20 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void likeIn(MouseEvent event){
-        if(likeStatus)
+        likeTip.setVisible(true);
+        if(likeStatus) {
+            likeTip.setText("Dislike");
             likeButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-        else
+        }
+        else {
+            likeTip.setText("Like");
             likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
+        }
     }
 
     @FXML
     void likeOut(MouseEvent event){
+        likeTip.setVisible(false);
         if(!likeStatus)
             likeButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
         else
@@ -242,6 +278,12 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void trashClick(MouseEvent event){
+
+        likeTip.setVisible(false);
+        watchTip.setVisible(false);
+        removeTip.setVisible(false);
+        cancelTip.setVisible(false);
+
         if(!disableClick){
             Logger.info("Trash button clicked");
             UserPageService service = new UserPageService();
@@ -358,21 +400,26 @@ public class PodcastPreviewInUserPageController {
 
     @FXML
     void trashIn(MouseEvent event){
+
         if(disableClick) {
+            cancelTip.setVisible(true);
             podcastAnchorPane.setOpacity(1.0);
             trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh2.png"));
             return;
         }
+        removeTip.setVisible(true);
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
     }
 
     @FXML
     void trashOut(MouseEvent event){
         if(disableClick) {
+            cancelTip.setVisible(false);
             podcastAnchorPane.setOpacity(0.2);
             trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
             return;
         }
+        removeTip.setVisible(false);
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
     }
     /************************/
@@ -401,6 +448,11 @@ public class PodcastPreviewInUserPageController {
        else
            trashButtonArea.setVisible(false);
 
+        likeTip.setVisible(false);
+        watchTip.setVisible(false);
+        removeTip.setVisible(false);
+        cancelTip.setVisible(false);
+
     }
 
     public void setData(AnchorPane mainPage, Podcast podcast, boolean ifInWatchlist, boolean ifLiked) {
@@ -428,6 +480,11 @@ public class PodcastPreviewInUserPageController {
             likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
             likeStatus = true;
         }
+
+        likeTip.setVisible(false);
+        watchTip.setVisible(false);
+        removeTip.setVisible(false);
+        cancelTip.setVisible(false);
 
     }
 

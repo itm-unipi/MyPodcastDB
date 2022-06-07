@@ -17,10 +17,13 @@
          <children>
             <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
                <children>
-                  <ImageView fx:id="actorImage" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;" />
-                  <Pane fx:id="trashButtonArea" layoutX="70.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                  <ImageView fx:id="actorImage" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                     <image>
+                        <Image url="@img/users/user2.png" />
+                     </image></ImageView>
+                  <Pane fx:id="trashButtonArea" layoutX="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                      <children>
-                        <ImageView fx:id="trashButton" fitHeight="25.0" fitWidth="25.0" layoutX="-2.0" layoutY="-2.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                        <ImageView fx:id="trashButton" fitHeight="20.0" fitWidth="20.0" layoutX="5.0" layoutY="5.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
                               <Image url="@img/delete_elem1.png" />
                            </image>
@@ -39,6 +42,21 @@
                         </ImageView>
                      </children>
                   </Pane>
+                  <Label fx:id="followTip" alignment="CENTER" layoutX="17.0" layoutY="-5.0" prefHeight="13.0" prefWidth="40.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Follow" textFill="#2c2c2c">
+                     <font>
+                        <Font name="Corbel Light" size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="cancelTip" alignment="CENTER" layoutX="35.0" layoutY="23.0" prefHeight="13.0" prefWidth="34.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Cancel" textFill="#2c2c2c">
+                     <font>
+                        <Font name="Corbel Light" size="10.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="removeTip" alignment="CENTER" layoutX="29.0" layoutY="23.0" prefHeight="13.0" prefWidth="40.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Remove" textFill="#2c2c2c">
+                     <font>
+                        <Font name="Corbel Light" size="10.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <Label fx:id="actorName" alignment="CENTER" prefHeight="35.0" prefWidth="204.0" text="Label" textFill="#434343">

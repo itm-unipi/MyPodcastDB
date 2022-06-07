@@ -1302,7 +1302,7 @@ public class UserPageController {
             column = userPageAuthorsGrid.getColumnCount();
         Author author = authors.get(column);
         FXMLLoader authorfxmlLoader = new FXMLLoader();
-        authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+        authorfxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreviewUserPage.fxml"));
         AnchorPane newAuthor = authorfxmlLoader.load();
         ActorPreviewController authorController = authorfxmlLoader.getController();
 
@@ -1330,7 +1330,7 @@ public class UserPageController {
 
         User user = users.get(column);
         FXMLLoader userfxmlLoader = new FXMLLoader();
-        userfxmlLoader.setLocation(getClass().getClassLoader().getResource("ActorPreview.fxml"));
+        userfxmlLoader.setLocation(getClass().getClassLoader().getResource("UserPreviewUserPage.fxml"));
         AnchorPane newUser = userfxmlLoader.load();
         ActorPreviewController actorController = userfxmlLoader.getController();
         boolean isFollowed = false;
