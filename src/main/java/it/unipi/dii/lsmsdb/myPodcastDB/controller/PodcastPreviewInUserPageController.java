@@ -1,5 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -19,6 +22,8 @@ import java.io.IOException;
 
 public class PodcastPreviewInUserPageController {
 
+    @FXML
+    private  AnchorPane podcastAnchorPane;
     @FXML
     private ImageView podcastImage;
 
@@ -49,13 +54,18 @@ public class PodcastPreviewInUserPageController {
     private Pane trashButtonArea;
 
     private String actorName = "";
+    private String actorType = "";
     boolean likeStatus = false;
     boolean watchStatus = false;
     boolean blockClickEvent = false;
     private AnchorPane mainPage;
+    private boolean disableClick = false;
+    private String listType = "";
 
     @FXML
     void onClick(MouseEvent event) throws IOException {
+        if(disableClick)
+            return;
         if(blockClickEvent){
             blockClickEvent = false;
             return;
@@ -232,22 +242,34 @@ public class PodcastPreviewInUserPageController {
     void trashClick(MouseEvent event){
         Logger.info("Trash button clicked");
         blockClickEvent = true;
+        disableClick = true;
+        podcastAnchorPane.setOpacity(0.2);
+        UserPageService service = new UserPageService();
+        service.removePodcast(actorName, podcastPreview.getId(), listType);
     }
 
     @FXML
     void trashIn(MouseEvent event){
+        if(disableClick)
+            return;
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
     }
 
     @FXML
     void trashOut(MouseEvent event){
+        if(disableClick)
+            return;
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
     }
     /************************/
 
-    public void setData(AnchorPane mainPage, Podcast podcast, String visitorType) {
+    public void setData(AnchorPane mainPage, String listType, Podcast podcast) {
         this.mainPage = mainPage;
         this.podcastPreview = podcast;
+        this.listType = listType;
+        this.actorType = MyPodcastDB.getInstance().getSessionType();
+        if(actorType.equals("User"))
+            this.actorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
 
         Image image = ImageCache.getImageFromLocalPath("/img/logo.png");
         this.podcastImage.setImage(image);
@@ -260,14 +282,14 @@ public class PodcastPreviewInUserPageController {
         });
 
        buttonArea.setVisible(false);
-       if(!visitorType.equals("Admin"))
+       if(actorType.equals("User"))
            trashButtonArea.setVisible(true);
        else
            trashButtonArea.setVisible(false);
 
     }
 
-    public void setData(AnchorPane mainPage, Podcast podcast, String actorName, boolean ifInWatchlist, boolean ifLiked) {
+    public void setData(AnchorPane mainPage, Podcast podcast, boolean ifInWatchlist, boolean ifLiked) {
         this.mainPage = mainPage;
         this.podcastPreview = podcast;
 
@@ -283,7 +305,7 @@ public class PodcastPreviewInUserPageController {
 
         buttonArea.setVisible(true);
         trashButtonArea.setVisible(false);
-        this.actorName = actorName;
+        this.actorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         if(ifInWatchlist) {
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
             watchStatus = true;

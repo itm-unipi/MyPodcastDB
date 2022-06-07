@@ -9,6 +9,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.List;
 
@@ -470,6 +471,30 @@ public class UserPageService {
                     res = 0;
             }
         }
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int removePodcast(String owner, String podcastId, String listType){
+
+        int res = -1;
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        Logger.error("DA IMPLEMENTARE");
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int removeActor(String owner, String actorName, String actorType){
+
+        int res = -1;
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        Logger.error("DA IMPLEMENTARE");
+        MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;
     }

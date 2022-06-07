@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
@@ -21,6 +22,8 @@ import java.io.IOException;
 
 public class ActorPreviewController {
 
+    @FXML
+    private AnchorPane actorAnchorPane;
     @FXML
     private VBox actorContainer;
 
@@ -53,6 +56,7 @@ public class ActorPreviewController {
     private String visitorName;
     private boolean followStatus = false;
     private boolean blockClickEvent = false;
+    private boolean disableClick = false;
 
     @FXML
     void actorIn(MouseEvent event) {
@@ -66,6 +70,9 @@ public class ActorPreviewController {
 
     @FXML
     void onClick(MouseEvent event) throws IOException {
+
+        if(disableClick)
+            return;
 
         if(blockClickEvent) {
             blockClickEvent = false;
@@ -177,15 +184,26 @@ public class ActorPreviewController {
     void trashClick(MouseEvent event){
         Logger.info("Trash button clicked");
         blockClickEvent = true;
+        disableClick = true;
+        actorAnchorPane.setOpacity(0.2);
+        UserPageService service = new UserPageService();
+        if(actorType.equals("Author"))
+            service.removeActor(visitorName, authorPreview.getName(), actorType );
+        else
+            service.removeActor(visitorName, userPreview.getUsername(), actorType );
     }
 
     @FXML
     void trashIn(MouseEvent event){
+        if(disableClick)
+            return;
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
     }
 
     @FXML
     void trashOut(MouseEvent event){
+        if(disableClick)
+            return;
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
     }
 
@@ -194,10 +212,13 @@ public class ActorPreviewController {
     }
 
 
-    public void setData(AnchorPane mainPage, Author author, String visitorType) {
+    public void setData(AnchorPane mainPage, Author author) {
         this.actorType = "Author";
         this.authorPreview = author;
         this.mainPage = mainPage;
+        this.visitorType = MyPodcastDB.getInstance().getSessionType();
+        if(visitorType.equals("User"))
+            visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
 
         Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
         this.actorImage.setImage(image);
@@ -205,18 +226,22 @@ public class ActorPreviewController {
         this.actorToolTip.setText(author.getName());
 
         followButtonArea.setVisible(false);
-        if(!visitorType.equals("Admin"))
+        if(visitorType.equals("User"))
             trashButtonArea.setVisible(true);
         else
             trashButtonArea.setVisible(false);
 
     }
-    public void setData(AnchorPane mainPage, Author author, String visitorType, String visitorName, boolean isFollowed) {
+    public void setData(AnchorPane mainPage, Author author, boolean isFollowed) {
         this.actorType = "Author";
-        this.visitorType = visitorType;
-        this.visitorName = visitorName;
         this.authorPreview = author;
         this.mainPage = mainPage;
+        this.visitorType = MyPodcastDB.getInstance().getSessionType();
+        if(visitorType.equals("User"))
+            this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        else if(visitorType.equals("Author"))
+            this.visitorName = ((Author)MyPodcastDB.getInstance().getSessionActor()).getName();
+
 
         Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
         this.actorImage.setImage(image);
@@ -230,10 +255,13 @@ public class ActorPreviewController {
             followStatus = true;
         }
     }
-    public void setData(AnchorPane mainPage, User user, String visitorType) {
+    public void setData(AnchorPane mainPage, User user) {
         this.actorType = "User";
         this.userPreview = user;
         this.mainPage = mainPage;
+        this.visitorType = MyPodcastDB.getInstance().getSessionType();
+        if(visitorType.equals("User"))
+            this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
 
         Image image = ImageCache.getImageFromLocalPath(user.getPicturePath());
         this.actorImage.setImage(image);
@@ -241,17 +269,17 @@ public class ActorPreviewController {
         this.actorToolTip.setText(user.getUsername());
 
         followButtonArea.setVisible(false);
-        if(!visitorType.equals("Admin"))
+        if(visitorType.equals("User"))
             trashButtonArea.setVisible(true);
         else
             trashButtonArea.setVisible(false);
     }
 
-    public void setData(AnchorPane mainPage, User user, String visitorName, boolean isFollowed) {
+    public void setData(AnchorPane mainPage, User user, boolean isFollowed) {
         this.actorType = "User";
         this.userPreview = user;
         this.visitorType = "User";
-        this.visitorName = visitorName;
+        this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();;
         this.mainPage = mainPage;
 
         Image image = ImageCache.getImageFromLocalPath(user.getPicturePath());

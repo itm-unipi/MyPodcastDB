@@ -1249,10 +1249,10 @@ public class UserPageController {
             if(lPodcastsByVisitor.contains(podcast.getId()))
                 isLiked = true;
 
-            whatchlistController.setData(userPageAnchorPane, podcast,((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isInWatchlist, isLiked);
+            whatchlistController.setData(userPageAnchorPane, podcast, isInWatchlist, isLiked);
         }
         else
-            whatchlistController.setData(userPageAnchorPane, podcast, MyPodcastDB.getInstance().getSessionType());
+            whatchlistController.setData(userPageAnchorPane,  "watchlist", podcast);
 
         // add new podcast to grid
         this.userPageWatchlistGrid.add(newPodcast, column, row);
@@ -1284,10 +1284,10 @@ public class UserPageController {
             if(lPodcastsByVisitor.contains(podcast.getId()))
                 isLiked = true;
 
-            likedController.setData(userPageAnchorPane, podcast, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isInWatchlist, isLiked);
+            likedController.setData(userPageAnchorPane, podcast, isInWatchlist, isLiked);
         }
         else
-            likedController.setData(userPageAnchorPane, podcast, MyPodcastDB.getInstance().getSessionType());
+            likedController.setData(userPageAnchorPane, "liked", podcast);
 
         // add new podcast to grid
         this.userPageLikedGrid.add(newPodcast, column, row);
@@ -1312,13 +1312,10 @@ public class UserPageController {
             if(authorsByVisitor.contains(author.getName()))
                 isFollowed = true;
 
-            if(MyPodcastDB.getInstance().getSessionType().equals("Author"))
-                authorController.setData(userPageAnchorPane, author, "Author", ((Author)(MyPodcastDB.getInstance().getSessionActor())).getName(), isFollowed);
-            else
-                authorController.setData(userPageAnchorPane, author, "User", ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
+            authorController.setData(userPageAnchorPane, author, isFollowed);
         }
         else
-            authorController.setData(userPageAnchorPane,author, MyPodcastDB.getInstance().getSessionType());
+            authorController.setData(userPageAnchorPane, author);
         this.userPageAuthorsGrid.add(newAuthor, column, row);
         column++;
     }
@@ -1341,10 +1338,10 @@ public class UserPageController {
             if(usersByVisitor.contains(user.getUsername()))
                 isFollowed = true;
 
-            actorController.setData(userPageAnchorPane, user, ((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername(), isFollowed);
+            actorController.setData(userPageAnchorPane, user, isFollowed);
         }
         else
-            actorController.setData(userPageAnchorPane, user, MyPodcastDB.getInstance().getSessionType());
+            actorController.setData(userPageAnchorPane, user);
         this.userPageUsersGrid.add(newUser, column, row);
 
     }
