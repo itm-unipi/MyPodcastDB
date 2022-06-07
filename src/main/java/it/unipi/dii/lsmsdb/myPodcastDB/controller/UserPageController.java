@@ -202,11 +202,12 @@ public class UserPageController {
 
     private int podcastRowSize = 5;
     private int actorRowSize = 8;
-    private int numberOfWpodcastsToAdd = 5;
-    private int numberOfLpodcastsToAdd = 5;
-    private int numberOfAuthorsToAdd = 8;
-    private int numberOfUsersToAdd = 8;
-    private int newRequest = 10;  // has to be > podcastRowSize and actorRowSize
+    private int numberOfWpodcastsToAdd = 5; // it has to be <= podcastRowSize
+    private int numberOfLpodcastsToAdd = 5; // it has to be <= podcastRowSize
+    private int numberOfAuthorsToAdd = 8;   // it has to be <= actorRowSize
+    private int numberOfUsersToAdd = 8;     // it has to be <= actorRowSize
+    private int newRequestPodcast = 7;      //it has to be > podcastRowSize
+    private int newRequestActor = 10;       //it has to be > actorRowSize
     private boolean getWbutton = false;
     private boolean getLbutton = false;
     private boolean getAbutton = false;
@@ -220,13 +221,14 @@ public class UserPageController {
 
     @FXML
     void scrollWatchlistButtonRightClick(MouseEvent event) throws IOException {
-
         Logger.info("Watchlist right button pressed");
         if(getWbutton){
             for(int i = 0; i < numberOfWpodcastsToAdd; i++) {
                 int column = userPageWatchlistGrid.getColumnCount();
-                if (column < wPodcasts.size())
+                if (column < wPodcasts.size()){
                     loadWatchlaterPodcast(false);
+                    Logger.info("Loaded new podcast to watchlist from memory");
+                }
                 else{
                     getWpodcasts();
                     i--;
@@ -243,7 +245,7 @@ public class UserPageController {
             userPageWatchlistRightButton.setVisible(false);
 
 
-        double scrollValue = 0.2;
+        double scrollValue = 1.0 / (userPageWatchlistGrid.getColumnCount() - podcastRowSize);
         userPageWatchlistLeftButton.setVisible(true);
         if(userPageWatchlistScrollPane.getHvalue() == 1.0)
             return;
@@ -257,7 +259,7 @@ public class UserPageController {
         Logger.info("Watchlist left button pressed");
 
         userPageWatchlistRightButton.setVisible(true);
-        double scrollValue = 0.2;
+        double scrollValue = 1.0 / (userPageWatchlistGrid.getColumnCount() - podcastRowSize);
         if(userPageWatchlistScrollPane.getHvalue() == 0.0) {
             userPageWatchlistLeftButton.setVisible(false);
             return;
@@ -307,8 +309,10 @@ public class UserPageController {
         if(getLbutton){
             for(int i = 0; i < numberOfLpodcastsToAdd; i++) {
                 int column = userPageLikedGrid.getColumnCount();
-                if(column < lPodcasts.size())
+                if(column < lPodcasts.size()) {
                     loadLikedPodcast(false);
+                    Logger.info("Loaded new podcast to watchlist from memory");
+                }
                 else{
                     getLpodcasts();
                     i--;
@@ -324,7 +328,7 @@ public class UserPageController {
         else if(numberOfLpodcastsToAdd == 0 && userPageLikedScrollPane.getHvalue() == 1.0)
             userPageLikedRightButton.setVisible(false);
 
-        double scrollValue = 0.2;
+        double scrollValue = 1.0 / (userPageLikedGrid.getColumnCount() - podcastRowSize);
         userPageLikedLeftButton.setVisible(true);
         if(userPageLikedScrollPane.getHvalue() == 1.0)
             return;
@@ -336,7 +340,7 @@ public class UserPageController {
     void scrollLikedButtonLeftClick(MouseEvent event) {
         Logger.info("Liked left button pressed");
 
-        double scrollValue = 0.2;
+        double scrollValue = 1.0 / (userPageLikedGrid.getColumnCount() - podcastRowSize);
         userPageLikedRightButton.setVisible(true);
         if(userPageLikedScrollPane.getHvalue() == 0.0){
             userPageLikedLeftButton.setVisible(false);
@@ -382,8 +386,10 @@ public class UserPageController {
         if (getAbutton) {
             for (int i = 0; i < numberOfAuthorsToAdd; i++) {
                 int column = userPageAuthorsGrid.getColumnCount();
-                if (column < authors.size())
+                if (column < authors.size()) {
                     loadAuthor(false);
+                    Logger.info("Loaded new podcast to watchlist from memory");
+                }
                 else if (getAbutton) {
                     getAuthors();
                     i--;
@@ -398,7 +404,7 @@ public class UserPageController {
         else if(numberOfAuthorsToAdd == 0 && userPageAuthorsScrollPane.getHvalue() == 1.0)
             userPageAuthorsRightButton.setVisible(false);
 
-        double scrollValue = 0.125;
+        double scrollValue = 1.0 / (userPageAuthorsGrid.getColumnCount() - actorRowSize);
         userPageAuthorsLeftButton.setVisible(true);
         if(userPageAuthorsScrollPane.getHvalue() == 1.0)
             return;
@@ -410,7 +416,7 @@ public class UserPageController {
     void scrollAuthorsButtonLeftClick(MouseEvent event) {
         Logger.info("Authors left button pressed");
 
-        double scrollValue = 0.125;
+        double scrollValue = 1.0 / (userPageAuthorsGrid.getColumnCount() - actorRowSize);
         userPageAuthorsRightButton.setVisible(true);
         if(userPageAuthorsScrollPane.getHvalue() == 0.0) {
             userPageAuthorsLeftButton.setVisible(false);
@@ -457,8 +463,10 @@ public class UserPageController {
         if(getUbutton){
             for(int i = 0; i < numberOfUsersToAdd; i++) {
                 int column = userPageUsersGrid.getColumnCount();
-                if(column < users.size())
+                if(column < users.size()) {
                     loadUser(false);
+                    Logger.info("Loaded new podcast to watchlist from memory");
+                }
                 else if(getUbutton) {
                     getUsers();
                     i--;
@@ -474,7 +482,7 @@ public class UserPageController {
         else if(numberOfUsersToAdd == 0 && userPageUsersScrollPane.getHvalue() == 1.0)
             userPageUsersRightButton.setVisible(false);
 
-        double scrollValue = 0.13;
+        double scrollValue = 1.0 / (userPageUsersGrid.getColumnCount() - actorRowSize);
         userPageUsersLeftButton.setVisible(true);
         if(userPageUsersScrollPane.getHvalue() == 1.0)
             return;
@@ -485,7 +493,7 @@ public class UserPageController {
     void scrollUsersButtonLeftClick(MouseEvent event) {
         Logger.info("Users left button pressed");
 
-        double scrollValue = 0.13;
+        double scrollValue = 1.0 / (userPageUsersGrid.getColumnCount() - actorRowSize);
         userPageUsersRightButton.setVisible(true);
         if(userPageUsersScrollPane.getHvalue() == 0.0) {
             userPageUsersLeftButton.setVisible(false);
@@ -892,7 +900,7 @@ public class UserPageController {
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
         UserService service = new UserService();
-        int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, newRequest);
+        int res = service.loadUserPageProfile(pageOwner, wPodcasts, lPodcasts, authors, users, newRequestPodcast, newRequestActor);
         if(res == 0)
             Logger.success("Load user success");
         else if(res == 1){
@@ -1009,7 +1017,7 @@ public class UserPageController {
         // fill the watchlist grid
         if(!wPodcasts.isEmpty()) {
             loadWatchlaterPodcast(true);
-            for(int i = 1; i < wPodcasts.size() && i < 8; i++)
+            for(int i = 1; i < wPodcasts.size() && i <= podcastRowSize; i++)
                 loadWatchlaterPodcast(false);
         }
         else{
@@ -1021,7 +1029,7 @@ public class UserPageController {
         // fill the liked grid
         if(!lPodcasts.isEmpty()){
             loadLikedPodcast(true);
-            for(int i = 1; i < lPodcasts.size() && i < 8; i++)
+            for(int i = 1; i < lPodcasts.size() && i <= podcastRowSize; i++)
                 loadLikedPodcast(false);
         }
         else{
@@ -1033,7 +1041,7 @@ public class UserPageController {
         //fill the authors grid
         if(!authors.isEmpty()) {
             loadAuthor(true);
-           for(int i = 1; i < authors.size() && i < 12; i++)
+           for(int i = 1; i < authors.size() && i <= actorRowSize; i++)
                loadAuthor(false);
         }
         else{
@@ -1045,7 +1053,7 @@ public class UserPageController {
         //fill the users grid
         if(!users.isEmpty()) {
             loadUser(true);
-            for(int i = 1; i < users.size() && i < 12; i++)
+            for(int i = 1; i < users.size() && i <= actorRowSize; i++)
                 loadUser(false);
         }
         else{
@@ -1273,7 +1281,7 @@ public class UserPageController {
 
     public void getWpodcasts(){
         UserService service = new UserService();
-        int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequest);
+        int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
         if(res == 2){
             Logger.error("User not exists on neo4j");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
@@ -1290,7 +1298,7 @@ public class UserPageController {
 
     public void getLpodcasts(){
         UserService service = new UserService();
-        int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequest);
+        int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequestPodcast);
         if(res == 2){
             Logger.error("User not exists on neo4j");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
@@ -1307,7 +1315,7 @@ public class UserPageController {
 
     public void getAuthors(){
         UserService service = new UserService();
-        int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequest);
+        int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
         if(res == 2){
             Logger.error("User not exists on neo4j");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
@@ -1324,7 +1332,7 @@ public class UserPageController {
 
     public void getUsers(){
         UserService service = new UserService();
-        int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequest);
+        int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
         if(res == 2){
             Logger.error("User not exists on neo4j");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");

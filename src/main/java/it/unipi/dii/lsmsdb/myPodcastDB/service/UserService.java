@@ -78,7 +78,7 @@ public class UserService {
 
     }
 
-    public int loadUserPageProfile(User pageOwner, List<Podcast> wPodcasts, List<Podcast> lPodcasts, List<Author> followedAuthors, List<User> followedUsers, int limit ){
+    public int loadUserPageProfile(User pageOwner, List<Podcast> wPodcasts, List<Podcast> lPodcasts, List<Author> followedAuthors, List<User> followedUsers, int limitPodcast, int limitActor ){
 
         int res = -1;
         MongoManager.getInstance().openConnection();
@@ -91,22 +91,22 @@ public class UserService {
         else {
             pageOwner.copy(user);
             //load podcasts in watchlist from neo4j
-            List<Podcast> podcasts = podcastNeo4j.showPodcastsInWatchlist(pageOwner.getUsername(), limit, 0);
+            List<Podcast> podcasts = podcastNeo4j.showPodcastsInWatchlist(pageOwner.getUsername(), limitPodcast, 0);
             if(podcasts != null)
                 wPodcasts.addAll(podcasts);
 
             //load liked podcasts
-            podcasts = podcastNeo4j.showLikedPodcastsByUser(pageOwner.getUsername(), limit, 0);
+            podcasts = podcastNeo4j.showLikedPodcastsByUser(pageOwner.getUsername(), limitPodcast, 0);
             if(podcasts != null)
                 lPodcasts.addAll(podcasts);
 
             //load followed authors
-            List<Author> authors = authorNeo4j.showFollowedAuthorsByUser(pageOwner.getUsername(), limit, 0);
+            List<Author> authors = authorNeo4j.showFollowedAuthorsByUser(pageOwner.getUsername(), limitActor, 0);
             if(authors != null)
                 followedAuthors.addAll(authors);
 
             //load followed users
-            List<User> users = userNeo4jManager.showFollowedUsers(user.getUsername(), limit, 0);
+            List<User> users = userNeo4jManager.showFollowedUsers(user.getUsername(), limitActor, 0);
             if(users != null)
                 followedUsers.addAll(users);
 
