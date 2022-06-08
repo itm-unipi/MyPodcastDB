@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.SearchService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -56,13 +57,13 @@ public class UserSearchPreviewController {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         if (actorType.equals("User")) {
-            UserService userService = new UserService();
+            SearchService searchService = new SearchService();
 
             if (btnFollowUser.getText().equals("Follow")) {
-                userService.followUser(user.getUsername());
+                searchService.followUser(user.getUsername());
                 btnFollowUser.setText("Unfollow");
             } else {
-                userService.unfollowUser(user.getUsername());
+                searchService.unfollowUser(user.getUsername());
                 btnFollowUser.setText("Follow");
             }
 

@@ -5,7 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.HomepageService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.HomePageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -620,7 +620,7 @@ public class HomePageController {
 
     @FXML
     void onClickShowBasedOnFollowedUsers(MouseEvent event) throws IOException {
-        HomepageService homepageService = new HomepageService();
+        HomePageService homepageService = new HomePageService();
         this.noMoreBasedOnUsers = homepageService.loadMoreSuggested(this.basedOnFollowedUsers, this.podcastsToRetrieve, 0);
         loadSuggestedOnFollowedUsers(false);
     }
@@ -652,7 +652,7 @@ public class HomePageController {
             if ((this.suggestedAuthors.size() - gridSuggestedAuthors.getColumnCount()) == 0 && !this.noMoreSuggestedAuthors) {
                 Logger.info("(Call to the service) Trying to load new " + this.authorsToRetrieve + " authors in memory");
 
-                HomepageService homepageService = new HomepageService();
+                HomePageService homepageService = new HomePageService();
                 this.noMoreSuggestedAuthors = homepageService.loadSuggestedAuthors(this.suggestedAuthors, this.authorsToRetrieve, this.suggestedAuthors.size());
 
                 Logger.info("(End call service) Total authors loaded in memory: " + this.suggestedAuthors.size() + " | Authors available to be shown: " + (this.suggestedAuthors.size() - this.gridSuggestedAuthors.getColumnCount()));
@@ -682,7 +682,7 @@ public class HomePageController {
             if ((this.basedOnFollowedUsers.size() - gridSuggestedForUser.getColumnCount()) == 0 && !this.noMoreBasedOnUsers) {
                 Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
 
-                HomepageService homepageService = new HomepageService();
+                HomePageService homepageService = new HomePageService();
                 this.noMoreBasedOnUsers = homepageService.loadMoreSuggested(this.basedOnFollowedUsers, this.podcastsToRetrieve, this.basedOnFollowedUsers.size());
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.basedOnFollowedUsers.size() + " | Podcasts available to be shown: " + (this.basedOnFollowedUsers.size() - this.gridSuggestedForUser.getColumnCount()));
@@ -712,7 +712,7 @@ public class HomePageController {
             if ((this.basedOnWatchlist.size() - gridPodcastsBasedOnWatchlist.getColumnCount()) == 0 && !this.noMoreBasedOnWatchlist) {
                 Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
 
-                HomepageService homepageService = new HomepageService();
+                HomePageService homepageService = new HomePageService();
                 this.noMoreBasedOnWatchlist = homepageService.loadBasedOnWatchlist(this.basedOnWatchlist, this.podcastsToRetrieve, this.basedOnWatchlist.size());
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.basedOnWatchlist.size() + " | Podcasts available to be shown: " + (this.basedOnWatchlist.size() - this.gridPodcastsBasedOnWatchlist.getColumnCount()));
@@ -778,7 +778,7 @@ public class HomePageController {
             if ((this.topGenres.size() - gridSuggestedForCategory.getColumnCount()) == 0 && !this.noMorePodcastsTopGenres) {
                 Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
 
-                HomepageService homepageService = new HomepageService();
+                HomePageService homepageService = new HomePageService();
                 this.noMorePodcastsTopGenres = homepageService.loadTopGenres(this.topGenres, this.podcastsToRetrieve, this.topGenres.size());
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.topGenres.size() + " | Podcasts available to be shown: " + (this.topGenres.size() - this.gridSuggestedForCategory.getColumnCount()));
@@ -826,7 +826,7 @@ public class HomePageController {
             if ((this.watchlist.size() - gridWatchlist.getColumnCount()) == 0 && !this.noMorePodcastsWatchlist) {
                 Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
 
-                HomepageService homepageService = new HomepageService();
+                HomePageService homepageService = new HomePageService();
                 this.noMorePodcastsWatchlist = homepageService.loadWatchlist(this.watchlist, this.podcastsToRetrieve, this.watchlist.size());
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.watchlist.size() + " | Podcasts available to be shown: " + (this.watchlist.size() - this.gridWatchlist.getColumnCount()));
@@ -841,7 +841,7 @@ public class HomePageController {
     }
 
     public void initialize() throws IOException {
-        HomepageService homepageService = new HomepageService();
+        HomePageService homepageService = new HomePageService();
         switch (this.actorType) {
             case "Author" -> {
                 Author sessionActor = (Author) MyPodcastDB.getInstance().getSessionActor();

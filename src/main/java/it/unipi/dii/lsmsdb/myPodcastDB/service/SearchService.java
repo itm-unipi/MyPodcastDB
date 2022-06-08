@@ -12,6 +12,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 import java.util.List;
@@ -174,6 +175,28 @@ public class SearchService {
         MongoManager.getInstance().closeConnection();
 
         return noMoreUsers;
+    }
+
+    public void followUser(String username) {
+        Neo4jManager.getInstance().openConnection();
+
+        if (userNeo4jManager.addUserFollowUser(((User) (MyPodcastDB.getInstance().getSessionActor())).getUsername(), username))
+            Logger.success("(User) You started following " + username);
+        else
+            Logger.error("(User) Error during the following operation");
+
+        Neo4jManager.getInstance().closeConnection();
+    }
+
+    public void unfollowUser(String username) {
+        Neo4jManager.getInstance().openConnection();
+
+        if (userNeo4jManager.deleteUserFollowUser(((User) (MyPodcastDB.getInstance().getSessionActor())).getUsername(), username))
+            Logger.success("(User) You started following " + username);
+        else
+            Logger.error("(User) Error during the following operation");
+
+        Neo4jManager.getInstance().closeConnection();
     }
 
     /****** ADMIN SEARCH *******/

@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -73,12 +74,12 @@ public class AuthorReducedPodcastController {
             String actorType = MyPodcastDB.getInstance().getSessionType();
 
             int deleteResult = 0;
-            PodcastService podcastService = new PodcastService();
+            AuthorProfileService authorProfileService = new AuthorProfileService();
 
             if (actorType.equals("Author")) {
-                deleteResult = podcastService.deletePodcastAsAuthor(this.podcastId);
+                deleteResult = authorProfileService.deletePodcastAsAuthor(this.podcastId);
             } else {
-                deleteResult = podcastService.deletePodcastAsAdmin(this.authorId, this.podcastId);
+                deleteResult = authorProfileService.deletePodcastAsAdmin(this.authorId, this.podcastId);
             }
 
             if (deleteResult == 0) {

@@ -16,7 +16,7 @@ import org.javatuples.Triplet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomepageService {
+public class HomePageService {
 
     //---------------- GIANLUCA ---------------------
     //-----------------------------------------------
@@ -27,7 +27,7 @@ public class HomepageService {
     private final UserNeo4j userNeo4jManager;
     private final PodcastNeo4j podcastNeo4jManager;
 
-    public HomepageService() {
+    public HomePageService() {
         this.authorMongoManager = new AuthorMongo();
         this.authorNeo4jManager = new AuthorNeo4j();
         this.userNeo4jManager = new UserNeo4j();
