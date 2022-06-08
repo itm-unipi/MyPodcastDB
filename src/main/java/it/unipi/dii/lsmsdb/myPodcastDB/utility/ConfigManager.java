@@ -62,10 +62,10 @@ public class ConfigManager {
             Logger.error(e.getMessage());
             return false;
         }
-
-        config = (XMLconfig)xs.fromXML(importedXML);
-        Logger.setLogMode(config.getLogMode());
+        XMLconfig newConfig = (XMLconfig)xs.fromXML(importedXML);
         Logger.success("Configuration loaded");
+        config = newConfig;
+        Logger.setLogMode(config.getLogMode());
         return true;
     }
 

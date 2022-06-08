@@ -1,14 +1,13 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminDashboardService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -27,6 +26,8 @@ public class AddAdminController {
     @FXML
     private TextField adminRpPwdTextFiled;
 
+    @FXML
+    private TextField adminEmailTextFiled;
     @FXML
     private Button confirmButton;
 
@@ -52,38 +53,33 @@ public class AddAdminController {
         String name = adminNameTextField.getText();
         String password = adminPwdTextFiled.getText();
         String rpPassword = adminRpPwdTextFiled.getText();
+        String email = adminEmailTextFiled.getText();
 
-        if( !name.isEmpty() && !password.isEmpty() && !rpPassword.isEmpty() && password.equals(rpPassword) ) {
-            Logger.info("{ " +name + ", " + password + ", " + rpPassword + "}");
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            Stage stageInfo = (Stage)alert.getDialogPane().getScene().getWindow();
-            stageInfo.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-            alert.setTitle("Information!");
-            alert.setHeaderText("Account created");
-            alert.setContentText(null);
-            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/info_80px.png")));
-            alert.initOwner(addAdminAnchorPane.getScene().getWindow());
+        if( !name.isEmpty() && !password.isEmpty() && !rpPassword.isEmpty() && password.equals(rpPassword) && !email.isEmpty()) {
 
-            addAdminAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-            alert.showAndWait();
-            addAdminAnchorPane.setEffect(null);
+            Admin admin = new Admin("",name, password, email);
+            Logger.info(admin.toString());
 
-            closeStage(event);
+            AdminDashboardService service = new AdminDashboardService();
+            int res = service.addAdmin(admin);
+            if(res == 0) {
+                Logger.success("admin account created");
+                DialogManager.getInstance().createInformationAlert(addAdminAnchorPane, "Account created");
+                closeStage(event);
+            }
+            else if(res == 1){
+                Logger.error("admin already exists");
+                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "admin already exists");
+            }
+            else{
+                Logger.error("unknown error");
+                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "unknown error");
+            }
+
         }
         else{
-            Logger.info("no new admin created, invalid inputs typed");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            Stage stageErr = (Stage)alert.getDialogPane().getScene().getWindow();
-            stageErr.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
-            alert.setTitle("Error!");
-            alert.setHeaderText("Invalid inputs");
-            alert.setGraphic(new ImageView(ImageCache.getImageFromLocalPath("/img/error_100px.png")));
-            alert.setContentText(null);
-            alert.initOwner(addAdminAnchorPane.getScene().getWindow());
-
-            addAdminAnchorPane.setEffect(new BoxBlur(3, 3, 3));
-            alert.showAndWait();
-            addAdminAnchorPane.setEffect(null);
+            Logger.error("no new admin created, invalid inputs typed");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid inputs");
         }
     }
 
@@ -95,50 +91,54 @@ public class AddAdminController {
     }
 
     @FXML
-    void confirmButtonPressed(MouseEvent event){
+    void confirmButtonIn(MouseEvent event){
+        Logger.info("login button pressed");
         confirmButton.setStyle(
-                "-fx-background-color: #bcbcbc;" +
-                        "-fx-border-color:  #e0e0e0;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color: white;" +
+                        "-fx-border-color: #4CAF50;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
         );
-
     }
 
     @FXML
-    void confirmButtonReleased(MouseEvent event){
-        Logger.info("login butto released");
+    void confirmButtonOut(MouseEvent event){
+        Logger.info("login buttod released");
         confirmButton.setStyle(
-                "-fx-background-color: #e0e0e0;" +
-                        "-fx-border-color:  #bcbcbc;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color: #4CAF50;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
         );
     }
 
     @FXML
-    void cancelButtonPressed(MouseEvent event){
+    void cancelButtonIn(MouseEvent event){
+        Logger.info("sugnup butto pressed");
         cancelButton.setStyle(
-                "-fx-background-color: #bcbcbc;" +
-                        "-fx-border-color:  #e0e0e0;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color:  white;" +
+                        "-fx-border-color:  #f4511e;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
         );
-
     }
 
     @FXML
-    void cancelButtonReleased(MouseEvent event){
-        Logger.info("login butto released");
+    void cancelButtonOut(MouseEvent event){
+        Logger.info("login button released");
         cancelButton.setStyle(
-                "-fx-background-color: #e0e0e0;" +
-                        "-fx-border-color:  #bcbcbc;" +
-                        "-fx-border-radius: 25;" +
-                        "-fx-background-radius: 25;" +
-                        "-fx-cursor: hand;"
+                "-fx-background-color:  #f4511e;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
         );
     }
 

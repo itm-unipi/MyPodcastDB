@@ -259,14 +259,111 @@ public class PodcastNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<Podcast> showPodcastsInWatchlist(User user, int limit, int skip) {
-
+    public List<Podcast> showPodcastsInWatchlist(String username, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
                 "RETURN p " + "\n"+
-                "SKIP $skip " + "\n"+
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", user.getUsername(), "limit", limit, "skip", skip);
+        Value params = parameters("username", username, "limit", limit, "skip", skip);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Podcast> podcasts = new ArrayList<>();
+        for(Record record : result){
+            String podcastName = record.get(0).get("name").asString();
+            String podcastId = record.get(0).get("podcastId").asString();
+            String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
+
+            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
+    }
+
+    public List<Podcast> showPodcastsInWatchlist(String username) {
+
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
+                "RETURN p ";
+        Value params = parameters("username", username);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Podcast> podcasts = new ArrayList<>();
+        for(Record record : result){
+            String podcastName = record.get(0).get("name").asString();
+            String podcastId = record.get(0).get("podcastId").asString();
+            String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
+
+            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
+    }
+
+    public List<Podcast> showLikedPodcastsByUser(String username, int limit, int skip) {
+
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User { username: $username})-[r:LIKES]->(p:Podcast)" + "\n"+
+                "RETURN p " + "\n"+
+                "SKIP $skip" + "\n" +
+                "LIMIT $limit";
+        Value params = parameters("username", username, "limit", limit, "skip", skip);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        if(result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Podcast> podcasts = new ArrayList<>();
+        for(Record record : result){
+            String podcastName = record.get(0).get("name").asString();
+            String podcastId = record.get(0).get("podcastId").asString();
+            String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
+
+            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
+            podcasts.add(podcast);
+        }
+
+        return podcasts;
+    }
+
+    public List<Podcast> showLikedPodcastsByUser(String username) {
+
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = "MATCH (u:User { username: $username})-[r:LIKES]->(p:Podcast)" + "\n"+
+                "RETURN p ";
+        Value params = parameters("username", username);
         List<Record> result = null;
 
         try {

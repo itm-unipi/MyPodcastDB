@@ -34,7 +34,9 @@ public class AuthorMongo {
             Document newAuthor = new Document("name", author.getName())
                     .append("email", author.getEmail())
                     .append("password", author.getPassword())
-                    .append("podcasts", new ArrayList<>());
+                    .append("podcasts", new ArrayList<>())
+                    .append("picturePath", author.getPicturePath()
+                    );
 
             manager.getCollection("author").insertOne(newAuthor);
             author.setId(newAuthor.getObjectId("_id").toString());

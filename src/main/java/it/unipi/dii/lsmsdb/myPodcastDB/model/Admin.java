@@ -7,6 +7,7 @@ public class Admin {
     private String email;
 
     public Admin() {
+
     }
 
     public Admin(String id, String name, String password, String email) {

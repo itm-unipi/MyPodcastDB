@@ -127,7 +127,7 @@ public class HomePageService {
         List<Author> authors;
 
         // Load podcasts in watchlist
-        podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()), limit, 0);
+        podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, 0);
         if(podcasts != null)
             watchlist.addAll(podcasts);
 
@@ -265,7 +265,7 @@ public class HomePageService {
 
         boolean noMorePodcastsWatchlist = false;
 
-        List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()), limit, skip);
+        List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, skip);
         if(podcasts != null) {
             watchlist.addAll(podcasts);
             noMorePodcastsWatchlist = podcasts.size() < limit;

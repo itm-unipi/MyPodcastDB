@@ -3,7 +3,6 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -60,7 +59,6 @@ public class AuthorSearchPreviewController {
         AuthorProfileService authorProfileService = new AuthorProfileService();
 
         if (this.actorType.equals("Author")) {
-
             if (btnFollowAuthor.getText().equals("Follow")) {
                 authorProfileService.followAuthorAsAuthor(author.getName());
                 btnFollowAuthor.setText("Unfollow");
@@ -69,8 +67,6 @@ public class AuthorSearchPreviewController {
                 btnFollowAuthor.setText("Follow");
             }
         } else if (this.actorType.equals("User")) {
-            UserService userService = new UserService();
-
             if (btnFollowAuthor.getText().equals("Follow")) {
                 authorProfileService.followAuthorAsUser(author.getName());
                 btnFollowAuthor.setText("Unfollow");

@@ -131,7 +131,7 @@ public class AdminMongo {
 
     // --------- DELETE --------- //
 
-    public boolean deleteAuthorById(String id) {
+    public boolean deleteAdminById(String id) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
@@ -143,7 +143,7 @@ public class AdminMongo {
         }
     }
 
-    public boolean deleteAuthorByName(String name) {
+    public boolean deleteAdminByName(String name) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
@@ -155,7 +155,7 @@ public class AdminMongo {
         }
     }
 
-    public boolean deleteAuthorByEmail(String email) {
+    public boolean deleteAdminByEmail(String email) {
         MongoManager manager = MongoManager.getInstance();
 
         try {

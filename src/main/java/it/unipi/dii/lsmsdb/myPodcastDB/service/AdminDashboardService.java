@@ -14,17 +14,12 @@ import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.util.*;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AdminMongo;
 
 public class AdminDashboardService {
 
-    //---------------- GIANLUCA ---------------------
-    //-----------------------------------------------
-
-    //----------------- BIAGIO ----------------------
-    //-----------------------------------------------
-
-    //----------------- MATTEO ----------------------
-
+    private AdminMongo adminMongo;
     private PodcastMongo podcastMongo;
     private UserMongo userMongo;
     private QueryMongo queryMongo;
@@ -32,11 +27,73 @@ public class AdminDashboardService {
     private AuthorNeo4j authorNeo4j;
 
     public AdminDashboardService() {
+        this.adminMongo = new AdminMongo();
         this.podcastMongo = new PodcastMongo();
         this.userMongo = new UserMongo();
         this.queryMongo = new QueryMongo();
         this.podcastNeo4j = new PodcastNeo4j();
         this.authorNeo4j = new AuthorNeo4j();
+    }
+
+    public int addAdmin(Admin admin){
+
+        int res = -1;
+        MongoManager.getInstance().openConnection();
+        //check if an admin with the same name already exists
+        if(adminMongo.findAdminByName(admin.getName()) != null)
+            res = 1;
+        //check failure mongo operation
+        else if (!adminMongo.addAdmin(admin))
+            res = 2;
+        else
+            res = 0;
+        MongoManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int updateAdmin(Admin oldAdmin, Admin newAdmin){
+
+        int res = -1;
+
+        //check if there is something to update
+        if( oldAdmin.getName().equals(newAdmin.getName()) &&
+            oldAdmin.getEmail().equals(newAdmin.getEmail()) &&
+            oldAdmin.getPassword().equals(newAdmin.getPassword())
+        )
+            return 1;
+
+        MongoManager.getInstance().openConnection();
+        //check if oldAdmin exists
+        if(adminMongo.findAdminByName(oldAdmin.getName()) == null)
+            res = 2;
+        //check if an admin with the same name already exists
+        else if(!oldAdmin.getName().equals(newAdmin.getName()) && adminMongo.findAdminByName(newAdmin.getName()) != null)
+            res = 3;
+        //check failure mongo operation
+        else if (!adminMongo.updateAdmin(newAdmin))
+            res = 4;
+        else
+            res = 0;
+        MongoManager.getInstance().closeConnection();
+        if(res == 0)
+            oldAdmin.copy(newAdmin);
+        return res;
+    }
+
+    public int deleteAdmin(Admin admin){
+        int res = -1;
+        MongoManager.getInstance().openConnection();
+        //check if admin exists
+        if(adminMongo.findAdminByName(admin.getName()) == null)
+            res = 1;
+        //check failure mongo operation
+        else if (!adminMongo.deleteAdminById(admin.getId()))
+            res = 2;
+        else
+            res = 0;
+        MongoManager.getInstance().closeConnection();
+
+        return res;
     }
 
     public List<String> loadAdminPage(List<Pair<String, Float>> averageAgeOfUsersPerFavouriteCategory, List<Pair<Podcast, Integer>> podcastsWithHighestNumberOfReviews, List<Pair<String, Integer>> countryWithHighestNumberOfPodcasts, Triplet<List<String>, List<String>, List<String>> topFavouriteCategoriesPerGender, List<Pair<String, Integer>> mostNumerousCategories, List<Pair<String, Integer>> mostAppreciatedCategory) {
@@ -408,6 +465,4 @@ public class AdminDashboardService {
 
         return result != null;
     }
-
-    //-----------------------------------------------
 }

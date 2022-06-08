@@ -164,7 +164,7 @@ public class PodcastNeo4jTest {
     public void showPodcastsInWatchlistTest(){
         User user = new User();
         user.setUsername("whiteladybug851481");
-        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user, 10, 0);
+        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user.getUsername(), 10, 0);
 
         if(podcasts == null) {
             System.err.println("[-] showPodcastsInWatchlist");
@@ -172,6 +172,22 @@ public class PodcastNeo4jTest {
         }
         else
             System.out.println("[+] showPodcastsInWatchlist");
+
+        for(Podcast podcast : podcasts)
+            System.out.println(podcast);
+    }
+
+    public void showLikedPodcastsByUserTest(){
+        User user = new User();
+        user.setUsername("whiteladybug851481");
+        List<Podcast> podcasts = this.podcastNeo4j.showPodcastsInWatchlist(user.getUsername(), 10, 0);
+
+        if(podcasts == null) {
+            System.err.println("[-] showLikedPodcastsByUser");
+            return;
+        }
+        else
+            System.out.println("[+] showLikedPodcastsByUser");
 
         for(Podcast podcast : podcasts)
             System.out.println(podcast);
@@ -258,6 +274,7 @@ public class PodcastNeo4jTest {
         test.showMostNumerousCategoriesTest();
         test.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLikedTest();
         test.showPodcastsInWatchlistTest();
+        test.showLikedPodcastsByUserTest();
         test.showMostAppreciatedCategoriesTest();
         test.showSuggestedPodcastsLikedByFollowedUsersTest();
         test.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlistTest();

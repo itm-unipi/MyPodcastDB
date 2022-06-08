@@ -16,12 +16,12 @@ public class AuthorNeo4j {
 
     // --------- CREATE --------- //
 
-    public boolean addAuthor(String authorName) {
+    public boolean addAuthor(String authorName, String picturePath) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
-            String query = "CREATE (a:Author {name: $name})";
-            Value params = parameters("name", authorName);
+            String query = "CREATE (a:Author {name: $name, picturePath: $picturePath})";
+            Value params = parameters("name", authorName, "picturePath", picturePath);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -156,12 +156,40 @@ public class AuthorNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<Author> showFollowedAuthorsByUser(String username, int limit) {
+    public List<Author> showFollowedAuthorsByUser(String username, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u:User { username: $username})-[r:FOLLOWS]->(a:Author)" + "\n" +
                 "RETURN a" + "\n" +
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", username, "limit", limit);
+        Value params = parameters("username", username, "limit", limit, "skip", skip);
+        List<Record> result = null;
+
+        try {
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Author> authors = new ArrayList<>();
+        for (Record record : result) {
+            String name = record.get(0).get("name").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+            Author author = new Author("", name, picturePath);
+            authors.add(author);
+        }
+
+        return authors;
+    }
+
+    public List<Author> showFollowedAuthorsByUser(String username) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+        String query = " MATCH (u:User { username: $username})-[r:FOLLOWS]->(a:Author)" + "\n" +
+                "RETURN a";
+        Value params = parameters("username", username);
         List<Record> result = null;
 
         try {

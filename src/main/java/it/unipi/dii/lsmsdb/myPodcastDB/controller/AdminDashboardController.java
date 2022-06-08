@@ -176,6 +176,9 @@ public class AdminDashboardController {
     @FXML
     private Button updateInfo;
 
+    @FXML
+    private AnchorPane adminAnchorPane;
+
     private Admin admin;
     private AdminDashboardService service;
     private int limit;
@@ -213,7 +216,7 @@ public class AdminDashboardController {
         this.emailTextField.setText(this.admin.getEmail());
         this.emailTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
-        this.passwordTextField.setText("********************");
+        this.passwordTextField.setText(this.admin.getPassword());
         this.passwordTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
         this.modifyInfoWrapper.setVisible(true);
@@ -223,8 +226,38 @@ public class AdminDashboardController {
     }
 
     @FXML
-    void clickOnDelete(MouseEvent event) {
-        Logger.info("Delete Admin");
+    void clickOnDelete(MouseEvent event) throws IOException {
+
+        Logger.info("Delete Admin button clicked");
+        AdminDashboardService service = new AdminDashboardService();
+        int res = service.deleteAdmin(this.admin);
+        String logMsg = "";
+        String dialogMsg = "";
+        switch (res){
+            case 0:
+                Logger.success("Admin account removed");
+                DialogManager.getInstance().createInformationAlert(adminAnchorPane, "Admin account removed");
+                break;
+            case 1:
+                logMsg = "Admin account not exists";
+                dialogMsg = "Your account not exists";
+                break;
+            case 2:
+                logMsg = "Operation failed on mongo";
+                dialogMsg = "operation failed";
+                break;
+            case -1:
+                logMsg = "Unknown error";
+                dialogMsg = "Unknown error";
+                break;
+
+        }
+        if(res > 0 || res == -1){
+            Logger.error(logMsg);
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
+            return;
+        }
+        StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
     @FXML
@@ -246,7 +279,6 @@ public class AdminDashboardController {
         this.nameTextField.setDisable(false);
         this.emailTextField.setStyle("-fx-background-color: white");
         this.nameTextField.setDisable(false);
-        this.passwordTextField.setText("");
         this.passwordTextField.setStyle("-fx-background-color: white");
         this.nameTextField.setDisable(false);
         this.modifyInfoWrapper.setVisible(false);
@@ -267,10 +299,51 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnUpdate(MouseEvent event) {
+
+        Logger.info("Update button clicked");
+
+        Admin newAdmin = new Admin();
         // update admin
-        this.admin.setName(this.nameTextField.getText());
-        this.admin.setEmail(this.emailTextField.getText());
-        this.admin.setPassword(this.passwordTextField.getText());
+        newAdmin.setId(this.admin.getId());
+        newAdmin.setName(this.nameTextField.getText());
+        newAdmin.setEmail(this.emailTextField.getText());
+        newAdmin.setPassword(this.passwordTextField.getText());
+
+        AdminDashboardService service = new AdminDashboardService();
+        int res = service.updateAdmin(this.admin, newAdmin);
+        String logMsg = "";
+        String dialogMsg = "";
+        switch (res){
+
+            case 0:
+                Logger.success("Update admin success");
+                break;
+            case 1:
+                Logger.success("Nothing to update");
+                break;
+            case 2:
+                logMsg = "Admin not exists on mongo";
+                dialogMsg = "Your account not exists";
+                break;
+            case 3:
+                logMsg = "Admin with the same name already exists";
+                dialogMsg = "Admin with the same name already exists";
+                break;
+            case 4:
+                logMsg = "Operation on mongo failed";
+                dialogMsg = "Operation failed";
+                break;
+            case -1:
+                logMsg = "Unknown error";
+                dialogMsg = "Unknown error";
+                break;
+        }
+
+        if(res > 1 || res == -1){
+            Logger.error(logMsg);
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
+            return;
+        }
 
         // hide buttons and disable text fields
         this.nameTextField.setText(this.admin.getName());
@@ -279,7 +352,6 @@ public class AdminDashboardController {
         this.emailTextField.setText(this.admin.getEmail());
         this.emailTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
-        this.passwordTextField.setText("********************");
         this.passwordTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
         this.modifyInfo.setVisible(true);
@@ -804,6 +876,15 @@ public class AdminDashboardController {
         PieChartController controller6 = pieLoader.getController();
         controller6.setData("Most appreciated category", new String[] {"Category", "Number of likes"}, mostAppreciatedCategory, this.mainPage);
         this.statisticsGrid.add(newPieChart2, column, row);
+        /*
+        // settings buttons and texts
+        this.updateInfo.setVisible(false);
+        this.cancelInfo.setVisible(false);
+        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.nameTextField.setText(this.admin.getName());
+        this.emailTextField.setText(this.admin.getEmail());
+        this.passwordTextField.setText(this.admin.getPassword());*/
 
         return updateTimes;
     }

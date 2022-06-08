@@ -69,13 +69,13 @@ public class UserNeo4jTest {
         this.podcastNeo4j.addPodcast(podcast);
         Author author = new Author();
         author.setName("author test");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
         author.setName("author test1");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
         author.setName("author test2");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
         author.setName("author test3");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
 
         User user = new User();
         user.setUsername("user test");
@@ -255,7 +255,7 @@ public class UserNeo4jTest {
     private void showFollowedUserTest() {
         User user = new User();
         user.setUsername("silverelephant716273");
-        List<User> users = this.userNeo4j.showFollowedUsers(user.getUsername(), 10);
+        List<User> users = this.userNeo4j.showFollowedUsers(user.getUsername(), 10, 0);
         if(users != null)
             System.out.println("[+] showFollowedUserTest");
         else
@@ -333,7 +333,7 @@ public class UserNeo4jTest {
         this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         Author author = new Author();
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
 
         this.userNeo4j.addUserFollowAuthor("test1", "test2");
         this.userNeo4j.deleteUserFollowAuthor("test1", "test2");
@@ -355,9 +355,9 @@ public class UserNeo4jTest {
         this.userNeo4j.addUser(user.getUsername(), user.getPicturePath());
         Author author = new Author();
         author.setName("test2");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
         author.setName("test3");
-        this.authorNeo4j.addAuthor(author.getName());
+        this.authorNeo4j.addAuthor(author.getName(), "");
 
         this.userNeo4j.addUserFollowAuthor("test1", "test2");
         this.userNeo4j.addUserFollowAuthor("test1", "test3");
