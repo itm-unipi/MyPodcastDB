@@ -2,8 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -112,31 +111,30 @@ public class AuthorPreviewController {
     @FXML
     void onClickBtnFollowAuthor(MouseEvent event) {
 
+        AuthorProfileService authorProfileService = new AuthorProfileService();
         if (this.actorType.equals("Author")) {
-            AuthorService authorService = new AuthorService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthor(this.author.getName());
+                authorProfileService.followAuthorAsAuthor(this.author.getName());
                 btnFollowAuthor.setText("Unfollow");
 
                 // Increment followers counter
                 updateFollowerCounter(true);
             } else {
-                authorService.unfollowAuthor(this.author.getName());
+                authorProfileService.unfollowAuthorAsAuthor(this.author.getName());
                 btnFollowAuthor.setText("Follow");
 
                 // Decrement followers counter
                 updateFollowerCounter(false);
             }
         } else if (this.actorType.equals("User")) {
-            UserService userService = new UserService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                userService.followAuthor(this.author.getName());
+                authorProfileService.followAuthorAsUser(this.author.getName());
                 btnFollowAuthor.setText("Unfollow");
                 updateFollowerCounter(true);
             } else {
-                userService.unfollowAuthor(this.author.getName());
+                authorProfileService.unfollowAuthorAsUser(this.author.getName());
                 btnFollowAuthor.setText("Follow");
                 updateFollowerCounter(false);
             }

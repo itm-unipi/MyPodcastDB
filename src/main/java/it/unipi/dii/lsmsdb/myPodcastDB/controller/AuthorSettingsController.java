@@ -2,24 +2,18 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
-import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -145,8 +139,8 @@ public class AuthorSettingsController {
         if (alert.getResult() == ButtonType.OK) {
 
             if (authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
-                AuthorService authorService = new AuthorService();
-                int deleteResult = authorService.deleteAccount();
+                AuthorProfileService authorProfileService = new AuthorProfileService();
+                int deleteResult = authorProfileService.deleteAccountAsAuthor();
 
                 if (deleteResult == 0) {
                     alert = new Alert(Alert.AlertType.INFORMATION);
@@ -237,8 +231,8 @@ public class AuthorSettingsController {
                         && authorNewPassword.getText().equals("")
                         && tempAuthor.getPicturePath().equals(oldAuthor.getPicturePath()))) {
 
-                    AuthorService authorService = new AuthorService();
-                    int updateResult = authorService.updateAuthor(oldAuthor, tempAuthor);
+                    AuthorProfileService authorProfileService = new AuthorProfileService();
+                    int updateResult = authorProfileService.updateAuthorAsAuthor(oldAuthor, tempAuthor);
 
                     if (updateResult == 1) {
                         // Commit

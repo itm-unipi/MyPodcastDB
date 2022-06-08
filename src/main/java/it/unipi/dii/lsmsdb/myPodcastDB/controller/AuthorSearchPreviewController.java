@@ -2,7 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -57,25 +57,25 @@ public class AuthorSearchPreviewController {
     /****** Events on follow button ******/
     @FXML
     void onClickBtnFollowAuthor(MouseEvent event) {
+        AuthorProfileService authorProfileService = new AuthorProfileService();
 
         if (this.actorType.equals("Author")) {
-            AuthorService authorService = new AuthorService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthor(author.getName());
+                authorProfileService.followAuthorAsAuthor(author.getName());
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                authorService.unfollowAuthor(author.getName());
+                authorProfileService.unfollowAuthorAsAuthor(author.getName());
                 btnFollowAuthor.setText("Follow");
             }
         } else if (this.actorType.equals("User")) {
             UserService userService = new UserService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                userService.followAuthor(author.getName());
+                authorProfileService.followAuthorAsUser(author.getName());
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                userService.unfollowAuthor(author.getName());
+                authorProfileService.unfollowAuthorAsUser(author.getName());
                 btnFollowAuthor.setText("Follow");
             }
 

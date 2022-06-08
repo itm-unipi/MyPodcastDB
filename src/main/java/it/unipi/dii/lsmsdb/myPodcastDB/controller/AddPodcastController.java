@@ -3,7 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -153,8 +153,8 @@ public class AddPodcastController {
             Podcast podcast = new Podcast("0", podcastName, authorId, authorName, "", artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
             Logger.info("PODCAST TO ADD: " + podcast.toString());
 
-            AuthorService authorService = new AuthorService();
-            int addResult = authorService.addPodcast(podcast);
+            PodcastService podcastService = new PodcastService();
+            int addResult = podcastService.addPodcastAsAuthor(podcast);
 
             if (addResult == 0) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

@@ -5,9 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -204,26 +202,25 @@ public class AuthorProfileController {
     /********* Author Operations (Add podcast, Update Author, Delete Author, Follow Author) ***********/
     @FXML
     void onClickBtnFollowAuthor(MouseEvent event) {
+        AuthorProfileService authorService = new AuthorProfileService();
 
         if (this.actorType.equals("Author")) {
-            AuthorService authorService = new AuthorService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthor(StageManager.getObjectIdentifier());
+                authorService.followAuthorAsAuthor(StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                authorService.unfollowAuthor(StageManager.getObjectIdentifier());
+                authorService.unfollowAuthorAsAuthor(StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Follow");
             }
 
         } else if (this.actorType.equals("User")) {
-            UserService userService = new UserService();
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                userService.followAuthor(StageManager.getObjectIdentifier());
+                authorService.followAuthorAsUser(StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                userService.unfollowAuthor(StageManager.getObjectIdentifier());
+                authorService.unfollowAuthorAsUser(StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Follow");
             }
 
@@ -295,8 +292,8 @@ public class AuthorProfileController {
 
         if (alert.getResult() == ButtonType.OK) {
 
-            AdminService adminService = new AdminService();
-            int deleteResult = adminService.deleteAuthor(author);
+            AuthorProfileService authorProfileService = new AuthorProfileService();
+            int deleteResult = authorProfileService.deleteAuthorAsAdmin(author);
 
             if (deleteResult == 0) {
                 alert = new Alert(Alert.AlertType.INFORMATION);
@@ -472,28 +469,25 @@ public class AuthorProfileController {
             if ((this.followedAuthors.size() - gridAuthorsFollowed.getColumnCount()) == 0 && !this.noMoreAuthors) {
                 Logger.info("(Call to the service) Trying to load new " + this.authorsToRetrieve + " authors in memory");
 
+                AuthorProfileService authorProfileService = new AuthorProfileService();
                 switch (this.actorType) {
                     case "Author" -> {
-                        AuthorService authorService = new AuthorService();
 
                         // Need to distinguish if the session author is also the visited author
                         if (StageManager.getObjectIdentifier().equals(this.author.getName())) {
-                            this.noMoreAuthors = authorService.loadOwnFollowedAuthors(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                            this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsPageOwner(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
                         } else {
-                            this.noMoreAuthors = authorService.loadFollowedAuthors(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                            this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsAuthor(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
                         }
                     }
                     case "User" -> {
-                        UserService userService = new UserService();
-                        this.noMoreAuthors = userService.loadFollowedAuthorsRegistered(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                        this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsUser(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
                     }
                     case "Admin" -> {
-                        AdminService adminService = new AdminService();
-                        this.noMoreAuthors = adminService.loadFollowedAuthors(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                        this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsAdmin(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
                     }
                     case "Unregistered" -> {
-                        UserService userService = new UserService();
-                        this.noMoreAuthors = userService.loadFollowedAuthorsUnregistered(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
+                        this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsUnregistered(this.author, this.followedAuthors, this.authorsToRetrieve, this.followedAuthors.size());
                     }
                     default -> Logger.error("Unidentified Actor Type");
                 }
@@ -571,6 +565,7 @@ public class AuthorProfileController {
     /********************/
 
     public void initialize() throws IOException {
+        AuthorProfileService authorProfileService = new AuthorProfileService();
 
         switch (this.actorType) {
             case "Author" -> {
@@ -580,11 +575,10 @@ public class AuthorProfileController {
                 Image image = ImageCache.getImageFromLocalPath(sessionActor.getPicturePath());
                 actorPicture.setImage(image);
 
-                AuthorService authorService = new AuthorService();
                 if (StageManager.getObjectIdentifier().equals(sessionActor.getName())) {
                     // Session author coincides with the author profile requested
                     author.setName(sessionActor.getName());
-                    authorService.loadAuthorOwnProfile(this.author, this.followedAuthors, this.authorsToRetrieve);
+                    authorProfileService.loadAuthorProfileAsPageOwner(this.author, this.followedAuthors, this.authorsToRetrieve);
                     // TODO: rimuovere dopo il rebase (è stato fatto solo perchè il login crea un utente di sessione fittizio)
                     ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(this.author);
 
@@ -602,7 +596,7 @@ public class AuthorProfileController {
                 } else {
                     // Author profile requested is different form the session author
                     this.author.setName(StageManager.getObjectIdentifier());
-                    this.followingAuthor = authorService.loadAuthorProfile(this.author, this.followedAuthors, this.authorsToRetrieve);
+                    this.followingAuthor = authorProfileService.loadAuthorProfileAsAuthor(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                     // Setting GUI information about the author visited
                     authorName.setText(this.author.getName());
@@ -630,8 +624,7 @@ public class AuthorProfileController {
 
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
-                UserService userService = new UserService();
-                this.followingAuthor = userService.loadAuthorProfileRegistered(this.author, this.followedAuthors, this.authorsToRetrieve);
+                this.followingAuthor = authorProfileService.loadAuthorProfileAsUser(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                 // Setting GUI information about the author visited
                 this.authorName.setText(author.getName());
@@ -657,9 +650,8 @@ public class AuthorProfileController {
                 this.actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
-                AdminService adminService = new AdminService();
                 this.author.setName(StageManager.getObjectIdentifier());
-                adminService.loadAuthorProfile(this.author, this.followedAuthors, this.authorsToRetrieve);
+                authorProfileService.loadAuthorProfileAsAdmin(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                 // Setting GUI information of the author visited
                 this.authorName.setText(this.author.getName());
@@ -678,8 +670,7 @@ public class AuthorProfileController {
 
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
-                UserService userService = new UserService();
-                userService.loadAuthorProfileUnregistered(this.author, this.followedAuthors, this.authorsToRetrieve);
+                authorProfileService.loadAuthorProfileAsUnregistered(this.author, this.followedAuthors, this.authorsToRetrieve);
 
                 this.authorName.setText(this.author.getName());
                 this.tooltipAuthorName.setText(this.author.getName());

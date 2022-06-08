@@ -5,9 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.SearchService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -251,33 +249,27 @@ public class SearchController {
         // Setting text in the GUI label
         this.searchingForText.setText("Searching for \"" + text + "\"");
 
+        SearchService searchService = new SearchService();
+
         switch (this.actorType) {
             case "Author" -> {
-                // Author search service
-                AuthorService authorService = new AuthorService();
-                authorService.search(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
+                searchService.searchAsAuthor(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
             }
             case "User" -> {
-                // Registered User search service
-                UserService userService = new UserService();
-                userService.searchRegistered(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
+                searchService.searchAsUser(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
             }
             case "Admin" -> {
-                // Admin search service
-                AdminService adminService = new AdminService();
-                adminService.search(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
+                searchService.searchAsAdmin(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
             }
             case "Unregistered" -> {
-                // Unregistered User Search Service
-                UserService userService = new UserService();
-                userService.searchUnregistered(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
+                searchService.searchAsUnregisteredUser(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
             }
         }
     }
 
     void clearIndexes(boolean newLoad, GridPane grid) {
         if (newLoad) {
-            this.row = grid.getRowCount() - 1;
+            this.row = grid.getRowCount();
         } else {
             this.row = 0;
         }
@@ -293,20 +285,17 @@ public class SearchController {
             this.noUsersFound.setMaxHeight(0);
 
             clearIndexes(newLoad, gridFoundUsers);
+            int maxValue = Math.min(this.usersMatch.size(), (this.row + this.usersToLoadInGrid));
 
-            if (!noMoreUsers) {
-                int maxValue = Math.min(this.usersMatch.size(), (this.row + this.usersToLoadInGrid));
-                
-                for (Pair<User, Boolean> user : this.usersMatch.subList(this.row, maxValue)) {
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserSearchPreview.fxml"));
+            for (Pair<User, Boolean> user : this.usersMatch.subList(this.row, maxValue)) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserSearchPreview.fxml"));
 
-                    AnchorPane newUser = fxmlLoader.load();
-                    UserSearchPreviewController controller = fxmlLoader.getController();
-                    controller.setData(user.getValue0(), user.getValue1());
+                AnchorPane newUser = fxmlLoader.load();
+                UserSearchPreviewController controller = fxmlLoader.getController();
+                controller.setData(user.getValue0(), user.getValue1());
 
-                    gridFoundUsers.add(newUser, this.column, this.row++);
-                }
+                gridFoundUsers.add(newUser, this.column, this.row++);
             }
         }
 
@@ -327,19 +316,17 @@ public class SearchController {
 
             clearIndexes(newLoad, gridFoundPodcasts);
 
-            if (!noMorePodcasts) {
-                int maxValue = Math.min(this.podcastsMatch.size(), (this.row + this.podcastsToLoadInGrid));
+            int maxValue = Math.min(this.podcastsMatch.size(), (this.row + this.podcastsToLoadInGrid));
 
-                for (Podcast entry : this.podcastsMatch.subList(this.row, maxValue)) {
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
+            for (Podcast entry : this.podcastsMatch.subList(this.row, maxValue)) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
-                    AnchorPane newPodcast = fxmlLoader.load();
-                    AuthorReducedPodcastController controller = fxmlLoader.getController();
-                    controller.setData(entry.getAuthorId(), entry.getId(), entry.getName(), entry.getReleaseDate(), entry.getPrimaryCategory(), entry.getArtworkUrl600());
+                AnchorPane newPodcast = fxmlLoader.load();
+                AuthorReducedPodcastController controller = fxmlLoader.getController();
+                controller.setData(entry.getAuthorId(), entry.getId(), entry.getName(), entry.getReleaseDate(), entry.getPrimaryCategory(), entry.getArtworkUrl600());
 
-                    gridFoundPodcasts.add(newPodcast, this.column, this.row++);
-                }
+                gridFoundPodcasts.add(newPodcast, this.column, this.row++);
             }
         }
 
@@ -358,20 +345,17 @@ public class SearchController {
             this.noAuthorsText.setMaxHeight(0);
 
             clearIndexes(newLoad, gridFoundAuthors);
+            int maxValue = Math.min(this.authorsMatch.size(), (this.row + this.usersToLoadInGrid));
 
-            if (!noMoreAuthors) {
-                int maxValue = Math.min(this.authorsMatch.size(), (this.row + this.usersToLoadInGrid));
+            for (Pair<Author, Boolean> author : this.authorsMatch.subList(this.row, maxValue)) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSearchPreview.fxml"));
 
-                for (Pair<Author, Boolean> author : this.authorsMatch.subList(this.row, maxValue)) {
-                    FXMLLoader fxmlLoader = new FXMLLoader();
-                    fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSearchPreview.fxml"));
+                AnchorPane newAuthor = fxmlLoader.load();
+                AuthorSearchPreviewController controller = fxmlLoader.getController();
+                controller.setData(author.getValue0(), author.getValue1());
 
-                    AnchorPane newAuthor = fxmlLoader.load();
-                    AuthorSearchPreviewController controller = fxmlLoader.getController();
-                    controller.setData(author.getValue0(), author.getValue1());
-
-                    gridFoundAuthors.add(newAuthor, this.column, this.row++);
-                }
+                gridFoundAuthors.add(newAuthor, this.column, this.row++);
             }
         }
 
@@ -438,22 +422,19 @@ public class SearchController {
             if ((this.authorsMatch.size() - gridFoundAuthors.getRowCount() == 0) && !this.noMoreAuthors) {
                 Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " authors in memory");
 
+                SearchService searchService = new SearchService();
                 switch (this.actorType) {
                     case "Author" -> {
-                        AuthorService authorService = new AuthorService();
-                        this.noMoreAuthors = authorService.loadMoreAuthors(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
+                        this.noMoreAuthors = searchService.loadMoreAuthorsAsAuthor(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
                     }
                     case "User" -> {
-                        UserService userService = new UserService();
-                        this.noMoreAuthors = userService.loadMoreAuthorsRegistered(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
+                        this.noMoreAuthors = searchService.loadMoreAuthorsAsUser(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
                     }
                     case "Admin" -> {
-                        AdminService adminService = new AdminService();
-                        this.noMoreAuthors = adminService.loadMoreAuthors(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
+                        this.noMoreAuthors = searchService.loadMoreAuthorsAsAdmin(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
                     }
                     case "Unregistered" -> {
-                        UserService userService = new UserService();
-                        this.noMoreAuthors = userService.loadMoreAuthorsUnregistered(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
+                        this.noMoreAuthors = searchService.loadMoreAuthorsAsUnregistered(searchText.getText(), this.authorsMatch, this.authorsToRetrieve, this.authorsMatch.size());
                     }
                     default -> Logger.error("Unidentified Actor Type");
                 }
@@ -477,22 +458,19 @@ public class SearchController {
             if ((this.podcastsMatch.size() - gridFoundPodcasts.getRowCount()) == 0 && !this.noMorePodcasts) {
                 Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
 
+                SearchService searchService = new SearchService();
                 switch (this.actorType) {
                     case "Author" -> {
-                        AuthorService authorService = new AuthorService();
-                        this.noMorePodcasts = authorService.loadMorePodcasts(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
+                        this.noMorePodcasts = searchService.loadMorePodcastsAsAuthor(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
                     }
                     case "User" -> {
-                        UserService userService = new UserService();
-                        this.noMorePodcasts = userService.loadMorePodcasts(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
+                        this.noMorePodcasts = searchService.loadMorePodcastsAsUser(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
                     }
                     case "Admin" -> {
-                        AdminService adminService = new AdminService();
-                        this.noMorePodcasts = adminService.loadMorePodcasts(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
+                        this.noMorePodcasts = searchService.loadMorePodcastsAsAdmin(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
                     }
                     case "Unregistered" -> {
-                        UserService userService = new UserService();
-                        this.noMorePodcasts = userService.loadMorePodcasts(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
+                        this.noMorePodcasts = searchService.loadMorePodcastsAsUnregistered(searchText.getText(), this.podcastsMatch, this.podcastsToRetrieve, this.podcastsMatch.size());
                     }
                     default -> Logger.error("Unidentified Actor Type");
                 }
@@ -516,14 +494,13 @@ public class SearchController {
             if ((this.usersMatch.size() - gridFoundUsers.getRowCount()) == 0 && !this.noMoreUsers) {
                 Logger.info("(Call to the service) Trying to load new " + this.usersToRetrieve + " users in memory");
 
+                SearchService searchService = new SearchService();
                 switch (this.actorType) {
                     case "User" -> {
-                        UserService userService = new UserService();
-                        this.noMoreUsers = userService.loadMoreUsers(searchText.getText(), this.usersMatch, this.usersToRetrieve, this.usersMatch.size());
+                        this.noMoreUsers = searchService.loadMoreUsersAsUser(searchText.getText(), this.usersMatch, this.usersToRetrieve, this.usersMatch.size());
                     }
                     case "Admin" -> {
-                        AdminService adminService = new AdminService();
-                        this.noMoreUsers = adminService.loadMoreUsers(searchText.getText(), this.usersMatch, this.usersToRetrieve, this.usersMatch.size());
+                        this.noMoreUsers = searchService.loadMoreUsersAsAdmin(searchText.getText(), this.usersMatch, this.usersToRetrieve, this.usersMatch.size());
                     }
                     default -> Logger.error("Unidentified Actor Type");
                 }
