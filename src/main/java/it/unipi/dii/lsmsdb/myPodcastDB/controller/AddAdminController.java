@@ -1,18 +1,13 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminDashboardService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -65,7 +60,7 @@ public class AddAdminController {
             Admin admin = new Admin("",name, password, email);
             Logger.info(admin.toString());
 
-            AdminService service = new AdminService();
+            AdminDashboardService service = new AdminDashboardService();
             int res = service.addAdmin(admin);
             if(res == 0) {
                 Logger.success("admin account created");

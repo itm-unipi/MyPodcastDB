@@ -5,12 +5,12 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AdminMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
-public class AdminService {
+public class AdminDashboardService {
 
     //---------------- GIANLUCA ---------------------
     private AdminMongo adminMongoManager;
 
-    public AdminService(){
+    public AdminDashboardService(){
         adminMongoManager = new AdminMongo();
     }
 

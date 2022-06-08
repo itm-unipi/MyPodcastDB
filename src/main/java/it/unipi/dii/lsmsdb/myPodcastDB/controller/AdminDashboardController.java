@@ -2,8 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminDashboardService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -18,7 +17,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.javatuples.Triplet;
 
@@ -176,7 +174,7 @@ public class AdminDashboardController {
     void clickOnDelete(MouseEvent event) throws IOException {
 
         Logger.info("Delete Admin button clicked");
-        AdminService service = new AdminService();
+        AdminDashboardService service = new AdminDashboardService();
         int res = service.deleteAdmin(this.admin);
         String logMsg = "";
         String dialogMsg = "";
@@ -242,7 +240,7 @@ public class AdminDashboardController {
         newAdmin.setEmail(this.emailTextField.getText());
         newAdmin.setPassword(this.passwordTextField.getText());
 
-        AdminService service = new AdminService();
+        AdminDashboardService service = new AdminDashboardService();
         int res = service.updateAdmin(this.admin, newAdmin);
         String logMsg = "";
         String dialogMsg = "";
