@@ -57,13 +57,13 @@ public class UserMongo {
 
     // ---------- READ ---------- //
 
-    public List<User> searchUser(String textToSearch, int limit) {
+    public List<User> searchUser(String textToSearch, int limit, int skip) {
         MongoManager manager = MongoManager.getInstance();
 
         List<User> userMatch = new ArrayList<>();
         Bson filter = Filters.text(textToSearch);
 
-        try (MongoCursor<Document> cursor = manager.getCollection("user").find(filter).limit(limit).iterator()) {
+        try (MongoCursor<Document> cursor = manager.getCollection("user").find(filter).limit(limit).skip(skip).iterator()) {
             while (cursor.hasNext()) {
                 Document user = cursor.next();
 

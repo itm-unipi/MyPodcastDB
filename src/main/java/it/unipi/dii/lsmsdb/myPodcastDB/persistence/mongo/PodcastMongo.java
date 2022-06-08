@@ -90,13 +90,13 @@ public class PodcastMongo {
 
     // ---------- READ ---------- //
 
-    public List<Podcast> searchPodcast(String textToSearch, int limit) {
+    public List<Podcast> searchPodcast(String textToSearch, int limit, int skip) {
         MongoManager manager = MongoManager.getInstance();
 
         List<Podcast> podcastMatch = new ArrayList<>();
         Bson filter = Filters.text(textToSearch);
 
-        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(filter).limit(limit).iterator()) {
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(filter).limit(limit).skip(skip).iterator()) {
             while (cursor.hasNext()) {
                 Document podcast = cursor.next();
 

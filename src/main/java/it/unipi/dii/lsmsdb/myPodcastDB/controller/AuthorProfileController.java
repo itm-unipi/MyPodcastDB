@@ -45,8 +45,9 @@ public class AuthorProfileController {
     private int column;
 
     /*** Variables to manage the scroll behavior ****/
+    private final int podcastsToLoadInGrid;
     private final int authorsToRetrieve;
-    private final int authorToLoadInGrid;
+    private final int authorsToLoadInGrid;
     private boolean noMoreAuthors;
     /***********************************************/
 
@@ -141,9 +142,11 @@ public class AuthorProfileController {
         // Authors retrieved from the databases in one request (corresponds to the "limit")
         this.authorsToRetrieve = 16;
         // Authors to add to the grid at each "scroll finished" (taken from the "authors in memory" retrieved)
-        this.authorToLoadInGrid = 8;
+        this.authorsToLoadInGrid = 8;
         // Used to avoid useless call to the services
         this.noMoreAuthors = false;
+
+        this.podcastsToLoadInGrid = 5;
     }
 
     /*********** Navigator Events (Profile, Home, Search) *************/
@@ -376,7 +379,7 @@ public class AuthorProfileController {
     /******* LOAD GRIDS ******/
     void clearIndexes(boolean newFollowedAuthors, boolean newPodcasts) {
         if (newPodcasts) {
-            this.row = this.gridAuthorPodcasts.getRowCount();
+            this.row = this.gridAuthorPodcasts.getRowCount() - 1;
             this.column = 0;
         } else if (newFollowedAuthors) {
             this.row = 0;
@@ -391,8 +394,7 @@ public class AuthorProfileController {
     void loadFollowedAuthors(boolean newLoad) throws IOException {
         clearIndexes(newLoad, false);
 
-        int maxValue = Math.min(this.followedAuthors.size(), (gridAuthorsFollowed.getColumnCount() + this.authorToLoadInGrid));
-
+        int maxValue = Math.min(this.followedAuthors.size(), (gridAuthorsFollowed.getColumnCount() + this.authorsToLoadInGrid));
         for (Pair<Author, Boolean> followedAuthor: this.followedAuthors.subList(gridAuthorsFollowed.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
@@ -409,8 +411,8 @@ public class AuthorProfileController {
     void loadPodcasts(boolean newPodcasts) throws IOException {
         clearIndexes(false, newPodcasts);
 
-        // TODO: create sublist
-        for (Podcast podcast: this.author.getOwnPodcasts()) {
+        int maxValue  = Math.min(this.author.getOwnPodcasts().size(), (this.row + this.podcastsToLoadInGrid));
+        for (Podcast podcast: this.author.getOwnPodcasts().subList(this.row, maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorReducedPodcast.fxml"));
 
@@ -438,13 +440,7 @@ public class AuthorProfileController {
         }
     }
 
-    /******* TEST SCROLL ******/
-
-    @FXML
-    void scrollStarted(ScrollEvent event) {
-        Logger.info(event.toString());
-    }
-
+    /******* SCROLL EVENTS ******/
     @FXML
     void onScrollGridPane(ScrollEvent event) throws IOException {
         // Hide left arrow
@@ -515,7 +511,7 @@ public class AuthorProfileController {
 
     void setupScrollArrows() {
 
-        if (this.followedAuthors.size() >= this.authorToLoadInGrid) {
+        if (this.followedAuthors.size() >= this.authorsToLoadInGrid) {
             this.rightArrow.setVisible(true);
             Logger.info("There are authors to load");
         } else {
@@ -561,6 +557,15 @@ public class AuthorProfileController {
         else
             leftArrow.setVisible(true);
          */
+    }
+
+    @FXML
+    void onScrollPodcasts(ScrollEvent event) throws IOException {
+        if (scrollPodcasts.getVvalue() == 1) {
+            Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.author.getOwnPodcasts().size() - gridAuthorPodcasts.getRowCount()));
+            Logger.info("Podcasts loaded in the grid: " + this.gridAuthorPodcasts.getRowCount() + " | Podcasts in memory: " + this.author.getOwnPodcasts().size());
+            loadPodcasts(true);
+        }
     }
 
     /********************/

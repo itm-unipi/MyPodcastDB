@@ -178,21 +178,21 @@ public class AdminService {
 
         // Searching for podcasts
         if (filters.getValue0()) {
-            List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit);
+            List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit, 0);
             if (podcasts != null)
                 podcastsMatch.addAll(podcasts);
         }
 
         // Searching for authors
         if (filters.getValue1()) {
-            List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
+            List<Author> authors = authorMongoManager.searchAuthor(searchText, limit, 0);
             for (Author authorFound : authors)
                 authorsMatch.add(new Pair<>(authorFound, false));
         }
 
         // Searching for users
         if (filters.getValue2()) {
-            List<User> users = userMongoManager.searchUser(searchText, limit);
+            List<User> users = userMongoManager.searchUser(searchText, limit, 0);
             for (User userFound : users)
                 usersMatch.add(new Pair<>(userFound, false));
         }
@@ -287,6 +287,53 @@ public class AdminService {
         MongoManager.getInstance().closeConnection();
     }
 
+    public boolean loadMorePodcasts(String searchText, List<Podcast> podcastsMatch, int limit, int skip) {
+        MongoManager.getInstance().openConnection();
+        boolean noMorePodcasts = false;
+
+        List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit, skip);
+        if (podcasts != null) {
+            podcastsMatch.addAll(podcasts);
+            noMorePodcasts = podcasts.size() < limit;
+        }
+
+        MongoManager.getInstance().closeConnection();
+        return noMorePodcasts;
+    }
+
+    public boolean loadMoreUsers(String searchText, List<Pair<User, Boolean>> usersMatch, int limit, int skip) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        boolean noMoreUsers = false;
+
+        List<User> users = userMongoManager.searchUser(searchText, limit, skip);
+        if (users != null) {
+            for (User userFound : users)
+                usersMatch.add(new Pair<>(userFound, false));
+            noMoreUsers = users.size() < limit;
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        MongoManager.getInstance().closeConnection();
+
+        return noMoreUsers;
+    }
+
+    public boolean loadMoreAuthors(String searchText, List<Pair<Author, Boolean>> authorsMatch, int limit, int skip) {
+        MongoManager.getInstance().openConnection();
+        boolean noMoreAuthors = false;
+
+        List<Author> authors = authorMongoManager.searchAuthor(searchText, limit, skip);
+        if (authors != null) {
+            for (Author authorFound : authors)
+                authorsMatch.add(new Pair<>(authorFound, false));
+            noMoreAuthors = authors.size() < limit;
+        }
+
+        MongoManager.getInstance().closeConnection();
+        return noMoreAuthors;
+    }
     //-----------------------------------------------
 
     //----------------- MATTEO ----------------------

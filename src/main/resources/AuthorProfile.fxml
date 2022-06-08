@@ -276,7 +276,7 @@
                                     <Insets top="1.0" />
                                  </VBox.margin>
                                  <content>
-                                    <GridPane fx:id="gridAuthorPodcasts" vgap="8.0">
+                                    <GridPane fx:id="gridAuthorPodcasts" onScroll="#onScrollPodcasts" vgap="8.0">
                                       <columnConstraints>
                                         <ColumnConstraints minWidth="0.0" />
                                       </columnConstraints>

@@ -369,14 +369,14 @@ public class AuthorService {
 
         // Searching for podcasts
         if (filters.getValue0()) {
-            List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit);
+            List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit, 0);
             if (podcasts != null)
                 podcastsMatch.addAll(podcasts);
         }
 
         // Searching for authors
         if (filters.getValue1()) {
-            List<Author> authors = authorMongoManager.searchAuthor(searchText, limit);
+            List<Author> authors = authorMongoManager.searchAuthor(searchText, limit, 0);
             for (Author authorFound : authors) {
                 boolean followingAuthor = authorNeo4jManager.findAuthorFollowsAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), authorFound.getName());
                 authorsMatch.add(new Pair<>(authorFound, followingAuthor));
@@ -476,6 +476,40 @@ public class AuthorService {
         MongoManager.getInstance().closeConnection();
     }
 
+    public boolean loadMorePodcasts(String searchText, List<Podcast> podcastsMatch, int limit, int skip) {
+        MongoManager.getInstance().openConnection();
+        boolean noMorePodcasts = false;
+
+        List<Podcast> podcasts = podcastMongoManager.searchPodcast(searchText, limit, skip);
+        if (podcasts != null) {
+            podcastsMatch.addAll(podcasts);
+            noMorePodcasts = podcasts.size() < limit;
+        }
+
+        MongoManager.getInstance().closeConnection();
+        return noMorePodcasts;
+    }
+
+    public boolean loadMoreAuthors(String searchText, List<Pair<Author, Boolean>> authorsMatch, int limit, int skip) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        boolean noMoreAuthors = false;
+
+        List<Author> authors = authorMongoManager.searchAuthor(searchText, limit, skip);
+        if (authors != null) {
+            for (Author authorFound : authors) {
+                boolean followingAuthor = authorNeo4jManager.findAuthorFollowsAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), authorFound.getName());
+                authorsMatch.add(new Pair<>(authorFound, followingAuthor));
+            }
+            noMoreAuthors = authors.size() < limit;
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        MongoManager.getInstance().closeConnection();
+
+        return noMoreAuthors;
+    }
     //-----------------------------------------------
 
     //----------------- MATTEO ----------------------

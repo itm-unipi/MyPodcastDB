@@ -421,11 +421,8 @@ public class HomePageController {
     }
 
     /********* LOADING GRIDS *********/
-    void clearIndexes(boolean newAuthors, boolean newPodcasts, GridPane grid) {
-        if (newPodcasts) {
-            this.row = 0;
-            this.column = grid.getColumnCount();
-        } else if (newAuthors) {
+    void clearIndexes(boolean newLoad, GridPane grid) {
+        if (newLoad) {
             this.row = 0;
             this.column = grid.getColumnCount();
         } else {
@@ -473,7 +470,7 @@ public class HomePageController {
 
     // Show podcasts in the user watchlist
     void loadWatchlistGrid(boolean newLoad) throws IOException {
-        clearIndexes(false, newLoad, gridWatchlist);
+        clearIndexes(newLoad, gridWatchlist);
 
         int maxValue = Math.min(this.watchlist.size(), (gridWatchlist.getColumnCount() + this.podcastsToLoadInGrid));
 
@@ -491,7 +488,7 @@ public class HomePageController {
 
     // Suggested on podcast's category user liked
     void loadSuggestedBasedOnCategoryGrid(boolean newLoad) throws IOException {
-        clearIndexes(false, newLoad, gridSuggestedForCategory);
+        clearIndexes(newLoad, gridSuggestedForCategory);
 
         int maxValue = Math.min(this.topGenres.size(), (gridSuggestedForCategory.getColumnCount() + this.podcastsToLoadInGrid));
 
@@ -509,7 +506,7 @@ public class HomePageController {
 
     // Suggestions based on authors in user's watchlist
     void loadSuggestedBasedOnWatchlistGrid(boolean newLoad) throws IOException {
-        clearIndexes(false, newLoad, gridPodcastsBasedOnWatchlist);
+        clearIndexes(newLoad, gridPodcastsBasedOnWatchlist);
 
         int maxValue = Math.min(this.basedOnWatchlist.size(), (gridPodcastsBasedOnWatchlist.getColumnCount() + this.podcastsToLoadInGrid));
 
@@ -527,7 +524,7 @@ public class HomePageController {
 
     // Suggest authors based on user you follow
     void loadSuggestedAuthorsBasedOnUserGrid(boolean newLoad) throws IOException {
-        clearIndexes(newLoad, false, gridSuggestedAuthors);
+        clearIndexes(newLoad, gridSuggestedAuthors);
 
         int maxValue = Math.min(this.suggestedAuthors.size(), (gridSuggestedAuthors.getColumnCount() + this.authorsToLoadInGrid));
 
@@ -544,7 +541,7 @@ public class HomePageController {
     }
 
     void loadSuggestedOnFollowedUsers(boolean newLoad) throws IOException {
-        clearIndexes(false, newLoad, gridSuggestedForUser);
+        clearIndexes(newLoad, gridSuggestedForUser);
 
         int maxValue = Math.min(this.basedOnFollowedUsers.size(), (gridSuggestedForUser.getColumnCount() + this.podcastsToLoadInGrid));
         for (Podcast podcast : this.basedOnFollowedUsers.subList(gridSuggestedForUser.getColumnCount(), maxValue)) {
@@ -572,7 +569,7 @@ public class HomePageController {
 
     // Grids available to everyone
     void loadTopRatedPodcasts(boolean newLoad) throws IOException {
-        clearIndexes(false, newLoad, gridTopRated);
+        clearIndexes(newLoad, gridTopRated);
 
         int maxValue = Math.min(this.topRated.size(), (gridTopRated.getColumnCount() + this.podcastsToLoadInGrid));
         for (Triplet<Podcast, Float, Boolean> podcast : this.topRated.subList(gridTopRated.getColumnCount(), maxValue)) {
@@ -592,7 +589,7 @@ public class HomePageController {
     }
 
     void loadMostLikedPodcasts(boolean newLoad) throws IOException {
-        clearIndexes(false, newLoad, gridMostLikedPodcasts);
+        clearIndexes(newLoad, gridMostLikedPodcasts);
 
         int maxValue = Math.min(this.mostLikedPodcasts.size(), (gridMostLikedPodcasts.getColumnCount() + this.podcastsToLoadInGrid));
         for (Pair<Podcast, Integer> podcast : this.mostLikedPodcasts.subList(gridMostLikedPodcasts.getColumnCount(), maxValue)) {
@@ -608,7 +605,7 @@ public class HomePageController {
     }
 
     void loadMostFollowedAuthors(boolean newLoad) throws IOException {
-        clearIndexes(newLoad, false, gridMostFollowedAuthors);
+        clearIndexes(newLoad, gridMostFollowedAuthors);
 
         int maxValue = Math.min(this.mostFollowedAuthors.size(), (gridMostFollowedAuthors.getColumnCount() + this.authorsToLoadInGrid));
         for (Triplet<Author, Integer, Boolean> author : this.mostFollowedAuthors.subList(gridMostFollowedAuthors.getColumnCount(), maxValue)) {
