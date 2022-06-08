@@ -268,15 +268,15 @@ public class AuthorMongo {
         }
     }
 
-    public boolean updatePodcastOfAuthor(String authorId, int podcastIndex, String podcastId, String podcastName, String podcastReleaseDate, String category, String artworkUrl) {
+    public boolean updatePodcastOfAuthor(String authorId, String podcastId, String podcastName, String podcastReleaseDate, String category, String artworkUrl) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            Bson filter = eq("_id", new ObjectId(authorId));
-            Bson update = combine(set("podcasts." + podcastIndex + ".podcastName", podcastName),
-                    set("podcasts." + podcastIndex + ".podcastReleaseDate", podcastReleaseDate),
-                    set("podcasts." + podcastIndex + ".category", category),
-                    set("podcasts." + podcastIndex + ".artworkUrl600", artworkUrl));
+            Bson filter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcastId)));
+            Bson update = combine(set("podcasts.$.podcastName", podcastName),
+                    set("podcasts.$.podcastReleaseDate", podcastReleaseDate),
+                    set("podcasts.$.category", category),
+                    set("podcasts.$.artworkUrl600", artworkUrl));
 
             UpdateResult result = manager.getCollection("author").updateOne(filter, update);
             return result.getMatchedCount() == 1;

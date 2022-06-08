@@ -169,8 +169,7 @@ public class PodcastPageService {
             } else {
                 // update reduced podcast if needed
                 if (updateReduced) {
-                    int index = 0;
-                    Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(podcast.getAuthorId(), index, podcast.getId(), podcast.getName(), podcast.getReleaseDateAsString(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
+                    Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(podcast.getAuthorId(), podcast.getId(), podcast.getName(), podcast.getReleaseDateAsString(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
                     if (!resUpRed) {
                         Logger.error("Reduced podcast not updated");
                         result = -3;
