@@ -41,6 +41,28 @@
                         <Font name="Corbel" size="22.0" />
                      </font>
                   </Label>
+                  <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="264.0">
+                     <children>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exit" prefHeight="22.0" prefWidth="22.0" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/delete.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <HBox.margin>
+                              <Insets right="-5.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
             </HBox>
             <Separator prefWidth="200.0" />
@@ -116,8 +138,8 @@
                         <Font name="Corbel" size="18.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="releaseDateField" focusTraversable="false" onMouseClicked="#restoreBorderDatePicker" prefWidth="180.0" GridPane.rowIndex="15" />
-                  <TextField fx:id="podcastNameField" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" GridPane.rowIndex="1">
+                  <DatePicker fx:id="releaseDateField" focusTraversable="false" onMouseClicked="#restoreBorderDatePicker" prefWidth="180.0" style="-fx-border-color: transparent;" GridPane.rowIndex="15" />
+                  <TextField fx:id="podcastNameField" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" style="-fx-border-color: transparent;" GridPane.rowIndex="1">
                      <font>
                         <Font name="Corbel" size="15.0" />
                      </font>
@@ -125,7 +147,7 @@
                         <Cursor fx:constant="TEXT" />
                      </cursor>
                   </TextField>
-                  <TextField fx:id="authorNameField" editable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" GridPane.rowIndex="3">
+                  <TextField fx:id="authorNameField" editable="false" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" style="-fx-border-color: transparent;" GridPane.rowIndex="3">
                      <font>
                         <Font name="Corbel" size="15.0" />
                      </font>
@@ -133,7 +155,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </TextField>
-                  <TextField fx:id="artworkURLField" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" GridPane.rowIndex="5">
+                  <TextField fx:id="artworkURLField" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" style="-fx-border-color: transparent;" GridPane.rowIndex="5">
                      <font>
                         <Font name="Corbel" size="15.0" />
                      </font>
@@ -141,7 +163,7 @@
                         <Cursor fx:constant="TEXT" />
                      </cursor>
                   </TextField>
-                  <TextField fx:id="contentAdvisoryRatingField" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" GridPane.rowIndex="7">
+                  <TextField fx:id="contentAdvisoryRatingField" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="240.0" style="-fx-border-color: transparent;" GridPane.rowIndex="7">
                      <font>
                         <Font name="Corbel" size="15.0" />
                      </font>
@@ -149,9 +171,9 @@
                         <Cursor fx:constant="TEXT" />
                      </cursor>
                   </TextField>
-                  <ComboBox fx:id="comboBoxCountry" onMouseClicked="#restoreBorderComboBox" prefWidth="180.0" GridPane.rowIndex="9" />
-                  <ComboBox fx:id="comboBoxPrimaryCategory" onMouseClicked="#restoreBorderComboBox" prefWidth="180.0" GridPane.rowIndex="11" />
-                  <ScrollPane hbarPolicy="NEVER" prefViewportHeight="86.0" GridPane.rowIndex="13">
+                  <ComboBox fx:id="comboBoxCountry" onMouseClicked="#restoreBorderComboBox" prefWidth="180.0" style="-fx-border-color: transparent;" GridPane.rowIndex="9" />
+                  <ComboBox fx:id="comboBoxPrimaryCategory" onMouseClicked="#restoreBorderComboBox" prefWidth="180.0" style="-fx-border-color: transparent;" GridPane.rowIndex="11" />
+                  <ScrollPane hbarPolicy="NEVER" prefViewportHeight="86.0" style="-fx-border-color: transparent;" GridPane.rowIndex="13">
                      <GridPane.margin>
                         <Insets bottom="5.0" top="5.0" />
                      </GridPane.margin>
@@ -176,7 +198,7 @@
             </GridPane>
             <HBox>
                <children>
-                  <Button mnemonicParsing="false" onAction="#btnAddPodcast" style="-fx-background-color: #34B521; -fx-background-radius: 8;" text="Apply" textFill="WHITE">
+                  <Button fx:id="btnApply" mnemonicParsing="false" onAction="#btnAddPodcast" onMouseEntered="#onHoverBtnApply" onMouseExited="#onExitedBtnApply" style="-fx-background-color: #4CAF50; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4;" text="Apply" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="16.0" />
                      </font>
@@ -184,18 +206,18 @@
                         <Insets right="8.0" />
                      </HBox.margin>
                      <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#btnCancel" style="-fx-background-color: #D10D0D; -fx-background-radius: 8;" text="Cancel" textFill="WHITE">
+                  <Button fx:id="btnCancel" mnemonicParsing="false" onAction="#btnCancel" onMouseEntered="#onHoverBtnCancel" onMouseExited="#onExitedBtnCancel" style="-fx-background-color: #f44336; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4;" text="Cancel" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="16.0" />
                      </font>
                      <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                      <cursor>
                         <Cursor fx:constant="HAND" />

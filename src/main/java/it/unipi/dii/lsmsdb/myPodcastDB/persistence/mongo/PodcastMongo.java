@@ -2,9 +2,11 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Accumulators;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import org.bson.Document;
@@ -88,6 +90,40 @@ public class PodcastMongo {
     }
 
     // ---------- READ ---------- //
+
+    public List<Podcast> searchPodcast(String textToSearch, int limit, int skip) {
+        MongoManager manager = MongoManager.getInstance();
+
+        List<Podcast> podcastMatch = new ArrayList<>();
+        Bson filter = Filters.text(textToSearch);
+
+        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(filter).limit(limit).skip(skip).iterator()) {
+            while (cursor.hasNext()) {
+                Document podcast = cursor.next();
+
+                String id = podcast.getObjectId("_id").toString();
+                String name = podcast.getString("podcastName");
+                String authorId = podcast.getObjectId("authorId").toString();
+                String authorName = podcast.getString("authorName");
+                String artworkUrl600 = podcast.getString("artworkUrl600");
+                String primaryCategory = podcast.getString("primaryCategory");
+                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
+                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+
+                Podcast podcastFound = new Podcast(id, name, releaseDate, artworkUrl600, primaryCategory);
+                // AuthorId is needed for delete podcast when an admin is in the search page
+                podcastFound.setAuthor(authorId, authorName);
+
+                podcastMatch.add(podcastFound);
+            }
+
+            return podcastMatch;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public Podcast findPodcastById(String podcastId) {
         MongoManager manager = MongoManager.getInstance();

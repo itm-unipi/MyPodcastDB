@@ -91,13 +91,13 @@ public class AuthorNeo4j {
 
     // --------- UPDATE --------- //
 
-    public boolean updateAuthor(String oldName, String newName) {
+    public boolean updateAuthor(String oldName, String newName, String newPicturePath) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
             String query =  "MATCH (a:Author {name: $oldName}) " +
-                            "SET a.name = $newName";
-            Value params = parameters("oldName", oldName, "newName", newName);
+                            "SET a.name = $newName, a.picturePath = $newPicturePath";
+            Value params = parameters("oldName", oldName, "newName", newName, "newPicturePath", newPicturePath);
             manager.write(query, params);
             return true;
         } catch (Exception e) {
@@ -184,12 +184,13 @@ public class AuthorNeo4j {
         return authors;
     }
 
-    public List<Author> showFollowedAuthorsByAuthor(String name, int limit) {
+    public List<Author> showFollowedAuthorsByAuthor(String name, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author)" + "\n" +
                 "RETURN a2" + "\n" +
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("name", name, "limit", limit);
+        Value params = parameters("name", name, "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {
@@ -212,7 +213,7 @@ public class AuthorNeo4j {
         return authors;
     }
 
-    public List<Author> showSuggestedAuthorsFollowedByFollowedUser(String username, int limit) {
+    public List<Author> showSuggestedAuthorsFollowedByFollowedUser(String username, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         try {
@@ -220,8 +221,9 @@ public class AuthorNeo4j {
                     "WHERE NOT EXISTS " +
                     "{ MATCH (u)-[:FOLLOWS]->(a1) } " +
                     "RETURN DISTINCT a1 " +
+                    "SKIP $skip " +
                     "LIMIT $limit";
-            List<Record> result = manager.read(query, parameters("username", username, "limit", limit));
+            List<Record> result = manager.read(query, parameters("username", username, "limit", limit, "skip", skip));
 
             if (result.isEmpty())
                 return null;
@@ -264,9 +266,9 @@ public class AuthorNeo4j {
         for (Record record : result) {
             String name = record.get("name").asString();
             String picturePath = record.get("picturePath").asString();
-            int follows = record.get("followers").asInt();
+            int followers = record.get("followers").asInt();
             Author author = new Author("", name, picturePath);
-            authors.add(new Pair<>(author, follows));
+            authors.add(new Pair<>(author, followers));
         }
 
         return authors;

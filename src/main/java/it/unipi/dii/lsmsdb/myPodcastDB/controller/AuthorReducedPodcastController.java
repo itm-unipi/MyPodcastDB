@@ -2,7 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -21,17 +21,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import java.util.Date;
-import java.util.List;
 
 public class AuthorReducedPodcastController {
     private String podcastId;
+
+    private String authorId;
 
     @FXML
     private Label podcastCategory;
@@ -60,8 +56,6 @@ public class AuthorReducedPodcastController {
 
     @FXML
     void deletePodcast(MouseEvent event) throws IOException {
-        Logger.info("Delete podcast");
-
         Node source = (Node)event.getSource();
         Stage stage = (Stage)source.getScene().getWindow();
 
@@ -75,19 +69,48 @@ public class AuthorReducedPodcastController {
 
         if (alert.getResult() == ButtonType.OK) {
             Logger.info("Deleting podcast " + podcastId + " (" + podcastName + ") that belongs to " + StageManager.getObjectIdentifier());
+            String actorType = MyPodcastDB.getInstance().getSessionType();
 
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(stage);
-            alert.setTitle("Delete Account");
-            alert.setHeaderText(null);
-            alert.setContentText("Podcast deleted successfully!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+            int deleteResult = 0;
+            AuthorProfileService authorProfileService = new AuthorProfileService();
+
+            if (actorType.equals("Author")) {
+                deleteResult = authorProfileService.deletePodcastAsAuthor(this.podcastId);
+            } else {
+                deleteResult = authorProfileService.deletePodcastAsAdmin(this.authorId, this.podcastId);
+            }
+
+            if (deleteResult == 0) {
+                alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initOwner(stage);
+                alert.setTitle("Delete Account");
+                alert.setHeaderText(null);
+                alert.setContentText("Podcast deleted successfully!");
+                alert.setGraphic(null);
+                alert.showAndWait();
+                //StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+                StageManager.showPage(ViewNavigator.HOMEPAGE.getPage(), StageManager.getObjectIdentifier());
+            } else {
+                Logger.error("Error during the delete podcast operation");
+
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(stage);
+                alert.setTitle("Delete Podcast Error");
+                alert.setHeaderText(null);
+
+                if (deleteResult == -1) {
+                    alert.setContentText("Podcast not found!");
+                } else {
+                    // General message error
+                    alert.setContentText("Something went wrong!");
+                }
+
+                alert.setGraphic(null);;
+                alert.showAndWait();
+            }
         } else {
             Logger.info("Operation aborted");
         }
-
     }
 
     @FXML
@@ -125,7 +148,8 @@ public class AuthorReducedPodcastController {
 
     /*************************************/
 
-    public void setData(String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String ArtworkUrl600 ) {
+    public void setData(String authorId, String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String artworkUrl600 ) {
+        this.authorId = authorId;
         this.podcastId = podcastId;
         this.podcastName.setText(podcastName);
         this.podcastCategory.setText(podcastCategory);
@@ -140,7 +164,7 @@ public class AuthorReducedPodcastController {
         podcastImage.setImage(image);
 
         Platform.runLater(() -> {
-            Image imageLoaded = ImageCache.getImageFromURL(ArtworkUrl600);
+            Image imageLoaded = ImageCache.getImageFromURL(artworkUrl600);
             this.podcastImage.setImage(imageLoaded);
         });
     }

@@ -1,6 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -12,15 +14,19 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
-import java.util.Objects;
-import java.util.Optional;
 
 public class AuthorSettingsController {
+    @FXML
+    private DialogPane dialogPane;
 
     private Author author;
+
+    private Label authorNameProfile;
+
+    private ImageView actorPictureProfile;
+
     @FXML
     private TextField authorEmail;
 
@@ -31,7 +37,7 @@ public class AuthorSettingsController {
     private PasswordField authorPassword;
 
     @FXML
-    private PasswordField authorConfirmPassword;
+    private PasswordField authorNewPassword;
 
     @FXML
     private ImageView imagePreview;
@@ -39,14 +45,23 @@ public class AuthorSettingsController {
     private int counterImage;
 
     @FXML
-    private DialogPane dialogPane;
+    private Button btnApply;
 
     @FXML
+    private Button btnCancel;
+
+    @FXML
+    private Button btnDelete;
+
+    @FXML
+    private ImageView bin;
+
+    /******* AUTHOR PICTURE SLIDE *******/
+    @FXML
     void nextAuthorPicture(MouseEvent event) {
-        Logger.info("Next author picture");
 
         if (this.counterImage == 19)
-            this.counterImage = 0; // MIN_NUMBER
+            this.counterImage = 0; // MIN_NUMBER_IMAGE
         else
             ++this.counterImage;
 
@@ -54,8 +69,7 @@ public class AuthorSettingsController {
     }
 
     @FXML
-    void previousAuthorPicture(MouseEvent event) {
-        Logger.info("Previous author picture");
+    void backAuthorPicture(MouseEvent event) {
 
         if (this.counterImage == 0)
             this.counterImage = 19; // MAX_NUMBER_IMAGE
@@ -65,47 +79,7 @@ public class AuthorSettingsController {
         imagePreview.setImage(ImageCache.getImageFromLocalPath("/img/authors/author" + this.counterImage + ".png"));
     }
 
-    @FXML
-    void deleteAccount(ActionEvent event) throws IOException {
-        Logger.info("Delete account clicked!");
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(dialogPane.getScene().getWindow());
-        //alert.initStyle(StageStyle.UNDECORATED);
-        alert.setTitle("Delete Account");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this account?");
-        alert.setGraphic(null);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Delete account..");
-
-            alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(dialogPane.getScene().getWindow());
-            alert.setTitle("Delete Account");
-            alert.setHeaderText(null);
-            alert.setContentText("Account deleted successfully!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
-            StageManager.showPage(ViewNavigator.LOGIN.getPage());
-            closeStage(event);
-        } else {
-            Logger.info("Operation aborted");
-        }
-    }
-
-    public void setData(Author author) {
-        this.author = author;
-        this.counterImage = 0;
-
-        authorName.setText(author.getName());
-        authorEmail.setText(author.getEmail());
-        authorPassword.setText(author.getPassword());
-        authorConfirmPassword.setText(author.getPassword());
-        imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
-    }
-
+    /********** RESET BORDER EMPTY FIELDS **********/
     @FXML
     void restoreBorderTextField(MouseEvent event) {
         ((TextField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
@@ -116,10 +90,103 @@ public class AuthorSettingsController {
         ((PasswordField)event.getSource()).setStyle("-fx-border-radius: 4; -fx-border-color: transparent");
     }
 
+    /******** BUTTONS HOVER AND MOUSE EXIT *********/
+
+    @FXML
+    void onExitedBtnApply(MouseEvent event) {
+        btnApply.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnCancel(MouseEvent event) {
+        btnCancel.setStyle("-fx-background-color: #f44336; -fx-text-fill: white; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onExitedBtnDelete(MouseEvent event) {
+        btnDelete.setStyle("-fx-background-color:  #555555; -fx-text-fill: white; -fx-border-color:  #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+        bin.setStyle("-fx-blend-mode: add");
+    }
+
+    @FXML
+    void onHoverBtnApply(MouseEvent event) {
+        btnApply.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnCancel(MouseEvent event) {
+        btnCancel.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+    }
+
+    @FXML
+    void onHoverBtnDelete(MouseEvent event) {
+        btnDelete.setStyle("-fx-background-color: white; -fx-text-fill: #5c5c5c; -fx-border-color: #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4");
+        bin.setStyle("-fx-blend-mode: multiply");
+    }
+
+    /******************************/
+
+    @FXML
+    void deleteAccount(ActionEvent event) throws IOException {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.initOwner(dialogPane.getScene().getWindow());
+        alert.setTitle("Delete Account");
+        alert.setHeaderText(null);
+        alert.setContentText("Do you really want to delete this account?");
+        alert.setGraphic(null);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+
+            if (authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
+                AuthorProfileService authorProfileService = new AuthorProfileService();
+                int deleteResult = authorProfileService.deleteAccountAsAuthor();
+
+                if (deleteResult == 0) {
+                    alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initOwner(dialogPane.getScene().getWindow());
+                    alert.setTitle("Delete Account");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Account deleted successfully!");
+                    alert.setGraphic(null);;
+                    alert.showAndWait();
+
+                    closeStage(event);
+                    StageManager.showPage(ViewNavigator.LOGIN.getPage());
+                } else {
+                    Logger.error("Error during the delete operation");
+
+                    alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initOwner(dialogPane.getScene().getWindow());
+                    alert.setTitle("Delete Account Error");
+                    alert.setHeaderText(null);
+
+                    if (deleteResult == -1) {
+                        alert.setContentText("Author don't exists!");
+                    } else {
+                        // General message error
+                        alert.setContentText("Something went wrong!");
+                    }
+
+                    alert.setGraphic(null);;
+                    alert.showAndWait();
+                }
+            } else {
+                alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Delete Account: incorrect password");
+                alert.setHeaderText(null);
+                alert.setContentText("Invalid current password! Please try again.");
+                alert.setGraphic(null);;
+                alert.showAndWait();
+            }
+        } else {
+            Logger.info("Operation aborted");
+        }
+    }
+
     @FXML
     void updatePersonalInfo(ActionEvent event) {
-        System.out.println("Update applied");
-
         boolean emptyFields = false;
 
         if (authorName.getText().equals("")) {
@@ -137,35 +204,125 @@ public class AuthorSettingsController {
             emptyFields = true;
         }
 
-        if (authorConfirmPassword.getText().equals("")) {
-            authorConfirmPassword.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
-            emptyFields = true;
-        }
-
-        if (!authorPassword.getText().equals(authorConfirmPassword.getText())) {
-            Logger.info("password doesn't match");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(dialogPane.getScene().getWindow());
-            alert.setTitle("Password Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Password doesn't match!");
-            alert.setGraphic(null);
-            alert.showAndWait();
-            emptyFields = true;
-        }
-
         if (!emptyFields) {
-            this.author.setName(authorName.getText());
-            this.author.setEmail(authorEmail.getText());
-            this.author.setPassword(authorPassword.getText());
-            this.author.setPicturePath("/img/authors/author" + this.counterImage + ".png");
-            closeStage(event);
+            // Author object that keeps the old information of the session author
+            Author oldAuthor = new Author();
+            oldAuthor.copy((Author) MyPodcastDB.getInstance().getSessionActor());
+
+            // Temporary author with the new information to commit if there are no error
+            String password;
+            if (authorNewPassword.getText().equals(""))
+                password = oldAuthor.getPassword();
+            else
+                password = authorNewPassword.getText();
+
+            // TODO: bug in tempAuthor -> imagePreview.getImage().getURL()
+            // "/img/authors/author" + this.counterImage + ".png" (this.counter is always 0 when the setData is called there will be always a change in the picutre path)
+            // if the default img has not index 0
+            Author tempAuthor = new Author(author.getId(), authorName.getText(), password, authorEmail.getText(), "/img/authors/author" + this.counterImage + ".png");
+
+            Logger.info("SESSION AUTHOR: " + oldAuthor);
+            Logger.info("TEMP AUTHOR (to commit): " + tempAuthor);
+
+            if (authorPassword.getText().equals(oldAuthor.getPassword())) {
+                if (!(tempAuthor.getName().equals(oldAuthor.getName())
+                        && tempAuthor.getId().equals(oldAuthor.getId())
+                        && tempAuthor.getEmail().equals(oldAuthor.getEmail())
+                        && authorNewPassword.getText().equals("")
+                        && tempAuthor.getPicturePath().equals(oldAuthor.getPicturePath()))) {
+
+                    AuthorProfileService authorProfileService = new AuthorProfileService();
+                    int updateResult = authorProfileService.updateAuthorAsAuthor(oldAuthor, tempAuthor);
+
+                    if (updateResult == 1) {
+                        // Commit
+                        this.author.setName(authorName.getText());
+                        this.author.setEmail(authorEmail.getText());
+                        this.author.setPassword(password);
+                        this.author.setPicturePath(tempAuthor.getPicturePath());
+
+                        Logger.info("NEW AUTHOR (commited): " + this.author);
+
+                        // Updating GUI
+                        authorNameProfile.setText(this.author.getName());
+                        actorPictureProfile.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
+
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Done");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Settings updated successfully!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+                        closeStage(event);
+
+                    } else if (updateResult == -1) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Name Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Name already exists!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+
+                        // Resetting field that caused the error
+                        authorName.setText(oldAuthor.getName());
+
+                    } else if (updateResult == -2) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Email Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Email is already associate to an account!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+
+                        // Resetting field that caused the error
+                        authorEmail.setText(oldAuthor.getEmail());
+
+                    } else if (updateResult == -4) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.initOwner(dialogPane.getScene().getWindow());
+                        alert.setTitle("Update Personal Info: Error");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Error during the update operation!");
+                        alert.setGraphic(null);
+                        alert.showAndWait();
+
+                    }
+
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.initOwner(dialogPane.getScene().getWindow());
+                    alert.setTitle("Update Personal Info");
+                    alert.setHeaderText(null);
+                    alert.setContentText("No changes found.");
+                    alert.setGraphic(null);
+                    alert.showAndWait();
+                    closeStage(event);
+                }
+            }  else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.initOwner(dialogPane.getScene().getWindow());
+                alert.setTitle("Update Personal Info: Invalid Password");
+                alert.setHeaderText(null);
+                alert.setContentText("Incorrect Current Password!");
+                alert.setGraphic(null);
+                alert.showAndWait();
+
+                // Resetting password field
+                authorPassword.setText("");
+            }
         }
     }
 
     @FXML
+    void exit(ActionEvent event) {
+        closeStage(event);
+    }
+
+    @FXML
     void cancel(ActionEvent event) {
-        System.out.println("Cancel Operation");
         closeStage(event);
     }
 
@@ -174,4 +331,19 @@ public class AuthorSettingsController {
         Stage stage = (Stage)source.getScene().getWindow();
         stage.close();
     }
+
+    void setData(Author author, Label authorNameLabel, ImageView actorPictureImage) {
+        this.author = author;
+        this.authorNameProfile = authorNameLabel;
+        this.actorPictureProfile = actorPictureImage;
+        this.counterImage = Integer.parseInt(author.getPicturePath().replaceAll("\\D+",""));
+
+        authorName.setText(author.getName());
+        authorEmail.setText(author.getEmail());
+        authorPassword.setText("");
+        authorNewPassword.setText("");
+        imagePreview.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
+        btnApply.requestFocus();
+    }
+
 }

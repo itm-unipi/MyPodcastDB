@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
@@ -19,7 +20,7 @@
 
 <AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.SearchController">
    <children>
-      <BorderPane prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane fx:id="MainPage" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <VBox prefHeight="80.0" prefWidth="920.0" style="-fx-background-color: transparent;" BorderPane.alignment="TOP_CENTER">
                <children>
@@ -43,12 +44,30 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="920.0">
                            <children>
+                              <VBox fx:id="boxLogout" alignment="CENTER">
+                                 <children>
+                                    <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@img/logout.png" />
+                                       </image>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                       <VBox.margin>
+                                          <Insets top="3.0" />
+                                       </VBox.margin>
+                                    </ImageView>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets right="2.0" />
+                                 </HBox.margin>
+                              </VBox>
                               <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#onClickHome" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/home.png" />
                                  </image>
                                  <HBox.margin>
-                                    <Insets right="2.0" />
+                                    <Insets />
                                  </HBox.margin>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -56,27 +75,12 @@
                               </ImageView>
                               <VBox fx:id="boxActorProfile" alignment="CENTER">
                                  <HBox.margin>
-                                    <Insets left="2.0" right="3.0" />
+                                    <Insets left="2.0" />
                                  </HBox.margin>
                                  <children>
                                     <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickActorProfile" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/userPicture.png" />
-                                       </image>
-                                       <cursor>
-                                          <Cursor fx:constant="HAND" />
-                                       </cursor>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </ImageView>
-                                 </children>
-                              </VBox>
-                              <VBox fx:id="boxLogout" alignment="CENTER">
-                                 <children>
-                                    <ImageView fx:id="logout" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#onClickLogout" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@img/logout.png" />
                                        </image>
                                        <cursor>
                                           <Cursor fx:constant="HAND" />
@@ -134,30 +138,62 @@
                      <content>
                         <VBox alignment="TOP_CENTER" fillWidth="false" spacing="5.0">
                            <children>
-                              <Label fx:id="searchingForText" prefHeight="27.0" prefWidth="1040.0" text="Searching for &quot;author, podcast, user...&quot;">
-                                 <font>
-                                    <Font name="Corbel Light" size="22.0" />
-                                 </font>
+                              <HBox>
                                  <VBox.margin>
-                                    <Insets bottom="8.0" top="8.0" />
+                                    <Insets left="120.0" right="120.0" top="8.0" />
                                  </VBox.margin>
-                              </Label>
-                              <VBox>
+                                 <children>
+                                    <Label fx:id="searchingForText" prefHeight="27.0" prefWidth="838.0" text="Searching for &quot;&lt;text&gt;&quot;">
+                                       <font>
+                                          <Font name="Corbel Light" size="22.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER_RIGHT" minWidth="-Infinity" prefWidth="234.0">
+                                       <children>
+                                          <CheckBox fx:id="podcastsFilter" focusTraversable="false" mnemonicParsing="false" selected="true" text="Podcasts">
+                                             <font>
+                                                <Font name="Corbel Light" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                          </CheckBox>
+                                          <CheckBox fx:id="authorsFilter" focusTraversable="false" mnemonicParsing="false" selected="true" text="Authors">
+                                             <font>
+                                                <Font name="Corbel Light" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="15.0" />
+                                             </HBox.margin>
+                                          </CheckBox>
+                                          <CheckBox fx:id="usersFilter" focusTraversable="false" minWidth="-Infinity" mnemonicParsing="false" selected="true" text="Users">
+                                             <font>
+                                                <Font name="Corbel Light" size="14.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="15.0" />
+                                             </HBox.margin>
+                                          </CheckBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </HBox>
+                              <VBox fx:id="boxPodcastsFound" maxHeight="-Infinity" minHeight="-Infinity">
                                  <VBox.margin>
                                     <Insets left="120.0" right="120.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label fx:id="podcastsFound" prefWidth="1040.0" text="Podcasts (nPodcastFound)">
+                                    <Label fx:id="podcastsFound" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="1040.0" text="Podcasts (&lt;counter_podcasts_found&gt;)">
                                        <font>
-                                          <Font name="Corbel Light" size="22.0" />
+                                          <Font name="Corbel Light" size="20.0" />
                                        </font>
                                        <VBox.margin>
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ScrollPane fx:id="scrollFoundPodcasts" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
+                                    <ScrollPane fx:id="scrollFoundPodcasts" focusTraversable="false" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
-                                          <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" vgap="8.0">
+                                          <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" onScroll="#onScrollPodcastsFound" vgap="8.0">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
                                              </columnConstraints>
@@ -167,29 +203,29 @@
                                           </GridPane>
                                        </content>
                                     </ScrollPane>
-                                    <Label fx:id="noPodcastsText" alignment="CENTER" text="There are no podcasts found.">
+                                    <Label fx:id="noPodcastsText" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" text="There are no podcasts found.">
                                        <font>
                                           <Font name="Corbel Light" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox>
+                              <VBox fx:id="boxAuthorsFound" maxHeight="-Infinity" minHeight="-Infinity">
                                  <VBox.margin>
                                     <Insets left="120.0" right="120.0" />
                                  </VBox.margin>
                                  <children>
-                                    <Label fx:id="authorsFound" prefWidth="1040.0" text="Authors (nAuthorsFound)">
+                                    <Label fx:id="authorsFound" prefWidth="1040.0" text="Authors (&lt;counter_authors_found&gt;)">
                                        <font>
-                                          <Font name="Corbel Light" size="22.0" />
+                                          <Font name="Corbel Light" size="20.0" />
                                        </font>
                                        <VBox.margin>
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ScrollPane fx:id="scrollFoundAuthors" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
+                                    <ScrollPane fx:id="scrollFoundAuthors" focusTraversable="false" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
-                                          <GridPane fx:id="gridFoundAuthors" minHeight="0.0" vgap="8.0">
+                                          <GridPane fx:id="gridFoundAuthors" minHeight="0.0" onScroll="#onScrollAuthors" vgap="8.0">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
                                              </columnConstraints>
@@ -199,26 +235,26 @@
                                           </GridPane>
                                        </content>
                                     </ScrollPane>
-                                    <Label fx:id="noAuthorsText" alignment="CENTER" text="There are no authors found.">
+                                    <Label fx:id="noAuthorsText" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" text="There are no authors found.">
                                        <font>
                                           <Font name="Corbel Light" size="20.0" />
                                        </font>
                                     </Label>
                                  </children>
                               </VBox>
-                              <VBox fx:id="boxUsersFound">
+                              <VBox fx:id="boxUsersFound" maxHeight="-Infinity" minHeight="-Infinity">
                                  <children>
-                                    <Label fx:id="usersFound" prefWidth="1063.0" text="Users (nUsersFound)">
+                                    <Label fx:id="usersFound" prefWidth="1063.0" text="Users (&lt;counter_users_found&gt;)">
                                        <font>
-                                          <Font name="Corbel Light" size="22.0" />
+                                          <Font name="Corbel Light" size="20.0" />
                                        </font>
                                        <VBox.margin>
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ScrollPane fx:id="scrollFoundUsers" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
+                                    <ScrollPane fx:id="scrollFoundUsers" focusTraversable="false" hbarPolicy="NEVER" maxHeight="215.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
-                                          <GridPane fx:id="gridFoundUsers" minHeight="0.0" vgap="8.0">
+                                          <GridPane fx:id="gridFoundUsers" minHeight="0.0" onScroll="#onScrollUsersFound" vgap="8.0">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
                                              </columnConstraints>
@@ -228,7 +264,7 @@
                                           </GridPane>
                                        </content>
                                     </ScrollPane>
-                                    <Label fx:id="noUsersFound" alignment="CENTER" text="There are no users found.">
+                                    <Label fx:id="noUsersFound" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" text="There are no users found.">
                                        <font>
                                           <Font name="Corbel Light" size="20.0" />
                                        </font>

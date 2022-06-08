@@ -259,13 +259,14 @@ public class PodcastNeo4j {
 
     // --------------------------------- GRAPH QUERY ------------------------------------ //
 
-    public List<Podcast> showPodcastsInWatchlist(User user, int limit) {
+    public List<Podcast> showPodcastsInWatchlist(User user, int limit, int skip) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
                 "RETURN p " + "\n"+
+                "SKIP $skip " + "\n"+
                 "LIMIT $limit";
-        Value params = parameters("username", user.getUsername(), "limit", limit);
+        Value params = parameters("username", user.getUsername(), "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {
@@ -388,7 +389,7 @@ public class PodcastNeo4j {
         return categories;
     }
 
-    public List<Podcast> showSuggestedPodcastsLikedByFollowedUsers(User user, int limit) {
+    public List<Podcast> showSuggestedPodcastsLikedByFollowedUsers(User user, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (source:User{username: $username})-[:FOLLOWS_USER]->(u:User)-[:LIKES]->(p:Podcast)," + "\n" +
                 "(p)<-[l:LIKES]-(:User)" + "\n" +
@@ -397,8 +398,9 @@ public class PodcastNeo4j {
                 "WITH p.name as name, p.podcastId as id, p.artworkUrl600 as artwork, count(l) as likes" + "\n" +
                 "RETURN name, id, artwork, likes" + "\n" +
                 "ORDER BY likes desc" + "\n" +
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit" ;
-        Value params = parameters("username", user.getUsername(), "limit", limit);
+        Value params = parameters("username", user.getUsername(), "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {
@@ -425,7 +427,7 @@ public class PodcastNeo4j {
         return podcasts;
     }
 
-    public List<Podcast> showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(String username, int limit) {
+    public List<Podcast> showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(String username, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
 
         List<Record> result = null;
@@ -434,8 +436,9 @@ public class PodcastNeo4j {
                             "MATCH (liked)-[:BELONGS_TO]->(:Category)<-[:BELONGS_TO]-(p:Podcast) " +
                             "WHERE NOT EXISTS {MATCH (u)-[:LIKES]->(p)} " +
                             "RETURN p.name as name, p.podcastId as pid, p.artworkUrl600 as artwork " +
+                            "SKIP $skip " +
                             "LIMIT $limit";
-            Value params = parameters("username", username, "limit", limit);
+            Value params = parameters("username", username, "limit", limit, "skip", skip);
             result = manager.read(query, params);
         } catch (Exception e) {
             e.printStackTrace();
@@ -457,14 +460,16 @@ public class PodcastNeo4j {
         return podcasts;
     }
 
-    public List<Podcast> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(User user, int limit) {
+    public List<Podcast> showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(User user, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
                 "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
                 "WHERE NOT EXISTS { match (s)-[:WATCH_LATER]->(p2) }" + "\n" +
                 "RETURN p2.name as name, p2.podcastId as id, p2.artworkUrl600 as artwork" + "\n" +
+                "SKIP $skip" + "\n" +
                 "LIMIT $limit";
-        Value params = parameters("username", user.getUsername(), "limit", limit);
+
+        Value params = parameters("username", user.getUsername(), "limit", limit, "skip", skip);
         List<Record> result = null;
 
         try {

@@ -1,8 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import com.thoughtworks.xstream.annotations.XStreamAlias;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -14,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -22,6 +23,8 @@ import java.io.IOException;
 public class AuthorPreviewController {
     private Author author;
 
+    private final String actorType;
+
     @FXML
     private ImageView authorPicture;
 
@@ -29,17 +32,26 @@ public class AuthorPreviewController {
     private VBox boxAuthorImage;
 
     @FXML
-    private Button followAuthor;
+    private Button btnFollowAuthor;
 
     @FXML
     private Label nameAuthorFollowed;
 
     @FXML
-    void onAuthor(MouseEvent event) {
-        String actorType = MyPodcastDB.getInstance().getSessionType();
+    private HBox boxCounterFollowers;
 
-        if (actorType.equals("Author") || actorType.equals("User")) {
-            boxAuthorImage.setStyle("-fx-background-color:  #eaeaea; -fx-background-radius: 100px; -fx-border-color: #eaeaea; -fx-border-radius: 100px;");
+    @FXML
+    private Label counterFollowersLabel;
+
+    public AuthorPreviewController() {
+        this.actorType = MyPodcastDB.getInstance().getSessionType();;
+    }
+
+    @FXML
+    void onAuthor(MouseEvent event) {
+
+        if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
+            boxAuthorImage.setStyle("-fx-background-color:  #eaeaea; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
             FadeTransition fadeBackground = new FadeTransition(Duration.seconds(1), boxAuthorImage);
             fadeBackground.play();
 
@@ -48,10 +60,10 @@ public class AuthorPreviewController {
             fadeAuthorImage.setToValue(0.2);
             fadeAuthorImage.play();
 
-            followAuthor.setVisible(true);
-            followAuthor.setStyle("-fx-pref-width: 80px; -fx-min-width: 80px; -fx-pref-height: 30px; -fx-min-height: 30px; -fx-background-color: white; -fx-background-radius: 12px; -fx-border-radius: 12px;");
+            btnFollowAuthor.setVisible(true);
+            btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
 
-            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.7), followAuthor);
+            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.7), btnFollowAuthor);
             fadeButton.setFromValue(0);
             fadeButton.setToValue(1.0);
             fadeButton.play();
@@ -60,10 +72,9 @@ public class AuthorPreviewController {
 
     @FXML
     void outAuthor(MouseEvent event) {
-        String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if (actorType.equals("Author") || actorType.equals("User")) {
-            boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100px; -fx-border-color: #eaeaea; -fx-border-radius: 100px;");
+        if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
+            boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
             FadeTransition fadeBackground = new FadeTransition(Duration.seconds(0.3), boxAuthorImage);
             fadeBackground.play();
 
@@ -72,10 +83,10 @@ public class AuthorPreviewController {
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
 
-            followAuthor.setVisible(false);
-            followAuthor.setStyle("-fx-pref-width: 0px; -fx-min-width: 0px; -fx-pref-height: 30px; -fx-min-height: 30px; -fx-background-color: white; -fx-background-radius: 12px; -fx-border-radius: 12px;");
+            btnFollowAuthor.setVisible(false);
+            btnFollowAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
 
-            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.3), followAuthor);
+            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.3), btnFollowAuthor);
             fadeButton.setFromValue(1.0);
             fadeButton.setToValue(0);
             fadeButton.play();
@@ -84,31 +95,80 @@ public class AuthorPreviewController {
 
     @FXML
     void onMouseHoverFollowButton(MouseEvent event) {
-        followAuthor.setStyle("-fx-pref-width: 80px; -fx-min-width: 80px; -fx-pref-height: 30px; -fx-min-height: 30px; -fx-background-color: #FAFAFAFF; -fx-background-radius: 12px; -fx-border-radius: 12px;");
+        btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: #FAFAFAFF; -fx-background-radius: 12; -fx-border-radius: 12;");
     }
 
     @FXML
     void onMouseExitedFollowButton(MouseEvent event) {
-        followAuthor.setStyle("-fx-pref-width: 80px; -fx-min-width: 80px; -fx-pref-height: 30px; -fx-min-height: 30px; -fx-background-color: white; -fx-background-radius: 12px; -fx-border-radius: 12px;");
+        btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
     }
 
     @FXML
     void onClickAuthorName(MouseEvent event) throws IOException {
-        Logger.info("Clicked on Author name: " + this.author.getName());
         StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
     }
 
     @FXML
-    void onClickFollowAuthor(MouseEvent event) {
-        Logger.info("Clicked on Follow " + this.author.getName());
-        // TODO: change button text from Follow to Unfollow and viceversa
+    void onClickBtnFollowAuthor(MouseEvent event) {
+
+        AuthorProfileService authorProfileService = new AuthorProfileService();
+        if (this.actorType.equals("Author")) {
+
+            if (btnFollowAuthor.getText().equals("Follow")) {
+                authorProfileService.followAuthorAsAuthor(this.author.getName());
+                btnFollowAuthor.setText("Unfollow");
+
+                // Increment followers counter
+                updateFollowerCounter(true);
+            } else {
+                authorProfileService.unfollowAuthorAsAuthor(this.author.getName());
+                btnFollowAuthor.setText("Follow");
+
+                // Decrement followers counter
+                updateFollowerCounter(false);
+            }
+        } else if (this.actorType.equals("User")) {
+
+            if (btnFollowAuthor.getText().equals("Follow")) {
+                authorProfileService.followAuthorAsUser(this.author.getName());
+                btnFollowAuthor.setText("Unfollow");
+                updateFollowerCounter(true);
+            } else {
+                authorProfileService.unfollowAuthorAsUser(this.author.getName());
+                btnFollowAuthor.setText("Follow");
+                updateFollowerCounter(false);
+            }
+
+        } else {
+            Logger.error("Operation not allowed!");
+        }
     }
 
-    public void setData(Author author) {
+    void updateFollowerCounter(boolean increment) {
+        int followers = Integer.parseInt(counterFollowersLabel.getText());
+
+        if (increment)
+            followers++;
+        else
+            followers--;
+
+        counterFollowersLabel.setText(String.valueOf(followers));
+    }
+
+    public void setData(Author author, boolean follow, int typeLabel, String valueLabel) {
         this.author = author;
         nameAuthorFollowed.setText(author.getName());
 
-        Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
+        Image image = ImageCache.getImageFromLocalPath(this.author.getPicturePath());
         authorPicture.setImage(image);
+
+        if (follow)
+            this.btnFollowAuthor.setText("Unfollow");
+
+        if (typeLabel == 1) {
+            boxCounterFollowers.setVisible(true);
+            boxCounterFollowers.setStyle("-fx-pref-height: 20;");
+            counterFollowersLabel.setText(valueLabel);
+        }
     }
 }

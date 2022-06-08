@@ -52,7 +52,7 @@ public class AuthorNeo4jTest {
         Author author = new Author();
         author.setName("test");
         this.authorNeo4j.addAuthor(author.getName());
-        this.authorNeo4j.updateAuthor("test", "newTest");
+        this.authorNeo4j.updateAuthor("test", "newTest", "null");
 
         boolean test1 = this.authorNeo4j.findAuthorByName("test");
         boolean test2 = this.authorNeo4j.findAuthorByName("newTest");
@@ -133,7 +133,7 @@ public class AuthorNeo4jTest {
     }
 
     public void showSuggestedAuthorsFollowedByFollowedUserTest() {
-        List<Author> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10);
+        List<Author> authors = authorNeo4j.showSuggestedAuthorsFollowedByFollowedUser("organicmouse599943", 10, 0);
 
         if (authors != null && authors.size() == 10)
             System.out.println("[+] showSuggestedAuthorsFollowedByFollowedUser");

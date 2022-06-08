@@ -14,18 +14,61 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<DialogPane fx:id="dialogPane" prefWidth="600.0" style="-fx-border-color: #a6a6a6;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorSettingsController">
+<DialogPane fx:id="dialogPane" style="-fx-border-color: #a6a6a6;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorSettingsController">
+   <header>
+      <VBox>
+         <children>
+            <HBox>
+               <children>
+                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/info.png" />
+                     </image>
+                  </ImageView>
+                  <Label prefWidth="429.0" text="Personal Info" textFill="#5e5e5e">
+                     <font>
+                        <Font name="Corbel" size="22.0" />
+                     </font>
+                  </Label>
+                  <HBox alignment="CENTER" translateX="29.0">
+                     <children>
+                        <Button focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#exit" prefHeight="20.0" prefWidth="15.0" style="-fx-background-color: transparent;">
+                           <graphic>
+                              <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                                 <image>
+                                    <Image url="@img/delete.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </Button>
+                     </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="6.0" />
+               </VBox.margin>
+            </HBox>
+            <Separator prefWidth="200.0" />
+         </children>
+      </VBox>
+   </header>
    <padding>
       <Insets left="13.0" right="13.0" top="6.0" />
    </padding>
    <content>
       <VBox>
          <children>
-            <HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" prefHeight="180.0" prefWidth="190.0">
+                  <HBox alignment="CENTER">
                      <children>
-                        <ImageView fitHeight="39.0" fitWidth="30.0" onMouseClicked="#previousAuthorPicture" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#backAuthorPicture" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@img/backArrow.png" />
                            </image>
@@ -37,9 +80,6 @@
                            <image>
                               <Image url="@img/authors/author0.png" />
                            </image>
-                           <HBox.margin>
-                              <Insets left="3.0" right="2.0" />
-                           </HBox.margin>
                         </ImageView>
                         <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#nextAuthorPicture" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -50,94 +90,77 @@
                            </cursor>
                         </ImageView>
                      </children>
-                     <HBox.margin>
-                        <Insets left="-1.0" top="22.0" />
-                     </HBox.margin>
                   </HBox>
-                  <VBox prefWidth="355.0" style="-fx-border-color: #eaeaea; -fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;">
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefWidth="290.0" style="-fx-border-color: #eaeaea; -fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10;" translateX="5.0">
                      <children>
-                        <Label text="Your Name" textFill="#5e5e5e">
+                        <Label text="Your Name" textFill="#5c5c5c">
                            <font>
                               <Font name="Corbel" size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="2.0" />
-                           </VBox.margin>
-                        </Label>
-                        <TextField fx:id="authorName" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;name&gt;">
+                              <Insets bottom="5.0" top="15.0" />
+                           </VBox.margin></Label>
+                        <TextField fx:id="authorName" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="200.0" style="-fx-border-color: transparent;" text="&lt;name&gt;">
                            <font>
-                              <Font name="Corbel Light" size="16.0" />
+                              <Font name="Corbel Light" size="15.0" />
+                           </font>
+                           <cursor>
+                              <Cursor fx:constant="TEXT" />
+                           </cursor></TextField>
+                        <Label text="Your Email" textFill="#5c5c5c">
+                           <font>
+                              <Font name="Corbel" size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="2.0" left="-10.0" />
+                              <Insets bottom="8.0" top="8.0" />
                            </VBox.margin>
+                        </Label>
+                        <TextField fx:id="authorEmail" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="200.0" style="-fx-border-color: transparent;" text="&lt;email&gt;">
+                           <font>
+                              <Font name="Corbel Light" size="15.0" />
+                           </font>
                         </TextField>
-                        <Label text="Your Email" textFill="#5e5e5e">
+                        <Label text="Current Password" textFill="#5c5c5c">
                            <font>
                               <Font name="Corbel" size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="2.0" />
+                              <Insets bottom="8.0" top="8.0" />
                            </VBox.margin>
                         </Label>
-                        <TextField fx:id="authorEmail" maxWidth="-Infinity" onMouseClicked="#restoreBorderTextField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;email&gt;">
+                        <PasswordField fx:id="authorPassword" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="200.0" style="-fx-border-color: transparent;" text="&lt;password&gt;">
                            <font>
-                              <Font name="Corbel Light" size="16.0" />
+                              <Font name="Corbel Light" size="15.0" />
                            </font>
-                           <VBox.margin>
-                              <Insets bottom="2.0" left="-10.0" />
-                           </VBox.margin>
-                        </TextField>
-                        <Label text="Your Password" textFill="#5e5e5e">
-                           <font>
-                              <Font name="Corbel" size="18.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="2.0" />
-                           </VBox.margin>
-                        </Label>
-                        <PasswordField fx:id="authorPassword" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;password&gt;">
-                           <font>
-                              <Font name="Corbel Light" size="16.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets bottom="2.0" left="-10.0" />
-                           </VBox.margin>
                         </PasswordField>
-                        <Label text="Confirm Password" textFill="#5e5e5e">
+                        <Label text="New Password" textFill="#5c5c5c">
                            <font>
                               <Font name="Corbel" size="18.0" />
                            </font>
                            <VBox.margin>
-                              <Insets bottom="2.0" />
+                              <Insets bottom="8.0" top="8.0" />
                            </VBox.margin>
                         </Label>
-                        <PasswordField fx:id="authorConfirmPassword" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="230.0" style="-fx-background-color: transparent;" text="&lt;password&gt;">
+                        <PasswordField fx:id="authorNewPassword" maxWidth="-Infinity" onMouseClicked="#restoreBorderPasswordField" prefWidth="200.0" style="-fx-border-color: transparent;" text="&lt;password&gt;">
                            <font>
-                              <Font name="Corbel Light" size="16.0" />
+                              <Font name="Corbel Light" size="15.0" />
                            </font>
-                           <VBox.margin>
-                              <Insets bottom="7.0" left="-10.0" />
-                           </VBox.margin>
                         </PasswordField>
                      </children>
                      <padding>
-                        <Insets left="20.0" top="12.0" />
+                        <Insets bottom="20.0" />
                      </padding>
                      <HBox.margin>
-                        <Insets />
+                        <Insets left="10.0" />
                      </HBox.margin>
                   </VBox>
                </children>
-               <VBox.margin>
-                  <Insets bottom="14.0" />
-               </VBox.margin>
             </HBox>
             <HBox alignment="CENTER_RIGHT" maxHeight="-Infinity">
                <children>
-                  <HBox prefHeight="34.0" prefWidth="390.0">
+                  <HBox prefHeight="43.0" prefWidth="307.0">
                      <children>
-                        <Button mnemonicParsing="false" onAction="#deleteAccount" prefHeight="32.0" prefWidth="158.0" style="-fx-background-color: #333333; -fx-background-radius: 8;" text="Delete Account" textFill="WHITE">
+                        <Button fx:id="btnDelete" focusTraversable="false" mnemonicParsing="false" onAction="#deleteAccount" onMouseEntered="#onHoverBtnDelete" onMouseExited="#onExitedBtnDelete" style="-fx-background-color: #555555; -fx-border-color: #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4;" text="Delete Account" textFill="WHITE">
                            <font>
                               <Font name="Corbel Bold" size="16.0" />
                            </font>
@@ -145,7 +168,7 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                            <graphic>
-                              <ImageView blendMode="ADD" cache="true" depthTest="DISABLE" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" translateX="-1.0" translateY="1.0">
+                              <ImageView fx:id="bin" blendMode="ADD" cache="true" depthTest="DISABLE" fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" translateX="-1.0" translateY="1.0">
                                  <image>
                                     <Image url="@img/deleteActor.png" />
                                  </image>
@@ -155,12 +178,12 @@
                               <Insets left="5.0" />
                            </HBox.margin>
                            <padding>
-                              <Insets bottom="5.0" left="3.0" right="4.0" top="5.0" />
+                              <Insets bottom="10.0" left="11.0" right="12.0" top="10.0" />
                            </padding>
                         </Button>
                      </children>
                   </HBox>
-                  <Button mnemonicParsing="false" onAction="#updatePersonalInfo" style="-fx-background-color: #34B521; -fx-background-radius: 8;" text="Apply" textFill="WHITE">
+                  <Button fx:id="btnApply" mnemonicParsing="false" onAction="#updatePersonalInfo" onMouseEntered="#onHoverBtnApply" onMouseExited="#onExitedBtnApply" style="-fx-background-color: #4CAF50; -fx-border-color: #4CAF50; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4;" text="Apply" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="16.0" />
                      </font>
@@ -171,10 +194,10 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </Button>
-                  <Button mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #D10D0D; -fx-background-radius: 8;" text="Cancel" textFill="WHITE">
+                  <Button fx:id="btnCancel" focusTraversable="false" mnemonicParsing="false" onAction="#cancel" onMouseEntered="#onHoverBtnCancel" onMouseExited="#onExitedBtnCancel" style="-fx-background-color: #f44336; -fx-border-color: #f44336; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4;" text="Cancel" textFill="WHITE">
                      <font>
                         <Font name="Corbel Bold" size="16.0" />
                      </font>
@@ -182,42 +205,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <padding>
-                        <Insets bottom="5.0" left="15.0" right="15.0" top="5.0" />
+                        <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                      </padding>
                   </Button>
                </children>
                <VBox.margin>
-                  <Insets bottom="-18.0" />
+                  <Insets bottom="-22.0" top="10.0" />
                </VBox.margin>
             </HBox>
          </children>
       </VBox>
    </content>
-   <header>
-      <VBox maxHeight="-Infinity" maxWidth="-Infinity">
-         <children>
-            <HBox alignment="CENTER_LEFT">
-               <VBox.margin>
-                  <Insets bottom="6.0" />
-               </VBox.margin>
-               <children>
-                  <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/info.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets right="2.0" top="2.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label text="Personal Info" textFill="#5e5e5e">
-                     <font>
-                        <Font name="Corbel" size="22.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <Separator prefWidth="200.0" />
-         </children>
-      </VBox>
-   </header>
 </DialogPane>

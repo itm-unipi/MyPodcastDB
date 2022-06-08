@@ -1,35 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="230.0" prefWidth="185.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController">
    <children>
-      <VBox fx:id="podcastPreviewBox" onMouseClicked="#podcastInfo" onMouseEntered="#onFocus" onMouseExited="#onExit" prefHeight="220.0" prefWidth="185.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: transparent; -fx-border-color: transparent;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="podcastImage" fitHeight="185.0" pickOnBounds="true" preserveRatio="true" smooth="false">
-               <image>
-                  <Image url="@img/test.jpg" />
-               </image>
-            </ImageView>
-            <Label fx:id="podcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" style="-fx-scale-y: 1.06;" text="SermonAudio" textFill="#434343de">
-               <font>
-                  <Font name="Corbel Bold" size="15.0" />
-               </font>
-               <tooltip>
-                  <Tooltip fx:id="podcastToolTip" text="Empty Tooltip" />
-               </tooltip>
-            </Label>
+            <VBox fx:id="podcastPreviewBox" onMouseClicked="#podcastInfo" onMouseEntered="#onFocus" onMouseExited="#onExit" prefHeight="220.0" prefWidth="185.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: transparent; -fx-border-color: transparent;">
+               <children>
+                  <VBox>
+                     <children>
+                        <ImageView fx:id="podcastImage" fitHeight="185.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                           <image>
+                              <Image url="@img/test.jpg" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </VBox>
+                  <Label fx:id="podcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" style="-fx-scale-y: 1.06;" text="SermonAudio" textFill="#434343de">
+                     <font>
+                        <Font name="Corbel Bold" size="15.0" />
+                     </font>
+                     <tooltip>
+                        <Tooltip fx:id="podcastToolTip" text="Empty Tooltip" />
+                     </tooltip>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="9.0" right="9.0" top="10.0" />
+               </padding>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </VBox>
+            <HBox fx:id="boxLikes" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="59.0" translateY="-90.0" visible="false">
+               <children>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/like.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="1.0" right="2.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="counterLikeLabel" text="00000">
+                     <font>
+                        <Font name="Dubai Light" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="6.0" right="7.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="boxRating" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="59.0" translateY="-90.0" visible="false">
+               <children>
+                  <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/rating.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="1.0" right="2.0" top="1.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="ratingLabel" text="0.00">
+                     <font>
+                        <Font name="Dubai Regular" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="6.0" right="7.0" top="1.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="boxTopCountry" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="59.0" translateY="-90.0" visible="false">
+               <children>
+                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" translateY="-2.0">
+                     <image>
+                        <Image url="@img/star.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets right="2.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="ratingCountryLabel" text="0.00">
+                     <font>
+                        <Font name="Dubai Regular" size="14.0" />
+                     </font>
+                     <tooltip>
+                        <Tooltip text="Top rated in your country">
+                           <font>
+                              <Font name="Corbel" size="12.0" />
+                           </font>
+                        </Tooltip>
+                     </tooltip>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="2.0" left="5.0" right="5.0" top="4.0" />
+               </padding>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </HBox>
          </children>
-         <padding>
-            <Insets bottom="5.0" left="9.0" right="9.0" top="10.0" />
-         </padding>
-      </VBox>
+      </StackPane>
    </children>
 </AnchorPane>
