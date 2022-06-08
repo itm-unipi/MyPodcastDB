@@ -173,8 +173,9 @@ public class AuthorProfileService {
             author.copy(foundAuthor);
 
             List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
-            for (Author a: followedAuthor)
-                followed.add(new Pair<>(a, true));
+            if (followedAuthor != null)
+                for (Author a: followedAuthor)
+                    followed.add(new Pair<>(a, true));
         }
 
         MongoManager.getInstance().closeConnection();

@@ -247,7 +247,7 @@ public class PodcastPageController {
             // if successful go to author/admin page
             if (result == 0) {
                 if (MyPodcastDB.getInstance().getSessionType().equals("Author"))
-                    StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+                    StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
                 else
                     StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
             }
@@ -287,7 +287,6 @@ public class PodcastPageController {
 
     @FXML
     void clickOnLogout(MouseEvent event) throws IOException {
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
@@ -364,9 +363,9 @@ public class PodcastPageController {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
         else if (actorType.equals("User"))
-            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         else if (actorType.equals("Admin"))
             StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
         else
@@ -505,6 +504,9 @@ public class PodcastPageController {
             // owner of podcast
             this.like.setVisible(false);
             this.watchlater.setVisible(false);
+            Author author = (Author) MyPodcastDB.getInstance().getSessionActor();
+            Image picture = ImageCache.getImageFromLocalPath(author.getPicturePath());
+            userPicture.setImage(picture);
         } else if (sessionType.equals("User") || sessionType.equals("Author") || sessionType.equals("Unregistered")) {
             // visitator
             this.updatePodcast.setVisible(false);

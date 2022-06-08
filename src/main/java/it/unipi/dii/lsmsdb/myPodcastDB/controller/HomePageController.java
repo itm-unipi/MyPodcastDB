@@ -313,9 +313,6 @@ public class HomePageController {
 
     @FXML
     void onClickLogout(MouseEvent event) throws IOException {
-        Logger.info("Logout button clicked");
-        // TODO: clear the session
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 

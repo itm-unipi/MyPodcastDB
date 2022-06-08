@@ -160,7 +160,7 @@ public class ReviewPageController {
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
         Logger.info("Click on author : " + this.podcast.getAuthorId());
-        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getId());
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorName());
     }
 
     @FXML
@@ -215,7 +215,6 @@ public class ReviewPageController {
 
     @FXML
     void clickOnLogout(MouseEvent event) throws IOException {
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
@@ -349,9 +348,9 @@ public class ReviewPageController {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         if (actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage());
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
         else if (actorType.equals("User"))
-            StageManager.showPage(ViewNavigator.USERPAGE.getPage());
+            StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         else if (actorType.equals("Admin"))
             StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
         else

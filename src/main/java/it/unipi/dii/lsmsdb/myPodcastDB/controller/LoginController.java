@@ -60,6 +60,7 @@ public class LoginController {
     @FXML
     public void initialize(){
 
+        MyPodcastDB.getInstance().setSession(null, null);
         ToggleGroup tg = new ToggleGroup();
         loginUserRadioButton.setToggleGroup(tg);
         loginAuthorRadioButton.setToggleGroup(tg);

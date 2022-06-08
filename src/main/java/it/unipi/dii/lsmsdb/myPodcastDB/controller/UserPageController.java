@@ -759,7 +759,7 @@ public class UserPageController {
         if(actorType.equals("User"))
             StageManager.showPage(ViewNavigator.USERPAGE.getPage(), ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         else if(actorType.equals("Author"))
-            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getId());
+            StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), ((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
         else if (actorType.equals("Admin"))
             StageManager.showPage(ViewNavigator.ADMINDASHBOARD.getPage());
         else
@@ -769,7 +769,6 @@ public class UserPageController {
     @FXML
     void logoutButtonClick(MouseEvent event) throws IOException{
         Logger.info("Logout button clicked");
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 

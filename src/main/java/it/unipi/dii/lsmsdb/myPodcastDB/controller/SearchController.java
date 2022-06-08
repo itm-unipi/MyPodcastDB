@@ -238,8 +238,6 @@ public class SearchController {
 
     @FXML
     void onClickLogout(MouseEvent event) throws IOException {
-        // Clear the session and exit
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 

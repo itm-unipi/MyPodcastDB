@@ -194,8 +194,6 @@ public class AuthorProfileController {
 
     @FXML
     void onClickLogout(MouseEvent event) throws IOException {
-        // Clear the session and exit
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
@@ -579,8 +577,6 @@ public class AuthorProfileController {
                     // Session author coincides with the author profile requested
                     author.setName(sessionActor.getName());
                     authorProfileService.loadAuthorProfileAsPageOwner(this.author, this.followedAuthors, this.authorsToRetrieve);
-                    // TODO: rimuovere dopo il rebase (è stato fatto solo perchè il login crea un utente di sessione fittizio)
-                    ((Author)MyPodcastDB.getInstance().getSessionActor()).copy(this.author);
 
                     authorName.setText(sessionActor.getName());
                     tooltipAuthorName.setText(sessionActor.getName());

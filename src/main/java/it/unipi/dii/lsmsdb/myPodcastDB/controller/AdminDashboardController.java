@@ -219,10 +219,12 @@ public class AdminDashboardController {
         this.passwordTextField.setText(this.admin.getPassword());
         this.passwordTextField.setStyle("-fx-background-color: transparent");
         this.nameTextField.setDisable(true);
-        this.modifyInfoWrapper.setVisible(true);
-        this.updateCancelWrapper.setVisible(false);
-        this.modifyInfoWrapper.setStyle("-fx-max-height: 40;");
-        this.updateCancelWrapper.setStyle("-fx-max-height: 0;");
+        this.modifyInfo.setVisible(true);
+        this.updateInfo.setVisible(false);
+        this.cancelInfo.setVisible(false);
+        this.modifyInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #008CBA; -fx-background-radius: 10; -fx-margin-right: 10; -fx-max-height: 20;");
+        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px; -fx-max-height: 20;");
+        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px; -fx-max-height: 20;");
     }
 
     @FXML
@@ -268,7 +270,6 @@ public class AdminDashboardController {
 
     @FXML
     void clickOnLogout(MouseEvent event) throws IOException {
-        MyPodcastDB.getInstance().setSession(null, null);
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
 
@@ -281,10 +282,12 @@ public class AdminDashboardController {
         this.nameTextField.setDisable(false);
         this.passwordTextField.setStyle("-fx-background-color: white");
         this.nameTextField.setDisable(false);
-        this.modifyInfoWrapper.setVisible(false);
-        this.updateCancelWrapper.setVisible(true);
-        this.modifyInfoWrapper.setStyle("-fx-pref-height: 0; -fx-max-height: 0;");
-        this.updateCancelWrapper.setStyle("-fx-pref-height: 39; -fx-max-height: 40;");
+        this.modifyInfo.setVisible(false);
+        this.updateInfo.setVisible(true);
+        this.cancelInfo.setVisible(true);
+        this.modifyInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px; -fx-max-height: 0;");
+        this.updateInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #4CAF50; -fx-background-radius: 10; -fx-margin-right: 10; -fx-max-height: 20;");
+        this.cancelInfo.setStyle("-fx-pref-width: 120; -fx-pref-height: 20px; -fx-background-color: #f4511e; -fx-background-radius: 10; -fx-margin-right: 10; -fx-max-height: 20;");
     }
 
     @FXML
@@ -774,7 +777,6 @@ public class AdminDashboardController {
         this.limit = 10;
         this.nameTextField.setText(this.admin.getName());
         this.emailTextField.setText(this.admin.getEmail());
-        this.passwordTextField.setText("********************");
 
         // load chart
         List<String> updateTimes = this.loadCharts();
@@ -799,10 +801,13 @@ public class AdminDashboardController {
         this.data10.setText("Last update: " + updateTimes.get(9) + "  ");
 
         // settings buttons and texts
-        this.modifyInfoWrapper.setVisible(true);
-        this.updateCancelWrapper.setVisible(false);
-        this.modifyInfoWrapper.setStyle("-fx-max-height: 40; -fx-pref-height: 39");
-        this.updateCancelWrapper.setStyle("-fx-max-height: 0; -fx-pref-height: 0");
+        this.updateInfo.setVisible(false);
+        this.cancelInfo.setVisible(false);
+        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
+        this.nameTextField.setText(this.admin.getName());
+        this.emailTextField.setText(this.admin.getEmail());
+        this.passwordTextField.setText(this.admin.getPassword());
     }
 
     private List<String> loadCharts() throws IOException {
@@ -876,15 +881,6 @@ public class AdminDashboardController {
         PieChartController controller6 = pieLoader.getController();
         controller6.setData("Most appreciated category", new String[] {"Category", "Number of likes"}, mostAppreciatedCategory, this.mainPage);
         this.statisticsGrid.add(newPieChart2, column, row);
-        /*
-        // settings buttons and texts
-        this.updateInfo.setVisible(false);
-        this.cancelInfo.setVisible(false);
-        this.updateInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
-        this.cancelInfo.setStyle("-fx-min-width: 0; -fx-pref-width: 0px; -fx-min-height: 0; -fx-pref-height: 0px;");
-        this.nameTextField.setText(this.admin.getName());
-        this.emailTextField.setText(this.admin.getEmail());
-        this.passwordTextField.setText(this.admin.getPassword());*/
 
         return updateTimes;
     }
