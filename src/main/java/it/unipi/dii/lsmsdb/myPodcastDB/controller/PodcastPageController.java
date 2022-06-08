@@ -5,7 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -23,7 +23,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -151,7 +150,7 @@ public class PodcastPageController {
     private boolean watchLatered;
     private int row, column;
 
-    private PodcastService service;
+    private PodcastPageService service;
 
     /**************************** Click and Enter Events ****************************/
 
@@ -475,7 +474,7 @@ public class PodcastPageController {
         // Get the podcast info from service
         Podcast podcast = new Podcast();
         podcast.setId(StageManager.getObjectIdentifier());
-        this.service = new PodcastService();
+        this.service = new PodcastPageService();
 
         // load podcast from service
         Boolean result;

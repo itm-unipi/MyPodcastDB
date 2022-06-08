@@ -13,7 +13,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
-public class PodcastService {
+public class PodcastPageService {
 
     //---------------- GIANLUCA ---------------------
     //-----------------------------------------------
@@ -29,7 +29,7 @@ public class PodcastService {
     private PodcastNeo4j podcastNeo4j;
     private UserNeo4j userNeo4j;
 
-    public PodcastService() {
+    public PodcastPageService() {
         this.podcastMongo = new PodcastMongo();
         this.reviewMongo  = new ReviewMongo();
         this.authorMongo  = new AuthorMongo();

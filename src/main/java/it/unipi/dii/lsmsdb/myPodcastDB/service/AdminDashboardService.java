@@ -15,7 +15,7 @@ import org.javatuples.Triplet;
 
 import java.util.*;
 
-public class AdminService {
+public class AdminDashboardService {
 
     //---------------- GIANLUCA ---------------------
     //-----------------------------------------------
@@ -31,7 +31,7 @@ public class AdminService {
     private PodcastNeo4j podcastNeo4j;
     private AuthorNeo4j authorNeo4j;
 
-    public AdminService() {
+    public AdminDashboardService() {
         this.podcastMongo = new PodcastMongo();
         this.userMongo = new UserMongo();
         this.queryMongo = new QueryMongo();

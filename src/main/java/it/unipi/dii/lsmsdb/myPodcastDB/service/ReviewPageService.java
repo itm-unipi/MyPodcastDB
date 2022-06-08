@@ -9,7 +9,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.List;
 
-public class ReviewService {
+public class ReviewPageService {
 
     //---------------- GIANLUCA ---------------------
     //-----------------------------------------------
@@ -22,7 +22,7 @@ public class ReviewService {
     private PodcastMongo podcastMongo;
     private ReviewMongo reviewMongo;
 
-    public ReviewService() {
+    public ReviewPageService() {
         this.podcastMongo = new PodcastMongo();
         this.reviewMongo  = new ReviewMongo();
     }

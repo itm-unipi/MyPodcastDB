@@ -4,9 +4,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -43,7 +42,7 @@ public class EpisodeController {
     @FXML
     private Button updateEpisode;
 
-    private PodcastService service;
+    private PodcastPageService service;
     private Podcast podcast;
 
     private Episode episode;
@@ -148,7 +147,7 @@ public class EpisodeController {
         this.mainPage.setEffect(null);
     }
 
-    public void setData(Episode episode, Podcast podcast, BorderPane mainPage, PodcastService service, PodcastPageController podcastPageController) {
+    public void setData(Episode episode, Podcast podcast, BorderPane mainPage, PodcastPageService service, PodcastPageController podcastPageController) {
         this.episode = episode;
         this.mainPage = mainPage;
         this.podcast = podcast;

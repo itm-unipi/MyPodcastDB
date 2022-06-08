@@ -3,8 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminDashboardService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -20,7 +19,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
@@ -28,11 +26,9 @@ import org.javatuples.Triplet;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class AdminDashboardController {
 
@@ -181,7 +177,7 @@ public class AdminDashboardController {
     private Button updateInfo;
 
     private Admin admin;
-    private AdminService service;
+    private AdminDashboardService service;
     private int limit;
 
     /**************************** Click and Enter Events ****************************/
@@ -701,7 +697,7 @@ public class AdminDashboardController {
     public void initialize() throws IOException {
         Admin admin = (Admin)MyPodcastDB.getInstance().getSessionActor();
         this.admin = admin;
-        this.service = new AdminService();
+        this.service = new AdminDashboardService();
         this.title.setText("Welcome " + this.admin.getName());
         this.limit = 10;
         this.nameTextField.setText(this.admin.getName());

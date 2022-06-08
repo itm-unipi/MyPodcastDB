@@ -1,10 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -12,9 +11,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.image.Image;
@@ -70,7 +67,7 @@ public class ReviewController {
 
     private Review review;
     private BorderPane mainPage;
-    private ReviewService service;
+    private ReviewPageService service;
     private ReviewPageController controller;
 
     @FXML
@@ -114,7 +111,7 @@ public class ReviewController {
         this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
     }
 
-    public void setData(Review review, BorderPane mainPage, ReviewService service, ReviewPageController controller) {
+    public void setData(Review review, BorderPane mainPage, ReviewPageService service, ReviewPageController controller) {
         this.review = review;
         this.mainPage = mainPage;
         this.service = service;

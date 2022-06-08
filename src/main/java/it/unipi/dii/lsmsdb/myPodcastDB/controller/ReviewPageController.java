@@ -2,7 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewService;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -147,7 +147,7 @@ public class ReviewPageController {
     private Review ownReview;
     private Podcast podcast;
     private List<Review> loadedReviews;
-    private ReviewService service;
+    private ReviewPageService service;
 
     private int row;
     private int column;
@@ -535,7 +535,7 @@ public class ReviewPageController {
 
     public void initialize() throws IOException {
         // Initialize structure
-        this.service = new ReviewService();
+        this.service = new ReviewPageService();
         this.podcast = new Podcast();
         this.podcast.setId(StageManager.getObjectIdentifier());
         this.loadedReviews = new ArrayList<>();
