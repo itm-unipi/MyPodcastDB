@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.UserMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
@@ -20,12 +21,14 @@ public class UserPageService {
     private UserNeo4j userNeo4jManager;
     private PodcastNeo4j podcastNeo4jManager;
     private AuthorNeo4j authorNeo4jManager;
+    private ReviewMongo reviewMongoManager;
 
     public UserPageService(){
         userMongoManager = new UserMongo();
         userNeo4jManager = new UserNeo4j();
         podcastNeo4jManager = new PodcastNeo4j();
         authorNeo4jManager = new AuthorNeo4j();
+        reviewMongoManager = new ReviewMongo();
     }
 
 
@@ -327,6 +330,9 @@ public class UserPageService {
         else if(!userNeo4jManager.deleteUser(user.getUsername())){
             userMongoManager.addUser(user);
             res =  4;
+        }
+        else if(reviewMongoManager.deleteReviewsByAuthorUsername(user.getUsername()) == 0){
+            res = 0;
         }
         else
             res = 0;

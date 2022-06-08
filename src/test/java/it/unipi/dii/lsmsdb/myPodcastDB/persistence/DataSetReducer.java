@@ -3,11 +3,11 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence;
 import com.mongodb.client.MongoCursor;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.UserMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.UserService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.bson.Document;
@@ -42,7 +42,7 @@ public class DataSetReducer {
         }
     }
 
-    public int deleteUsers(UserMongo userMongoManager, UserNeo4j userNeo4jManager, String username){
+    public int deleteUsers(UserMongo userMongoManager, UserNeo4j userNeo4jManager, ReviewMongo reviewMongoManager,  String username){
         int res;
 
         //check if user exists in mongo
@@ -56,6 +56,9 @@ public class DataSetReducer {
             res = 3;
         else if(!userNeo4jManager.deleteUser(username)){
             res =  4;
+        }
+        else if(reviewMongoManager.deleteReviewsByAuthorUsername(username) == 0){
+            res = 0;
         }
         else
             res = 0;
@@ -79,9 +82,10 @@ public class DataSetReducer {
 
         UserMongo userMongoManager = new UserMongo();
         UserNeo4j userNeo4jManager = new UserNeo4j();
+        ReviewMongo reviewMongoManager = new ReviewMongo();
         int i = 0;
         for(String username : users){
-            dr.deleteUsers(userMongoManager, userNeo4jManager, username);
+            dr.deleteUsers(userMongoManager, userNeo4jManager, reviewMongoManager, username);
             i++;
             if(i % 100 == 0)
                System.out.println("Removed : " + i);
