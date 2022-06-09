@@ -20,7 +20,7 @@
                <children>
                   <VBox>
                      <children>
-                        <ImageView fx:id="podcastImage" fitHeight="185.0" pickOnBounds="true" preserveRatio="true" smooth="false">
+                        <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="185.0" pickOnBounds="true" preserveRatio="true" smooth="false">
                            <image>
                               <Image url="@img/test.jpg" />
                            </image>

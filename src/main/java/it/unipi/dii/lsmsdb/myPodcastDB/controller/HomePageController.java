@@ -37,7 +37,7 @@ public class HomePageController {
 
     private List<Pair<Podcast, Integer>> mostLikedPodcasts;
 
-    private List<Triplet<Author, Integer, Boolean>> mostFollowedAuthors;
+    private List<Pair<Author, Integer>> mostFollowedAuthors;
 
     private List<Podcast> watchlist;
 
@@ -47,7 +47,7 @@ public class HomePageController {
 
     private List<Podcast> basedOnWatchlist;
 
-    private List<Pair<Author, Boolean>> suggestedAuthors;
+    private List<Author> suggestedAuthors;
 
     private int row;
 
@@ -523,13 +523,13 @@ public class HomePageController {
 
         int maxValue = Math.min(this.suggestedAuthors.size(), (gridSuggestedAuthors.getColumnCount() + this.authorsToLoadInGrid));
 
-        for (Pair<Author, Boolean> author : this.suggestedAuthors.subList(gridSuggestedAuthors.getColumnCount(), maxValue)) {
+        for (Author author : this.suggestedAuthors.subList(gridSuggestedAuthors.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(author.getValue0(), author.getValue1(), 0, null);
+            controller.setData(author, false, 0, null);
 
             this.gridSuggestedAuthors.add(newAuthor, this.column++, this.row);
         }
@@ -603,13 +603,13 @@ public class HomePageController {
         clearIndexes(newLoad, gridMostFollowedAuthors);
 
         int maxValue = Math.min(this.mostFollowedAuthors.size(), (gridMostFollowedAuthors.getColumnCount() + this.authorsToLoadInGrid));
-        for (Triplet<Author, Integer, Boolean> author : this.mostFollowedAuthors.subList(gridMostFollowedAuthors.getColumnCount(), maxValue)) {
+        for (Pair<Author, Integer> author : this.mostFollowedAuthors.subList(gridMostFollowedAuthors.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(author.getValue0(), author.getValue2(), 1, author.getValue1().toString());
+            controller.setData(author.getValue0(), false, 1, author.getValue1().toString());
 
             this.gridMostFollowedAuthors.add(newAuthor, this.column++, this.row);
         }

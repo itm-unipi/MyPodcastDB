@@ -49,47 +49,45 @@ public class AuthorPreviewController {
 
     @FXML
     void onAuthor(MouseEvent event) {
+        boxAuthorImage.setStyle("-fx-background-color:  #eaeaea; -fx-background-radius: 100; -fx-border-color: #d3d3d3; -fx-border-radius: 100;");
 
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
-            boxAuthorImage.setStyle("-fx-background-color:  #eaeaea; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
-            FadeTransition fadeBackground = new FadeTransition(Duration.seconds(1), boxAuthorImage);
-            fadeBackground.play();
+            if (!MyPodcastDB.getInstance().getSessionPage().equals("HomePage.fxml")) {
+                FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), authorPicture);
+                fadeAuthorImage.setFromValue(1.0);
+                fadeAuthorImage.setToValue(0.2);
+                fadeAuthorImage.play();
 
-            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), authorPicture);
-            fadeAuthorImage.setFromValue(1.0);
-            fadeAuthorImage.setToValue(0.2);
-            fadeAuthorImage.play();
+                btnFollowAuthor.setVisible(true);
+                btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
 
-            btnFollowAuthor.setVisible(true);
-            btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
-
-            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.7), btnFollowAuthor);
-            fadeButton.setFromValue(0);
-            fadeButton.setToValue(1.0);
-            fadeButton.play();
+                FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.7), btnFollowAuthor);
+                fadeButton.setFromValue(0);
+                fadeButton.setToValue(1.0);
+                fadeButton.play();
+            }
         }
     }
 
     @FXML
     void outAuthor(MouseEvent event) {
+        boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
 
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
-            boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
-            FadeTransition fadeBackground = new FadeTransition(Duration.seconds(0.3), boxAuthorImage);
-            fadeBackground.play();
+            if (!MyPodcastDB.getInstance().getSessionPage().equals("HomePage.fxml")) {
+                FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), authorPicture);
+                fadeAuthorImage.setFromValue(0.3);
+                fadeAuthorImage.setToValue(1.0);
+                fadeAuthorImage.play();
 
-            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), authorPicture);
-            fadeAuthorImage.setFromValue(0.3);
-            fadeAuthorImage.setToValue(1.0);
-            fadeAuthorImage.play();
+                btnFollowAuthor.setVisible(false);
+                btnFollowAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
 
-            btnFollowAuthor.setVisible(false);
-            btnFollowAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
-
-            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.3), btnFollowAuthor);
-            fadeButton.setFromValue(1.0);
-            fadeButton.setToValue(0);
-            fadeButton.play();
+                FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.3), btnFollowAuthor);
+                fadeButton.setFromValue(1.0);
+                fadeButton.setToValue(0);
+                fadeButton.play();
+            }
         }
     }
 
@@ -105,6 +103,11 @@ public class AuthorPreviewController {
 
     @FXML
     void onClickAuthorName(MouseEvent event) throws IOException {
+        StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
+    }
+
+    @FXML
+    void onClickAuthor(MouseEvent event) throws IOException {
         StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.author.getName());
     }
 
@@ -157,18 +160,18 @@ public class AuthorPreviewController {
 
     public void setData(Author author, boolean follow, int typeLabel, String valueLabel) {
         this.author = author;
-        nameAuthorFollowed.setText(author.getName());
+        this.nameAuthorFollowed.setText(author.getName());
 
         Image image = ImageCache.getImageFromLocalPath(this.author.getPicturePath());
-        authorPicture.setImage(image);
+        this.authorPicture.setImage(image);
 
         if (follow)
             this.btnFollowAuthor.setText("Unfollow");
 
         if (typeLabel == 1) {
-            boxCounterFollowers.setVisible(true);
-            boxCounterFollowers.setStyle("-fx-pref-height: 20;");
-            counterFollowersLabel.setText(valueLabel);
+            this.boxCounterFollowers.setVisible(true);
+            this.boxCounterFollowers.setStyle("-fx-pref-height: 20;");
+            this.counterFollowersLabel.setText(valueLabel);
         }
     }
 }
