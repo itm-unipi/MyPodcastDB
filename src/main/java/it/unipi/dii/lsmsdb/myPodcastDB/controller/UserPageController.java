@@ -27,10 +27,7 @@ import javafx.stage.Stage;
 import org.javatuples.Pair;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.LongFunction;
 
 public class UserPageController {
@@ -1112,7 +1109,7 @@ public class UserPageController {
 
         // service simulation
         pageOwner.setUsername(usernamePage);
-        pageOwner.setAge(65);
+        pageOwner.setDateOfBirth(new Date());
         pageOwner.setGender("male");
         pageOwner.setPicturePath("File:src/main/resources/img/user_100px.png");
         pageOwner.setFavouriteGenre("Music History");
@@ -1196,7 +1193,7 @@ public class UserPageController {
         newUser.setUsername(userPageUsernameTextField.getText());
         newUser.setName(userPageNameTextField.getText());
         newUser.setSurname(userPageSurnameTextField.getText());
-        newUser.setAge(Integer.parseInt(userPageAgeTextField.getText()));
+        newUser.setDateOfBirth(new Date()); // TODO: prendere il valore corretto
         newUser.setCountry(userPageCountryComboBox.getValue().toString());
         newUser.setEmail(userPageEmailTextField.getText());
         newUser.setGender(userPageGenderComboBox.getValue().toString());

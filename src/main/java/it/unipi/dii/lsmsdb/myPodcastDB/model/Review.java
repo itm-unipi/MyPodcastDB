@@ -88,12 +88,6 @@ public class Review {
         return createdAt;
     }
 
-    public String getCreatedAtAsString() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = dateFormat.format(this.createdAt).replace(" ", "T") + "Z";
-        return date;
-    }
-
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }

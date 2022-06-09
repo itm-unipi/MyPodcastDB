@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -58,7 +59,7 @@ public class UserMongoTest {
         String country = "Ireland";
         String picturePath = "https://randomuser.me/api/portraits/med/men/45.jpg";
         String favouriteGenre = "Documentary";
-        int age = 23;
+        Date age = new Date();
         String gender = "Male";
 
         User newUser = new User("", username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
@@ -101,10 +102,11 @@ public class UserMongoTest {
     public void updateTest() {
         User newUser = this.userMongo.findUserByUsername("MarioRossi123456");
         String id = newUser.getId();
-        newUser.setAge(25);
+        Date newDate = new Date();
+        newUser.setDateOfBirth(newDate);
         this.userMongo.updateUser(newUser);
         newUser = this.userMongo.findUserById(id);
-        if (newUser.getAge() == 25)
+        if (newUser.getDateOfBirth().equals(newDate))
             System.out.println("[+] updateUser");
         else
             System.err.println("[-] updateUser");

@@ -1,5 +1,12 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Date;
+
 public class User {
     private String id;
     private String username;
@@ -10,7 +17,7 @@ public class User {
     private String country;
     private String picturePath;
     private String favouriteGenre;
-    private int age;
+    private Date dateOfBirth;
     private String gender;
 
     public User() {
@@ -21,7 +28,7 @@ public class User {
         this.picturePath = picturePath;
     }
 
-    public User(String id, String username, String password, String name, String surname, String email, String country, String picturePath, String favouriteGenre, int age, String gender) {
+    public User(String id, String username, String password, String name, String surname, String email, String country, String picturePath, String favouriteGenre, Date dateOfBirth, String gender) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -31,7 +38,7 @@ public class User {
         this.country = country;
         this.picturePath = picturePath;
         this.favouriteGenre = favouriteGenre;
-        this.age = age;
+        this.dateOfBirth = dateOfBirth;
         this.gender = gender;
     }
 
@@ -45,7 +52,7 @@ public class User {
         this.country = user.country;
         this.picturePath = user.picturePath;
         this.favouriteGenre = user.favouriteGenre;
-        this.age = user.age;
+        this.dateOfBirth = user.dateOfBirth;
         this.gender = user.gender;
     }
 
@@ -122,11 +129,16 @@ public class User {
     }
 
     public int getAge() {
-        return age;
+        LocalDate birth = this.dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return Period.between(LocalDate.now(), birth).getYears();
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getGender() {
@@ -149,7 +161,7 @@ public class User {
                 ", country='" + country + '\'' +
                 ", picturePath='" + picturePath + '\'' +
                 ", favouriteGenre='" + favouriteGenre + '\'' +
-                ", age=" + age +
+                ", dateOfBirth=" + dateOfBirth +
                 ", gender='" + gender + '\'' +
                 '}';
     }

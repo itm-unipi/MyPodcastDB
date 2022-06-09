@@ -162,12 +162,6 @@ public class Podcast {
         return releaseDate;
     }
 
-    public String getReleaseDateAsString() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String date = dateFormat.format(this.releaseDate).replace(" ", "T") + "Z";
-        return date;
-    }
-
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
     }

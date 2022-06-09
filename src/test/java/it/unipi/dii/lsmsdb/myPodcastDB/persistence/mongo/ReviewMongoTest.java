@@ -28,7 +28,7 @@ public class ReviewMongoTest {
             return false;
         if (r1.getRating() != r2.getRating())
             return false;
-        if (!r1.getCreatedAtAsString().equals(r2.getCreatedAtAsString()))
+        if (!r1.getCreatedAt().equals(r2.getCreatedAt()))
             return false;
         return true;
     }
@@ -97,8 +97,9 @@ public class ReviewMongoTest {
     }
 
     public void findByPodcastIdTest() {
-        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 0, 4, "", true);
-        if (reviews.size() != 4)
+        List<Review> reviews = this.reviewMongo.findReviewsByPodcastId("0005852e3f81889c1ff0f26c", 0, 2, "", true);
+        System.out.println(reviews.size() + "");
+        if (reviews.size() != 2)
             System.err.println("[-] findReviewsByPodcastId: limit doesn't work");
         boolean test = true;
         for (Review review : reviews) {

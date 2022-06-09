@@ -97,8 +97,7 @@ public class AuthorMongo {
                 for (Document podcast : podcasts) {
                     String podcastId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
-                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
-                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    Date podcastReleaseDate = podcast.getDate("podcastReleaseDate");
                     String podcastCategory = podcast.getString("category");
                     String podcastArtwork = podcast.getString("artworkUrl600");
 
@@ -137,8 +136,7 @@ public class AuthorMongo {
                 for (Document podcast : podcasts) {
                     String podcastId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
-                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
-                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    Date podcastReleaseDate = podcast.getDate("podcastReleaseDate");
                     String podcastCategory = podcast.getString("category");
                     String podcastArtwork = podcast.getString("artworkUrl600");
 
@@ -177,8 +175,7 @@ public class AuthorMongo {
                 for (Document podcast : podcasts) {
                     String podcastId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
-                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
-                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    Date podcastReleaseDate = podcast.getDate("podcastReleaseDate");
                     String podcastCategory = podcast.getString("category");
                     String podcastArtwork = podcast.getString("artworkUrl600");
 
@@ -217,8 +214,7 @@ public class AuthorMongo {
                 for(Document podcast : podcasts) {
                     String podId = podcast.getObjectId("podcastId").toString();
                     String podcastName = podcast.getString("podcastName");
-                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
-                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    Date podcastReleaseDate = podcast.getDate("podcastReleaseDate");
                     String podcastCategory = podcast.getString("category");
                     String podcastArtwork = podcast.getString("artworkUrl600");
 
@@ -259,8 +255,7 @@ public class AuthorMongo {
                 for (Document podcast : podcasts) {
                     String podId = podcast.getObjectId("podcastId").toString();
                     String podName = podcast.getString("podcastName");
-                    String podcastDate = podcast.getString("podcastReleaseDate").replace("T", " "). replace("Z", "");
-                    Date podcastReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(podcastDate);
+                    Date podcastReleaseDate = podcast.getDate("podcastReleaseDate");
                     String podcastCategory = podcast.getString("category");
                     String podcastArtwork = podcast.getString("artworkUrl600");
 
@@ -298,15 +293,15 @@ public class AuthorMongo {
         }
     }
 
-    public boolean updatePodcastOfAuthor(String authorId, String podcastId, String podcastName, String podcastReleaseDate, String category, String artworkUrl) {
+    public boolean updatePodcastOfAuthor(String authorId, Podcast podcast) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            Bson filter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcastId)));
-            Bson update = combine(set("podcasts.$.podcastName", podcastName),
-                    set("podcasts.$.podcastReleaseDate", podcastReleaseDate),
-                    set("podcasts.$.category", category),
-                    set("podcasts.$.artworkUrl600", artworkUrl));
+            Bson filter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcast.getId())));
+            Bson update = combine(set("podcasts.$.podcastName", podcast.getName()),
+                    set("podcasts.$.podcastReleaseDate", podcast.getReleaseDate()),
+                    set("podcasts.$.category", podcast.getPrimaryCategory()),
+                    set("podcasts.$.artworkUrl600", podcast.getArtworkUrl600()));
 
             UpdateResult result = manager.getCollection("author").updateOne(filter, update);
             return result.getMatchedCount() == 1;
@@ -323,7 +318,7 @@ public class AuthorMongo {
             // Creating a new document for the podcast
             Document newPodcast = new Document("podcastId", new ObjectId(podcast.getId()))
                     .append("podcastName", podcast.getName())
-                    .append("podcastReleaseDate", podcast.getReleaseDateAsString())
+                    .append("podcastReleaseDate", podcast.getReleaseDate())
                     .append("category", podcast.getPrimaryCategory())
                     .append("artworkUrl600", podcast.getArtworkUrl600());
 

@@ -164,7 +164,7 @@ public class AuthorMongoTest {
 
         // Add a new podcast
         Date date = new Date();
-        Podcast podcast = new Podcast("0", "PodcastTest-1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
+        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest-1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
 
         am.addPodcastToAuthor(newAuthor.getId(), podcast);
 
@@ -186,9 +186,9 @@ public class AuthorMongoTest {
         Date date = new Date();
         List<Podcast> pods = new ArrayList<>();
 
-        Podcast podcast1 = new Podcast("0", "PodcastTest1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
+        Podcast podcast1 = new Podcast("000000000000000000000000", "PodcastTest1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
         pods.add(podcast1);
-        Podcast podcast2 = new Podcast("0", "PodcastTest2", "art", "art1600", "5", "Italy", "TestCategory2", null, null, null, date);
+        Podcast podcast2 = new Podcast("000000000000000000000000", "PodcastTest2", "art", "art1600", "5", "Italy", "TestCategory2", null, null, null, date);
         pods.add(podcast2);
 
         am.addPodcastToAuthor(newAuthor.getId(), podcast1);
@@ -218,7 +218,7 @@ public class AuthorMongoTest {
         String authorId = newAuthor.getId();
 
         Date date = new Date();
-        Podcast podcast = new Podcast("0", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
+        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
 
         if (am.addPodcastToAuthor(authorId, podcast)) {
             // try to find the new podcast
@@ -240,11 +240,15 @@ public class AuthorMongoTest {
         String authorId = newAuthor.getId();
 
         Date date = new Date();
-        Podcast podcast = new Podcast("0", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
+        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
         am.addPodcastToAuthor(authorId, podcast);
 
         int podcastIndex = 0;
-        if(am.updatePodcastOfAuthor(authorId, podcast.getId(), "Podcast Test UPDATED", "2012-01-15T12:47:00Z", "test", "test"))
+        podcast.setName("Podcast Test UPDATED");
+        podcast.setReleaseDate(new Date());
+        podcast.setPrimaryCategory("test");
+        podcast.setArtworkUrl600("test");
+        if(am.updatePodcastOfAuthor(authorId, podcast))
             if(am.findAuthorByPodcastId(podcast.getId()) != null)
                 System.out.println("[+] updatePodcastOfAuthor");
             else

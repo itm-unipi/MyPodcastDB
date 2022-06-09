@@ -107,7 +107,7 @@ public class EpisodeController {
         dialog.showAndWait();
 
         // check if modified
-        if (!modifiedEpisode.getName().equals(this.episode.getName()) || !modifiedEpisode.getDescription().equals(this.episode.getDescription()) || !modifiedEpisode.getReleaseDateAsString().equals(this.episode.getReleaseDateAsString()) || modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis()) {
+        if (!modifiedEpisode.getName().equals(this.episode.getName()) || !modifiedEpisode.getDescription().equals(this.episode.getDescription()) || !modifiedEpisode.getReleaseDate().equals(this.episode.getReleaseDate()) || modifiedEpisode.getTimeMillis() != this.episode.getTimeMillis()) {
             // delete old version
             int resDel = this.service.deleteEpisode(this.podcast, this.episode);
 

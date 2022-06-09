@@ -35,7 +35,7 @@ public class ReviewMongo {
                 .append("title", review.getTitle())
                 .append("content", review.getContent())
                 .append("rating", review.getRating())
-                .append("createdAt", review.getCreatedAtAsString())
+                .append("createdAt", review.getCreatedAt())
                 .append("authorUsername", review.getAuthorUsername());
 
         try {
@@ -63,8 +63,7 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
-                Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
+                Date createdAt = review.getDate("createdAt");
                 String authorName = review.getString("authorUsername");
 
                 Review newReview = new Review(id, podcastId, authorName, title, content, rating, createdAt);
@@ -119,8 +118,7 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
-                Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
+                Date createdAt = review.getDate("createdAt");
                 String authorUsername = review.getString("authorUsername");
 
                 Review newReview = new Review(id, podcastId, authorUsername, title, content, rating, createdAt);
@@ -147,8 +145,7 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
-                Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
+                Date createdAt = review.getDate("createdAt");
 
                 Review newReview = new Review(id, podcastId, authorUsername, title, content, rating, createdAt);
                 return newReview;
@@ -189,7 +186,7 @@ public class ReviewMongo {
                             .limit(limit).iterator();
                 }
             } else {
-                cursor = cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername)).limit(limit).iterator();
+                cursor = manager.getCollection("review").find(eq("authorUsername", authorUsername)).limit(limit).iterator();
             }
 
             List<Review> reviews = new ArrayList<>();
@@ -203,8 +200,7 @@ public class ReviewMongo {
                 String title = review.getString("title");
                 String content = review.getString("content");
                 int rating = review.getInteger("rating");
-                String strCreatedAt = review.getString("createdAt").replace("T", " ").replace("Z", "");
-                Date createdAt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(strCreatedAt);
+                Date createdAt = review.getDate("createdAt");
 
                 Review newReview = new Review(id, podcastId, authorUsername, title, content, rating, createdAt);
                 reviews.add(newReview);
@@ -229,7 +225,7 @@ public class ReviewMongo {
                     set("title", review.getTitle()),
                     set("content", review.getContent()),
                     set("rating", review.getRating()),
-                    set("createdAt", review.getCreatedAtAsString())
+                    set("createdAt", review.getCreatedAt())
             );
 
             UpdateResult result = manger.getCollection("review").updateOne(filter, update);

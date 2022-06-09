@@ -48,7 +48,7 @@ public class PodcastMongo {
             Document newEpisode = new Document()
                     .append("episodeName", episode.getName())
                     .append("episodeDescription", episode.getDescription())
-                    .append("episodeReleaseDate", episode.getReleaseDateAsString())
+                    .append("episodeReleaseDate", episode.getReleaseDate())
                     .append("episodeTimeMillis", episode.getTimeMillis());
             episodes.add(newEpisode);
         }
@@ -70,7 +70,7 @@ public class PodcastMongo {
                 .append("country", podcast.getCountry())
                 .append("primaryCategory", podcast.getPrimaryCategory())
                 .append("categories", podcast.getCategories())
-                .append("releaseDate", podcast.getReleaseDateAsString())
+                .append("releaseDate", podcast.getReleaseDate())
                 .append("episodes", episodes)
                 .append("reviews", reviews);
 
@@ -107,11 +107,10 @@ public class PodcastMongo {
                 String authorName = podcast.getString("authorName");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String primaryCategory = podcast.getString("primaryCategory");
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
 
                 Podcast podcastFound = new Podcast(id, name, releaseDate, artworkUrl600, primaryCategory);
-                // AuthorId is needed for delete podcast when an admin is in the search page
+                // AuthorId is needed for delete podcast when an admin is in the search page TODO: remove
                 podcastFound.setAuthor(authorId, authorName);
 
                 podcastMatch.add(podcastFound);
@@ -143,8 +142,7 @@ public class PodcastMongo {
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
                 Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
@@ -152,8 +150,7 @@ public class PodcastMongo {
                 for (Document episode : episodes) {
                     String episodeName = episode.getString("episodeName");
                     String episodeDescription = episode.getString("episodeDescription");
-                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
-                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
                     int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
 
                     newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
@@ -197,8 +194,7 @@ public class PodcastMongo {
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
                 Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
@@ -206,8 +202,7 @@ public class PodcastMongo {
                 for (Document episode : episodes) {
                     String episodeName = episode.getString("episodeName");
                     String episodeDescription = episode.getString("episodeDescription");
-                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
-                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
                     int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
 
                     newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
@@ -250,8 +245,7 @@ public class PodcastMongo {
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
                 Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
@@ -259,8 +253,7 @@ public class PodcastMongo {
                 for (Document episode : episodes) {
                     String episodeName = episode.getString("episodeName");
                     String episodeDescription = episode.getString("episodeDescription");
-                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
-                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
                     int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
 
                     newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
@@ -303,8 +296,7 @@ public class PodcastMongo {
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
                 Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
@@ -312,8 +304,7 @@ public class PodcastMongo {
                 for (Document episode : episodes) {
                     String episodeName = episode.getString("episodeName");
                     String episodeDescription = episode.getString("episodeDescription");
-                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
-                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
                     int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
 
                     newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
@@ -356,8 +347,7 @@ public class PodcastMongo {
                 String country = podcast.getString("country");
                 String primaryCategory = podcastPrimaryCategory;
                 List<String> categories = podcast.getList("categories", String.class);
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
                 Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
@@ -365,8 +355,7 @@ public class PodcastMongo {
                 for (Document episode : episodes) {
                     String episodeName = episode.getString("episodeName");
                     String episodeDescription = episode.getString("episodeDescription");
-                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
-                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
                     int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
 
                     newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
@@ -409,8 +398,7 @@ public class PodcastMongo {
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
-                String date = podcast.getString("releaseDate").replace("T", " "). replace("Z", "");
-                Date releaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date);
+                Date releaseDate = podcast.getDate("releaseDate");
                 Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
@@ -418,8 +406,7 @@ public class PodcastMongo {
                 for (Document episode : episodes) {
                     String episodeName = episode.getString("episodeName");
                     String episodeDescription = episode.getString("episodeDescription");
-                    String epDate = episode.getString("episodeReleaseDate").replace("T", " "). replace("Z", "");
-                    Date episodeReleaseDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(epDate);
+                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
                     int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
 
                     newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
@@ -460,7 +447,7 @@ public class PodcastMongo {
                     set("country", podcast.getCountry()),
                     set("primaryCategory", podcast.getPrimaryCategory()),
                     set("categories", podcast.getCategories()),
-                    set("releaseDate", podcast.getReleaseDateAsString())
+                    set("releaseDate", podcast.getReleaseDate())
             );
 
             UpdateResult result = manager.getCollection("podcast").updateOne(filter, updates);
@@ -480,7 +467,7 @@ public class PodcastMongo {
         Document newEpisode= new Document()
                 .append("episodeName", episode.getName())
                 .append("episodeDescription", episode.getDescription())
-                .append("episodeReleaseDate", episode.getReleaseDateAsString())
+                .append("episodeReleaseDate", episode.getReleaseDate())
                 .append("episodeTimeMillis", episode.getTimeMillis());
         try {
             Bson filter = eq("_id", new ObjectId(podcastId));

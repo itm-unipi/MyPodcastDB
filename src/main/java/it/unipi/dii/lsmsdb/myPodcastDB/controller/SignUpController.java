@@ -19,7 +19,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class SignUpController {
 
@@ -102,8 +105,6 @@ public class SignUpController {
 
     private int maxUserImages = 30;
 
-
-
     public void initialize() throws IOException,Exception {
 
         actorType = "User";
@@ -123,14 +124,13 @@ public class SignUpController {
         signUpCoutryComboBox.setVisibleRowCount(5);
         signUpFavGenreComboBox.setVisibleRowCount(5);
 
-        signUpGenderChoiceBox.setValue("unknown");
+        signUpGenderChoiceBox.setValue("Unknown");
         signUpCoutryComboBox.setValue("Unknown");
         signUpFavGenreComboBox.setValue("Unknown");
         signUpAgeDatePicker.setValue(LocalDate.now());
         signUpImage.setImage(ImageCache.getInstance().getImageFromLocalPath("/img/users/user0.png"));
-
-
     }
+
     @FXML
     void signUpSignUpButtonClick(MouseEvent event) throws IOException {
 
@@ -148,14 +148,17 @@ public class SignUpController {
             LocalDate birthDate = signUpAgeDatePicker.getValue();
             String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
 
+            Instant instant = Instant.from(birthDate.atStartOfDay(ZoneId.systemDefault()));
+            Date dateOfBirth = Date.from(instant);
+
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("Invalid values");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
                 return;
             }
 
-            int age = LocalDate.now().getYear() - birthDate.getYear();
-            User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, age, gender);
+            // int age = LocalDate.now().getYear() - birthDate.getYear();
+            User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender);
             Logger.info(user.toString());
 
             int res = service.addUserSignUp(user);

@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import org.javatuples.Triplet;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class LoginController {
 
@@ -295,7 +296,7 @@ public class LoginController {
     Object simActorService(String actorname, String password, String actorType){
 
         if(actorType.equals("User")){
-            User user = new User("af679", actorname, password, "userTestName", "userTestSurname", "userTest@example.com", "Italy", "/img/account_50px.png", "Horror", 34, "Male");
+            User user = new User("af679", actorname, password, "userTestName", "userTestSurname", "userTest@example.com", "Italy", "/img/account_50px.png", "Horror", new Date(), "Male");
             return user;
         }
         else if(actorType.equals("Author")){
