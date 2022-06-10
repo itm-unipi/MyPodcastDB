@@ -2,32 +2,30 @@ package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 import java.io.IOException;
-import java.util.Date;
 
 public class AuthorReducedPodcastController {
-    private String podcastId;
+    private Podcast podcast;
 
-    private String authorId;
+    private BorderPane mainPage;
 
     @FXML
     private Label podcastCategory;
@@ -50,63 +48,35 @@ public class AuthorReducedPodcastController {
     /****** Reduced Podcast Events *******/
     @FXML
     void onClickReducedPodcast(MouseEvent event) throws IOException {
-        Logger.info(podcastId + " | " + podcastName.getText() + " | " + podcastReleaseDate.getText() + " | " + podcastCategory.getText());
-        StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), this.podcastId);
+        Logger.info(this.podcast.getId() + " | " + this.podcast.getName() + " | " + this.podcast.getReleaseDate() + " | " + this.podcast.getPrimaryCategory());
+        StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), this.podcast.getId());
     }
 
     @FXML
     void deletePodcast(MouseEvent event) throws IOException {
-        Node source = (Node)event.getSource();
-        Stage stage = (Stage)source.getScene().getWindow();
+        boolean result = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Delete Podcast", "Do you really want to delete this podcast?");
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(stage);
-        alert.setTitle("Delete Podcast");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this podcast?");
-        alert.setGraphic(null);
-        alert.showAndWait();
-
-        if (alert.getResult() == ButtonType.OK) {
-            Logger.info("Deleting podcast " + podcastId + " (" + podcastName + ") that belongs to " + StageManager.getObjectIdentifier());
-            String actorType = MyPodcastDB.getInstance().getSessionType();
-
-            int deleteResult = 0;
+        if (result) {
+            Logger.info("Deleting podcast " + this.podcast.getId() + " (" + this.podcast.getName() + ") that belongs to " + StageManager.getObjectIdentifier());
             AuthorProfileService authorProfileService = new AuthorProfileService();
 
-            if (actorType.equals("Author")) {
-                deleteResult = authorProfileService.deletePodcastAsAuthor(this.podcastId);
-            } else {
-                deleteResult = authorProfileService.deletePodcastAsAdmin(this.authorId, this.podcastId);
-            }
-
+            int deleteResult = authorProfileService.deletePodcastAsAuthor(this.podcast.getId());
             if (deleteResult == 0) {
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.initOwner(stage);
-                alert.setTitle("Delete Account");
-                alert.setHeaderText(null);
-                alert.setContentText("Podcast deleted successfully!");
-                alert.setGraphic(null);
-                alert.showAndWait();
-                //StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
-                StageManager.showPage(ViewNavigator.HOMEPAGE.getPage(), StageManager.getObjectIdentifier());
+                DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Delete Podcast", "Podcast deleted successfully!");
+                // TODO: remove show page in order to avoid to request to the database.
+                StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
             } else {
                 Logger.error("Error during the delete podcast operation");
 
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(stage);
-                alert.setTitle("Delete Podcast Error");
-                alert.setHeaderText(null);
-
+                String alertText;
                 if (deleteResult == -1) {
-                    alert.setContentText("Podcast not found!");
+                    alertText = "Podcast don't exists!";
                 } else {
                     // General message error
-                    alert.setContentText("Something went wrong!");
+                    alertText = "Something went wrong! Please try again.";
                 }
 
-                alert.setGraphic(null);;
-                alert.showAndWait();
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Delete Podcast", alertText);
             }
         } else {
             Logger.info("Operation aborted");
@@ -156,14 +126,14 @@ public class AuthorReducedPodcastController {
 
     /*************************************/
 
-    public void setData(String authorId, String podcastId, String podcastName, Date podcastReleaseDate, String podcastCategory, String artworkUrl600 ) {
-        this.authorId = authorId;
-        this.podcastId = podcastId;
-        this.podcastName.setText(podcastName);
-        this.podcastCategory.setText(podcastCategory);
+    public void setData(Podcast podcast, BorderPane mainPage) {
+        this.mainPage = mainPage;
+        this.podcast = podcast;
+        this.podcastName.setText(podcast.getName());
+        this.podcastCategory.setText(podcast.getPrimaryCategory());
 
         // Setting release date
-        String[] tokens = podcastReleaseDate.toString().split(" ");
+        String[] tokens = this.podcast.getReleaseDate().toString().split(" ");
         String date = tokens[2] + " " + tokens[1] + " " + tokens[5];
         this.podcastReleaseDate.setText(date);
 
@@ -172,7 +142,7 @@ public class AuthorReducedPodcastController {
         this.podcastImage.setImage(image);
 
         Platform.runLater(() -> {
-            Image imageLoaded = ImageCache.getImageFromURL(artworkUrl600);
+            Image imageLoaded = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
             this.podcastImage.setImage(imageLoaded);
         });
     }

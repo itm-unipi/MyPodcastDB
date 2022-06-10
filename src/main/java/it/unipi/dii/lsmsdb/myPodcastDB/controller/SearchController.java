@@ -8,6 +8,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.SearchService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -184,20 +185,14 @@ public class SearchController {
 
             if (!filters.getValue0() && !filters.getValue1() && !filters.getValue2()) {
                 Logger.error("No filter isn't allowed!");
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(MainPage, "Filters Error", "Please choose at least one search filter.");
             } else {
                 search(text);
                 loadResults();
             }
         } else {
             Logger.error("Field cannot be empty!");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(MainPage.getScene().getWindow());
-            alert.setTitle("Search Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Search field cannot be empty!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
+            DialogManager.getInstance().createErrorAlert(MainPage, "Search Error", "Search field cannot be empty!");
         }
     }
 
@@ -212,7 +207,7 @@ public class SearchController {
 
                 if (!filters.getValue0() && !filters.getValue1() && !filters.getValue2()) {
                     Logger.error("No filter isn't allowed!");
-                    // TODO: alert
+                    DialogManager.getInstance().createErrorAlert(MainPage, "Filters Error", "Please choose at least one search filter.");
                 } else {
                     search(text);
                     loadResults();
@@ -220,13 +215,7 @@ public class SearchController {
 
             } else {
                 Logger.error("Field cannot be empty!");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(MainPage.getScene().getWindow());
-                alert.setTitle("Search Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Search field cannot be empty!");
-                alert.setGraphic(null);;
-                alert.showAndWait();
+                DialogManager.getInstance().createErrorAlert(MainPage, "Search Error", "Search field cannot be empty!");
             }
         }
     }
@@ -322,7 +311,7 @@ public class SearchController {
 
                 AnchorPane newPodcast = fxmlLoader.load();
                 AuthorReducedPodcastController controller = fxmlLoader.getController();
-                controller.setData(entry.getAuthorId(), entry.getId(), entry.getName(), entry.getReleaseDate(), entry.getPrimaryCategory(), entry.getArtworkUrl600());
+                controller.setData(entry, this.MainPage);
 
                 gridFoundPodcasts.add(newPodcast, this.column, this.row++);
             }

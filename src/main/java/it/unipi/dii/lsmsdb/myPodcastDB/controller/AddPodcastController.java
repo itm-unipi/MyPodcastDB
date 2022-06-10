@@ -6,6 +6,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.event.ActionEvent;
@@ -13,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -24,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 public class AddPodcastController {
+    private BorderPane mainPage;
+
     @FXML
     private TextField artworkURLField;
 
@@ -157,28 +161,16 @@ public class AddPodcastController {
             int addResult = authorProfileService.addPodcastAsAuthor(podcast);
 
             if (addResult == 0) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.initOwner(dialogPane.getScene().getWindow());
-                alert.setTitle("Podcast added!");
-                alert.setHeaderText(null);
-                alert.setContentText("Podcast successfully added!");
-                alert.setGraphic(null);
-                alert.showAndWait();
+                DialogManager.getInstance().createInformationAlert(mainPage, "Add Podcast", "Podcast successfully added!");
                 closeStage(event);
 
                 Logger.success("Added " + podcast);
                 StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcast.getId());
-
             } else {
                 Logger.error("Error during the creation of a podcast");
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(dialogPane.getScene().getWindow());
-                alert.setTitle("Add podcast error");
-                alert.setHeaderText(null);
-                alert.setContentText("Something went wrong during the adding of the podcast.");
-                alert.setGraphic(null);
-                alert.showAndWait();
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add Podcast - Error", "Something went wrong! Please try again.");
+                // TODO: fare il caso in cui l'author sta aggiungendo un podcast uguale ad uno che ha già
+                // DialogManager.getInstance().createErrorAlert(mainPage, "Add Podcast - Error", "This podcast already exists in your podcasts list!");
             }
         }
     }
@@ -198,6 +190,8 @@ public class AddPodcastController {
         Stage stage = (Stage)source.getScene().getWindow();
         stage.close();
     }
+
+    void setData(BorderPane mainPage) { this.mainPage = mainPage; }
 
     public void initialize() throws Exception {
         // Add choice for country field

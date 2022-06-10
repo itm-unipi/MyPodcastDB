@@ -87,11 +87,7 @@ public class PodcastPreviewController {
     }
 
     public void setData(Podcast podcast, int typeLabel, String valueLabel) {
-        // TypeLabel can be
-        // 0: no label
-        // 1: likes
-        // 2: rating
-        // 3: star
+        // TypeLabel can be: 0 -> no label, 1 -> likes, 2 -> rating, 3 -> star
 
         this.podcastPreview = podcast;
 

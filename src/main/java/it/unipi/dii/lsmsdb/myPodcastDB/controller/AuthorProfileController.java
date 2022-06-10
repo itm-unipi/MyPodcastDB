@@ -8,6 +8,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -169,7 +170,7 @@ public class AuthorProfileController {
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
         } else {
             Logger.error("Field cannot be empty!");
-            // TODO: alert
+            DialogManager.getInstance().createErrorAlert(MainPage, "Search Error", "Search field cannot be empty!");
         }
     }
 
@@ -182,7 +183,7 @@ public class AuthorProfileController {
                 StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
             } else {
                 Logger.error("Field cannot be empty!");
-                // TODO: alert
+                DialogManager.getInstance().createErrorAlert(MainPage, "Search Error", "Search field cannot be empty!");
             }
         }
     }
@@ -229,7 +230,6 @@ public class AuthorProfileController {
 
     @FXML
     void addPodcast(MouseEvent event) throws IOException {
-
         BoxBlur blur = new BoxBlur(3, 3 , 3);
         MainPage.setEffect(blur);
 
@@ -237,6 +237,9 @@ public class AuthorProfileController {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(getClass().getClassLoader().getResource("AddPodcast.fxml"));
         DialogPane authorDialogPane = fxmlLoader.load();
+
+        AddPodcastController addPodcastController = fxmlLoader.getController();
+        addPodcastController.setData(MainPage);
 
         // Creating a Dialog Pane
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -280,52 +283,31 @@ public class AuthorProfileController {
 
     @FXML
     void deleteAuthorByAdmin(MouseEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(MainPage.getScene().getWindow());
-        alert.setTitle("Delete Account");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this account?");
-        alert.setGraphic(null);
-        alert.showAndWait();
+        boolean result = DialogManager.getInstance().createConfirmationAlert(MainPage, "Delete Account", "Do you really want to delete this account?");
 
-        if (alert.getResult() == ButtonType.OK) {
-
+        if (result) {
             AuthorProfileService authorProfileService = new AuthorProfileService();
             int deleteResult = authorProfileService.deleteAuthorAsAdmin(author);
 
             if (deleteResult == 0) {
-                alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.initOwner(MainPage.getScene().getWindow());
-                alert.setTitle("Delete Account");
-                alert.setHeaderText(null);
-                alert.setContentText("Account deleted successfully!");
-                alert.setGraphic(null);;
-                alert.showAndWait();
-
+                DialogManager.getInstance().createInformationAlert(MainPage, "Delete Account", "Account delete successfully!");
                 StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
             } else {
                 Logger.error("Error during the delete operation");
 
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(MainPage.getScene().getWindow());
-                alert.setTitle("Delete Account Error");
-                alert.setHeaderText(null);
-
+                String alertText;
                 if (deleteResult == -1) {
-                    alert.setContentText("Author don't exists!");
+                    alertText = "Author don't exists!";
                 } else {
                     // General message error
-                    alert.setContentText("Something went wrong!");
+                    alertText = "Something went wrong! Please try again.";
                 }
 
-                alert.setGraphic(null);;
-                alert.showAndWait();
+                DialogManager.getInstance().createErrorAlert(MainPage, "Delete Account Failed", alertText);
             }
-
         } else {
             Logger.info("Operation aborted");
         }
-
     }
 
     /********* BUTTONS HOVER AND MOUSE EXITED **********/
@@ -413,7 +395,7 @@ public class AuthorProfileController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             AuthorReducedPodcastController controller = fxmlLoader.getController();
-            controller.setData(author.getId(), podcast.getId(), podcast.getName(), podcast.getReleaseDate(), podcast.getPrimaryCategory(), podcast.getArtworkUrl600());
+            controller.setData(podcast, MainPage);
 
             this.gridAuthorPodcasts.add(newPodcast, this.column, this.row++);
         }

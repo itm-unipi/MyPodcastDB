@@ -8,6 +8,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.HomePageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
@@ -276,13 +277,7 @@ public class HomePageController {
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
         } else {
             Logger.error("Field cannot be empty!");
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(MainPage.getScene().getWindow());
-            alert.setTitle("Search Error");
-            alert.setHeaderText(null);
-            alert.setContentText("Search field cannot be empty!");
-            alert.setGraphic(null);;
-            alert.showAndWait();
+            DialogManager.getInstance().createErrorAlert(MainPage, "Search Error", "Search field cannot be empty!");
         }
     }
 
@@ -295,13 +290,7 @@ public class HomePageController {
                 StageManager.showPage(ViewNavigator.SEARCH.getPage(), text);
             } else {
                 Logger.error("Field cannot be empty!");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(MainPage.getScene().getWindow());
-                alert.setTitle("Search Error");
-                alert.setHeaderText(null);
-                alert.setContentText("Search field cannot be empty!");
-                alert.setGraphic(null);;
-                alert.showAndWait();
+                DialogManager.getInstance().createErrorAlert(MainPage, "Search Error", "Search field cannot be empty!");
             }
         }
     }

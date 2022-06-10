@@ -5,6 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.event.ActionEvent;
@@ -128,57 +129,33 @@ public class AuthorSettingsController {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.initOwner(dialogPane.getScene().getWindow());
-        alert.setTitle("Delete Account");
-        alert.setHeaderText(null);
-        alert.setContentText("Do you really want to delete this account?");
-        alert.setGraphic(null);
-        alert.showAndWait();
+        boolean result = DialogManager.getInstance().createConfirmationAlert(dialogPane, "Delete Account", "Do you really want to delete your account? You will lose all your podcasts.");
 
-        if (alert.getResult() == ButtonType.OK) {
+        if (result) {
 
             if (authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
                 AuthorProfileService authorProfileService = new AuthorProfileService();
                 int deleteResult = authorProfileService.deleteAccountAsAuthor();
 
                 if (deleteResult == 0) {
-                    alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.initOwner(dialogPane.getScene().getWindow());
-                    alert.setTitle("Delete Account");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Account deleted successfully!");
-                    alert.setGraphic(null);;
-                    alert.showAndWait();
-
+                    DialogManager.getInstance().createInformationAlert(dialogPane, "Delete Account", "Account deleted successfully!");
                     closeStage(event);
                     StageManager.showPage(ViewNavigator.LOGIN.getPage());
                 } else {
                     Logger.error("Error during the delete operation");
 
-                    alert = new Alert(Alert.AlertType.ERROR);
-                    alert.initOwner(dialogPane.getScene().getWindow());
-                    alert.setTitle("Delete Account Error");
-                    alert.setHeaderText(null);
-
+                    String alertText;
                     if (deleteResult == -1) {
-                        alert.setContentText("Author don't exists!");
+                        alertText = "Author don't exists!";
                     } else {
                         // General message error
-                        alert.setContentText("Something went wrong!");
+                        alertText = "Something went wrong! Please try again.";
                     }
 
-                    alert.setGraphic(null);;
-                    alert.showAndWait();
+                    DialogManager.getInstance().createErrorAlert(dialogPane, "Delete Account", alertText);
                 }
             } else {
-                alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(dialogPane.getScene().getWindow());
-                alert.setTitle("Delete Account: incorrect password");
-                alert.setHeaderText(null);
-                alert.setContentText("Invalid current password! Please try again.");
-                alert.setGraphic(null);;
-                alert.showAndWait();
+                DialogManager.getInstance().createErrorAlert(dialogPane, "Delete Account - Incorrect Password", "Invalid password! Please try again.");
             }
         } else {
             Logger.info("Operation aborted");
@@ -246,75 +223,28 @@ public class AuthorSettingsController {
                         // Updating GUI
                         authorNameProfile.setText(this.author.getName());
                         actorPictureProfile.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
-
                         // Updating the stage object identifier to avoid unexpected errors
                         StageManager.setObjectIdentifier(authorName.getText());
-
-                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                        alert.initOwner(dialogPane.getScene().getWindow());
-                        alert.setTitle("Update Personal Info: Done");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Settings updated successfully!");
-                        alert.setGraphic(null);
-                        alert.showAndWait();
-                        closeStage(event);
-
+                        DialogManager.getInstance().createInformationAlert(dialogPane, "Update Personal Info", "Personal info updated successfully!");
                     } else if (updateResult == -1) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.initOwner(dialogPane.getScene().getWindow());
-                        alert.setTitle("Update Personal Info: Name Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Name already exists!");
-                        alert.setGraphic(null);
-                        alert.showAndWait();
-
                         // Resetting field that caused the error
                         authorName.setText(oldAuthor.getName());
-
+                        DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Name Error", "This author name already exists!");
                     } else if (updateResult == -2) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.initOwner(dialogPane.getScene().getWindow());
-                        alert.setTitle("Update Personal Info: Email Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Email is already associate to an account!");
-                        alert.setGraphic(null);
-                        alert.showAndWait();
-
                         // Resetting field that caused the error
                         authorEmail.setText(oldAuthor.getEmail());
-
+                        DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Email Error", "This email is already associated to an account!");
                     } else if (updateResult == -4) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.initOwner(dialogPane.getScene().getWindow());
-                        alert.setTitle("Update Personal Info: Error");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Error during the update operation!");
-                        alert.setGraphic(null);
-                        alert.showAndWait();
-
+                        DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Error", "Something went wrong! Please try again.");
                     }
-
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.initOwner(dialogPane.getScene().getWindow());
-                    alert.setTitle("Update Personal Info");
-                    alert.setHeaderText(null);
-                    alert.setContentText("No changes found.");
-                    alert.setGraphic(null);
-                    alert.showAndWait();
+                    DialogManager.getInstance().createInformationAlert(dialogPane, "Update Personal Info", "No changes found.");
                     closeStage(event);
                 }
             }  else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.initOwner(dialogPane.getScene().getWindow());
-                alert.setTitle("Update Personal Info: Invalid Password");
-                alert.setHeaderText(null);
-                alert.setContentText("Incorrect Current Password!");
-                alert.setGraphic(null);
-                alert.showAndWait();
-
                 // Resetting password field
                 authorPassword.setText("");
+                DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Incorrect Password", "Invalid password! Please try again.");
             }
         }
     }
