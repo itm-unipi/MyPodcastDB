@@ -233,30 +233,13 @@ public class AdminDashboardController {
         Logger.info("Delete Admin button clicked");
         AdminDashboardService service = new AdminDashboardService();
         int res = service.deleteAdmin(this.admin);
-        String logMsg = "";
-        String dialogMsg = "";
-        switch (res){
-            case 0:
-                Logger.success("Admin account removed");
-                DialogManager.getInstance().createInformationAlert(adminAnchorPane, "Admin account removed");
-                break;
-            case 1:
-                logMsg = "Admin account not exists";
-                dialogMsg = "Your account not exists";
-                break;
-            case 2:
-                logMsg = "Operation failed on mongo";
-                dialogMsg = "operation failed";
-                break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
-                break;
-
+        if(res == 0){
+            Logger.success("Admin account removed");
+            DialogManager.getInstance().createInformationAlert(adminAnchorPane, "Admin account removed");
         }
-        if(res > 0 || res == -1){
-            Logger.error(logMsg);
-            DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
+        else{
+            Logger.error("Operation failed on mongo");
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Operation failed");
             return;
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
@@ -325,24 +308,16 @@ public class AdminDashboardController {
                 Logger.success("Nothing to update");
                 break;
             case 2:
-                logMsg = "Admin not exists on mongo";
-                dialogMsg = "Your account not exists";
-                break;
-            case 3:
                 logMsg = "Admin with the same name already exists";
                 dialogMsg = "Admin with the same name already exists";
                 break;
-            case 4:
+            case 3:
                 logMsg = "Operation on mongo failed";
                 dialogMsg = "Operation failed";
                 break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
-                break;
         }
 
-        if(res > 1 || res == -1){
+        if(res > 1){
             Logger.error(logMsg);
             DialogManager.getInstance().createErrorAlert(adminAnchorPane, dialogMsg);
             return;

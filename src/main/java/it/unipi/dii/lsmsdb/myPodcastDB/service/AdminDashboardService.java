@@ -42,7 +42,7 @@ public class AdminDashboardService {
         //check if an admin with the same name already exists
         if(adminMongo.findAdminByName(admin.getName()) != null)
             res = 1;
-        //check failure mongo operation
+        //adding new admin to mongo
         else if (!adminMongo.addAdmin(admin))
             res = 2;
         else
@@ -63,18 +63,17 @@ public class AdminDashboardService {
             return 1;
 
         MongoManager.getInstance().openConnection();
-        //check if oldAdmin exists
-        if(adminMongo.findAdminByName(oldAdmin.getName()) == null)
-            res = 2;
+
         //check if an admin with the same name already exists
-        else if(!oldAdmin.getName().equals(newAdmin.getName()) && adminMongo.findAdminByName(newAdmin.getName()) != null)
-            res = 3;
-        //check failure mongo operation
+        if(!oldAdmin.getName().equals(newAdmin.getName()) && adminMongo.findAdminByName(newAdmin.getName()) != null)
+            res = 2;
+        //updating admin
         else if (!adminMongo.updateAdmin(newAdmin))
-            res = 4;
+            res = 3;
         else
             res = 0;
         MongoManager.getInstance().closeConnection();
+
         if(res == 0)
             oldAdmin.copy(newAdmin);
         return res;
@@ -83,12 +82,10 @@ public class AdminDashboardService {
     public int deleteAdmin(Admin admin){
         int res = -1;
         MongoManager.getInstance().openConnection();
-        //check if admin exists
-        if(adminMongo.findAdminByName(admin.getName()) == null)
-            res = 1;
+
         //check failure mongo operation
-        else if (!adminMongo.deleteAdminById(admin.getId()))
-            res = 2;
+        if (!adminMongo.deleteAdminById(admin.getId()))
+            res = 1;
         else
             res = 0;
         MongoManager.getInstance().closeConnection();
