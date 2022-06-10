@@ -48,7 +48,7 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
@@ -77,12 +77,12 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
                 for (Document result : results) {
-                    String podcastId = result.getString("podcastId");
+                    String podcastId = result.getObjectId("podcastId").toString();
                     String podcastName = result.getString("podcastName");
                     String podcastArtwork = result.getString("podcastArtwork");
                     Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
@@ -109,7 +109,7 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
@@ -138,7 +138,7 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get the three lists
                 female.addAll(query.getList("resultsFemale", String.class));
@@ -163,7 +163,7 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
@@ -192,7 +192,7 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
@@ -221,12 +221,12 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
                 for (Document result : results) {
-                    String podcastId = result.getString("podcastId");
+                    String podcastId = result.getObjectId("podcastId").toString();
                     String podcastName = result.getString("podcastName");
                     String podcastArtwork = result.getString("podcastArtwork");
                     Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
@@ -253,12 +253,12 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
                 for (Document result : results) {
-                    String podcastId = result.getString("podcastId");
+                    String podcastId = result.getObjectId("podcastId").toString();
                     String podcastName = result.getString("podcastName");
                     String podcastArtwork = result.getString("podcastArtwork");
                     Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
@@ -286,7 +286,7 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
@@ -317,12 +317,12 @@ public class QueryMongo {
                 Document query = cursor.next();
 
                 // get the update time
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
 
                 // get all the results
                 List<Document> results = query.getList("results", Document.class);
                 for (Document result : results) {
-                    String podcastId = result.getString("podcastId");
+                    String podcastId = result.getObjectId("podcastId").toString();
                     String podcastName = result.getString("podcastName");
                     String podcastArtwork = result.getString("podcastArtwork");
                     Podcast podcast = new Podcast(podcastId, podcastName, podcastArtwork);
@@ -357,7 +357,7 @@ public class QueryMongo {
 
                 // get the update time
                 String queryName = query.getString("queryName");
-                String updateTime = query.getString("lastUpdate");
+                String updateTime = dateAsString(query.getDate("lastUpdate"));
                 updateTimes.add(new Pair<>(queryName, updateTime));
             }
 
@@ -386,7 +386,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "AverageAgeOfUsersPerFavouriteCategory");
             Bson update = combine(
                     set("queryName", "AverageAgeOfUsersPerFavouriteCategory"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -406,7 +406,7 @@ public class QueryMongo {
         List<Document> results = new ArrayList<>();
         for (Pair<Podcast, Integer> value : newValues) {
             Document newResult = new Document()
-                    .append("podcastId", value.getValue0().getId())
+                    .append("podcastId", new ObjectId(value.getValue0().getId()))
                     .append("podcastName", value.getValue0().getName())
                     .append("podcastArtwork", value.getValue0().getArtworkUrl600())
                     .append("numReviews", value.getValue1());
@@ -417,7 +417,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "PodcastsWithHighestNumberOfReviews");
             Bson update = combine(
                     set("queryName", "PodcastsWithHighestNumberOfReviews"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -446,7 +446,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "CountryWithHighestNumberOfPodcasts");
             Bson update = combine(
                     set("queryName", "CountryWithHighestNumberOfPodcasts"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -466,7 +466,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "FavouriteCategoryForGender");
             Bson update = combine(
                     set("queryName", "FavouriteCategoryForGender"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("resultsFemale", female),
                     set("resultsMale", male),
                     set("resultsNotBinary", notBinary)
@@ -497,7 +497,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "MostNumerousCategory");
             Bson update = combine(
                     set("queryName", "MostNumerousCategory"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -526,7 +526,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "MostAppreciatedCategory");
             Bson update = combine(
                     set("queryName", "MostAppreciatedCategory"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -556,7 +556,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "MostFollowedAuthor");
             Bson update = combine(
                     set("queryName", "MostFollowedAuthor"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -576,7 +576,7 @@ public class QueryMongo {
         List<Document> results = new ArrayList<>();
         for (Entry<Podcast, Integer> value : newValues) {
             Document newResult = new Document()
-                    .append("podcastId", value.getKey().getId())
+                    .append("podcastId", new ObjectId(value.getKey().getId()))
                     .append("podcastName", value.getKey().getName())
                     .append("podcastArtwork", value.getKey().getArtworkUrl600())
                     .append("numLikes", value.getValue());
@@ -587,7 +587,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "MostLikedPodcast");
             Bson update = combine(
                     set("queryName", "MostLikedPodcast"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -607,7 +607,7 @@ public class QueryMongo {
         List<Document> results = new ArrayList<>();
         for (Pair<Podcast, Float> value : newValues) {
             Document newResult = new Document()
-                    .append("podcastId", value.getValue0().getId())
+                    .append("podcastId", new ObjectId(value.getValue0().getId()))
                     .append("podcastName", value.getValue0().getName())
                     .append("podcastArtwork", value.getValue0().getArtworkUrl600())
                     .append("meanRating", value.getValue1());
@@ -618,7 +618,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "PodcastsWithHighestAverageRating");
             Bson update = combine(
                     set("queryName", "PodcastsWithHighestAverageRating"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
@@ -638,7 +638,7 @@ public class QueryMongo {
         List<Document> results = new ArrayList<>();
         for (Triplet<Podcast, String, Float> value : newValues) {
             Document newResult = new Document()
-                    .append("podcastId", value.getValue0().getId())
+                    .append("podcastId", new ObjectId(value.getValue0().getId()))
                     .append("podcastName", value.getValue0().getName())
                     .append("podcastArtwork", value.getValue0().getArtworkUrl600())
                     .append("country", value.getValue1())
@@ -650,7 +650,7 @@ public class QueryMongo {
             Bson filter = eq("queryName", "PodcastWithHighestAverageRatingPerCountry");
             Bson update = combine(
                     set("queryName", "PodcastWithHighestAverageRatingPerCountry"),
-                    set("lastUpdate", dateAsString(updateTime)),
+                    set("lastUpdate", updateTime),
                     set("results", results)
             );
             UpdateOptions options = new UpdateOptions().upsert(true);
