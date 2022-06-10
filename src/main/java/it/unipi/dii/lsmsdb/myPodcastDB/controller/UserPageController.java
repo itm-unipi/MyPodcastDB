@@ -27,6 +27,9 @@ import javafx.stage.Stage;
 import org.javatuples.Pair;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.function.LongFunction;
 
@@ -48,7 +51,7 @@ public class UserPageController {
     private TextField searchTextField;
 
     @FXML
-    private TextField userPageAgeTextField;
+    private Label userPageAgeLabel;
 
     @FXML
     private GridPane userPageAuthorsGrid;
@@ -181,6 +184,9 @@ public class UserPageController {
 
     @FXML
     private Label userPageGenderLabel;
+
+    @FXML
+    private DatePicker userPageDatePicker;
 
     private User pageOwner;
 
@@ -653,7 +659,6 @@ public class UserPageController {
         userPageNameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageSurnameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageEmailTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
-        userPageAgeTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         imageNumber = 0;
     }
 
@@ -671,7 +676,6 @@ public class UserPageController {
         userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageAgeTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
 
     }
 
@@ -742,10 +746,10 @@ public class UserPageController {
         userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-        userPageAgeTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageCountryLabel.setText(pageOwner.getCountry());
         userPageGenderLabel.setText(pageOwner.getGender());
         userPageFavGenreLabel.setText(pageOwner.getFavouriteGenre());
+        userPageAgeLabel.setText(pageOwner.getAge() + "");
 
     }
 
@@ -895,9 +899,6 @@ public class UserPageController {
         userPageGenderComboBox.setItems(genderList);
         userPageCountryComboBox.setVisibleRowCount(5);
         userPageFavGenreComboBox.setVisibleRowCount(5);
-        userPageCountryComboBox.setEditable(false);
-        userPageFavGenreComboBox.setEditable(false);
-        userPageGenderComboBox.setEditable(false);
         pageOwner.setUsername(pageUsername);
         //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
         int res = service.loadUserPageProfile(
@@ -1032,7 +1033,7 @@ public class UserPageController {
         imageButtonLeft.setVisible(false);
         imageButtonRight.setVisible(false);
 
-        //fill textFields and image
+        //fill all user informations
         restoreTextFields();
 
         // fill the watchlist grid
@@ -1102,6 +1103,7 @@ public class UserPageController {
         userPageCountryComboBox.setVisible(false);
         userPageGenderComboBox.setVisible(false);
         userPageFavGenreComboBox.setVisible(false);
+        userPageDatePicker.setVisible(false);
     }
 
 
@@ -1167,21 +1169,21 @@ public class UserPageController {
         userPageNameTextField.setEditable(value);
         userPageSurnameTextField.setEditable(value);
         userPageEmailTextField.setEditable(value);
-        userPageAgeTextField.setEditable(value);
         userPageUsernameTextField.setPadding(new Insets(0,0,0,padding));
         userPageNameTextField.setPadding(new Insets(0,0,0,padding));
         userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageSurnameTextField.setPadding(new Insets(0,0,0,padding));
         userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageEmailTextField.setPadding(new Insets(0,0,0,padding));
-        userPageAgeTextField.setPadding(new Insets(0,0,0,padding));
         userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageCountryComboBox.setVisible(value);
         userPageGenderComboBox.setVisible(value);
         userPageFavGenreComboBox.setVisible(value);
+        userPageDatePicker.setVisible(value);
         userPageCountryLabel.setVisible(!value);
         userPageGenderLabel.setVisible(!value);
         userPageFavGenreLabel.setVisible(!value);
+        userPageAgeLabel.setVisible(!value);
 
 
     }
@@ -1193,7 +1195,7 @@ public class UserPageController {
         newUser.setUsername(userPageUsernameTextField.getText());
         newUser.setName(userPageNameTextField.getText());
         newUser.setSurname(userPageSurnameTextField.getText());
-        newUser.setDateOfBirth(new Date()); // TODO: prendere il valore corretto
+        newUser.setDateOfBirth(Date.from(Instant.from(userPageDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()))));
         newUser.setCountry(userPageCountryComboBox.getValue().toString());
         newUser.setEmail(userPageEmailTextField.getText());
         newUser.setGender(userPageGenderComboBox.getValue().toString());
@@ -1209,7 +1211,8 @@ public class UserPageController {
         userPageSurnameTextField.setText(pageOwner.getSurname());
         userPageCountryComboBox.setValue(pageOwner.getCountry());
         userPageFavGenreComboBox.setValue(pageOwner.getFavouriteGenre());
-        userPageAgeTextField.setText(((Integer)pageOwner.getAge()).toString());
+        userPageAgeLabel.setText(((Integer)pageOwner.getAge()).toString());
+        userPageDatePicker.setValue(Instant.ofEpochMilli(pageOwner.getDateOfBirth().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
         userPageGenderComboBox.setValue(pageOwner.getGender());
         userPageEmailTextField.setText(pageOwner.getEmail());
         userPageImage.setImage(ImageCache.getInstance().getImageFromLocalPath(pageOwner.getPicturePath()));

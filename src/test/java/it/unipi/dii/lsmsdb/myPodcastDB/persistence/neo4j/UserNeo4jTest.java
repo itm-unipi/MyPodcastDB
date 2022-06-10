@@ -376,10 +376,10 @@ public class UserNeo4jTest {
     }
 
     void showSuggestedUsersByLikedPodcastsTest() {
-        List<User> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("whiterabbit394794", 25);
+        List<User> users = this.userNeo4j.showSuggestedUsersByLikedPodcasts("smallmeercat795128", 25);
         boolean test = false;
         for (User user : users)
-            if (user.getUsername().equals("whiteelephant974216"))
+            if (user.getUsername().equals("goldendog287451"))
                 test = true;
 
         if (test)
@@ -389,7 +389,7 @@ public class UserNeo4jTest {
     }
 
     public void showSuggestedUsersByFollowedAuthorsTest() {
-        List<User> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("whiterabbit394794", 4);
+        List<User> suggestedUsers = userNeo4j.showSuggestedUsersByFollowedAuthors("smallmeercat795128", 4);
 
         if (suggestedUsers != null && suggestedUsers.size() == 4) {
             System.out.println("[+] showSuggestedUsersByFollowedAuthors");

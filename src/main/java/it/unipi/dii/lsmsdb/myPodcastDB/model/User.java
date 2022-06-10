@@ -130,7 +130,7 @@ public class User {
 
     public int getAge() {
         LocalDate birth = this.dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return Period.between(LocalDate.now(), birth).getYears();
+        return Period.between(birth, LocalDate.now()).getYears();
     }
 
     public Date getDateOfBirth() {

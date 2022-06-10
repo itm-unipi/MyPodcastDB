@@ -148,8 +148,7 @@ public class SignUpController {
             LocalDate birthDate = signUpAgeDatePicker.getValue();
             String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
 
-            Instant instant = Instant.from(birthDate.atStartOfDay(ZoneId.systemDefault()));
-            Date dateOfBirth = Date.from(instant);
+            Date dateOfBirth = Date.from(Instant.from(birthDate.atStartOfDay(ZoneId.systemDefault())));
 
             if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
                 Logger.error("Invalid values");
@@ -157,7 +156,6 @@ public class SignUpController {
                 return;
             }
 
-            // int age = LocalDate.now().getYear() - birthDate.getYear();
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender);
             Logger.info(user.toString());
 
