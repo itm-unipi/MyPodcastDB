@@ -9,6 +9,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -875,9 +876,16 @@ public class UserPageController {
 
         if(res == 1){
             Logger.error("User not exists");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
-            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+            Platform.runLater(() -> {
+                try{
+                    DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
+                    StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+                }catch(IOException e){
+                    throw new RuntimeException(e);
+                }
+            });
             return;
+
         }
 
         if(actorType.equals("User"))
