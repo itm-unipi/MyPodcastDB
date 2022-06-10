@@ -163,6 +163,17 @@ public class ReviewMongoTest {
         reviewMongo.deleteReviewById(reviewId);
     }
 
+    public void updateReviewsByAuthorUsernameTest(){
+        Review newReview1 = addReviewForTest();
+        Review newReview2 = addReviewForTest();
+
+        reviewMongo.updateReviewsByAuthorUsername("testauthorusername", "newUsername");
+        if(reviewMongo.deleteReviewsByAuthorUsername("newUsername") == 2)
+            System.out.println("[+] updateReviewsByAuthorUsername");
+        else
+            System.err.println("[-] updateReviewsByAuthorUsername");
+    }
+
     public static void main(String[] args) {
         Logger.initialize();
         ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
@@ -180,6 +191,7 @@ public class ReviewMongoTest {
         test.deleteReviewsByPodcastIdTest();
         test.deleteReviewsByAuthorUsernameTest();
         test.updateReviewTest();
+        test.updateReviewsByAuthorUsernameTest();
 
         manager.closeConnection();
     }

@@ -334,6 +334,7 @@ public class UserPageService {
         else if(reviewMongoManager.deleteReviewsByAuthorUsername(user.getUsername()) == 0){
             res = 0;
         }
+        //else if(reviewMongoManager.deleteReviewsByPodcastId())
         else
             res = 0;
         MongoManager.getInstance().closeConnection();
