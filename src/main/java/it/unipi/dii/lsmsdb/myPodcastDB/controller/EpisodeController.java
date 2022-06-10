@@ -13,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import static java.lang.Math.round;
 
 public class EpisodeController {
+    @FXML
+    private HBox buttonWrapper;
 
     @FXML
     private Button deleteEpisode;
@@ -38,6 +41,9 @@ public class EpisodeController {
 
     @FXML
     private Label title;
+
+    @FXML
+    private Tooltip tootipTitle;
 
     @FXML
     private Button updateEpisode;
@@ -155,6 +161,7 @@ public class EpisodeController {
         this.podcastPageController = podcastPageController;
 
         this.title.setText(episode.getName());
+        this.tootipTitle.setText(episode.getName());
         this.description.setText(episode.getDescription());
         String[] date = this.episode.getReleaseDate().toString().split(" ");
         this.releaseDate.setText(date[2] + " " + date[1]);
@@ -166,8 +173,13 @@ public class EpisodeController {
             // visitator
             this.updateEpisode.setVisible(false);
             this.deleteEpisode.setVisible(false);
+            this.buttonWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0;");
+            this.title.setStyle("-fx-min-width: 548; -fx-pref-width: 584; -fx-max-width: 584;");
         } else if (sessionType.equals("Admin")) {
             this.updateEpisode.setVisible(false);
+            this.updateEpisode.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0;");
+            this.buttonWrapper.setStyle("-fx-min-width: 135; -fx-pref-width: 135; -fx-max-width: 135;");
+            this.title.setStyle("-fx-min-width: 445; -fx-pref-width: 445; -fx-max-width: 445;");
         }
     }
 }
