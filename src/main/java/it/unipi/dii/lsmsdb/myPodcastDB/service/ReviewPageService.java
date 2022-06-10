@@ -11,14 +11,6 @@ import java.util.List;
 
 public class ReviewPageService {
 
-    //---------------- GIANLUCA ---------------------
-    //-----------------------------------------------
-
-    //----------------- BIAGIO ----------------------
-    //-----------------------------------------------
-
-    //----------------- MATTEO ----------------------
-
     private PodcastMongo podcastMongo;
     private ReviewMongo reviewMongo;
 
@@ -77,6 +69,29 @@ public class ReviewPageService {
         return result;
     }
 
+    public boolean loadOtherReview(Podcast podcast, Review own, List<Review> reviews, int skip, int limit, String attributeToOrder, Boolean ascending) {
+        MongoManager.getInstance().openConnection();
+        Boolean result = true;
+
+        // search the podcast
+        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
+        if (foundPodcast == null) {
+            Logger.error("Podcast requested not found");
+            result = false;
+        } else {
+            podcast.copy(foundPodcast);
+        }
+
+        // load the podcast's reviews
+        List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), skip, limit, attributeToOrder, ascending);
+        if (own != null && loaded.contains(own))
+            loaded.remove(own);
+        reviews.addAll(loaded);
+
+        MongoManager.getInstance().closeConnection();
+        return result;
+    }
+
     public int addNewReview(Review review) {
         MongoManager.getInstance().openConnection();
         int result = 0;
@@ -102,6 +117,9 @@ public class ReviewPageService {
                 if (!addEmb) {
                     Logger.error("Failed to add rating embedded to podcast");
                     result = -3;
+
+                    // rollback
+                    this.reviewMongo.deleteReviewById(review.getId());
                 } else {
                     Logger.success("Review successfully added");
                 }
@@ -137,6 +155,9 @@ public class ReviewPageService {
                 if (!resEmb) {
                     Logger.error("Failed to remove review from podcast");
                     result = -3;
+
+                    // rollback
+                    this.reviewMongo.addReview(review);
                 } else {
                     Logger.success("Review successfully removed");
                 }
@@ -146,29 +167,4 @@ public class ReviewPageService {
         MongoManager.getInstance().closeConnection();
         return result;
     }
-
-    public boolean loadOtherReview(Podcast podcast, Review own, List<Review> reviews, int skip, int limit, String attributeToOrder, Boolean ascending) {
-        MongoManager.getInstance().openConnection();
-        Boolean result = true;
-
-        // search the podcast
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Podcast requested not found");
-            result = false;
-        } else {
-            podcast.copy(foundPodcast);
-        }
-
-        // load the podcast's reviews
-        List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), skip, limit, attributeToOrder, ascending);
-        if (own != null && loaded.contains(own))
-            loaded.remove(own);
-        reviews.addAll(loaded);
-
-        MongoManager.getInstance().closeConnection();
-        return result;
-    }
-
-    //-----------------------------------------------
 }

@@ -75,7 +75,8 @@ public class PodcastNeo4jTest {
     }
 
     public void updatePodcastTest() {
-        boolean result = podcastNeo4j.updatePodcast("0", "Podcast Test Updated", "18");
+        Podcast newPodcast = new Podcast("0", "Podcast Test Updated", "18");
+        boolean result = podcastNeo4j.updatePodcast(newPodcast);
         Podcast podcast = podcastNeo4j.findPodcastByPodcastId("0");
 
         if (podcast.getName().equals("Podcast Test Updated") && podcast.getArtworkUrl600().equals("18"))
@@ -155,7 +156,7 @@ public class PodcastNeo4jTest {
 
     public void showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLikedTest() {
         List<Podcast> results = this.podcastNeo4j.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked("yellowtiger876274", 10, 0);
-        if (results.get(0).getId().equals("50e391e1e88310022fb76600") && results.get(0).getName().equals("Leominster Church of Christ Sermons"))
+        if (results.get(0).getId().equals("39808b363e7d466ff9f8feb8") && results.get(0).getName().equals("Shakespeare’s Sonnets"))
             System.out.println("[+] showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked");
         else
             System.err.println("[-] showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked");
@@ -226,7 +227,7 @@ public class PodcastNeo4jTest {
 
     public void showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlistTest(){
         User user = new User();
-        user.setUsername("whiteladybug851481");
+        user.setUsername("yellowtiger876274");
         List<Podcast> podcasts = this.podcastNeo4j.showSuggestedPodcastsBasedOnAuthorsOfPodcastsInWatchlist(user, 10, 0);
 
         if(podcasts == null) {

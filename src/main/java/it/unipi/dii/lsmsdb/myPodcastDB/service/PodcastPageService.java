@@ -15,14 +15,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 public class PodcastPageService {
 
-    //---------------- GIANLUCA ---------------------
-    //-----------------------------------------------
-
-    //----------------- BIAGIO ----------------------
-    //-----------------------------------------------
-
-    //----------------- MATTEO ----------------------
-
     private PodcastMongo podcastMongo;
     private ReviewMongo reviewMongo;
     private AuthorMongo authorMongo;
@@ -137,6 +129,7 @@ public class PodcastPageService {
     public int updatePodcast(Podcast podcast) {
         MongoManager.getInstance().openConnection();
         int result = 0;
+        Boolean updateReduced = false;
 
         // check if podcast exists
         Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
@@ -148,7 +141,6 @@ public class PodcastPageService {
         // update podcast
         else {
             // check if is needed to update reduced podcast
-            Boolean updateReduced = false;
             if (!foundPodcast.getName().equals(podcast.getName()) || !foundPodcast.getReleaseDate().equals(podcast.getReleaseDate()) || !foundPodcast.getPrimaryCategory().equals(podcast.getPrimaryCategory()) || !foundPodcast.getArtworkUrl600().equals(podcast.getArtworkUrl600())) {
                 updateReduced = true;
             }
@@ -179,17 +171,24 @@ public class PodcastPageService {
                 // update Neo4J if needed
                 if (result == 0 && updateNeo) {
                     Neo4jManager.getInstance().openConnection();
-                    Boolean resUpNeo = this.podcastNeo4j.updatePodcast(podcast.getId(), podcast.getName(), podcast.getArtworkUrl600());
+                    Boolean resUpNeo = this.podcastNeo4j.updatePodcast(podcast);
                     if (!resUpNeo) {
                         Logger.error("Podcast not updated on Neo4J");
                         result = -4;
+                    } else {
+                        Neo4jManager.getInstance().closeConnection();
                     }
-                    Neo4jManager.getInstance().closeConnection();
                 }
 
                 if (result == 0)
                     Logger.success("Podcast updated");
             }
+        }
+
+        // rollback if process failed
+        if (result != 0) {
+            rollbackUpdatePodcast(result, foundPodcast, updateReduced);
+            Neo4jManager.getInstance().closeConnection();
         }
 
         MongoManager.getInstance().closeConnection();
@@ -242,6 +241,10 @@ public class PodcastPageService {
                 }
             }
         }
+
+        // rollback if process failed
+        if (result != 0)
+            rollbackDeletePodcast(result, podcast);
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
@@ -325,5 +328,32 @@ public class PodcastPageService {
         return result;
     }
 
-    //-----------------------------------------------
+    private void rollbackUpdatePodcast(int result, Podcast oldPodcast, boolean updateReduced) {
+        // failed to update reduced podcast
+        if (result == -4 && updateReduced) {
+            this.authorMongo.updatePodcastOfAuthor(oldPodcast.getAuthorId(), oldPodcast);
+        }
+
+        // failed to update podcast on mongo
+        if (result >= -3) {
+            this.podcastMongo.updatePodcast(oldPodcast);
+        }
+    }
+
+    private void rollbackDeletePodcast(int result, Podcast podcast) {
+        // failed to remove review of podcast
+        if (result == -5) {
+            this.podcastNeo4j.addPodcast(podcast);
+        }
+
+        // failed to remove podcast entity from neo4j
+        if (result >= -4) {
+            this.authorMongo.addPodcastToAuthor(podcast.getAuthorId(), podcast);
+        }
+
+        // failed to remove reduced podcast from author
+        if (result >= -3) {
+            this.podcastMongo.addPodcast(podcast);
+        }
+    }
 }

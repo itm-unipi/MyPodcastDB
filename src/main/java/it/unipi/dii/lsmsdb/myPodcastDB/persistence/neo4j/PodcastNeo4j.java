@@ -150,11 +150,11 @@ public class PodcastNeo4j {
 
     // --------- UPDATE --------- //
 
-    public boolean updatePodcast(String podcastId, String newName, String newArtwork) {
+    public boolean updatePodcast(Podcast podcast) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (p:Podcast{podcastId: $podcastId})" +
                 "SET p.name = $newName, p.artworkUrl600 = $newArtwork";
-        Value params = parameters("podcastId", podcastId, "newName", newName, "newArtwork", newArtwork);
+        Value params = parameters("podcastId", podcast.getId(), "newName", podcast.getName(), "newArtwork", podcast.getArtworkUrl600());
 
         try {
             manager.write(query, params);
