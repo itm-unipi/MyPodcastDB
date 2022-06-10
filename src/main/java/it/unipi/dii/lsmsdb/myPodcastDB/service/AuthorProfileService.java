@@ -18,12 +18,6 @@ import org.javatuples.Pair;
 import java.util.List;
 
 public class AuthorProfileService {
-
-    //---------------- GIANLUCA ---------------------
-    //-----------------------------------------------
-
-    //----------------- BIAGIO ----------------------
-
     private AuthorMongo authorMongoManager;
     private AuthorNeo4j authorNeo4jManager;
     private PodcastMongo podcastMongoManager;
@@ -40,88 +34,95 @@ public class AuthorProfileService {
         this.userNeo4jManager = new UserNeo4j();
     }
 
-    /******* USER ********/
-    public boolean loadAuthorProfileAsUser(Author author, List<Pair<Author, Boolean>> followed, int limit) {
+    /******* User Service ********/
+    public boolean loadAuthorProfileAsUser(Author author, List<Pair<Author, Boolean>> followedAuthors, List<String> following, int limit) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
-
-        boolean followingAuthor;
+        boolean loadResult;
 
         // Getting the author object from Mongo
         Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
         if (foundAuthor == null) {
-            Logger.error("Author not found!");
-            return false;
+            Logger.error(author.getName() + " not found!");
+            loadResult = false;
         } else {
+            Logger.info("Author requested found: " + author.getName());
             author.copy(foundAuthor);
 
-            // Checking if the user follows the visited author
-            followingAuthor = userNeo4jManager.findUserFollowsAuthor(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
+            // Getting the list of the followed authors by the user
+            List<Author> followedAuthorsByUser = authorNeo4jManager.showFollowedAuthorsByUser(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+            if (followedAuthorsByUser != null) {
+                for (Author followedByUser: followedAuthorsByUser)
+                    following.add(followedByUser.getName());
+            }
 
             // Getting the authors followed by the author visited
-            List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
-            if (followedAuthors != null) {
-                for (Author followedAuthor : followedAuthors) {
-                    boolean following = userNeo4jManager.findUserFollowsAuthor(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), followedAuthor.getName());
-                    followed.add(new Pair<>(followedAuthor, following));
+            List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
+            if (followedAuthorsByAuthor != null) {
+                for (Author followedAuthor : followedAuthorsByAuthor) {
+                    boolean follow = following.contains(followedAuthor.getName());
+                    followedAuthors.add(new Pair<>(followedAuthor, follow));
                 }
             }
+
+            loadResult = true;
         }
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
-
-        return followingAuthor;
+        return loadResult;
     }
 
-    public void loadAuthorProfileAsUnregistered(Author author, List<Pair<Author, Boolean>> followed, int limit) {
+    public boolean loadAuthorProfileAsUnregistered(Author author, List<Pair<Author, Boolean>> followedAuthors, int limit) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
+        boolean loadResult;
 
         // Getting the author object from Mongo
         Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
         if (foundAuthor == null) {
-            Logger.error("Author not found!");
+            Logger.error(author.getName() + " not found!");
+            loadResult = false;
         } else {
+            Logger.info("Author requested found: " + author.getName());
             author.copy(foundAuthor);
 
             // Getting the authors followed by the author visited
-            List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
-            if (followedAuthors != null) {
-                for (Author followedAuthor : followedAuthors)
-                    followed.add(new Pair<>(followedAuthor, false));
+            List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
+            if (followedAuthorsByAuthor != null) {
+                for (Author followedAuthor : followedAuthorsByAuthor)
+                    followedAuthors.add(new Pair<>(followedAuthor, false));
             }
+            loadResult = true;
         }
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
+        return loadResult;
     }
 
-    public boolean loadFollowedAuthorsAsUser(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
+    public boolean loadFollowedAuthorsAsUser(Author author, List<Pair<Author, Boolean>> followedAuthors, List<String> following, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-
         boolean noMoreAuthors = false;
 
-        List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
-        if (followedAuthors != null) {
-            for (Author followedAuthor: followedAuthors) {
-                boolean following = userNeo4jManager.findUserFollowsAuthor(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), followedAuthor.getName());
-                followed.add(new Pair<>(followedAuthor, following));
+        // Getting the authors followed by the author visited
+        List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
+        if (followedAuthorsByAuthor != null) {
+            for (Author followedAuthor : followedAuthorsByAuthor) {
+                boolean follow = following.contains(followedAuthor.getName());
+                followedAuthors.add(new Pair<>(followedAuthor, follow));
             }
-
             noMoreAuthors = followedAuthors.size() < limit;
         }
 
         Neo4jManager.getInstance().closeConnection();
-
         return noMoreAuthors;
     }
 
     public boolean loadFollowedAuthorsAsUnregistered(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-
         boolean noMoreAuthors = false;
 
         List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
@@ -133,7 +134,6 @@ public class AuthorProfileService {
         }
 
         Neo4jManager.getInstance().closeConnection();
-
         return noMoreAuthors;
     }
 
@@ -159,68 +159,76 @@ public class AuthorProfileService {
         Neo4jManager.getInstance().closeConnection();
     }
 
-    /****** AUTHOR ********/
-
-    public void loadAuthorProfileAsPageOwner(Author author, List<Pair<Author, Boolean>> followed, int limit) {
+    /****** Author Service ********/
+    public boolean loadAuthorProfileAsPageOwner(Author author, List<Pair<Author, Boolean>> followedAuthors, int limit) {
         Logger.success("Retrieving followed authors");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
-
-        Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
-        if (foundAuthor == null) {
-            Logger.error("Author not found!");
-        } else {
-            author.copy(foundAuthor);
-
-            List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
-            if (followedAuthor != null)
-                for (Author a: followedAuthor)
-                    followed.add(new Pair<>(a, true));
-        }
-
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
-    }
-
-    public boolean loadAuthorProfileAsAuthor(Author author, List<Pair<Author, Boolean>> followed, int limit) {
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
+        boolean loadResult;
 
         // Getting the author object from Mongo
         Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
         if (foundAuthor == null) {
-            Logger.error("Author not found!");
-
-            MongoManager.getInstance().closeConnection();
-            Neo4jManager.getInstance().closeConnection();
-
-            return false;
+            Logger.error(author.getName() + " not found!");
+            loadResult = false;
         } else {
+            Logger.info("Author requested found: " + author.getName());
             author.copy(foundAuthor);
 
-            // Checking if the "session" author follows the requested author
-            boolean followingAuthor = authorNeo4jManager.findAuthorFollowsAuthor(((Author) (MyPodcastDB.getInstance().getSessionActor())).getName(), foundAuthor.getName());
+            List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
+            if (followedAuthorsByAuthor != null)
+                for (Author followedAuthor: followedAuthorsByAuthor)
+                    followedAuthors.add(new Pair<>(followedAuthor, true));
 
-            // Getting the authors followed by the author requested
-            List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
-            if (followedAuthor != null) {
-                for (Author a: followedAuthor) {
-                    boolean following = authorNeo4jManager.findAuthorFollowsAuthor(((Author) (MyPodcastDB.getInstance().getSessionActor())).getName(), a.getName());
-                    followed.add(new Pair<>(a, following));
+            loadResult = true;
+        }
+
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return loadResult;
+    }
+
+    public boolean loadAuthorProfileAsAuthor(Author author, List<Pair<Author, Boolean>> followedAuthors, List<String> following, int limit) {
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+        boolean loadResult;
+
+        // Getting the author object from Mongo
+        Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
+        if (foundAuthor == null) {
+            Logger.error(author.getName() + " not found!");
+            loadResult = false;
+        } else {
+            Logger.info("Author requested found: " + author.getName());
+            author.copy(foundAuthor);
+
+            // Getting the list of the followed authors by the author (visitor)
+            List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
+            if (followedAuthorsByAuthor != null) {
+                for (Author followedByAuthor: followedAuthorsByAuthor)
+                    following.add(followedByAuthor.getName());
+            }
+
+            // Getting the authors followed by the author visited
+            List<Author> followedAuthorsByRequestedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
+            if (followedAuthorsByRequestedAuthor != null) {
+                for (Author followedAuthor: followedAuthorsByRequestedAuthor) {
+                    boolean follow = following.contains(followedAuthor.getName());
+                    followedAuthors.add(new Pair<>(followedAuthor, follow));
                 }
             }
 
-            MongoManager.getInstance().closeConnection();
-            Neo4jManager.getInstance().closeConnection();
-
-            return followingAuthor;
+            loadResult = true;
         }
+
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return loadResult;
     }
 
     public boolean loadFollowedAuthorsAsPageOwner(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-
         boolean noMoreAuthors = false;
 
         List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
@@ -231,26 +239,24 @@ public class AuthorProfileService {
         }
 
         Neo4jManager.getInstance().closeConnection();
-
         return noMoreAuthors;
     }
 
-    public boolean loadFollowedAuthorsAsAuthor(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
+    public boolean loadFollowedAuthorsAsAuthor(Author author, List<Pair<Author, Boolean>> followedAuthors, List<String> following, int limit, int skip) {
         Neo4jManager.getInstance().openConnection();
-
         boolean noMoreAuthors = false;
 
-        List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
-        if (followedAuthors != null) {
-            for (Author a : followedAuthors) {
-                boolean following = authorNeo4jManager.findAuthorFollowsAuthor(((Author) (MyPodcastDB.getInstance().getSessionActor())).getName(), a.getName());
-                followed.add(new Pair<>(a, following));
+        // Getting the authors followed by the author visited
+        List<Author> followedAuthorsByRequestedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
+        if (followedAuthorsByRequestedAuthor != null) {
+            for (Author followedAuthor: followedAuthorsByRequestedAuthor) {
+                boolean follow = following.contains(followedAuthor.getName());
+                followedAuthors.add(new Pair<>(followedAuthor, follow));
             }
             noMoreAuthors = followedAuthors.size() < limit;
         }
 
         Neo4jManager.getInstance().closeConnection();
-
         return noMoreAuthors;
     }
 
@@ -488,45 +494,49 @@ public class AuthorProfileService {
         return deleteResult;
     }
 
-    /****** ADMIN ******/
-    public void loadAuthorProfileAsAdmin(Author author, List<Pair<Author, Boolean>> followed, int limit) {
+    /****** Admin Service ******/
+    public boolean loadAuthorProfileAsAdmin(Author author, List<Pair<Author, Boolean>> followedAuthors, int limit) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
+        boolean loadResult;
 
         // Getting the author object from Mongo
         Author foundAuthor = authorMongoManager.findAuthorByName(author.getName());
         if (foundAuthor == null) {
-            Logger.error("Author not found!");
+            Logger.error(author.getName() + " not found!");
+            loadResult = false;
         } else {
+            Logger.info("Author requested found: " + author.getName());
             author.copy(foundAuthor);
 
             // Getting the authors followed by the author visited
-            List<Author> followedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
-            if (followedAuthor != null) {
-                for (Author a : followedAuthor)
-                    followed.add(new Pair<>(a, false));
+            List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, 0);
+            if (followedAuthorsByAuthor != null) {
+                for (Author a: followedAuthorsByAuthor)
+                    followedAuthors.add(new Pair<>(a, false));
             }
+
+            loadResult = true;
         }
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
+        return loadResult;
     }
 
-    public boolean loadFollowedAuthorsAsAdmin(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
+    public boolean loadFollowedAuthorsAsAdmin(Author author, List<Pair<Author, Boolean>> followedAuthors, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-
         boolean noMoreAuthors = false;
 
-        List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
-        if (followedAuthors != null) {
-            for (Author followedAuthor: followedAuthors)
-                followed.add(new Pair<>(followedAuthor, false));
+        List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
+        if (followedAuthorsByAuthor != null) {
+            for (Author followedAuthor: followedAuthorsByAuthor)
+                followedAuthors.add(new Pair<>(followedAuthor, false));
             noMoreAuthors = followedAuthors.size() < limit;
         }
 
         Neo4jManager.getInstance().closeConnection();
-
         return noMoreAuthors;
     }
 
@@ -619,8 +629,5 @@ public class AuthorProfileService {
 
         return deleteResult;
     }
-    //-----------------------------------------------
 
-    //----------------- MATTEO ----------------------
-    //-----------------------------------------------
 }

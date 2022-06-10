@@ -43,27 +43,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <HBox fx:id="boxLikes" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="59.0" translateY="-90.0" visible="false">
-               <children>
-                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/like.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets bottom="1.0" right="2.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <Label fx:id="counterLikeLabel" text="00000">
-                     <font>
-                        <Font name="Dubai Light" size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets left="6.0" right="7.0" />
-               </padding>
-            </HBox>
-            <HBox fx:id="boxRating" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="59.0" translateY="-90.0" visible="false">
+            <HBox fx:id="boxRating" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="58.0" translateY="-90.0" visible="false">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -83,7 +63,7 @@
                   <Insets left="6.0" right="7.0" top="1.0" />
                </padding>
             </HBox>
-            <HBox fx:id="boxTopCountry" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="59.0" translateY="-90.0" visible="false">
+            <HBox fx:id="boxTopCountry" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="58.0" translateY="-90.0" visible="false">
                <children>
                   <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" translateY="-2.0">
                      <image>
@@ -108,6 +88,29 @@
                </children>
                <padding>
                   <Insets bottom="2.0" left="5.0" right="5.0" top="4.0" />
+               </padding>
+               <StackPane.margin>
+                  <Insets />
+               </StackPane.margin>
+            </HBox>
+            <HBox fx:id="boxLikes" alignment="CENTER_LEFT" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="58.0" translateY="-90.0" visible="false">
+               <children>
+                  <ImageView fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/like.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="1.0" right="2.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <Label fx:id="counterLikeLabel" text="000">
+                     <font>
+                        <Font name="Dubai Light" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets left="6.0" right="7.0" />
                </padding>
                <StackPane.margin>
                   <Insets />

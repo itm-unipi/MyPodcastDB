@@ -12,14 +12,14 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorReducedPodcastController">
    <children>
-      <HBox fx:id="reducedPodcast" onMouseEntered="#OnMouseHoverReducedPodcast" onMouseExited="#onMouseExitedReducedPodcast" prefHeight="70.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox fx:id="reducedPodcast" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#OnMouseHoverReducedPodcast" onMouseExited="#onMouseExitedReducedPodcast" prefHeight="85.0" prefWidth="1024.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="72.0" prefWidth="72.0" style="-fx-background-color: #eaeaea;">
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="85.0" prefWidth="85.0" style="-fx-background-color: #eaeaea;">
                <HBox.margin>
                   <Insets right="3.0" />
                </HBox.margin>
                <children>
-                  <ImageView fx:id="podcastImage" fitHeight="72.0" fitWidth="72.0" onMouseClicked="#onClickReducedPodcast" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="podcastImage" fitHeight="86.0" fitWidth="86.0" onMouseClicked="#onClickReducedPodcast" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/test.jpg" />
                      </image>
@@ -29,7 +29,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="72.0" prefWidth="820.0">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="800.0">
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
@@ -84,19 +84,16 @@
                   <Insets left="6.0" right="1.0" />
                </HBox.margin>
             </VBox>
-            <VBox>
+            <VBox alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="92.0">
                <children>
-                  <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="106.0" text="&lt;release_date&gt;">
+                  <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="&lt;release_date&gt;">
                      <font>
                         <Font name="Dubai Light" size="14.0" />
                      </font>
-                     <padding>
-                        <Insets right="5.0" />
-                     </padding>
                   </Label>
                </children>
                <HBox.margin>
-                  <Insets left="3.0" />
+                  <Insets left="5.0" />
                </HBox.margin>
             </VBox>
          </children>

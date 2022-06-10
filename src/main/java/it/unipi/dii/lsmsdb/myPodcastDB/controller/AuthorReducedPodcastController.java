@@ -63,8 +63,10 @@ public class AuthorReducedPodcastController {
             int deleteResult = authorProfileService.deletePodcastAsAuthor(this.podcast.getId());
             if (deleteResult == 0) {
                 DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Delete Podcast", "Podcast deleted successfully!");
-                // TODO: remove show page in order to avoid to request to the database.
-                StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), StageManager.getObjectIdentifier());
+
+                // Hiding the deleted podcast in the grid
+                reducedPodcast.setVisible(false);
+                reducedPodcast.setPrefHeight(0);
             } else {
                 Logger.error("Error during the delete podcast operation");
 

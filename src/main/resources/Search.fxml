@@ -180,7 +180,7 @@
                               </HBox>
                               <VBox fx:id="boxPodcastsFound" maxHeight="-Infinity" minHeight="-Infinity">
                                  <VBox.margin>
-                                    <Insets left="120.0" right="120.0" />
+                                    <Insets left="120.0" right="120.0" top="3.0" />
                                  </VBox.margin>
                                  <children>
                                     <Label fx:id="podcastsFound" maxHeight="-Infinity" minHeight="-Infinity" prefWidth="1040.0" text="Podcasts (&lt;counter_podcasts_found&gt;)">
@@ -191,9 +191,9 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ScrollPane fx:id="scrollFoundPodcasts" focusTraversable="false" hbarPolicy="NEVER" maxHeight="240.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
+                                    <ScrollPane fx:id="scrollFoundPodcasts" focusTraversable="false" hbarPolicy="NEVER" maxHeight="267.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
-                                          <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" onScroll="#onScrollPodcastsFound" vgap="8.0">
+                                          <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" onScroll="#onScrollPodcastsFound" vgap="7.0">
                                              <columnConstraints>
                                                 <ColumnConstraints hgrow="ALWAYS" minWidth="0.0" />
                                              </columnConstraints>
@@ -212,7 +212,7 @@
                               </VBox>
                               <VBox fx:id="boxAuthorsFound" maxHeight="-Infinity" minHeight="-Infinity">
                                  <VBox.margin>
-                                    <Insets left="120.0" right="120.0" />
+                                    <Insets left="120.0" right="120.0" top="3.0" />
                                  </VBox.margin>
                                  <children>
                                     <Label fx:id="authorsFound" prefWidth="1040.0" text="Authors (&lt;counter_authors_found&gt;)">
@@ -271,7 +271,7 @@
                                     </Label>
                                  </children>
                                  <VBox.margin>
-                                    <Insets bottom="20.0" left="120.0" right="120.0" />
+                                    <Insets bottom="20.0" left="120.0" right="120.0" top="3.0" />
                                  </VBox.margin>
                               </VBox>
                            </children>

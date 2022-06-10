@@ -18,11 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageService {
-
-    //---------------- GIANLUCA ---------------------
-    //-----------------------------------------------
-
-    //----------------- BIAGIO ----------------------
     private final AuthorMongo authorMongoManager;
     private final QueryMongo queryMongoManager;
     private final AuthorNeo4j authorNeo4jManager;
@@ -237,9 +232,4 @@ public class HomePageService {
         Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
     }
-
-    //-----------------------------------------------
-
-    //----------------- MATTEO ----------------------
-    //-----------------------------------------------
 }

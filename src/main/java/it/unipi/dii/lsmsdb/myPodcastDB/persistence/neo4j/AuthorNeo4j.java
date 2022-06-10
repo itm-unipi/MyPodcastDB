@@ -212,6 +212,34 @@ public class AuthorNeo4j {
         return authors;
     }
 
+    public List<Author> showFollowedAuthorsByAuthor(String name) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        String query = "MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author) RETURN a2";
+        Value params = parameters("name", name);
+
+        List<Record> result = null;
+        try {
+            result = manager.read(query, params);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (result == null || !result.iterator().hasNext())
+            return null;
+
+        List<Author> authors = new ArrayList<>();
+        for (Record record : result) {
+            String authorName = record.get(0).get("name").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+            Author author = new Author("", authorName, picturePath);
+            authors.add(author);
+        }
+
+        return authors;
+    }
+
+
     public List<Author> showFollowedAuthorsByAuthor(String name, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author)" + "\n" +

@@ -146,18 +146,18 @@ public class SearchController {
         this.usersMatch = new ArrayList<>();
         this.filters = new Triplet<>(true, true, true);
 
-        this.limit = 5;
+        this.limit = 10;
 
-        this.authorsToRetrieve = 5;
-        this.authorsToLoadInGrid = 4;
+        this.authorsToRetrieve = 10;
+        this.authorsToLoadInGrid = 5;
         this.noMoreAuthors = false;
 
-        this.podcastsToRetrieve = 5;
-        this.podcastsToLoadInGrid = 4;
+        this.podcastsToRetrieve = 10;
+        this.podcastsToLoadInGrid = 5;
         this.noMorePodcasts = false;
 
-        this.usersToRetrieve = 5;
-        this.usersToLoadInGrid = 4;
+        this.usersToRetrieve = 10;
+        this.usersToLoadInGrid = 5;
         this.noMoreUsers = false;
     }
 
@@ -536,11 +536,9 @@ public class SearchController {
             case "Unregistered" -> {
                 Logger.info("I'm an unregistered user");
 
-                // Disabling User Profile Page, Logout Button and Users Filter
+                // Disabling User Profile Page and Users Filter
                 boxActorProfile.setVisible(false);
                 boxActorProfile.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
-                boxLogout.setVisible(false);
-                boxLogout.setStyle("-fx-min-height: 0; -fx-pref-height: 0; -fx-min-width: 0; -fx-pref-width: 0;");
                 usersFilter.setVisible(false);
                 usersFilter.setPrefWidth(0);
             }
