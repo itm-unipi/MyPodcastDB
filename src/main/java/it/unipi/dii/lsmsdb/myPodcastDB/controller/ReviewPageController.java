@@ -8,6 +8,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -581,7 +582,13 @@ public class ReviewPageController {
 
         // check service result
         if (!result) {
-            DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
+            Platform.runLater(() -> {
+                try {
+                    redirect();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
 
         // no reviews message
@@ -780,5 +787,10 @@ public class ReviewPageController {
     private int getLoaded() {
         int toAdd = this.ownReview.getTitle() != null ? 1 : 0;
         return this.loadedReviews.size() + toAdd;
+    }
+
+    private void redirect() throws IOException {
+        DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 }

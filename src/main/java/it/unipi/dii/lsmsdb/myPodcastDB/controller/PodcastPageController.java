@@ -11,6 +11,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -485,12 +486,27 @@ public class PodcastPageController {
                 this.watchLatered = status[0];
                 this.liked = status[1];
             } else {
-                DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
+                Platform.runLater(() -> {
+                    try {
+                        redirect();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+                return;
             }
         } else {
             result = this.service.loadPodcastPageForNotUser(podcast);
             if (!result) {
-                DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
+                Platform.runLater(() -> {
+                    try {
+                        redirect();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+                return;
             }
         }
 
@@ -647,5 +663,10 @@ public class PodcastPageController {
         this.threeStars.setProgress((float)numReview[2] / this.podcast.getReviews().size());
         this.fourStars.setProgress((float)numReview[3] / this.podcast.getReviews().size());
         this.fiveStars.setProgress((float)numReview[4] / this.podcast.getReviews().size());
+    }
+
+    private void redirect() throws IOException {
+        DialogManager.getInstance().createErrorAlert(this.mainPage, "The requested podcast is not available");
+        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 }
