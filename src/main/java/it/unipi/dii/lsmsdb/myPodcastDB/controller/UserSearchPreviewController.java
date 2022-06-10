@@ -20,8 +20,6 @@ import java.io.IOException;
 public class UserSearchPreviewController {
     private User user;
 
-    private Boolean followed;
-
     @FXML
     private Label userFound;
 
@@ -32,11 +30,7 @@ public class UserSearchPreviewController {
     private HBox boxUserPreview;
 
     @FXML
-    private Button btnFollowUser;
-
-    @FXML
     void onClickUser(MouseEvent event) throws IOException {
-        Logger.info("Clicked on user " + this.user.getUsername());
         StageManager.showPage(ViewNavigator.USERPAGE.getPage(), this.user.getUsername());
     }
 
@@ -50,54 +44,12 @@ public class UserSearchPreviewController {
         this.boxUserPreview.setStyle("-fx-background-color: transparent;");
     }
 
-    /****** Events on follow button ******/
-    @FXML
-    void onClickBtnFollowUser(MouseEvent event) {
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("User")) {
-            SearchService searchService = new SearchService();
-
-            if (btnFollowUser.getText().equals("Follow")) {
-                searchService.followUser(user.getUsername());
-                btnFollowUser.setText("Unfollow");
-            } else {
-                searchService.unfollowUser(user.getUsername());
-                btnFollowUser.setText("Follow");
-            }
-
-        } else {
-            Logger.error("Operation not allowed!");
-        }
-    }
-    @FXML
-    void onMouseExitedFollowButton(MouseEvent event) {
-        btnFollowUser.setStyle("-fx-background-color: white; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
-    }
-
-    @FXML
-    void onMouseHoverFollowButton(MouseEvent event) {
-        btnFollowUser.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 25px; -fx-border-color: #c9c9c9; -fx-border-radius: 27px;");
-    }
-
-    public void setData(User user, Boolean follow) {
+    public void setData(User user) {
         this.user = user;
         userFound.setText(user.getUsername());
 
         Image image = ImageCache.getImageFromLocalPath(user.getPicturePath());
         userPicture.setImage(image);
-
-        // Disabling follow button for unregistered users, admin and if user founds himself
-        String actorType = MyPodcastDB.getInstance().getSessionType();
-
-        if (actorType.equals("Admin") || actorType.equals("Unregistered")
-                || (actorType.equals("User") && ((User) MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(user.getUsername()) )) {
-            this.btnFollowUser.setVisible(false);
-        } else {
-            this.followed = follow;
-            if (followed)
-                this.btnFollowUser.setText("Unfollow");
-        }
     }
 }
 

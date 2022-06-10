@@ -241,11 +241,14 @@ public class AuthorSettingsController {
                         this.author.setPassword(password);
                         this.author.setPicturePath(tempAuthor.getPicturePath());
 
-                        Logger.info("NEW AUTHOR (commited): " + this.author);
+                        Logger.info("Author updated (and commited): " + this.author);
 
                         // Updating GUI
                         authorNameProfile.setText(this.author.getName());
                         actorPictureProfile.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
+
+                        // Updating the stage object identifier to avoid unexpected errors
+                        StageManager.setObjectIdentifier(authorName.getText());
 
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.initOwner(dialogPane.getScene().getWindow());

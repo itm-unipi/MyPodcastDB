@@ -14,18 +14,22 @@
    <children>
       <HBox fx:id="reducedPodcast" onMouseEntered="#OnMouseHoverReducedPodcast" onMouseExited="#onMouseExitedReducedPodcast" prefHeight="70.0" prefWidth="1020.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="podcastImage" fitHeight="72.0" fitWidth="72.0" onMouseClicked="#onClickReducedPodcast" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/test.jpg" />
-               </image>
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="72.0" prefWidth="72.0" style="-fx-background-color: #eaeaea;">
                <HBox.margin>
                   <Insets right="3.0" />
                </HBox.margin>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </ImageView>
-            <VBox alignment="CENTER_LEFT" prefHeight="72.0" prefWidth="843.0">
+               <children>
+                  <ImageView fx:id="podcastImage" fitHeight="72.0" fitWidth="72.0" onMouseClicked="#onClickReducedPodcast" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/test.jpg" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="72.0" prefWidth="820.0">
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
@@ -40,24 +44,6 @@
                               <Cursor fx:constant="HAND" />
                            </cursor>
                         </Label>
-                        <VBox fx:id="boxDeletePodcast" alignment="CENTER" visible="false">
-                           <children>
-                              <ImageView fitHeight="18.0" fitWidth="18.0" onMouseClicked="#deletePodcast" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@img/deleteActor.png" />
-                                 </image>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                                 <cursor>
-                                    <Cursor fx:constant="HAND" />
-                                 </cursor>
-                              </ImageView>
-                           </children>
-                           <HBox.margin>
-                              <Insets left="6.0" right="1.0" />
-                           </HBox.margin>
-                        </VBox>
                      </children>
                   </HBox>
                   <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="&lt;category&gt;">
@@ -70,14 +56,49 @@
                   <Insets left="5.0" />
                </padding>
             </VBox>
-            <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="106.0" text="&lt;release_date&gt;">
-               <font>
-                  <Font name="Dubai Light" size="14.0" />
-               </font>
-               <padding>
-                  <Insets right="5.0" />
-               </padding>
-            </Label>
+            <VBox fx:id="boxDeletePodcast" alignment="CENTER">
+               <children>
+                  <VBox fx:id="boxDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="31.0" prefWidth="31.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                     <children>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#deletePodcast" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/deleteActor.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </VBox>
+               </children>
+               <HBox.margin>
+                  <Insets left="6.0" right="1.0" />
+               </HBox.margin>
+            </VBox>
+            <VBox>
+               <children>
+                  <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" prefHeight="72.0" prefWidth="106.0" text="&lt;release_date&gt;">
+                     <font>
+                        <Font name="Dubai Light" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets right="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <HBox.margin>
+                  <Insets left="3.0" />
+               </HBox.margin>
+            </VBox>
          </children>
          <cursor>
             <Cursor fx:constant="DEFAULT" />

@@ -118,8 +118,7 @@ public class AuthorReducedPodcastController {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         // Only the author of the podcast or admins can delete it
-        if ((actorType.equals("Author") && StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()))
-                || actorType.equals("Admin")) {
+        if ((actorType.equals("Author") && StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()))) {
             boxDeletePodcast.setVisible(true);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), boxDeletePodcast);
             fadeAuthorImage.setFromValue(0);
@@ -134,8 +133,7 @@ public class AuthorReducedPodcastController {
     void onMouseExitedReducedPodcast(MouseEvent event) {
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
-        if ((actorType.equals("Author") && StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()))
-                || actorType.equals("Admin")) {
+        if ((actorType.equals("Author") && StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()))) {
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), boxDeletePodcast);
             fadeAuthorImage.setFromValue(1.0);
             fadeAuthorImage.setToValue(0);
@@ -144,6 +142,16 @@ public class AuthorReducedPodcastController {
         }
 
         reducedPodcast.setStyle("-fx-background-color: transparent");
+    }
+
+    @FXML
+    void onMouseHoverDeletePodcast(MouseEvent event) {
+        this.boxDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #d3d3d3; -fx-border-radius: 25");
+    }
+
+    @FXML
+    void onMouseExitedDeletePodcast(MouseEvent event) {
+        this.boxDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25");
     }
 
     /*************************************/
@@ -161,7 +169,7 @@ public class AuthorReducedPodcastController {
 
         // Setting image preview
         Image image = ImageCache.getImageFromLocalPath("/img/logo.png");
-        podcastImage.setImage(image);
+        this.podcastImage.setImage(image);
 
         Platform.runLater(() -> {
             Image imageLoaded = ImageCache.getImageFromURL(artworkUrl600);

@@ -36,9 +36,9 @@ public class SearchController {
 
     private List<Podcast> podcastsMatch;
 
-    private List<Pair<Author, Boolean>> authorsMatch;
+    private List<Author> authorsMatch;
 
-    private List<Pair<User, Boolean>> usersMatch;
+    private List<User> usersMatch;
 
     private Triplet<Boolean, Boolean, Boolean> filters;
 
@@ -260,7 +260,7 @@ public class SearchController {
                 searchService.searchAsAdmin(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
             }
             case "Unregistered" -> {
-                searchService.searchAsUnregisteredUser(text, podcastsMatch, authorsMatch, usersMatch, this.limit, filters);
+                searchService.searchAsUnregisteredUser(text, podcastsMatch, authorsMatch, this.limit, filters);
             }
         }
     }
@@ -285,13 +285,13 @@ public class SearchController {
             clearIndexes(newLoad, gridFoundUsers);
             int maxValue = Math.min(this.usersMatch.size(), (this.row + this.usersToLoadInGrid));
 
-            for (Pair<User, Boolean> user : this.usersMatch.subList(this.row, maxValue)) {
+            for (User user: this.usersMatch.subList(this.row, maxValue)) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getClassLoader().getResource("UserSearchPreview.fxml"));
 
                 AnchorPane newUser = fxmlLoader.load();
                 UserSearchPreviewController controller = fxmlLoader.getController();
-                controller.setData(user.getValue0(), user.getValue1());
+                controller.setData(user);
 
                 gridFoundUsers.add(newUser, this.column, this.row++);
             }
@@ -345,13 +345,13 @@ public class SearchController {
             clearIndexes(newLoad, gridFoundAuthors);
             int maxValue = Math.min(this.authorsMatch.size(), (this.row + this.usersToLoadInGrid));
 
-            for (Pair<Author, Boolean> author : this.authorsMatch.subList(this.row, maxValue)) {
+            for (Author author: this.authorsMatch.subList(this.row, maxValue)) {
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorSearchPreview.fxml"));
 
                 AnchorPane newAuthor = fxmlLoader.load();
                 AuthorSearchPreviewController controller = fxmlLoader.getController();
-                controller.setData(author.getValue0(), author.getValue1());
+                controller.setData(author);
 
                 gridFoundAuthors.add(newAuthor, this.column, this.row++);
             }

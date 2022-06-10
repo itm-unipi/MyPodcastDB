@@ -20,8 +20,6 @@ import java.io.IOException;
 public class AuthorSearchPreviewController {
     private Author author;
 
-    private final String actorType;
-
     @FXML
     private Label authorFound;
 
@@ -30,13 +28,6 @@ public class AuthorSearchPreviewController {
 
     @FXML
     private HBox boxAuthorPreview;
-
-    @FXML
-    private Button btnFollowAuthor;
-
-    public AuthorSearchPreviewController() {
-        this.actorType = MyPodcastDB.getInstance().getSessionType();
-    }
 
     @FXML
     void onClickAuthor(MouseEvent event) throws IOException {
@@ -53,57 +44,12 @@ public class AuthorSearchPreviewController {
         this.boxAuthorPreview.setStyle("-fx-background-color: transparent;");
     }
 
-    /****** Events on follow button ******/
-    @FXML
-    void onClickBtnFollowAuthor(MouseEvent event) {
-        AuthorProfileService authorProfileService = new AuthorProfileService();
-
-        if (this.actorType.equals("Author")) {
-            if (btnFollowAuthor.getText().equals("Follow")) {
-                authorProfileService.followAuthorAsAuthor(author.getName());
-                btnFollowAuthor.setText("Unfollow");
-            } else {
-                authorProfileService.unfollowAuthorAsAuthor(author.getName());
-                btnFollowAuthor.setText("Follow");
-            }
-        } else if (this.actorType.equals("User")) {
-            if (btnFollowAuthor.getText().equals("Follow")) {
-                authorProfileService.followAuthorAsUser(author.getName());
-                btnFollowAuthor.setText("Unfollow");
-            } else {
-                authorProfileService.unfollowAuthorAsUser(author.getName());
-                btnFollowAuthor.setText("Follow");
-            }
-
-        } else {
-            Logger.error("Operation not allowed!");
-        }
-    }
-    @FXML
-    void onMouseExitedFollowButton(MouseEvent event) {
-        this.btnFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #c9c9c9; -fx-border-radius: 10; -fx-background-insets: 0");
-    }
-
-    @FXML
-    void onMouseHoverFollowButton(MouseEvent event) {
-        btnFollowAuthor.setStyle("-fx-background-color: #eaeaea; -fx-background-radius: 10; -fx-border-color: #c9c9c9; -fx-border-radius: 10; -fx-background-insets: 0;");
-    }
-
-    public void setData(Author author, boolean follow) {
+    public void setData(Author author) {
         this.author = author;
         this.authorFound.setText(author.getName());
 
         Image image = ImageCache.getImageFromLocalPath(author.getPicturePath());
         this.authorPicture.setImage(image);
-
-        // Disabling follow button for unregistered users, admin and if author founds himself
-        if (this.actorType.equals("Admin") || this.actorType.equals("Unregistered")
-                || (this.actorType.equals("Author") && ((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName()))) {
-            this.btnFollowAuthor.setVisible(false);
-        } else {
-            if (follow)
-                this.btnFollowAuthor.setText("Unfollow");
-        }
     }
 }
 
