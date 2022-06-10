@@ -155,6 +155,10 @@ public class SignUpController {
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
                 return;
             }
+            else if(username.equals("Removed user")){
+                Logger.error("username not valid");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid username");
+            }
 
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender);
             Logger.info(user.toString());

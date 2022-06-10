@@ -132,14 +132,37 @@ public class ActorPreviewController {
             if (followStatus) {
                 res = service.updateFollowedUser(visitorName, actorName.getText(), false);
                 if (res == 0) {
+                    Logger.success("Removed follow user relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
                     followStatus = false;
                 }
+                else if(res == 3)
+                    Logger.error("Follow user relation already not exists");
+                else if(res == 4){
+                    Logger.error("Removing follow user relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+
             } else {
                 res = service.updateFollowedUser(visitorName, actorName.getText(), true);
                 if (res == 0) {
+                    Logger.success("Added follow user relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
                     followStatus = true;
+                }
+                else if(res == 1)
+                    Logger.error("Follow user relation already exists");
+                else if(res == 2){
+                    Logger.error("Adding follow user relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
                 }
             }
         }
@@ -147,55 +170,50 @@ public class ActorPreviewController {
             if (followStatus) {
                 res = service.updateFollowedAuthor(visitorName, visitorType, actorName.getText(), false);
                 if (res == 0) {
+                    Logger.info("Removed author follows author relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
                     followStatus = false;
+                }
+                else if(res == 3)
+                    Logger.error("User Follows author relation already not exists");
+                else if(res == 4){
+                    Logger.error("Removing user follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else if(res == 7)
+                    Logger.error("Author Follows author relation already not exists");
+                else if(res == 8){
+                    Logger.error("Removing author follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
                 }
             } else {
                 res = service.updateFollowedAuthor(visitorName, visitorType, actorName.getText(), true);
                 if (res == 0) {
+                    Logger.success("Added author follows author relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
                     followStatus = true;
                 }
+                else if(res == 1)
+                    Logger.error("User Follows author relation already exists");
+                else if(res == 2){
+                    Logger.error("Adding user follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else if(res == 5)
+                    Logger.error("Author Follows author relation already exists");
+                else if(res == 6){
+                    Logger.error("Adding author follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
             }
-        }
-        String logMsg = "";
-        String dialogMsg = "";
-        switch(res){
-            case 0:
-                Logger.success("Updating liked success");
-                break;
-            case 1:
-                logMsg = "Visitor account not exists on Neo4j";
-                dialogMsg = "Your account not exists";
-                break;
-            case 2:
-                logMsg = "Actor not found in neo4j";
-                dialogMsg = "Account not found";
-                break;
-            case 3:
-                logMsg = "Follow relation already exists";
-                dialogMsg = "it's already followed";
-                break;
-            case 4:
-                logMsg = "Adding follow relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case 5:
-                logMsg = "Follow relation already not exists";
-                dialogMsg = "it's not followed";
-                break;
-            case 6:
-                logMsg = "Removing follow relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
-                break;
-        }
-        if(res != 0){
-            Logger.error(logMsg);
-            DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
         }
     }
 
@@ -210,50 +228,43 @@ public class ActorPreviewController {
             Logger.info("Trash button clicked");
             UserPageService service = new UserPageService();
             int res = -1;
-            if (actorType.equals("Author"))
+            if (actorType.equals("Author")) {
                 res = service.updateFollowedAuthor(visitorName, "User", authorPreview.getName(), false);
-            else if(actorType.equals("User"))
-                res = service.updateFollowedUser(visitorName, userPreview.getUsername(), false);
-
-            String logMsg = "";
-            String dialogMsg = "";
-            switch(res){
-                case 0:
-                    Logger.success("Updating liked success");
-                    break;
-                case 1:
-                    logMsg = "Visitor account not exists on Neo4j";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 2:
-                    logMsg = "Actor not found in neo4j";
-                    dialogMsg = "Account not found";
-                    break;
-                case 3:
-                    logMsg = "Follow relation already exists";
-                    dialogMsg = "it's already followed";
-                    break;
-                case 4:
-                    logMsg = "Adding follow relation failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case 5:
-                    logMsg = "Follow relation already not exists";
-                    dialogMsg = "it's not followed";
-                    break;
-                case 6:
-                    logMsg = "Removing follow relation failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
+                if (res == 0)
+                    Logger.info("Removed author follows author relation successfully");
+                else if(res == 3)
+                    Logger.error("User Follows author relation already not exists");
+                else if(res == 4){
+                    Logger.error("Removing user follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else if(res == 7)
+                    Logger.error("Author Follows author relation already not exists");
+                else if(res == 8){
+                    Logger.error("Removing author follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
             }
-            if(res != 0){
-                Logger.error(logMsg);
-                DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
-                return;
+            else if(actorType.equals("User")) {
+                res = service.updateFollowedUser(visitorName, userPreview.getUsername(), false);
+                if (res == 0)
+                    Logger.success("Removed follow user relation successfully");
+                else if(res == 3)
+                    Logger.error("Follow user relation already not exists");
+                else if(res == 4){
+                    Logger.error("Removing follow user relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
             }
 
             blockClickEvent = true;
@@ -266,51 +277,45 @@ public class ActorPreviewController {
 
             UserPageService service = new UserPageService();
             int res = -1;
-            if (actorType.equals("Author"))
+            if (actorType.equals("Author")) {
                 res = service.updateFollowedAuthor(visitorName, "User", authorPreview.getName(), true);
-            else if(actorType.equals("User"))
+                if (res == 0)
+                    Logger.success("Added author follows author relation successfully");
+                else if(res == 1)
+                    Logger.error("User Follows author relation already exists");
+                else if(res == 2){
+                    Logger.error("Adding user follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else if(res == 5)
+                    Logger.error("Author Follows author relation already exists");
+                else if(res == 6){
+                    Logger.error("Adding author follows author relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                }
+            }
+            else if(actorType.equals("User")) {
                 res = service.updateFollowedUser(visitorName, userPreview.getUsername(), true);
+                if (res == 0)
+                    Logger.success("Added follow user relation successfully");
+                else if(res == 1)
+                    Logger.error("Follow user relation already exists");
+                else if(res == 2){
+                    Logger.error("Adding follow user relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+            }
 
-            String logMsg = "";
-            String dialogMsg = "";
-            switch(res){
-                case 0:
-                    Logger.success("Updating liked success");
-                    break;
-                case 1:
-                    logMsg = "Visitor account not exists on Neo4j";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 2:
-                    logMsg = "Actor not found in neo4j";
-                    dialogMsg = "Account not found";
-                    break;
-                case 3:
-                    logMsg = "Follow relation already exists";
-                    dialogMsg = "it's already followed";
-                    break;
-                case 4:
-                    logMsg = "Adding follow relation failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case 5:
-                    logMsg = "Follow relation already not exists";
-                    dialogMsg = "it's not followed";
-                    break;
-                case 6:
-                    logMsg = "Removing follow relation failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
-            }
-            if(res != 0){
-                Logger.error(logMsg);
-                DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
-                return;
-            }
             blockClickEvent = true;
             disableClick = false;
             actorAnchorPane.setOpacity(1.0);

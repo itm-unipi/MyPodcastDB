@@ -111,57 +111,41 @@ public class PodcastPreviewInUserPageController {
         if(watchStatus) {
             res = service.updateWatchlist(actorName, podcastPreview.getId(), false);
             if(res == 0){
+                Logger.success("Removed watch later relation successfully");
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
                 watchStatus = false;
             }
+            else if(res == 3)
+                Logger.error("Watch later relation already not exists");
+            else if(res == 4){
+                Logger.error("Removing watch later relation failed");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
+            else{
+                Logger.error("Unknown error");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
+
         }
         else{
             res = service.updateWatchlist(actorName, podcastPreview.getId(), true);
             if(res == 0) {
+                Logger.success("Added watch later relation successfully");
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
                 watchStatus = true;
             }
+            else if(res == 1)
+                Logger.error("Watch later relation already exists");
+            else if(res == 2){
+                Logger.error("Adding watch later relation failed");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
+            else{
+                Logger.error("Unknown error");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
         }
 
-        String logMsg = "";
-        String dialogMsg = "";
-        switch(res){
-            case 0:
-                Logger.success("Updating watchlist success");
-                break;
-            case 1:
-                logMsg = "User account not exists on Neo4j";
-                dialogMsg = "Your account not exists";
-                break;
-            case 2:
-                logMsg = "Podcast not found in neo4j";
-                dialogMsg = "Podcast not found";
-                break;
-            case 3:
-                logMsg = "LIKES relation already exists";
-                dialogMsg = "it's already liked";
-                break;
-            case 4:
-                logMsg = "Adding likes relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case 5:
-                logMsg = "LIKES relation already not exists";
-                dialogMsg = "it's not liked";
-                break;
-            case 6:
-                logMsg = "Removing likes relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
-                break;
-        }
-        if(res != 0){
-            Logger.error(logMsg);
-            DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
-        }
     }
 
     @FXML
@@ -201,55 +185,39 @@ public class PodcastPreviewInUserPageController {
         if(likeStatus) {
             res = service.updateLiked(actorName, podcastPreview.getId(), false);
             if(res==0) {
+                Logger.success("Removed like relation successfully");
                 likeButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
                 likeStatus = false;
             }
+            else if(res == 3)
+                Logger.error("Like relation already not exists");
+            else if(res == 4){
+                Logger.error("Removing like relation failed");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
+            else{
+                Logger.error("Unknown error");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
+
         }
         else{
             res = service.updateLiked(actorName, podcastPreview.getId(), true);
             if(res == 0){
+                Logger.success("Added like relation successfully");
                 likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
                 likeStatus = true;
             }
-        }
-        String logMsg = "";
-        String dialogMsg = "";
-        switch(res){
-            case 0:
-                Logger.success("Updating liked success");
-                break;
-            case 1:
-                logMsg = "User account not exists on Neo4j";
-                dialogMsg = "Your account not exists";
-                break;
-            case 2:
-                logMsg = "Podcast not found in neo4j";
-                dialogMsg = "Podcast not found";
-                break;
-            case 3:
-                logMsg = "WATCH_LATER relation already exists";
-                dialogMsg = "it's already in your watchlist";
-                break;
-            case 4:
-                logMsg = "Adding watch later relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case 5:
-                logMsg = "WATCH_LATER relation already not exists";
-                dialogMsg = "it's not in your watchlist";
-                break;
-            case 6:
-                logMsg = "Removing waatch later relation failed";
-                dialogMsg = "Operation failed";
-                break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
-                break;
-        }
-        if(res != 0){
-            Logger.error(logMsg);
-            DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
+            else if(res == 1)
+                Logger.error("Like relation already exists");
+            else if(res == 2){
+                Logger.error("Adding like relation failed");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
+            else{
+                Logger.error("Unknown error");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+            }
         }
 
     }
@@ -288,51 +256,40 @@ public class PodcastPreviewInUserPageController {
             Logger.info("Trash button clicked");
             UserPageService service = new UserPageService();
             int res = -1;
-            if(listType.equals("watchlist"))
+            if(listType.equals("watchlist")) {
                 res = service.updateWatchlist(actorName, podcastPreview.getId(), false);
-            else if(listType.equals("liked"))
+                if (res == 0) {
+                    Logger.success("Removed watch later relation successfully");
+                } else if (res == 3)
+                    Logger.error("Watch later relation already not exists");
+                else if (res == 4) {
+                    Logger.error("Removing watch later relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                } else {
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+            }
+            else if(listType.equals("liked")) {
                 res = service.updateLiked(actorName, podcastPreview.getId(), false);
+                if(res==0)
+                    Logger.success("Removed like relation successfully");
+                else if(res == 3)
+                    Logger.error("Like relation already not exists");
+                else if(res == 4){
+                    Logger.error("Removing like relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+            }
 
-            String logMsg = "";
-            String dialogMsg = "";
-            switch(res){
-                case 0:
-                    Logger.success("Updating " + listType + " success");
-                    break;
-                case 1:
-                    logMsg = "User account not exists on Neo4j";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 2:
-                    logMsg = "Podcast not found in neo4j";
-                    dialogMsg = "Podcast not found";
-                    break;
-                case 3:
-                    logMsg = "It's already in the " + listType + " list";
-                    dialogMsg = "it's already in your " + listType;
-                    break;
-                case 4:
-                    logMsg = "Adding in " + listType + " failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case 5:
-                    logMsg = "It's not exits in " + listType + " list";
-                    dialogMsg = "it's not in your " + listType;
-                    break;
-                case 6:
-                    logMsg = "Removing from " + listType + " failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
-            }
-            if(res != 0){
-                Logger.error(logMsg);
-                DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
-                return;
-            }
             blockClickEvent = true;
             disableClick = true;
             podcastAnchorPane.setOpacity(0.2);
@@ -345,51 +302,40 @@ public class PodcastPreviewInUserPageController {
             Logger.info("Refresh button clicked");
             UserPageService service = new UserPageService();
             int res = -1;
-            if(listType.equals("watchlist"))
+            if(listType.equals("watchlist")) {
                 res = service.updateWatchlist(actorName, podcastPreview.getId(), true);
-            else if(listType.equals("liked"))
+                if (res == 0) {
+                    Logger.success("Added watch later relation successfully");
+                } else if (res == 1)
+                    Logger.error("Watch later relation already exists");
+                else if (res == 2) {
+                    Logger.error("Adding watch later relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                } else {
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+            }
+            else if(listType.equals("liked")) {
                 res = service.updateLiked(actorName, podcastPreview.getId(), true);
+                if(res == 0)
+                    Logger.success("Added like relation successfully");
+                else if(res == 1)
+                    Logger.error("Like relation already exists");
+                else if(res == 2){
+                    Logger.error("Adding like relation failed");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+                else{
+                    Logger.error("Unknown error");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
+                    return;
+                }
+            }
 
-            String logMsg = "";
-            String dialogMsg = "";
-            switch(res){
-                case 0:
-                    Logger.success("Updating " + listType + " success");
-                    break;
-                case 1:
-                    logMsg = "User account not exists on Neo4j";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 2:
-                    logMsg = "Podcast not found in neo4j";
-                    dialogMsg = "Podcast not found";
-                    break;
-                case 3:
-                    logMsg = "It's already in the " + listType + " list";
-                    dialogMsg = "it's already in your " + listType;
-                    break;
-                case 4:
-                    logMsg = "Adding in " + listType + " failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case 5:
-                    logMsg = "It's not exits in " + listType + " list";
-                    dialogMsg = "it's not in your " + listType;
-                    break;
-                case 6:
-                    logMsg = "Removing from " + listType + " failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
-            }
-            if(res != 0){
-                Logger.error(logMsg);
-                DialogManager.getInstance().createErrorAlert(mainPage, dialogMsg);
-                return;
-            }
             blockClickEvent = true;
             disableClick = false;
             podcastAnchorPane.setOpacity(1.0);

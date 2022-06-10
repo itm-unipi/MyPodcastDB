@@ -36,9 +36,11 @@ public class LoginService {
         int res = -1;
         MongoManager.getInstance().openConnection();
 
+        //check if user exists
         User newUser = userMongoManager.findUserByUsername(user.getUsername());
         if(newUser == null)
             res = 1;
+        //check if password is correct
         else if(!user.getPassword().equals(newUser.getPassword()))
             res = 2;
         else {
@@ -52,9 +54,12 @@ public class LoginService {
     public int getAuthorLogin(Author author){
         int res = -1;
         MongoManager.getInstance().openConnection();
+
+        //check if author exists
         Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
         if(newAuthor == null)
             res = 1;
+        //check if password is correct
         else if(!author.getPassword().equals(newAuthor.getPassword()))
             res = 2;
         else {
@@ -71,9 +76,11 @@ public class LoginService {
         int res = -1;
         MongoManager.getInstance().openConnection();
 
+        //check if admin exists
         Admin newAdmin = adminMongoManager.findAdminByName(admin.getName());
         if(newAdmin == null)
             res = 1;
+        //check if password is correct
         else if(!admin.getPassword().equals(newAdmin.getPassword()))
             res = 2;
         else {

@@ -42,22 +42,20 @@ public class SignUpService {
         User newUser = userMongoManager.findUserByUsername(user.getUsername());
         if(newUser != null)
             res = 1;
-            //check if a user with the same username already exists in neo4j
+        //check if a user with the same username already exists in neo4j
         else if(userNeo4jManager.findUserByUsername(user.getUsername()))
             res = 2;
-        else {
-            //failure mongo operation from persistence
-            if(!userMongoManager.addUser(user)){
-                res = 3;
-            }
-            //failure neo4j operation from persistence
-            else if(!userNeo4jManager.addUser(user.getUsername(), user.getPicturePath())){
-                userMongoManager.deleteUserByUsername(user.getUsername());
-                res = 4;
-            }
-            else
-                res = 0;
+        //failure mongo operation
+        else if(!userMongoManager.addUser(user))
+            res = 3;
+        //failure neo4j operation
+        else if(!userNeo4jManager.addUser(user.getUsername(), user.getPicturePath())){
+            userMongoManager.deleteUserByUsername(user.getUsername());
+            res = 4;
         }
+        else
+            res = 0;
+
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;
@@ -73,21 +71,19 @@ public class SignUpService {
         //check if author with the same name already exists in mongo
         if(authorMongoManager.findAuthorByName(author.getName()) != null)
             res = 1;
-            //check if author with the same name already exists in neo4j
+        //check if author with the same name already exists in neo4j
         else if(authorNeo4jManager.findAuthorByName(author.getName()))
             res = 2;
-        else {
-            //check failure mongo operation
-            if(!authorMongoManager.addAuthor(author))
+        //check failure mongo operation
+        else if(!authorMongoManager.addAuthor(author))
                 res = 3;
-                //check failure neo4j operation
-            else if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
-                authorMongoManager.deleteAuthorByName(author.getName());
-                res = 4;
-            }
-            else
-                res = 0;
+        //check failure neo4j operation
+        else if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
+            authorMongoManager.deleteAuthorByName(author.getName());
+            res = 4;
         }
+        else
+            res = 0;
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();

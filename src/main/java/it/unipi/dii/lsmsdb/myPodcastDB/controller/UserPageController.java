@@ -603,44 +603,24 @@ public class UserPageController {
                 Logger.success("Update follow relation success");
                 break;
             case 1:
-                logMsg = "Visitor account not exists on mongo";
-                dialogMsg = "Your account not exists";
-                break;
-            case 2:
-                logMsg = "Visitor account not exists on neo4j";
-                dialogMsg = "Your account not exists";
-                break;
-            case 3:
-                logMsg = "Owner not exists on mongo";
-                dialogMsg = "User not exists";
-                break;
-            case 4:
-                logMsg = "Owner not exists on neo4j";
-                dialogMsg = "User not exists";
-                break;
-            case 5:
                 logMsg = "Follow relation already exists";
                 dialogMsg = "You already followed user";
                 break;
-            case 6:
+            case 2:
                 logMsg = "Adding following relation failed";
                 dialogMsg = "Operation failed";
                 break;
-            case 7:
+            case 3:
                 logMsg = "Follow relation already not exists";
                 dialogMsg = "Operation failed";
                 break;
-            case 8:
+            case 4:
                 logMsg = "Removing following relation failed";
                 dialogMsg = "Operation failed";
                 break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
-                break;
         }
 
-        if(res > 0 || res == -1){
+        if(res > 0){
             Logger.error(logMsg);
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
         }
@@ -699,35 +679,23 @@ public class UserPageController {
                 Logger.success("Updating user success");
                 break;
             case 1 :
-                Logger.success("No operation needed");
+                Logger.success("Nothing to update");
                 break;
             case 2 :
-                logMsg = "User not exists on mongo";
-                dialogMsg = "Updating failed";
-                break;
-            case 3 :
-                logMsg = "User not exists on neo4j";
-                dialogMsg = "Updating failed";
-                break;
-            case 4 :
                 logMsg = "User with the same username already exists";
                 dialogMsg = "Username already in use";
                 break;
-            case 5 :
+            case 3 :
                 logMsg = "Mongo operation failed";
                 dialogMsg = "Updating failed";
                 break;
-            case 6 :
+            case 4 :
                 logMsg = "Neo4j operation failed";
                 dialogMsg = "Updating failed";
                 break;
-            case 7 :
-                logMsg = "Updating username reviews failed";
+            case 5 :
+                logMsg = "Updating reviews' author username failed";
                 dialogMsg = "Updating failed";
-                break;
-            case -1:
-                logMsg = "Unknown error";
-                dialogMsg = "Unknown error";
                 break;
 
         }
@@ -790,31 +758,19 @@ public class UserPageController {
                     Logger.success("Delete account success");
                     break;
                 case 1:
-                    logMsg = "User not exists on mongo";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 2:
-                    logMsg = "User not exists on neo4j";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 3:
                     logMsg = "Delete operation failed on mongo";
                     dialogMsg = "Operation failed";
                     break;
-                case 4:
+                case 2:
                     logMsg = "Delete operation failed on neo4j";
                     dialogMsg = "Operation failed";
                     break;
                 case 5:
-                    logMsg = "Updating username reviews failed";
+                    logMsg = "Updating reviews' author username failed";
                     dialogMsg = "Operation failed";
                     break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
             }
-            if(res > 0 || res == -1){
+            if(res > 0){
                 Logger.error(logMsg);
                 DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             }
@@ -916,31 +872,11 @@ public class UserPageController {
                 wPodcastsByVisitor, lPodcastsByVisitor, authorsByVisitor, usersByVisitor,
                 newRequestPodcast, newRequestActor
                 );
-        if(res == 0)
-            Logger.success("Load user profile success");
-        else if(res == 1){
-            Logger.error("User not exists on mongo");
+
+        if(res == 1){
+            Logger.error("User not exists");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
-            return;
-        }
-        else if(res == 2){
-            Logger.error("User not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User not exists");
-            return;
-        }
-        else if(res == 3){
-            Logger.error("User visitor not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Your user account not exists");
-            return;
-        }
-        else if(res == 4){
-            Logger.error("Author visitor not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Your author account not exists");
-            return;
-        }
-        else{
-            Logger.error("Unknown error");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Unknown error");
+            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
             return;
         }
 
@@ -967,51 +903,15 @@ public class UserPageController {
         }
         else if (actorType.equals("User")){
             Logger.info("User visitor mode");
-            int result = service.checkFollowUser(sessionActorName, pageOwner.getUsername());
-            String logMsg = "";
-            String dialogMsg = "";
-            switch (res){
-                case 0 :
-                case 1 :
-                    Logger.success("Check relation success");
-                    break;
-                case 2 :
-                    logMsg = "Your account not exists on mongo";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 3 :
-                    logMsg = "Your account not exists on neo4j";
-                    dialogMsg = "Your account not exists";
-                    break;
-                case 4 :
-                    logMsg = "User not exists on mongo";
-                    dialogMsg = "User not exists";
-                    break;
-                case 5 :
-                    logMsg = "User not exists on neo4j";
-                    dialogMsg = "User not exists";
-                    break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
-            }
-            if(res == 0 || res == -1) {
+            res = service.checkFollowUser(sessionActorName, pageOwner.getUsername());
+
+            if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
                 isFollowed = true;
             }
             else if(res == 1) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
                 isFollowed = false;
-            }
-            else if (res == -1){
-                Logger.error("Unknown error");
-                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "unknown error");
-                return;
-            }
-            else{
-                Logger.error(logMsg);
-                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             }
 
             userPageFollowButton.setVisible(true);
@@ -1354,11 +1254,7 @@ public class UserPageController {
 
     public void getWpodcasts(){
         int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
-        if(res == 2){
-            Logger.error("User not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
-        }
-        else if(res == 1){
+        if(res == 1){
             Logger.info("No podcasts to show");
             numberOfWpodcastsToAdd = 0;
         }
@@ -1370,49 +1266,33 @@ public class UserPageController {
 
     public void getLpodcasts(){
         int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequestPodcast);
-        if(res == 2){
-            Logger.error("User not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
-        }
-        else if(res == 1){
+        if(res == 1){
             Logger.info("No podcasts to show");
             numberOfLpodcastsToAdd = 0;
         }
         else if(res == 0)
             Logger.success("New Podcasts loaded");
-        else
-            Logger.error("Unknown error");
     }
 
     public void getAuthors(){
         int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
-        if(res == 2){
-            Logger.error("User not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
-        }
-        else if(res == 1){
+        if(res == 1){
             Logger.info("No authors to show");
             numberOfAuthorsToAdd = 0;
         }
         else if(res == 0)
             Logger.success("New authors loaded");
-        else
-            Logger.error("Unknown error");
+
     }
 
     public void getUsers(){
         int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
-        if(res == 2){
-            Logger.error("User not exists on neo4j");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "User account not exists");
-        }
-        else if(res == 1){
+        if(res == 1){
             Logger.info("No users to show");
             numberOfUsersToAdd = 0;
         }
         else if(res == 0)
             Logger.success("New users loaded");
-        else
-            Logger.error("Unknown error");
+
     }
 }

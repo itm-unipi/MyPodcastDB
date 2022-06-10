@@ -56,8 +56,6 @@ public class UserPageService {
         User user = userMongoManager.findUserByUsername(pageOwner.getUsername());
         if(user == null)
             res = 1;
-        else if(!userNeo4jManager.findUserByUsername(pageOwner.getUsername()))
-            res = 2;
         else {
             pageOwner.copy(user);
             //load podcasts in watchlist from neo4j
@@ -65,17 +63,17 @@ public class UserPageService {
             if(podcasts != null)
                 wPodcasts.addAll(podcasts);
 
-            //load liked podcasts
+            //load liked podcasts from neo4j
             podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner.getUsername(), limitPodcast, 0);
             if(podcasts != null)
                 lPodcasts.addAll(podcasts);
 
-            //load followed authors
+            //load followed authors from neo4j
             List<Author> authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner.getUsername(), limitActor, 0);
             if(authors != null)
                 followedAuthors.addAll(authors);
 
-            //load followed users
+            //load followed users from neo4j
             List<User> users = userNeo4jManager.showFollowedUsers(user.getUsername(), limitActor, 0);
             if(users != null)
                 followedUsers.addAll(users);
@@ -83,39 +81,35 @@ public class UserPageService {
             if(visitorType.equals("User") && !visitor.equals(pageOwner.getUsername())){
 
                 List<String> list = new ArrayList<>();
-                if(!userNeo4jManager.findUserByUsername(visitor))
-                    res = 3;
-                else{
-                    list = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
-                    if(list != null)
-                        wPodcastsByVisitor.addAll(list);
+                //load podcasts in the visitor's watchlist
+                list = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
+                if(list != null)
+                    wPodcastsByVisitor.addAll(list);
 
-                    list = podcastNeo4jManager.showLikedPodcastsByUser(visitor);
-                    if(list != null)
-                        lPodcastsByVisitor.addAll(list);
+                //load liked podcasts by the visitor
+                list = podcastNeo4jManager.showLikedPodcastsByUser(visitor);
+                if(list != null)
+                    lPodcastsByVisitor.addAll(list);
 
-                    list = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
-                    if(list != null)
-                        followedAuthorsByVisitor.addAll(list);
+                //load followed authors by the visitors
+                list = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
+                if(list != null)
+                    followedAuthorsByVisitor.addAll(list);
 
-                    list = userNeo4jManager.showFollowedUsers(visitor);
-                    if(list != null)
-                        followedUsersByVisitor.addAll(list);
+                //load followed users by the visitors
+                list = userNeo4jManager.showFollowedUsers(visitor);
+                if(list != null)
+                    followedUsersByVisitor.addAll(list);
 
-                    res = 0;
-                }
-
+                res = 0;
             }
             else if(visitorType.equals("Author")){
 
-                if(!authorNeo4jManager.findAuthorByName(visitor))
-                    res = 4;
-                else{
-                    List<String> list = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor);
-                    if(list != null)
-                        followedAuthorsByVisitor.addAll(list);
-                    res = 0;
-                }
+                //load followed authors by visitor
+                List<String> list = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor);
+                if(list != null)
+                    followedAuthorsByVisitor.addAll(list);
+                res = 0;
 
             }
             else
@@ -130,18 +124,16 @@ public class UserPageService {
     public int getMoreWatchlaterPodcasts(String pageOwner, List<Podcast> wPodcast, int limit){
         int res = -1;
         Neo4jManager.getInstance().openConnection();
-        if(!userNeo4jManager.findUserByUsername(pageOwner))
-            res = 2;
-        else{
-            int skip = wPodcast.size();
-            List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner, limit, skip);
-            if(podcasts != null){
-                wPodcast.addAll(podcasts);
-                res = 0;
-            }
-            else
-                res = 1;
+
+        int skip = wPodcast.size();
+        List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner, limit, skip);
+        if(podcasts != null){
+            wPodcast.addAll(podcasts);
+            res = 0;
         }
+        else
+            res = 1;
+
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
@@ -149,18 +141,16 @@ public class UserPageService {
     public int getMoreLikedPodcasts(String pageOwner, List<Podcast> lPodcast, int limit){
         int res = -1;
         Neo4jManager.getInstance().openConnection();
-        if(!userNeo4jManager.findUserByUsername(pageOwner))
-            res = 2;
-        else{
-            int skip = lPodcast.size();
-            List<Podcast> podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner, limit, skip);
-            if(podcasts != null){
-                lPodcast.addAll(podcasts);
-                res = 0;
-            }
-            else
-                res = 1;
+
+        int skip = lPodcast.size();
+        List<Podcast> podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner, limit, skip);
+        if(podcasts != null){
+            lPodcast.addAll(podcasts);
+            res = 0;
         }
+        else
+            res = 1;
+
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
@@ -168,18 +158,16 @@ public class UserPageService {
     public int getMoreFollowedAuthors(String pageOwner, List<Author> followedAuthors, int limit){
         int res = -1;
         Neo4jManager.getInstance().openConnection();
-        if(!userNeo4jManager.findUserByUsername(pageOwner))
-            res = 2;
-        else{
-            int skip = followedAuthors.size();
-            List<Author> authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner, limit, skip);
-            if(authors != null) {
-                followedAuthors.addAll(authors);
-                res = 0;
-            }
-            else
-                res = 1;
+
+        int skip = followedAuthors.size();
+        List<Author> authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner, limit, skip);
+        if(authors != null) {
+            followedAuthors.addAll(authors);
+            res = 0;
         }
+        else
+            res = 1;
+
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
@@ -187,28 +175,25 @@ public class UserPageService {
     public int getMoreFollowedUsers(String pageOwner, List<User> followedUsers, int limit){
         int res = -1;
         Neo4jManager.getInstance().openConnection();
-        if(!userNeo4jManager.findUserByUsername(pageOwner))
-            res = 2;
-        else{
-            int skip = followedUsers.size();
-            List<User> users = userNeo4jManager.showFollowedUsers(pageOwner, limit, skip);
-            if(users != null){
-                followedUsers.addAll(users);
-                res = 0;
-            }
-            else
-                res = 1;
+
+        int skip = followedUsers.size();
+        List<User> users = userNeo4jManager.showFollowedUsers(pageOwner, limit, skip);
+        if(users != null){
+            followedUsers.addAll(users);
+            res = 0;
         }
+        else
+            res = 1;
+
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
 
-
-    public int updateUserPageOwner(User oldUser, User newUser){
+    public int updateUserPageOwner(User oldUser, User newUser) {
         int res = -1;
 
         //check if there is something to update
-        if(oldUser.getUsername().equals(newUser.getUsername()) &&
+        if (oldUser.getUsername().equals(newUser.getUsername()) &&
                 oldUser.getCountry().equals(newUser.getCountry()) &&
                 oldUser.getGender().equals(newUser.getGender()) &&
                 oldUser.getName().equals(newUser.getName()) &&
@@ -222,27 +207,26 @@ public class UserPageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        //check if oldUser exists in mongo
-        if(userMongoManager.findUserByUsername(oldUser.getUsername()) == null)
+        //check if a user with the new username already exists
+        if (!oldUser.getUsername().equals(newUser.getUsername()) && userMongoManager.findUserByUsername(newUser.getUsername()) != null)
             res = 2;
-            //check if oldUser exists in neo4j
-        else if(!userNeo4jManager.findUserByUsername(oldUser.getUsername()))
+        //update user on mongo
+        else if (!userMongoManager.updateUser(newUser))
             res = 3;
-            //check if a user with the new username already exists
-        else if(!oldUser.getUsername().equals(newUser.getUsername()) && userMongoManager.findUserByUsername(newUser.getUsername()) != null)
-            res = 4;
-            //failure mongo operation from persistence
-        else if(!userMongoManager.updateUser(newUser))
-            res = 5;
-            //failure neo4j operation from persistence
-        else if(!userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())){
+        //update user on neo4j
+        else if (!userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())) {
             userMongoManager.updateUser(oldUser);
-            res = 6;
+            res = 4;
         }
-        else if(!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1)
-            res = 7;
+        //update reviews' authorUsername written by the user
+        else if (!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1){
+            userMongoManager.updateUser(oldUser);
+            userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+            res = 4;
+        }
         else
             res = 0;
+
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;
@@ -253,18 +237,8 @@ public class UserPageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        //check if user1 exists
-        if(userMongoManager.findUserByUsername(user1) == null)
-            res = 2;
-        else if(!userNeo4jManager.findUserByUsername(user1))
-            res = 3;
-            //check if user2 exists
-        else if(userMongoManager.findUserByUsername(user2) == null)
-            res = 4;
-        else if(!userNeo4jManager.findUserByUsername(user2))
-            res = 5;
-            //check if user1 follows user2
-        else if(!userNeo4jManager.findUserFollowsUser(user1, user2))
+        //check if user1 follows user2
+        if(!userNeo4jManager.findUserFollowsUser(user1, user2))
             res = 1;
         else
             res = 0;
@@ -272,44 +246,6 @@ public class UserPageService {
         MongoManager.getInstance().closeConnection();
         return res;
 
-    }
-
-    public int updateFollowUser(String user1, String user2, boolean op){
-        int res = -1;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        //check if user1 exists
-        if(userMongoManager.findUserByUsername(user1) == null)
-            res = 1;
-        else if(!userNeo4jManager.findUserByUsername(user1))
-            res = 2;
-            //check if user1 exists
-        else if(userMongoManager.findUserByUsername(user2) == null)
-            res = 3;
-        else if(!userNeo4jManager.findUserByUsername(user2))
-            res = 4;
-        else if(op) {
-            //check if the relation already exists
-            if(userNeo4jManager.findUserFollowsUser(user1, user2))
-                res = 5;
-            else if(!userNeo4jManager.addUserFollowUser(user1, user2))
-                res = 6;
-            else
-                res = 0;
-        }
-        else{
-            if(!userNeo4jManager.findUserFollowsUser(user1, user2))
-                res = 7;
-            else if(!userNeo4jManager.deleteUserFollowUser(user1, user2))
-                res = 8;
-            else
-                res = 0;
-        }
-
-        Neo4jManager.getInstance().closeConnection();
-        MongoManager.getInstance().closeConnection();
-        return res;
     }
 
     public int deleteUserPageOwner(User user){
@@ -317,21 +253,16 @@ public class UserPageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        //check if user exists in mongo
-        if(userMongoManager.findUserByUsername(user.getUsername()) == null)
+        if(!userMongoManager.deleteUserByUsername(user.getUsername()))
             res = 1;
-            //check if user exists in neo4j
-        else if(!userNeo4jManager.findUserByUsername(user.getUsername()))
-            res = 2;
-            //check delete operation failure
-        else if(!userMongoManager.deleteUserByUsername(user.getUsername()))
-            res = 3;
         else if(!userNeo4jManager.deleteUser(user.getUsername())){
             userMongoManager.addUser(user);
-            res =  4;
+            res =  2;
         }
         else if(reviewMongoManager.updateReviewsByAuthorUsername(user.getUsername(), "Removed account") == -1){
-            res = 5;
+            userMongoManager.addUser(user);
+            userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
+            res = 3;
         }
         else
             res = 0;
@@ -340,28 +271,57 @@ public class UserPageService {
         return res;
     }
 
-    public int updateWatchlist(String username, String podcastId, boolean ifInWatchlist){
+    public int updateFollowUser(String user1, String user2, boolean toAdd){
+        int res = -1;
+        MongoManager.getInstance().openConnection();
+        Neo4jManager.getInstance().openConnection();
+
+        if(toAdd) {
+            //check if the relation already exists
+            if(userNeo4jManager.findUserFollowsUser(user1, user2))
+                res = 1;
+            else if(!userNeo4jManager.addUserFollowUser(user1, user2))
+                res = 2;
+            else
+                res = 0;
+        }
+        else{
+            //check if the relation already not exists
+            if(!userNeo4jManager.findUserFollowsUser(user1, user2))
+                res = 3;
+            else if(!userNeo4jManager.deleteUserFollowUser(user1, user2))
+                res = 4;
+            else
+                res = 0;
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        MongoManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int updateWatchlist(String username, String podcastId, boolean toAdd){
 
         int res = -1;
         Neo4jManager.getInstance().openConnection();
 
-        if(!userNeo4jManager.findUserByUsername(username))
-            res = 1;
-        else if(podcastNeo4jManager.findPodcastByPodcastId(podcastId) == null)
-            res = 2;
-        else if(ifInWatchlist) {
+        if(toAdd) {
+            //check if watch later relation already exists
             if(userNeo4jManager.checkUserWatchLaterPodcastExists(username, podcastId))
-                res = 3;
+                res = 1;
+            //adding watch later relation
             else if (!userNeo4jManager.addUserWatchLaterPodcast(username, podcastId))
-                res = 4;
+                res = 2;
             else
                 res = 0;
         }
         else{
+            //check if watch later relation already not exists
             if(!userNeo4jManager.checkUserWatchLaterPodcastExists(username, podcastId))
-                res = 5;
+                res = 3;
+            //removing watch later relation
             else if (!userNeo4jManager.deleteUserWatchLaterPodcast(username, podcastId))
-                res = 6;
+                res = 4;
             else
                 res = 0;
         }
@@ -369,28 +329,28 @@ public class UserPageService {
         return res;
     }
 
-    public int updateLiked(String username, String podcastId, boolean ifIsLiked){
+    public int updateLiked(String username, String podcastId, boolean toAdd){
 
         int res = -1;
         Neo4jManager.getInstance().openConnection();
 
-        if(!userNeo4jManager.findUserByUsername(username))
-            res = 1;
-        else if(podcastNeo4jManager.findPodcastByPodcastId(podcastId) == null)
-            res = 2;
-        else if(ifIsLiked) {
+        if(toAdd) {
+            //check if like relation already exists
             if(userNeo4jManager.checkUserLikesPodcastExists(username, podcastId))
-                res = 3;
+                res = 1;
+            //adding like relation
             else if (!userNeo4jManager.addUserLikesPodcast(username, podcastId))
-                res = 4;
+                res = 2;
             else
                 res = 0;
         }
         else{
+            //check if like relation already not exists
             if(!userNeo4jManager.checkUserLikesPodcastExists(username, podcastId))
-                res = 5;
+                res = 3;
+            //removing relation
             else if (!userNeo4jManager.deleteUserLikesPodcast(username, podcastId))
-                res = 6;
+                res = 4;
             else
                 res = 0;
         }
@@ -398,28 +358,28 @@ public class UserPageService {
         return res;
     }
 
-    public int updateFollowedUser(String visitor, String username, boolean ifIsFollowed){
+    public int updateFollowedUser(String visitor, String username, boolean toAdd){
 
         int res = -1;
         Neo4jManager.getInstance().openConnection();
 
-        if(!userNeo4jManager.findUserByUsername(visitor))
-            res = 1;
-        else if(!userNeo4jManager.findUserByUsername(username))
-            res = 2;
-        else if(ifIsFollowed) {
+        if(toAdd) {
+            //check if follow user relation already exists
             if(userNeo4jManager.findUserFollowsUser(visitor, username))
-                res = 3;
+                res = 1;
+            //adding follow user relation
             else if (!userNeo4jManager.addUserFollowUser(visitor, username))
-                res = 4;
+                res = 2;
             else
                 res = 0;
         }
         else{
+            //check if follow user relation already not exists
             if(!userNeo4jManager.findUserFollowsUser(visitor, username))
-                res = 5;
+                res = 3;
+            //removing follow user relation
             else if (!userNeo4jManager.deleteUserFollowUser(visitor, username))
-                res = 6;
+                res = 4;
             else
                 res = 0;
         }
@@ -427,51 +387,51 @@ public class UserPageService {
         return res;
     }
 
-    public int updateFollowedAuthor(String visitorName, String visitorType, String author, boolean ifIsFollowed){
+    public int updateFollowedAuthor(String visitorName, String visitorType, String author, boolean toAdd){
 
         int res = -1;
         Neo4jManager.getInstance().openConnection();
 
         if(visitorType.equals("User")) {
-            if (!userNeo4jManager.findUserByUsername(visitorName))
-                res = 1;
-            else if (!authorNeo4jManager.findAuthorByName(author))
-                res = 2;
-            else if (ifIsFollowed) {
+            if (toAdd) {
+                //check if user follow author relation already exists
                 if(userNeo4jManager.findUserFollowsAuthor(visitorName, author))
-                    res = 3;
+                    res = 1;
+                //adding user follow author relation
                 else if (!userNeo4jManager.addUserFollowAuthor(visitorName, author))
-                    res = 4;
+                    res = 2;
                 else
                     res = 0;
             }
             else {
+                //check if user follow author relation already not exists
                 if(!userNeo4jManager.findUserFollowsAuthor(visitorName, author))
-                    res = 5;
+                    res = 3;
+                //removing user follow author relation
                 else if (!userNeo4jManager.deleteUserFollowAuthor(visitorName, author))
-                    res = 6;
+                    res = 4;
                 else
                     res = 0;
             }
         }
         else if(visitorType.equals("Author")) {
-            if (!authorNeo4jManager.findAuthorByName(visitorName))
-                res = 1;
-            else if (!authorNeo4jManager.findAuthorByName(author))
-                res = 2;
-            else if (ifIsFollowed) {
+            if (toAdd) {
+                //check if author follow author relation already exists
                 if(authorNeo4jManager.findAuthorFollowsAuthor(visitorName, author))
-                    res = 3;
+                    res = 5;
+                //adding author follow author relation
                 else if (!authorNeo4jManager.addAuthorFollowsAuthor(visitorName, author))
-                    res = 4;
+                    res = 6;
                 else
                     res = 0;
             }
             else {
+                //check if author follow author relation already not exists
                 if(!authorNeo4jManager.findAuthorFollowsAuthor(visitorName, author))
-                    res = 5;
+                    res = 7;
+                //removing author follow author relation
                 else if (!authorNeo4jManager.deleteAuthorFollowsAuthor(visitorName, author))
-                    res = 6;
+                    res = 8;
                 else
                     res = 0;
             }
@@ -480,12 +440,4 @@ public class UserPageService {
         return res;
     }
 
-
-    //-----------------------------------------------
-
-    //----------------- BIAGIO ----------------------
-    //-----------------------------------------------
-
-    //----------------- MATTEO ----------------------
-    //-----------------------------------------------
 }
