@@ -23,6 +23,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ReviewController {
 
@@ -131,7 +134,7 @@ public class ReviewController {
         if (rating >= 5)
             this.star5.setImage(star);
         this.authorName.setText(review.getAuthorUsername());
-        this.reviewDate.setText(review.getCreatedAt().toString());
+        this.reviewDate.setText(dateAsString(review.getCreatedAt()));
         this.title.setText(review.getTitle());
         this.text.setText(review.getContent());
 
@@ -150,5 +153,11 @@ public class ReviewController {
             this.yourNameWrapper.setVisible(false);
             this.yourNameWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
         }
+    }
+
+    private String dateAsString(Date date) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateAsString = dateFormat.format(date);
+        return dateAsString;
     }
 }

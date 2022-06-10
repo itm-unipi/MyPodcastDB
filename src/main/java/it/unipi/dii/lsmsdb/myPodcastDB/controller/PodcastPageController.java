@@ -212,7 +212,7 @@ public class PodcastPageController {
             else if (result != 0) {
                 // already used title
                 if (result == -2)
-                    DialogManager.getInstance().createErrorAlert(this.mainPage, "this title has already been used");
+                    DialogManager.getInstance().createErrorAlert(this.mainPage, "This title has already been used");
                 // other error
                 else
                     DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add episode");
@@ -335,7 +335,7 @@ public class PodcastPageController {
 
             // error in update
             else if (result != 0) {
-                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update podcast");
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update episode");
             }
         }
 

@@ -63,6 +63,7 @@ public class ReviewPageService {
         }
 
         // load the podcast's reviews
+        Logger.info(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending).toString());
         reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending));
 
         MongoManager.getInstance().closeConnection();

@@ -121,7 +121,11 @@
                            <children>
                               <HBox>
                                  <children>
-                                    <ImageView fx:id="podcastImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                    <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="150.0" style="-fx-background-color: #eaeaea;">
+                                       <children>
+                                          <ImageView fx:id="podcastImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
+                                       </children>
+                                    </VBox>
                                     <VBox maxWidth="-Infinity" prefHeight="150.0" prefWidth="528.0">
                                        <children>
                                           <Label fx:id="title" onMouseClicked="#clickOnTitle" onMouseEntered="#mouseOnTitle" onMouseExited="#mouseOutTitle" text="Title">

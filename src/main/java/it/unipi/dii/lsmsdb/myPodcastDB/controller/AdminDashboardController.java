@@ -828,7 +828,7 @@ public class AdminDashboardController {
         barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
         AnchorPane newBarChart3 = barLoader.load();
         BarChartController controller3 = barLoader.getController();
-        controller3.setDataInteger("Country with highest number of podcasts", new String[] {"Country", "Number of podcast"}, "Number of podcasts", countryWithHighestNumberOfPodcasts, this.mainPage);
+        controller3.setDataInteger("Country with highest number of podcasts", new String[] {"Country", "Number of podcasts"}, "Number of podcasts", countryWithHighestNumberOfPodcasts, this.mainPage);
         this.statisticsGrid.add(newBarChart3, column, row++);
         column -= 2;
 
@@ -915,7 +915,7 @@ public class AdminDashboardController {
             barLoader.setLocation(getClass().getClassLoader().getResource("BarChart.fxml"));
             AnchorPane newBarChart3 = barLoader.load();
             BarChartController controller3 = barLoader.getController();
-            controller3.setDataInteger("Country with highest number of podcasts", new String[]{"Country", "Number of podcast"}, "Number of podcasts", countryWithHighestNumberOfPodcasts, this.mainPage);
+            controller3.setDataInteger("Country with highest number of podcasts", new String[]{"Country", "Number of podcasts"}, "Number of podcasts", countryWithHighestNumberOfPodcasts, this.mainPage);
             this.statisticsGrid.add(newBarChart3, 2, 1);
         }
 

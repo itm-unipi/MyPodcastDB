@@ -135,10 +135,14 @@
                      <children>
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <ImageView fx:id="podcastImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true">
+                              <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #eaeaea;">
                                  <VBox.margin>
                                     <Insets top="10.0" />
-                                 </VBox.margin></ImageView>
+                                 </VBox.margin>
+                                 <children>
+                                    <ImageView fx:id="podcastImage" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+                                 </children>
+                              </VBox>
                               <VBox>
                                  <children>
                                     <HBox>
