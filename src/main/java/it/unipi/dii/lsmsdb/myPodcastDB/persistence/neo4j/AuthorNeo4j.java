@@ -239,7 +239,6 @@ public class AuthorNeo4j {
         return authors;
     }
 
-
     public List<Author> showFollowedAuthorsByAuthor(String name, int limit, int skip) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author)" + "\n" +

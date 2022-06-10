@@ -244,7 +244,7 @@ public class AuthorProfileController {
         DialogPane authorDialogPane = fxmlLoader.load();
 
         AddPodcastController addPodcastController = fxmlLoader.getController();
-        addPodcastController.setData(mainPage);
+        addPodcastController.setData(mainPage, this.author);
 
         // Creating a Dialog Pane
         Dialog<ButtonType> dialog = new Dialog<>();

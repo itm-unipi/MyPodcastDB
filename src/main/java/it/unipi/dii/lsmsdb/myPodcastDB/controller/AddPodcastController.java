@@ -26,6 +26,8 @@ import java.util.Date;
 import java.util.List;
 
 public class AddPodcastController {
+    private Author author;
+
     private BorderPane mainPage;
 
     @FXML
@@ -158,7 +160,7 @@ public class AddPodcastController {
             Logger.info("PODCAST TO ADD: " + podcast.toString());
 
             AuthorProfileService authorProfileService = new AuthorProfileService();
-            int addResult = authorProfileService.addPodcastAsAuthor(podcast);
+            int addResult = authorProfileService.addPodcastAsAuthor(podcast, this.author.getOwnPodcasts());
 
             if (addResult == 0) {
                 DialogManager.getInstance().createInformationAlert(mainPage, "Add Podcast", "Podcast successfully added!");
@@ -166,11 +168,12 @@ public class AddPodcastController {
 
                 Logger.success("Added " + podcast);
                 StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcast.getId());
+            } else if (addResult == -2){
+                Logger.error("Duplicated podcast!");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add Podcast - Error", "A podcast with the same name already exists in your list.");
             } else {
                 Logger.error("Error during the creation of a podcast");
                 DialogManager.getInstance().createErrorAlert(mainPage, "Add Podcast - Error", "Something went wrong! Please try again.");
-                // TODO: fare il caso in cui l'author sta aggiungendo un podcast uguale ad uno che ha già
-                // DialogManager.getInstance().createErrorAlert(mainPage, "Add Podcast - Error", "This podcast already exists in your podcasts list!");
             }
         }
     }
@@ -191,7 +194,10 @@ public class AddPodcastController {
         stage.close();
     }
 
-    void setData(BorderPane mainPage) { this.mainPage = mainPage; }
+    void setData(BorderPane mainPage, Author author ) {
+        this.mainPage = mainPage;
+        this.author = author;
+    }
 
     public void initialize() throws Exception {
         // Add choice for country field

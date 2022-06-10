@@ -281,7 +281,13 @@ public class PodcastMongo {
         MongoManager manager = MongoManager.getInstance();
         List<Podcast> podcasts = new ArrayList<>();
 
-        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("authorName", podcastAuthorName)).limit(limit).iterator()) {
+        MongoCursor<Document> cursor;
+        if (limit == 0)
+            cursor = manager.getCollection("podcast").find(eq("authorName", podcastAuthorName)).iterator();
+        else
+            cursor = manager.getCollection("podcast").find(eq("authorName", podcastAuthorName)).limit(limit).iterator();
+
+        try (cursor) {
             while (cursor.hasNext()) {
                 Document podcast = cursor.next();
 
