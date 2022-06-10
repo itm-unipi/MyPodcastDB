@@ -916,7 +916,6 @@ public class UserPageController {
                 wPodcastsByVisitor, lPodcastsByVisitor, authorsByVisitor, usersByVisitor,
                 newRequestPodcast, newRequestActor
                 );
-        Logger.info(usersByVisitor.toString());
         if(res == 0)
             Logger.success("Load user profile success");
         else if(res == 1){

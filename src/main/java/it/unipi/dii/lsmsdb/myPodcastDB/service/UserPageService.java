@@ -12,6 +12,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserPageService {
@@ -81,28 +82,25 @@ public class UserPageService {
 
             if(visitorType.equals("User") && !visitor.equals(pageOwner.getUsername())){
 
+                List<String> list = new ArrayList<>();
                 if(!userNeo4jManager.findUserByUsername(visitor))
                     res = 3;
                 else{
-                    podcasts = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
-                    if(podcasts != null)
-                        for(int i = 0; i < podcasts.size(); i++)
-                            wPodcastsByVisitor.add(podcasts.get(i).getId());
+                    list = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
+                    if(list != null)
+                        wPodcastsByVisitor.addAll(list);
 
-                    podcasts = podcastNeo4jManager.showLikedPodcastsByUser(visitor);
-                    if(podcasts != null)
-                        for(int i = 0; i < podcasts.size(); i++)
-                            lPodcastsByVisitor.add(podcasts.get(i).getId());
+                    list = podcastNeo4jManager.showLikedPodcastsByUser(visitor);
+                    if(list != null)
+                        lPodcastsByVisitor.addAll(list);
 
-                    authors = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
-                    if(authors != null)
-                        for(int i = 0; i < authors.size(); i++)
-                            followedAuthorsByVisitor.add(authors.get(i).getName());
+                    list = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
+                    if(list != null)
+                        followedAuthorsByVisitor.addAll(list);
 
-                    users = userNeo4jManager.showFollowedUsers(visitor);
-                    if(users != null)
-                        for(int i = 0; i < users.size(); i++)
-                            followedUsersByVisitor.add(users.get(i).getUsername());
+                    list = userNeo4jManager.showFollowedUsers(visitor);
+                    if(list != null)
+                        followedUsersByVisitor.addAll(list);
 
                     res = 0;
                 }
@@ -113,10 +111,9 @@ public class UserPageService {
                 if(!authorNeo4jManager.findAuthorByName(visitor))
                     res = 4;
                 else{
-                    authors = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor, 0, 0);
-                    if(authors != null)
-                        for(int i = 0; i < authors.size(); i++)
-                            followedAuthorsByVisitor.add(authors.get(i).getName());
+                    List<String> list = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor);
+                    if(list != null)
+                        followedAuthorsByVisitor.addAll(list);
                     res = 0;
                 }
 

@@ -307,11 +307,11 @@ public class PodcastNeo4j {
         return podcasts;
     }
 
-    public List<Podcast> showPodcastsInWatchlist(String username) {
+    public List<String> showPodcastsInWatchlist(String username) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
-                "RETURN p ";
+                "RETURN p.podcastId as podcastId";
         Value params = parameters("username", username);
         List<Record> result = null;
 
@@ -326,14 +326,9 @@ public class PodcastNeo4j {
         if(result == null || !result.iterator().hasNext())
             return null;
 
-        List<Podcast> podcasts = new ArrayList<>();
+        List<String> podcasts = new ArrayList<>();
         for(Record record : result){
-            String podcastName = record.get(0).get("name").asString();
-            String podcastId = record.get(0).get("podcastId").asString();
-            String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
-
-            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
-            podcasts.add(podcast);
+            podcasts.add(record.get("podcastId").asString());
         }
 
         return podcasts;
@@ -373,11 +368,11 @@ public class PodcastNeo4j {
         return podcasts;
     }
 
-    public List<Podcast> showLikedPodcastsByUser(String username) {
+    public List<String> showLikedPodcastsByUser(String username) {
 
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = "MATCH (u:User { username: $username})-[r:LIKES]->(p:Podcast)" + "\n"+
-                "RETURN p ";
+                "RETURN p.podcastId as podcastId";
         Value params = parameters("username", username);
         List<Record> result = null;
 
@@ -392,14 +387,9 @@ public class PodcastNeo4j {
         if(result == null || !result.iterator().hasNext())
             return null;
 
-        List<Podcast> podcasts = new ArrayList<>();
+        List<String> podcasts = new ArrayList<>();
         for(Record record : result){
-            String podcastName = record.get(0).get("name").asString();
-            String podcastId = record.get(0).get("podcastId").asString();
-            String artworkUrl600 = record.get(0).get("artworkUrl600").asString();
-
-            Podcast podcast = new Podcast(podcastId, podcastName, artworkUrl600);
-            podcasts.add(podcast);
+            podcasts.add(record.get("podcastId").asString());
         }
 
         return podcasts;
