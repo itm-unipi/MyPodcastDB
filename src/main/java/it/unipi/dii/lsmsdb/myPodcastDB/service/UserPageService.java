@@ -242,6 +242,8 @@ public class UserPageService {
             userMongoManager.updateUser(oldUser);
             res = 6;
         }
+        else if(!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1)
+            res = 7;
         else
             res = 0;
         MongoManager.getInstance().closeConnection();
@@ -331,10 +333,9 @@ public class UserPageService {
             userMongoManager.addUser(user);
             res =  4;
         }
-        else if(reviewMongoManager.deleteReviewsByAuthorUsername(user.getUsername()) == 0){
-            res = 0;
+        else if(reviewMongoManager.updateReviewsByAuthorUsername(user.getUsername(), "Removed account") == -1){
+            res = 5;
         }
-        //else if(reviewMongoManager.deleteReviewsByPodcastId())
         else
             res = 0;
         MongoManager.getInstance().closeConnection();

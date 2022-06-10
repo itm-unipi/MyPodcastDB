@@ -261,10 +261,10 @@
                                           </Label>
                                           <Pane prefHeight="200.0" prefWidth="200.0">
                                              <children>
-                                                <DatePicker fx:id="userPageDatePicker" layoutX="-7.0" layoutY="4.0" prefHeight="25.0" prefWidth="166.0" />
-                                                <Label fx:id="userPageAgeLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="21" textFill="#434343">
+                                                <DatePicker fx:id="userPageDatePicker" layoutX="-4.0" layoutY="1.0" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
+                                                <Label fx:id="userPageAgeLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="120.0" text="21" textFill="#434343">
                                                    <font>
-                                                      <Font name="Corbel Light" size="14.0" />
+                                                      <Font name="Dubai Light" size="14.0" />
                                                    </font>
                                                 </Label>
                                              </children>

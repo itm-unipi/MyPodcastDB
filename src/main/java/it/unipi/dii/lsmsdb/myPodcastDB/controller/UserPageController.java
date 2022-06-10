@@ -721,6 +721,10 @@ public class UserPageController {
                 logMsg = "Neo4j operation failed";
                 dialogMsg = "Updating failed";
                 break;
+            case 7 :
+                logMsg = "Updating username reviews failed";
+                dialogMsg = "Updating failed";
+                break;
             case -1:
                 logMsg = "Unknown error";
                 dialogMsg = "Unknown error";
@@ -799,6 +803,10 @@ public class UserPageController {
                     break;
                 case 4:
                     logMsg = "Delete operation failed on neo4j";
+                    dialogMsg = "Operation failed";
+                    break;
+                case 5:
+                    logMsg = "Updating username reviews failed";
                     dialogMsg = "Operation failed";
                     break;
                 case -1:

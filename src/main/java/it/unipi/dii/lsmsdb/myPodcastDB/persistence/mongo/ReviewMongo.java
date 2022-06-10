@@ -236,7 +236,7 @@ public class ReviewMongo {
         }
     }
 
-    public boolean updateReviewsByAuthorUsername(String oldUsername, String newUsername) {
+    public int updateReviewsByAuthorUsername(String oldUsername, String newUsername) {
         MongoManager manger = MongoManager.getInstance();
 
         try {
@@ -244,10 +244,10 @@ public class ReviewMongo {
             Bson update = combine(set("authorUsername", newUsername));
 
             UpdateResult result = manger.getCollection("review").updateMany(filter, update);
-            return result.getMatchedCount() == 1;
+            return (int)result.getMatchedCount();
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            return -1;
         }
     }
 
