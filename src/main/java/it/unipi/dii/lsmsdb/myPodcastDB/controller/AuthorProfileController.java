@@ -551,12 +551,14 @@ public class AuthorProfileController {
 
     void redirect() throws IOException {
         // Redirect to the homepage if the author doesn't exist
+        Logger.info("Author not found -> redirect");
         DialogManager.getInstance().createErrorAlert(mainPage, "404 Not found", "Sorry, the requested author is not available!");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
     public void initialize() throws IOException {
         AuthorProfileService authorProfileService = new AuthorProfileService();
+        boolean entityFound = false;
 
         switch (this.actorType) {
             case "Author" -> {
@@ -569,17 +571,7 @@ public class AuthorProfileController {
                 if (StageManager.getObjectIdentifier().equals(sessionActor.getName())) {
                     // Session author coincides with the author profile requested
                     author.setName(sessionActor.getName());
-
-                    boolean result = authorProfileService.loadAuthorProfileAsPageOwner(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
-                    if (!result) {
-                        Platform.runLater(() -> {
-                            try {
-                                redirect();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-                    }
+                    entityFound = authorProfileService.loadAuthorProfileAsPageOwner(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                     authorName.setText(sessionActor.getName());
                     tooltipAuthorName.setText(sessionActor.getName());
@@ -595,17 +587,7 @@ public class AuthorProfileController {
                 } else {
                     // Author profile requested is different form the session author
                     this.author.setName(StageManager.getObjectIdentifier());
-
-                    boolean result = authorProfileService.loadAuthorProfileAsAuthor(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
-                    if (!result) {
-                        Platform.runLater(() -> {
-                            try {
-                                redirect();
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        });
-                    }
+                    entityFound = authorProfileService.loadAuthorProfileAsAuthor(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
 
                     // Checking if the session actor follows the visited author (this not count for the author in his own profile)
                     this.followingAuthor = this.following.contains(StageManager.getObjectIdentifier());
@@ -636,17 +618,7 @@ public class AuthorProfileController {
 
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
-
-                boolean result = authorProfileService.loadAuthorProfileAsUser(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
-                if (!result) {
-                    Platform.runLater(() -> {
-                        try {
-                            redirect();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                }
+                entityFound = authorProfileService.loadAuthorProfileAsUser(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
 
                 // Checking if the session actor follows the visited author (this not count for the author in his own profile)
                 this.followingAuthor = this.following.contains(StageManager.getObjectIdentifier());
@@ -676,17 +648,7 @@ public class AuthorProfileController {
 
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
-
-                boolean result = authorProfileService.loadAuthorProfileAsAdmin(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
-                if (!result) {
-                    Platform.runLater(() -> {
-                        try {
-                            redirect();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                }
+                entityFound = authorProfileService.loadAuthorProfileAsAdmin(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                 // Checking if the session actor follows the visited author (this not count for the author in his own profile)
                 this.followingAuthor = this.following.contains(StageManager.getObjectIdentifier());
@@ -711,17 +673,7 @@ public class AuthorProfileController {
 
                 // Requesting the author's information from the database
                 this.author.setName(StageManager.getObjectIdentifier());
-
-                boolean result = authorProfileService.loadAuthorProfileAsUnregistered(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
-                if (!result) {
-                    Platform.runLater(() -> {
-                        try {
-                            redirect();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
-                }
+                entityFound = authorProfileService.loadAuthorProfileAsUnregistered(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                 this.authorName.setText(this.author.getName());
                 this.tooltipAuthorName.setText(this.author.getName());
@@ -739,6 +691,16 @@ public class AuthorProfileController {
                 authorButtons.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 0; -fx-min-height: 0;");
             }
             default -> Logger.error("Unidentified Actor Type");
+        }
+
+        if (!entityFound) {
+            Platform.runLater(() -> {
+                try {
+                    redirect();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
 
         // Load grids

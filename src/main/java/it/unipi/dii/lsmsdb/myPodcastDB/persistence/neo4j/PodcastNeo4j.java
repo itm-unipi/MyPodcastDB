@@ -213,6 +213,21 @@ public class PodcastNeo4j {
         }
     }
 
+    public boolean deletePodcastsOfAuthor(String authorName) {
+        Neo4jManager manager = Neo4jManager.getInstance();
+
+        try {
+            manager.write(
+                    "MATCH (p)-[:CREATED_BY]-(a: Author { name: $name}) DETACH DELETE p",
+                    parameters("name", authorName)
+            );
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean deletePodcastBelongsToCategory(String podcastId, String category) {
         Neo4jManager manager = Neo4jManager.getInstance();
 

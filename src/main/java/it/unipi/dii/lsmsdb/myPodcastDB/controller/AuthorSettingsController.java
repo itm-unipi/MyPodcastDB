@@ -129,33 +129,24 @@ public class AuthorSettingsController {
 
     @FXML
     void deleteAccount(ActionEvent event) throws IOException {
-        boolean result = DialogManager.getInstance().createConfirmationAlert(dialogPane, "Delete Account", "Do you really want to delete your account? You will lose all your podcasts.");
+        boolean result = DialogManager.getInstance().createConfirmationAlert(this.dialogPane, "Delete Account", "Do you really want to delete your account? You will lose all your podcasts.");
 
         if (result) {
 
-            if (authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
+            if (this.authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
                 AuthorProfileService authorProfileService = new AuthorProfileService();
-                int deleteResult = authorProfileService.deleteAccountAsAuthor();
+                int deleteResult = authorProfileService.deleteAccountAsAuthor(this.author);
 
                 if (deleteResult == 0) {
-                    DialogManager.getInstance().createInformationAlert(dialogPane, "Delete Account", "Account deleted successfully!");
+                    DialogManager.getInstance().createInformationAlert(this.dialogPane, "Delete Account", "Account deleted successfully!");
                     closeStage(event);
                     StageManager.showPage(ViewNavigator.LOGIN.getPage());
                 } else {
                     Logger.error("Error during the delete operation");
-
-                    String alertText;
-                    if (deleteResult == -1) {
-                        alertText = "Author don't exists!";
-                    } else {
-                        // General message error
-                        alertText = "Something went wrong! Please try again.";
-                    }
-
-                    DialogManager.getInstance().createErrorAlert(dialogPane, "Delete Account", alertText);
+                    DialogManager.getInstance().createErrorAlert(this.dialogPane, "Delete Account", "Something went wrong! Please try again.");
                 }
             } else {
-                DialogManager.getInstance().createErrorAlert(dialogPane, "Delete Account - Incorrect Password", "Invalid password! Please try again.");
+                DialogManager.getInstance().createErrorAlert(this.dialogPane, "Delete Account - Incorrect Password", "Invalid password! Please try again.");
             }
         } else {
             Logger.info("Operation aborted");
@@ -211,7 +202,7 @@ public class AuthorSettingsController {
                     AuthorProfileService authorProfileService = new AuthorProfileService();
                     int updateResult = authorProfileService.updateAuthorAsAuthor(oldAuthor, tempAuthor);
 
-                    if (updateResult == 1) {
+                    if (updateResult == 0) {
                         // Commit
                         this.author.setName(authorName.getText());
                         this.author.setEmail(authorEmail.getText());
@@ -234,9 +225,10 @@ public class AuthorSettingsController {
                         // Resetting field that caused the error
                         authorEmail.setText(oldAuthor.getEmail());
                         DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Email Error", "This email is already associated to an account!");
-                    } else if (updateResult == -4) {
+                    } else if (updateResult <= -3) {
                         DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Error", "Something went wrong! Please try again.");
                     }
+
                 } else {
                     DialogManager.getInstance().createInformationAlert(dialogPane, "Update Personal Info", "No changes found.");
                     closeStage(event);

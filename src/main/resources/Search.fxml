@@ -191,7 +191,7 @@
                                           <Insets bottom="5.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <ScrollPane fx:id="scrollFoundPodcasts" focusTraversable="false" hbarPolicy="NEVER" maxHeight="267.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
+                                    <ScrollPane fx:id="scrollFoundPodcasts" focusTraversable="false" hbarPolicy="NEVER" maxHeight="272.0" minHeight="0.0" minWidth="0.0" prefWidth="1280.0" style="-fx-background-color: transparent;">
                                        <content>
                                           <GridPane fx:id="gridFoundPodcasts" minHeight="0.0" onScroll="#onScrollPodcastsFound" vgap="7.0">
                                              <columnConstraints>
