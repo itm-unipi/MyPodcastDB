@@ -70,7 +70,7 @@ public class EpisodeEditController {
             LocalDate localDate = this.releaseDate.getValue();
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             this.episode.setReleaseDate(Date.from(instant));
-            this.episode.setTimeMillis(Integer.parseInt(this.duration.getText()) * 60 * 1000);
+            this.episode.setTimeMillis(Integer.parseInt(this.duration.getText()));
 
             Logger.info("New Episode : " + this.episode.toString());
             closeStage(event);
