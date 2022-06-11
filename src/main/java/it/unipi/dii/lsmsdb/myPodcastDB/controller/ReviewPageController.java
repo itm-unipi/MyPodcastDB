@@ -19,17 +19,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ReviewPageController {
 
@@ -305,8 +299,25 @@ public class ReviewPageController {
 
         // if is successful update the page
         if (result == 0) {
+            // update the local podcast
+            this.podcast.addReview(ownReview.getId(), ownReview.getRating());
+            int ratingIntermediate = (int)(this.podcast.getRating() * 10);
+            this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
+            this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
+
             // disable form
             this.disableForm();
+
+            // if is first review make visible the grid and hide the message
+            if (this.podcast.getReviews().size() == 1) {
+                this.noReviewsMessage.setVisible(false);
+                this.noReviewsMessage.setPadding(new Insets(-20, 0, 0, 0));
+                this.gridWrapper.setVisible(true);
+                this.gridWrapper.setStyle("-fx-min-width: 918; -fx-pref-width: 918; -fx-max-width: 918;");
+                this.gridWrapper.setMinHeight(Region.USE_COMPUTED_SIZE);
+                this.gridWrapper.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                this.gridWrapper.setMaxHeight(Region.USE_COMPUTED_SIZE);
+            }
 
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
@@ -743,38 +754,59 @@ public class ReviewPageController {
     private void reloadReviewList() throws IOException {
         // empty the grid
         this.reviewGrid.getChildren().clear();
+        
+        // if there are reviews yet update the grid
+        if (!this.podcast.getReviews().isEmpty()) {
+            // insert reviews in grid
+            this.row = 0;
+            this.column = 0;
+            for (Review review : this.loadedReviews) {
+                // if is the own review skip
+                if (review.equals(ownReview))
+                    return;
 
-        // insert reviews in grid
-        this.row = 0;
-        this.column = 0;
-        for (Review review : this.loadedReviews) {
-            // if is the own review skip
-            if (review.equals(ownReview))
-                return;
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
 
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
+                // create new review element
+                AnchorPane newReview = fxmlLoader.load();
+                ReviewController controller = fxmlLoader.getController();
+                controller.setData(review, this.mainPage, this.service, this);
 
-            // create new review element
-            AnchorPane newReview = fxmlLoader.load();
-            ReviewController controller = fxmlLoader.getController();
-            controller.setData(review, this.mainPage, this.service, this);
+                // add new podcast to grid
+                this.reviewGrid.add(newReview, column, row++);
+            }
 
-            // add new podcast to grid
-            this.reviewGrid.add(newReview, column, row++);
+            // check if the show review should be reneabled
+            if (!this.showMoreWrapper.isVisible() && this.getLoaded() < this.podcast.getReviews().size()) {
+                this.showMoreWrapper.setVisible(true);
+                this.showMoreWrapper.setStyle("-fx-pref-width: 140; -fx-pref-height: 22;");
+            }
         }
 
-        // check if the show review should be reneabled
-        if (!this.showMoreWrapper.isVisible() && this.getLoaded() < this.podcast.getReviews().size()) {
-            this.showMoreWrapper.setVisible(true);
-            this.showMoreWrapper.setStyle("-fx-pref-width: 140; -fx-pref-height: 22;");
+        //else show the no review message
+        else {
+            this.noReviewsMessage.setVisible(true);
+            this.noReviewsMessage.setPadding(new Insets(20, 0, 15, 0));
+            this.gridWrapper.setVisible(false);
+            this.gridWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
         }
     }
 
     public void removeReviewFromLocalList(Review review) throws IOException {
+        // update local copy of podcast
+        this.podcast.deleteReview(review);
+        int ratingIntermediate = (int)(this.podcast.getRating() * 10);
+        this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
+        this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
+
+        // update review list in page
         this.loadedReviews.remove(review);
         this.reloadReviewList();
-        this.enableForm();
+
+        // if is a User re-enable the form
+        if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+            this.enableForm();
 
         // reinitialize own review
         this.ownReview = new Review();

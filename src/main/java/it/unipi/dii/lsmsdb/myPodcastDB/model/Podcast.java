@@ -212,6 +212,11 @@ public class Podcast {
         this.reviews.add(review);
     }
 
+    public void deleteReview(Review review) {
+        ReducedReview toRemove = new ReducedReview(review.getId(), review.getRating());
+        this.reviews.remove(toRemove);
+    }
+
     public float getRating() {
         float average = 0.0f;
 
