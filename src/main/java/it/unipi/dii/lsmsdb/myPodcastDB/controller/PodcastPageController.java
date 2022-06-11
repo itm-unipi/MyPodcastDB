@@ -196,6 +196,13 @@ public class PodcastPageController {
 
             // if the service is successful update the page
             if (result == 0) {
+                // if first episode enable the grid and disable the text
+                if (podcast.getEpisodes() != null && podcast.getEpisodes().size() == 1) {
+                    this.noEpisodeMessage.setVisible(false);
+                    this.noEpisodeMessage.setPadding(new Insets(-20, 0, 0, 0));
+                    this.scroll.setVisible(true);
+                }
+
                 // add episode to page
                 FXMLLoader fxmlEpisodeLoader = new FXMLLoader();
                 fxmlEpisodeLoader.setLocation(getClass().getClassLoader().getResource("Episode.fxml"));
@@ -577,7 +584,7 @@ public class PodcastPageController {
             this.addEpisodeWrapper.setStyle("-fx-max-height: 0; -fx-max-width: 0; -fx-pref-height: 0; -fx-pref-width: 0; -fx-min-height: 0; -fx-min-width: 0; ");
         }
 
-        // no reviews message
+        // no episodes message
         if (podcast.getEpisodes() != null && !podcast.getEpisodes().isEmpty()) {
             this.noEpisodeMessage.setVisible(false);
             this.noEpisodeMessage.setPadding(new Insets(-20, 0, 0, 0));
@@ -635,6 +642,13 @@ public class PodcastPageController {
 
             // add new podcast to grid
             this.episodesGrid.add(newEpisode, this.column, this.row++);
+        }
+
+        // if there are no episodes show the message
+        if (podcast.getEpisodes() != null && podcast.getEpisodes().size() == 0) {
+            this.noEpisodeMessage.setVisible(true);
+            this.noEpisodeMessage.setPadding(new Insets(20, 0, 0, 0));
+            this.scroll.setVisible(false);
         }
 
         // calculate the progress bar for ratings
