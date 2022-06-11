@@ -600,90 +600,90 @@ public class ReviewPageController {
                     throw new RuntimeException(e);
                 }
             });
-        }
-
-        // no reviews message
-        if (this.loadedReviews != null && !this.loadedReviews.isEmpty()) {
-            this.noReviewsMessage.setVisible(false);
-            this.noReviewsMessage.setPadding(new Insets(-20, 0, 0, 0));
         } else {
-            this.gridWrapper.setVisible(false);
-            this.gridWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
-        }
-
-        // set fields
-        this.title.setText(this.podcast.getName());
-        this.titleTooltip.setText(this.podcast.getName());
-        this.author.setText(this.podcast.getAuthorName());
-        this.category.setText(this.podcast.getPrimaryCategory());
-        Image podcastImage = ImageCache.getImageFromURL(this.podcast.getArtworkUrl600());
-        this.podcastImage.setImage(podcastImage);
-        int ratingIntermediate = (int)(this.podcast.getRating() * 10);
-        this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
-        this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
-
-        // calculate the progress bar for ratings
-        int[] numReview = new int[5];
-        for (Map.Entry<String, Integer> review : this.podcast.getReviews()) {
-            switch (review.getValue()) {
-                case 1:
-                    numReview[0]++;
-                    break;
-                case 2:
-                    numReview[1]++;
-                    break;
-                case 3:
-                    numReview[2]++;
-                    break;
-                case 4:
-                    numReview[3]++;
-                    break;
-                case 5:
-                    numReview[4]++;
-                    break;
+            // no reviews message
+            if (this.loadedReviews != null && !this.loadedReviews.isEmpty()) {
+                this.noReviewsMessage.setVisible(false);
+                this.noReviewsMessage.setPadding(new Insets(-20, 0, 0, 0));
+            } else {
+                this.gridWrapper.setVisible(false);
+                this.gridWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
             }
+
+            // set fields
+            this.title.setText(this.podcast.getName());
+            this.titleTooltip.setText(this.podcast.getName());
+            this.author.setText(this.podcast.getAuthorName());
+            this.category.setText(this.podcast.getPrimaryCategory());
+            Image podcastImage = ImageCache.getImageFromURL(this.podcast.getArtworkUrl600());
+            this.podcastImage.setImage(podcastImage);
+            int ratingIntermediate = (int) (this.podcast.getRating() * 10);
+            this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
+            this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
+
+            // calculate the progress bar for ratings
+            int[] numReview = new int[5];
+            for (Map.Entry<String, Integer> review : this.podcast.getReviews()) {
+                switch (review.getValue()) {
+                    case 1:
+                        numReview[0]++;
+                        break;
+                    case 2:
+                        numReview[1]++;
+                        break;
+                    case 3:
+                        numReview[2]++;
+                        break;
+                    case 4:
+                        numReview[3]++;
+                        break;
+                    case 5:
+                        numReview[4]++;
+                        break;
+                }
+            }
+            this.oneStar.setProgress((float) numReview[0] / this.podcast.getReviews().size());
+            this.twoStars.setProgress((float) numReview[1] / this.podcast.getReviews().size());
+            this.threeStars.setProgress((float) numReview[2] / this.podcast.getReviews().size());
+            this.fourStars.setProgress((float) numReview[3] / this.podcast.getReviews().size());
+            this.fiveStars.setProgress((float) numReview[4] / this.podcast.getReviews().size());
+
+            // insert reviews in grid
+            this.row = 0;
+            this.column = 0;
+            for (Review review : this.loadedReviews) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
+
+                // create new review element
+                AnchorPane newReview = fxmlLoader.load();
+                ReviewController controller = fxmlLoader.getController();
+                controller.setData(review, this.mainPage, this.service, this);
+
+                // add new podcast to grid
+                this.reviewGrid.add(newReview, column, row++);
+            }
+
+            // check if are finished
+            if (this.loadedReviews.size() == this.podcast.getReviews().size()) {
+                this.showMoreWrapper.setVisible(false);
+                this.showMoreWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+            }
+
+            // initialize own review
+            this.ownReview = new Review();
+            this.ownReview.setPodcastId(podcast.getId());
+            if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+                this.ownReview.setAuthorUsername(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername());
+            this.ownReview.setRating(0);
+
+            // initialize combo box
+            this.orderBy.getItems().add("Date of creation");
+            this.orderBy.getItems().add("Rating");
+            this.ascending.getItems().add("Ascending");
+            this.ascending.getItems().add("Descending");
+            this.ascending.setValue("Ascending");
         }
-        this.oneStar.setProgress((float)numReview[0] / this.podcast.getReviews().size());
-        this.twoStars.setProgress((float)numReview[1] / this.podcast.getReviews().size());
-        this.threeStars.setProgress((float)numReview[2] / this.podcast.getReviews().size());
-        this.fourStars.setProgress((float)numReview[3] / this.podcast.getReviews().size());
-        this.fiveStars.setProgress((float)numReview[4] / this.podcast.getReviews().size());
-
-        // insert reviews in grid
-        this.row = 0;
-        this.column = 0;
-        for (Review review : this.loadedReviews) {
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
-
-            // create new review element
-            AnchorPane newReview = fxmlLoader.load();
-            ReviewController controller = fxmlLoader.getController();
-            controller.setData(review, this.mainPage, this.service, this);
-
-            // add new podcast to grid
-            this.reviewGrid.add(newReview, column, row++);
-        }
-
-        // check if are finished
-        if (this.loadedReviews.size() == this.podcast.getReviews().size()) {
-            this.showMoreWrapper.setVisible(false);
-            this.showMoreWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
-        }
-
-        // initialize own review
-        this.ownReview = new Review();
-        this.ownReview.setPodcastId(podcast.getId());
-        if (MyPodcastDB.getInstance().getSessionType().equals("User"))
-            this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
-        this.ownReview.setRating(0);
-
-        // initialize combo box
-        this.orderBy.getItems().add("Date of creation");
-        this.orderBy.getItems().add("Rating");
-        this.ascending.getItems().add("Ascending");
-        this.ascending.getItems().add("Descending");
-        this.ascending.setValue("Ascending");
     }
 
     private void readRating() {
@@ -822,6 +822,15 @@ public class ReviewPageController {
     }
 
     private void redirect() throws IOException {
+        // hide the text
+        this.title.setText("");
+        this.author.setText("");
+        this.category.setText("");
+        this.rating.setText("");
+        this.numReviews.setText("");
+        this.showMore.setText("");
+
+        // create alert end redirect to homepage
         DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }

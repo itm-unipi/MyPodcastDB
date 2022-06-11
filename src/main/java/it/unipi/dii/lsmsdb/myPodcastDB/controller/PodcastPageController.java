@@ -680,6 +680,17 @@ public class PodcastPageController {
     }
 
     private void redirect() throws IOException {
+        // hide the text
+        this.title.setText("");
+        this.author.setText("");
+        this.country.setText("");
+        this.numEpisodes.setText("");
+        this.category.setText("");
+        this.secondaryCategory.setText("");
+        this.rating.setText("");
+        this.numReviews.setText("");
+
+        // create alert end redirect to homepage
         DialogManager.getInstance().createErrorAlert(this.mainPage, "The requested podcast is not available");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
