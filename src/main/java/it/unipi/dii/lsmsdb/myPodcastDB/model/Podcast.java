@@ -207,6 +207,10 @@ public class Podcast {
         this.episodes.add(newEpisode);
     }
 
+    public void deleteEpisode(Episode episode) {
+        this.episodes.remove(episode);
+    }
+
     public void addReview(String id, int rating) {
         ReducedReview review = new ReducedReview(id, rating);
         this.reviews.add(review);

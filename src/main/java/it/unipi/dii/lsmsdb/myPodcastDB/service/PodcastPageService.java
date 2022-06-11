@@ -126,68 +126,58 @@ public class PodcastPageService {
         return result;
     }
 
-    public int updatePodcast(Podcast podcast) {
+    public int updatePodcast(Podcast oldPodcast, Podcast newPodcast) {
         MongoManager.getInstance().openConnection();
         int result = 0;
         Boolean updateReduced = false;
 
-        // check if podcast exists
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Podcast to update not found");
-            result = -1;
+        // check if is needed to update reduced podcast
+        if (!oldPodcast.getName().equals(newPodcast.getName()) || !oldPodcast.getReleaseDate().equals(newPodcast.getReleaseDate()) || !oldPodcast.getPrimaryCategory().equals(newPodcast.getPrimaryCategory()) || !oldPodcast.getArtworkUrl600().equals(newPodcast.getArtworkUrl600())) {
+            updateReduced = true;
         }
 
-        // update podcast
-        else {
-            // check if is needed to update reduced podcast
-            if (!foundPodcast.getName().equals(podcast.getName()) || !foundPodcast.getReleaseDate().equals(podcast.getReleaseDate()) || !foundPodcast.getPrimaryCategory().equals(podcast.getPrimaryCategory()) || !foundPodcast.getArtworkUrl600().equals(podcast.getArtworkUrl600())) {
-                updateReduced = true;
-            }
+        // check if is needed to update Neo4J
+        Boolean updateNeo = false;
+        if (!oldPodcast.getName().equals(newPodcast.getName()) || !oldPodcast.getArtworkUrl600().equals(newPodcast.getArtworkUrl600())) {
+            updateNeo = true;
+        }
 
-            // check if is needed to update Neo4J
-            Boolean updateNeo = false;
-            if (!foundPodcast.getName().equals(podcast.getName()) || !foundPodcast.getArtworkUrl600().equals(podcast.getArtworkUrl600())) {
-                updateNeo = true;
-            }
-
-            // update podcast on mongo
-            Boolean res = this.podcastMongo.updatePodcast(podcast);
-            if (!res) {
-                // reset the podcast object to the old status (for interface update)
-                Logger.error("Podcast not updated on MongoDB");
-                podcast.copy(foundPodcast);
-                result = -2;
-            } else {
-                // update reduced podcast if needed
-                if (updateReduced) {
-                    Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(podcast.getAuthorId(), podcast);
-                    if (!resUpRed) {
-                        Logger.error("Reduced podcast not updated");
-                        result = -3;
-                    }
+        // update podcast on mongo
+        Boolean res = this.podcastMongo.updatePodcast(newPodcast);
+        if (!res) {
+            // reset the podcast object to the old status (for interface update)
+            Logger.error("Podcast not updated on MongoDB");
+            newPodcast.copy(oldPodcast);
+            result = -1;
+        } else {
+            // update reduced podcast if needed
+            if (updateReduced) {
+                Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(newPodcast.getAuthorId(), newPodcast);
+                if (!resUpRed) {
+                    Logger.error("Reduced podcast not updated");
+                    result = -2;
                 }
-
-                // update Neo4J if needed
-                if (result == 0 && updateNeo) {
-                    Neo4jManager.getInstance().openConnection();
-                    Boolean resUpNeo = this.podcastNeo4j.updatePodcast(podcast);
-                    if (!resUpNeo) {
-                        Logger.error("Podcast not updated on Neo4J");
-                        result = -4;
-                    } else {
-                        Neo4jManager.getInstance().closeConnection();
-                    }
-                }
-
-                if (result == 0)
-                    Logger.success("Podcast updated");
             }
+
+            // update Neo4J if needed
+            if (result == 0 && updateNeo) {
+                Neo4jManager.getInstance().openConnection();
+                Boolean resUpNeo = this.podcastNeo4j.updatePodcast(newPodcast);
+                if (!resUpNeo) {
+                    Logger.error("Podcast not updated on Neo4J");
+                    result = -3;
+                } else {
+                    Neo4jManager.getInstance().closeConnection();
+                }
+            }
+
+            if (result == 0)
+                Logger.success("Podcast updated");
         }
 
         // rollback if process failed
         if (result != 0) {
-            rollbackUpdatePodcast(result, foundPodcast, updateReduced);
+            rollbackUpdatePodcast(result, oldPodcast, updateReduced);
             Neo4jManager.getInstance().closeConnection();
         }
 
@@ -200,43 +190,33 @@ public class PodcastPageService {
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
-        // check if podcast exists
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null || this.podcastNeo4j.findPodcastByPodcastId(podcast.getId()) == null) {
-            Logger.error("Podcast to delete not found in all databases");
+        // delete podcast entity in mongo
+        Boolean resDelPod = this.podcastMongo.deletePodcastById(podcast.getId());
+        if (!resDelPod) {
+            Logger.error("Podcast not deleted");
             result = -1;
         }
 
-        // delete podcast
+        // remove reduced podcast from author
         else {
-            // delete podcast entity in mongo
-            Boolean resDelPod = this.podcastMongo.deletePodcastById(podcast.getId());
-            if (!resDelPod) {
-                Logger.error("Podcast not deleted");
+            Boolean resDelRedPod = this.authorMongo.deletePodcastOfAuthor(podcast.getAuthorId(), podcast.getId());
+            if (!resDelRedPod) {
+                Logger.error("Reduced podcast not deleted from author");
                 result = -2;
-            }
-
-            // remove reduced podcast from author
-            else {
-                Boolean resDelRedPod = this.authorMongo.deletePodcastOfAuthor(podcast.getAuthorId(), podcast.getId());
-                if (!resDelRedPod) {
-                    Logger.error("Reduced podcast not deleted from author");
+            } else {
+                // remove podcast entity from neo4j
+                Boolean resDelNeo = this.podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
+                if (!resDelNeo) {
+                    Logger.error("Podcast not deleted from Neo4J");
                     result = -3;
                 } else {
-                    // remove podcast entity from neo4j
-                    Boolean resDelNeo = this.podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
-                    if (!resDelNeo) {
-                        Logger.error("Podcast not deleted from Neo4J");
+                    // remove review of podcast
+                    int resDelRew = this.reviewMongo.deleteReviewsByPodcastId(podcast.getId());
+                    if (resDelRew == -1) {
+                        Logger.error("Reviews of podcast not deleted");
                         result = -4;
                     } else {
-                        // remove review of podcast
-                        int resDelRew = this.reviewMongo.deleteReviewsByPodcastId(podcast.getId());
-                        if (resDelRew == -1) {
-                            Logger.error("Reviews of podcast not deleted");
-                            result = -5;
-                        } else {
-                            Logger.success("Podcast deleted");
-                        }
+                        Logger.success("Podcast deleted");
                     }
                 }
             }
@@ -255,39 +235,32 @@ public class PodcastPageService {
         MongoManager.getInstance().openConnection();
         int result = 0;
 
-        // check if podcast exists
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Episode's podcast not found");
-            result = -1;
-        } else {
-            // check if episode already exists
-            Boolean exists = false;
-            for (Episode ep : foundPodcast.getEpisodes()) {
-                if (ep.getName().equals(episode.getName())) {
-                    exists = true;
-                    break;
-                }
+        // check if episode already exists
+        Boolean exists = false;
+        for (Episode ep : podcast.getEpisodes()) {
+            if (ep.getName().equals(episode.getName())) {
+                exists = true;
+                break;
             }
+        }
 
-            // the episode exists
-            if (exists) {
-                Logger.error("Episode already exists");
-                result = -2;
-            }
+        // the episode exists
+        if (exists) {
+            Logger.error("Episode already exists");
+            result = -2;
+        }
 
-            // update podcast
-            else {
-                Boolean res = this.podcastMongo.addEpisodeToPodcast(podcast.getId(), episode);
-                if (res) {
-                    Logger.success("Episode added");
-                    podcast.addEpisode(episode);
-                } else {
-                    // reset the podcast object to the old status (for interface update)
-                    Logger.error("Episode not added");
-                    podcast.copy(foundPodcast);
-                    result = -3;
-                }
+        // update podcast
+        else {
+            Boolean res = this.podcastMongo.addEpisodeToPodcast(podcast.getId(), episode);
+            if (res) {
+                Logger.success("Episode added");
+                podcast.addEpisode(episode);
+            } else {
+                // reset the podcast object to the old status (for interface update)
+                Logger.error("Episode not added");
+                podcast.copy(podcast);
+                result = -3;
             }
         }
 
@@ -299,28 +272,21 @@ public class PodcastPageService {
         MongoManager.getInstance().openConnection();
         int result = 0;
 
-        // check if podcast exists
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Episode's podcast not found");
-            result = -1;
-        }
-
         // check if episode exists
-        else if (!podcast.getEpisodes().contains(episode)) {
+        if (!podcast.getEpisodes().contains(episode)) {
             Logger.success("Episode found");
-            result = -2;
+            result = -1;
         }
 
         // update podcast
         else {
             Boolean res = this.podcastMongo.deleteEpisodeOfPodcast(podcast.getId(), episode.getName());
             if (res) {
-                podcast.getEpisodes().remove(episode);
+                podcast.deleteEpisode(episode);
                 Logger.success("Episode deleted");
             } else {
                 Logger.error("Episode not deleted");
-                result = -3;
+                result = -2;
             }
         }
 
@@ -330,29 +296,36 @@ public class PodcastPageService {
 
     private void rollbackUpdatePodcast(int result, Podcast oldPodcast, boolean updateReduced) {
         // failed to update reduced podcast
-        if (result == -4 && updateReduced) {
+        if (result == -3 && updateReduced) {
             this.authorMongo.updatePodcastOfAuthor(oldPodcast.getAuthorId(), oldPodcast);
         }
 
         // failed to update podcast on mongo
-        if (result >= -3) {
+        if (result <= -2) {
             this.podcastMongo.updatePodcast(oldPodcast);
         }
     }
 
     private void rollbackDeletePodcast(int result, Podcast podcast) {
         // failed to remove review of podcast
-        if (result == -5) {
+        if (result == -4) {
+            // recreate the neo4j entity
             this.podcastNeo4j.addPodcast(podcast);
+
+            // recreate all recoverable relationship
+            this.podcastNeo4j.addPodcastCreatedByAuthor(podcast);
+            this.podcastNeo4j.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory());
+            for (String cat : podcast.getCategories())
+                this.podcastNeo4j.addPodcastBelongsToCategory(podcast, cat);
         }
 
         // failed to remove podcast entity from neo4j
-        if (result >= -4) {
+        if (result <= -3) {
             this.authorMongo.addPodcastToAuthor(podcast.getAuthorId(), podcast);
         }
 
         // failed to remove reduced podcast from author
-        if (result >= -3) {
+        if (result <= -2) {
             this.podcastMongo.addPodcast(podcast);
         }
     }

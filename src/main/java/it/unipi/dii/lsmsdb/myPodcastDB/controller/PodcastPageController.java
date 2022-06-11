@@ -212,8 +212,9 @@ public class PodcastPageController {
                 EpisodeController controller = fxmlEpisodeLoader.getController();
                 controller.setData(episode, this.podcast, this.mainPage, this.service, this);
 
-                // add new podcast to grid
+                // add new podcast to grid and update podcast info
                 this.episodesGrid.add(newEpisode, this.column, this.row++);
+                this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
             }
 
             // error
@@ -224,7 +225,6 @@ public class PodcastPageController {
                 // other error
                 else
                     DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add episode");
-
             }
         }
 
@@ -331,7 +331,7 @@ public class PodcastPageController {
         // check if modified
         if (!this.podcast.equals(newPodcast)) {
             // update podcast on persistence
-            int result = this.service.updatePodcast(newPodcast);
+            int result = this.service.updatePodcast(this.podcast, newPodcast);
 
             // if update is succesfull update the page
             if (result == 0) {
