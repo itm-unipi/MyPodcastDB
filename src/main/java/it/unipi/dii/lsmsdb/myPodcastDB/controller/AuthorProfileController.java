@@ -427,28 +427,13 @@ public class AuthorProfileController {
     void onScrollGridPane(ScrollEvent event) throws IOException {
         // Hide left arrow
         leftArrow.setVisible(scrollFollowedAuthors.getHvalue() != 0);
-
         // Hide right arrow
-        rightArrow.setVisible(scrollFollowedAuthors.getHvalue() != 1.0);
-
-        /*
-        if (scrollFollowedAuthors.getHvalue() == 1) {
-            //Logger.info("Authors loaded and ready to be shown in the grid: " + (this.followedAuthors.size() - gridAuthorsFollowed.getColumnCount()));
-
-            if (this.followedAuthors.size() - this.gridAuthorsFollowed.getColumnCount() == 0) {
-                rightArrow.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
-            } else {
-                updateAuthorsGrid();
-            }
-
-        }
-        */
-
+        rightArrow.setVisible(scrollFollowedAuthors.getHvalue() != 1.0  && (gridAuthorsFollowed.getColumnCount() != authorsToLoadInGrid - 1));
         updateAuthorsGrid();
     }
 
     void updateAuthorsGrid() throws IOException {
-        if (scrollFollowedAuthors.getHvalue() == 1) {
+        if (scrollFollowedAuthors.getHvalue() >= 0.99) {
             Logger.info("Authors loaded and ready to be shown in the grid: " + (this.followedAuthorsByAuthor.size() - gridAuthorsFollowed.getColumnCount()));
 
             if ((this.followedAuthorsByAuthor.size() - gridAuthorsFollowed.getColumnCount()) == 0 && !this.noMoreAuthors) {
@@ -478,6 +463,11 @@ public class AuthorProfileController {
                 }
 
                 Logger.info("(End call service) Total authors loaded in memory: " + this.followedAuthorsByAuthor.size() + " | Authors available to be shown: " + (this.followedAuthorsByAuthor.size() - this.gridAuthorsFollowed.getColumnCount()));
+                // Updating arrows
+                if ((this.followedAuthorsByAuthor.size() - this.gridAuthorsFollowed.getColumnCount()) > 0)
+                    rightArrow.setVisible(true);
+                else
+                    leftArrow.setVisible(false);
                 loadFollowedAuthorsByAuthor(true);
 
             } else {
@@ -504,38 +494,22 @@ public class AuthorProfileController {
 
     @FXML
     void nextFollowedAuthor(MouseEvent event) throws IOException {
-        /*
-        double scrollValue = 1.0 / (gridAuthorsFollowed.getColumnCount() - this.authorToLoadInGrid + 1.0);
+        double scrollValue = 1.0 / (gridAuthorsFollowed.getColumnCount() - this.authorsToLoadInGrid + 1.0);
         scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() + scrollValue);
 
         leftArrow.setVisible(true);
+        rightArrow.setVisible(scrollFollowedAuthors.getHvalue() <= 0.98 || this.followedAuthorsByAuthor.size() > this.gridAuthorsFollowed.getColumnCount());
 
         updateAuthorsGrid();
-
-        if (scrollFollowedAuthors.getHvalue() == 1.0)
-            rightArrow.setVisible(false);
-        else
-            rightArrow.setVisible(true);
-
-        updateAuthorsGrid();
-        */
     }
 
     @FXML
     void backFollowedAuthor(MouseEvent event) throws IOException {
-        /*
-        double scrollValue = 1.0 / (gridAuthorsFollowed.getColumnCount() - this.authorToLoadInGrid + 1.0);
+        double scrollValue = 1.0 / (gridAuthorsFollowed.getColumnCount() - this.authorsToLoadInGrid + 1.0);
         scrollFollowedAuthors.setHvalue(scrollFollowedAuthors.getHvalue() - scrollValue);
 
         rightArrow.setVisible(true);
-
-        updateAuthorsGrid();
-
-        if (scrollFollowedAuthors.getHvalue() == 0)
-            leftArrow.setVisible(false);
-        else
-            leftArrow.setVisible(true);
-         */
+        leftArrow.setVisible(scrollFollowedAuthors.getHvalue() >= 0.01);
     }
 
     @FXML

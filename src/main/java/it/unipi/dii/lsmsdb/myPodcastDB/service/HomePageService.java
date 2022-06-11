@@ -110,17 +110,16 @@ public class HomePageService {
         Logger.info("Retrieving podcasts based on your followed users");
         Neo4jManager.getInstance().openConnection();
 
-        boolean noMorePodcasts = false;
-
         // Load podcasts liked by followed users
         List<Podcast> podcasts = podcastNeo4jManager.showSuggestedPodcastsLikedByFollowedUsers(((User)MyPodcastDB.getInstance().getSessionActor()), limit, skip);
         if(podcasts != null) {
             basedOnFollowedUsers.addAll(podcasts);
-            noMorePodcasts = podcasts.size() < limit;
         }
 
-        Neo4jManager.getInstance().closeConnection();
+        boolean noMorePodcasts = (podcasts == null || podcasts.size() < limit);
+        Logger.info("No more podcasts: " + noMorePodcasts);
 
+        Neo4jManager.getInstance().closeConnection();
         return noMorePodcasts;
     }
 
@@ -128,16 +127,15 @@ public class HomePageService {
         Logger.info("Retrieving podcasts in watchlist");
         Neo4jManager.getInstance().openConnection();
 
-        boolean noMorePodcastsWatchlist = false;
-
         List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, skip);
         if(podcasts != null) {
             watchlist.addAll(podcasts);
-            noMorePodcastsWatchlist = podcasts.size() < limit;
         }
 
-        Neo4jManager.getInstance().closeConnection();
+        boolean noMorePodcastsWatchlist = (podcasts == null || podcasts.size() < limit);
+        Logger.info("No more podcasts: " + noMorePodcastsWatchlist);
 
+        Neo4jManager.getInstance().closeConnection();
         return noMorePodcastsWatchlist;
     }
 
@@ -145,13 +143,13 @@ public class HomePageService {
         Logger.info("Retrieving top genres podcasts");
         Neo4jManager.getInstance().openConnection();
 
-        boolean noMorePodcastsTopGenres = false;
-
         List<Podcast> podcasts = podcastNeo4jManager.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, skip);
         if(podcasts != null) {
             topGenres.addAll(podcasts);
-            noMorePodcastsTopGenres = podcasts.size() < limit;
         }
+
+        boolean noMorePodcastsTopGenres = (podcasts == null || podcasts.size() < limit);
+        Logger.info("No more podcasts: " + noMorePodcastsTopGenres);
 
         Neo4jManager.getInstance().closeConnection();
         return noMorePodcastsTopGenres;
@@ -177,13 +175,13 @@ public class HomePageService {
         Logger.info("Retrieving suggested authors");
         Neo4jManager.getInstance().openConnection();
 
-        boolean noMoreAuthors = false;
-
         List<Author> authors = authorNeo4jManager.showSuggestedAuthorsFollowedByFollowedUser(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, skip);
         if (authors != null) {
             suggestedAuthors.addAll(authors);
-            noMoreAuthors = authors.size() < limit;
         }
+
+        boolean noMoreAuthors = (authors == null || authors.size() < limit);
+        Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
         return noMoreAuthors;

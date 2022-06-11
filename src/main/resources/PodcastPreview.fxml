@@ -12,11 +12,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="230.0" prefWidth="185.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="235.0" prefWidth="205.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController">
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="podcastPreviewBox" onMouseClicked="#podcastInfo" onMouseEntered="#onFocus" onMouseExited="#onExit" prefHeight="220.0" prefWidth="185.0" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: transparent; -fx-border-color: transparent;">
+            <VBox fx:id="podcastPreviewBox" alignment="CENTER" onMouseClicked="#podcastInfo" onMouseEntered="#onFocus" onMouseExited="#onExit" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: transparent; -fx-border-color: transparent;">
                <children>
                   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="185.0" style="-fx-background-color: #eaeaea;">
                      <children>
@@ -27,7 +27,7 @@
                         </ImageView>
                      </children>
                   </VBox>
-                  <Label fx:id="podcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" style="-fx-scale-y: 1.06;" text="SermonAudio" textFill="#434343de">
+                  <Label fx:id="podcastName" minHeight="35.0" prefHeight="35.0" prefWidth="185.0" style="-fx-scale-y: 1.06;" text="SermonAudio" textFill="#434343de">
                      <font>
                         <Font name="Corbel Bold" size="15.0" />
                      </font>
@@ -37,7 +37,7 @@
                   </Label>
                </children>
                <padding>
-                  <Insets bottom="5.0" left="9.0" right="9.0" top="10.0" />
+                  <Insets bottom="5.0" top="10.0" />
                </padding>
                <cursor>
                   <Cursor fx:constant="HAND" />

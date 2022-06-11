@@ -105,7 +105,6 @@ public class AuthorProfileService {
     public boolean loadFollowedAuthorsAsUser(Author author, List<Pair<Author, Boolean>> followedAuthors, List<String> following, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-        boolean noMoreAuthors = false;
 
         // Getting the authors followed by the author visited
         List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
@@ -114,8 +113,10 @@ public class AuthorProfileService {
                 boolean follow = following.contains(followedAuthor.getName());
                 followedAuthors.add(new Pair<>(followedAuthor, follow));
             }
-            noMoreAuthors = followedAuthors.size() < limit;
         }
+
+        boolean noMoreAuthors = (followedAuthorsByAuthor == null || followedAuthorsByAuthor.size() < limit);
+        Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
         return noMoreAuthors;
@@ -124,15 +125,15 @@ public class AuthorProfileService {
     public boolean loadFollowedAuthorsAsUnregistered(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-        boolean noMoreAuthors = false;
 
         List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
         if (followedAuthors != null) {
             for (Author followedAuthor: followedAuthors)
                 followed.add(new Pair<>(followedAuthor, false));
-
-            noMoreAuthors = followedAuthors.size() < limit;
         }
+
+        boolean noMoreAuthors = (followedAuthors == null || followedAuthors.size() < limit);
+        Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
         return noMoreAuthors;
@@ -230,14 +231,15 @@ public class AuthorProfileService {
     public boolean loadFollowedAuthorsAsPageOwner(Author author, List<Pair<Author, Boolean>> followed, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-        boolean noMoreAuthors = false;
 
         List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
         if (followedAuthors != null) {
             for (Author a : followedAuthors)
                 followed.add(new Pair<>(a, true));
-            noMoreAuthors = followedAuthors.size() < limit;
         }
+
+        boolean noMoreAuthors = (followedAuthors == null || followedAuthors.size() < limit);
+        Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
         return noMoreAuthors;
@@ -245,7 +247,6 @@ public class AuthorProfileService {
 
     public boolean loadFollowedAuthorsAsAuthor(Author author, List<Pair<Author, Boolean>> followedAuthors, List<String> following, int limit, int skip) {
         Neo4jManager.getInstance().openConnection();
-        boolean noMoreAuthors = false;
 
         // Getting the authors followed by the author visited
         List<Author> followedAuthorsByRequestedAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
@@ -254,8 +255,10 @@ public class AuthorProfileService {
                 boolean follow = following.contains(followedAuthor.getName());
                 followedAuthors.add(new Pair<>(followedAuthor, follow));
             }
-            noMoreAuthors = followedAuthors.size() < limit;
         }
+
+        boolean noMoreAuthors = (followedAuthorsByRequestedAuthor == null || followedAuthorsByRequestedAuthor.size() < limit);
+        Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
         return noMoreAuthors;
@@ -589,14 +592,15 @@ public class AuthorProfileService {
     public boolean loadFollowedAuthorsAsAdmin(Author author, List<Pair<Author, Boolean>> followedAuthors, int limit, int skip) {
         Logger.info("Retrieving followed authors");
         Neo4jManager.getInstance().openConnection();
-        boolean noMoreAuthors = false;
 
         List<Author> followedAuthorsByAuthor = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
         if (followedAuthorsByAuthor != null) {
             for (Author followedAuthor: followedAuthorsByAuthor)
                 followedAuthors.add(new Pair<>(followedAuthor, false));
-            noMoreAuthors = followedAuthors.size() < limit;
         }
+
+        boolean noMoreAuthors = (followedAuthorsByAuthor == null || followedAuthorsByAuthor.size() < limit);
+        Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
         return noMoreAuthors;
