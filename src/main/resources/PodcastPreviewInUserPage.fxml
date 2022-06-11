@@ -53,7 +53,7 @@
                   </Pane>
                </children>
             </Pane>
-            <Label fx:id="PodcastName" alignment="TOP_LEFT" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
+            <Label fx:id="PodcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
                <font>
                   <Font name="Corbel Bold" size="15.0" />
                </font>

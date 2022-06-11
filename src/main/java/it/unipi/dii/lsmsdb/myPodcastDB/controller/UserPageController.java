@@ -246,21 +246,21 @@ public class UserPageController {
             userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getWbutton = false;
         }
-        else if(numberOfWpodcastsToAdd != 0 && userPageWatchlistScrollPane.getHvalue() == 1.0){
-            userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
-            getWbutton = true;
+        else {
+            double scrollValue = 1.0 / (userPageWatchlistGrid.getColumnCount() - podcastRowSize);
+            userPageWatchlistLeftButton.setVisible(true);
+            if (userPageWatchlistScrollPane.getHvalue() != 1.0)
+                userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() + scrollValue);
+
+            if (numberOfWpodcastsToAdd != 0 && userPageWatchlistScrollPane.getHvalue() == 1.0) {
+                userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+                getWbutton = true;
+            }
+            else if (numberOfWpodcastsToAdd == 0 && userPageWatchlistScrollPane.getHvalue() == 1.0)
+                userPageWatchlistRightButton.setVisible(false);
         }
-        else if(numberOfWpodcastsToAdd == 0 && userPageWatchlistScrollPane.getHvalue() == 1.0)
-            userPageWatchlistRightButton.setVisible(false);
 
-
-        double scrollValue = 1.0 / (userPageWatchlistGrid.getColumnCount() - podcastRowSize);
-        userPageWatchlistLeftButton.setVisible(true);
-        if(userPageWatchlistScrollPane.getHvalue() == 1.0)
-            return;
-
-        userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() + scrollValue);
-        //Logger.info(((Double)(userPageWatchlistScrollPane.getHvalue())).toString());
+        //Logger.info(scrollValue + "");
     }
 
     @FXML
@@ -269,16 +269,16 @@ public class UserPageController {
 
         userPageWatchlistRightButton.setVisible(true);
         double scrollValue = 1.0 / (userPageWatchlistGrid.getColumnCount() - podcastRowSize);
-        if(userPageWatchlistScrollPane.getHvalue() == 0.0) {
+        if(userPageWatchlistScrollPane.getHvalue() != 0.0)
+            userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() - scrollValue);
+
+        if(userPageWatchlistScrollPane.getHvalue() == 0.0)
             userPageWatchlistLeftButton.setVisible(false);
-            return;
-        }
+
         if(getWbutton){
             userPageWatchlistRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getWbutton = false;
         }
-        userPageWatchlistScrollPane.setHvalue(userPageWatchlistScrollPane.getHvalue() - scrollValue);
-        //Logger.info(((Double)(userPageWatchlistScrollPane.getHvalue())).toString());
     }
 
     @FXML
@@ -330,19 +330,20 @@ public class UserPageController {
             userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getLbutton = false;
         }
-        else if(numberOfLpodcastsToAdd != 0 && userPageLikedScrollPane.getHvalue() == 1.0){
-            userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
-            getLbutton = true;
+        else {
+            double scrollValue = 1.0 / (userPageLikedGrid.getColumnCount() - podcastRowSize);
+            userPageLikedLeftButton.setVisible(true);
+            if(userPageLikedScrollPane.getHvalue() != 1.0)
+                userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() + scrollValue);
+
+            if (numberOfLpodcastsToAdd != 0 && userPageLikedScrollPane.getHvalue() == 1.0) {
+                userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+                getLbutton = true;
+            }
+            else if (numberOfLpodcastsToAdd == 0 && userPageLikedScrollPane.getHvalue() == 1.0)
+                userPageLikedRightButton.setVisible(false);
         }
-        else if(numberOfLpodcastsToAdd == 0 && userPageLikedScrollPane.getHvalue() == 1.0)
-            userPageLikedRightButton.setVisible(false);
 
-        double scrollValue = 1.0 / (userPageLikedGrid.getColumnCount() - podcastRowSize);
-        userPageLikedLeftButton.setVisible(true);
-        if(userPageLikedScrollPane.getHvalue() == 1.0)
-            return;
-
-        userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() + scrollValue);
     }
 
     @FXML
@@ -351,15 +352,16 @@ public class UserPageController {
 
         double scrollValue = 1.0 / (userPageLikedGrid.getColumnCount() - podcastRowSize);
         userPageLikedRightButton.setVisible(true);
-        if(userPageLikedScrollPane.getHvalue() == 0.0){
+        if(userPageLikedScrollPane.getHvalue() != 0.0)
+            userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() - scrollValue);
+
+        if(userPageLikedScrollPane.getHvalue() == 0.0)
             userPageLikedLeftButton.setVisible(false);
-            return;
-        }
+
         if(getLbutton){
             userPageLikedRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getLbutton = false;
         }
-        userPageLikedScrollPane.setHvalue(userPageLikedScrollPane.getHvalue() - scrollValue);
     }
 
     @FXML
@@ -406,19 +408,21 @@ public class UserPageController {
             }
             userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getAbutton = false;
-        } else if (numberOfAuthorsToAdd != 0 && userPageAuthorsScrollPane.getHvalue() == 1.0){
-            userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
-            getAbutton = true;
         }
-        else if(numberOfAuthorsToAdd == 0 && userPageAuthorsScrollPane.getHvalue() == 1.0)
-            userPageAuthorsRightButton.setVisible(false);
+        else {
+            double scrollValue = 1.0 / (userPageAuthorsGrid.getColumnCount() - actorRowSize);
+            userPageAuthorsLeftButton.setVisible(true);
+            if(userPageAuthorsScrollPane.getHvalue() != 1.0)
+                userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() + scrollValue);
 
-        double scrollValue = 1.0 / (userPageAuthorsGrid.getColumnCount() - actorRowSize);
-        userPageAuthorsLeftButton.setVisible(true);
-        if(userPageAuthorsScrollPane.getHvalue() == 1.0)
-            return;
+            if (numberOfAuthorsToAdd != 0 && userPageAuthorsScrollPane.getHvalue() == 1.0) {
+                userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+                getAbutton = true;
+            }
+            else if (numberOfAuthorsToAdd == 0 && userPageAuthorsScrollPane.getHvalue() == 1.0)
+                userPageAuthorsRightButton.setVisible(false);
+        }
 
-        userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() + scrollValue);
     }
 
     @FXML
@@ -427,16 +431,16 @@ public class UserPageController {
 
         double scrollValue = 1.0 / (userPageAuthorsGrid.getColumnCount() - actorRowSize);
         userPageAuthorsRightButton.setVisible(true);
-        if(userPageAuthorsScrollPane.getHvalue() == 0.0) {
+        if(userPageAuthorsScrollPane.getHvalue() != 0.0)
+            userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() - scrollValue);
+
+        if(userPageAuthorsScrollPane.getHvalue() == 0.0)
             userPageAuthorsLeftButton.setVisible(false);
-            return;
-        }
+
         if(getAbutton){
             userPageAuthorsRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getAbutton = false;
         }
-
-        userPageAuthorsScrollPane.setHvalue(userPageAuthorsScrollPane.getHvalue() - scrollValue);
     }
 
     @FXML
@@ -484,18 +488,21 @@ public class UserPageController {
             userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getUbutton = false;
         }
-        else if(numberOfUsersToAdd != 0 && userPageUsersScrollPane.getHvalue() == 1.0){
-            userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
-            getUbutton = true;
-        }
-        else if(numberOfUsersToAdd == 0 && userPageUsersScrollPane.getHvalue() == 1.0)
-            userPageUsersRightButton.setVisible(false);
+        else {
+            double scrollValue = 1.0 / (userPageUsersGrid.getColumnCount() - actorRowSize);
+            userPageUsersLeftButton.setVisible(true);
+            if(userPageUsersScrollPane.getHvalue() != 1.0)
+                userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() + scrollValue);
 
-        double scrollValue = 1.0 / (userPageUsersGrid.getColumnCount() - actorRowSize);
-        userPageUsersLeftButton.setVisible(true);
-        if(userPageUsersScrollPane.getHvalue() == 1.0)
-            return;
-        userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() + scrollValue);
+            if (numberOfUsersToAdd != 0 && userPageUsersScrollPane.getHvalue() == 1.0) {
+                userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/add.png"));
+                getUbutton = true;
+            }
+            else if (numberOfUsersToAdd == 0 && userPageUsersScrollPane.getHvalue() == 1.0)
+                userPageUsersRightButton.setVisible(false);
+        }
+
+
     }
 
     @FXML
@@ -504,16 +511,15 @@ public class UserPageController {
 
         double scrollValue = 1.0 / (userPageUsersGrid.getColumnCount() - actorRowSize);
         userPageUsersRightButton.setVisible(true);
-        if(userPageUsersScrollPane.getHvalue() == 0.0) {
+        if(userPageUsersScrollPane.getHvalue() != 0.0)
+            userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
+
+        if(userPageUsersScrollPane.getHvalue() == 0.0)
             userPageUsersLeftButton.setVisible(false);
-            return;
-        }
         if(getUbutton){
             userPageUsersRightButton.setImage(ImageCache.getImageFromLocalPath("/img/forward_32px.png"));
             getUbutton = false;
         }
-
-        userPageUsersScrollPane.setHvalue(userPageUsersScrollPane.getHvalue() - scrollValue);
     }
 
     @FXML
