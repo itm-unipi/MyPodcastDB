@@ -152,6 +152,11 @@ public class ReviewController {
         } else {
             this.yourNameWrapper.setVisible(false);
             this.yourNameWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
+
+            // unregistared can't go to user page
+            if (sessionType.equals("Unregistered")) {
+                this.authorName.setDisable(true);
+            }
         }
     }
 
