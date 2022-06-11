@@ -42,21 +42,6 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Label fx:id="followTip" alignment="CENTER" layoutX="17.0" layoutY="-5.0" prefHeight="13.0" prefWidth="40.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Follow" textFill="#2c2c2c">
-                     <font>
-                        <Font name="Corbel Light" size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="cancelTip" alignment="CENTER" layoutX="35.0" layoutY="23.0" prefHeight="13.0" prefWidth="34.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Cancel" textFill="#2c2c2c">
-                     <font>
-                        <Font name="Corbel Light" size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="removeTip" alignment="CENTER" layoutX="29.0" layoutY="23.0" prefHeight="13.0" prefWidth="40.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Remove" textFill="#2c2c2c">
-                     <font>
-                        <Font name="Corbel Light" size="10.0" />
-                     </font>
-                  </Label>
                </children>
             </Pane>
             <Label fx:id="actorName" alignment="CENTER" prefHeight="35.0" prefWidth="204.0" text="Label" textFill="#434343">

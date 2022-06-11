@@ -8,15 +8,15 @@ import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -29,9 +29,6 @@ public class ActorPreviewController {
 
     @FXML
     private ImageView actorImage;
-
-    @FXML
-    private Tooltip actorToolTip;
 
     @FXML
     private Label actorName;
@@ -48,17 +45,9 @@ public class ActorPreviewController {
     @FXML
     private ImageView trashButton;
 
-    @FXML
-    private Label followTip;
 
-    @FXML
-    private Label removeTip;
-
-    @FXML
-    private Label cancelTip;
-
-    private Author authorPreview;
-    private User userPreview;
+    private Author authorPreview = new Author();
+    private User userPreview = new User();
     private String actorType;
     private AnchorPane mainPage;
     private String visitorType;
@@ -66,15 +55,37 @@ public class ActorPreviewController {
     private boolean followStatus = false;
     private boolean blockClickEvent = false;
     private boolean disableClick = false;
+    private boolean visitorMode;
 
     @FXML
     void actorIn(MouseEvent event) {
         actorContainer.setStyle("-fx-background-color: #E5E5E5; -fx-background-radius: 10;");
+        if(!visitorMode) {
+            trashButtonArea.setVisible(true);
+            trashButtonArea.setOpacity(0.0);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), trashButtonArea);
+            fadeAuthorImage.setFromValue(0.0);
+            fadeAuthorImage.setToValue(1.0);
+            fadeAuthorImage.play();
+        }
+        else if(!followStatus) {
+            followButtonArea.setVisible(true);
+            followButtonArea.setOpacity(0.0);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), followButtonArea);
+            fadeAuthorImage.setFromValue(0.0);
+            fadeAuthorImage.setToValue(1.0);
+            fadeAuthorImage.play();
+        }
+
     }
 
     @FXML
     void actorOut(MouseEvent event) {
         actorContainer.setStyle("-fx-background-color: transparent");
+        if(!visitorMode)
+            trashButtonArea.setVisible(false);
+        else if(!followStatus)
+            followButtonArea.setVisible(false);
     }
 
     @FXML
@@ -99,19 +110,14 @@ public class ActorPreviewController {
 
     @FXML
     void followIn(MouseEvent event){
-        followTip.setVisible(true);
-        if(followStatus) {
-            followTip.setText("Unfollow");
+        if(followStatus)
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-        }
-        else {followTip.setText("Follow");
+        else
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
-        }
     }
 
     @FXML
     void followOut(MouseEvent event){
-        followTip.setVisible(false);
         if(!followStatus)
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
         else
@@ -120,9 +126,6 @@ public class ActorPreviewController {
 
     @FXML
     void  followClick(MouseEvent event){
-        followTip.setVisible(false);
-        removeTip.setVisible(false);
-        cancelTip.setVisible(false);
 
         Logger.info("Like button clicked");
         blockClickEvent = true;
@@ -219,10 +222,6 @@ public class ActorPreviewController {
 
     @FXML
     void trashClick(MouseEvent event){
-
-        followTip.setVisible(false);
-        removeTip.setVisible(false);
-        cancelTip.setVisible(false);
 
         if(!disableClick) {
             Logger.info("Trash button clicked");
@@ -326,24 +325,20 @@ public class ActorPreviewController {
     @FXML
     void trashIn(MouseEvent event){
         if(disableClick) {
-            cancelTip.setVisible(true);
             actorAnchorPane.setOpacity(1.0);
             trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh2.png"));
             return;
         }
-        removeTip.setVisible(true);
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem2.png"));
     }
 
     @FXML
     void trashOut(MouseEvent event){
         if(disableClick) {
-            cancelTip.setVisible(false);
             actorAnchorPane.setOpacity(0.2);
             trashButton.setImage(ImageCache.getImageFromLocalPath("/img/refresh1.png"));
             return;
         }
-        removeTip.setVisible(false);
         trashButton.setImage(ImageCache.getImageFromLocalPath("/img/delete_elem1.png"));
     }
 
@@ -352,30 +347,23 @@ public class ActorPreviewController {
     }
 
 
-    public void setData(AnchorPane mainPage, Author author) {
+    public void setData(AnchorPane mainPage, Author author) { //the visitor it's always the page owner
+        this.visitorMode = false;
         this.actorType = "Author";
         this.authorPreview = author;
         this.mainPage = mainPage;
         this.visitorType = MyPodcastDB.getInstance().getSessionType();
-        if(visitorType.equals("User"))
-            visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
 
         this.actorImage.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
         this.actorName.setText(author.getName());
-        this.actorToolTip.setText(author.getName());
 
         followButtonArea.setVisible(false);
-        if(visitorType.equals("User"))
-            trashButtonArea.setVisible(true);
-        else
-            trashButtonArea.setVisible(false);
-
-        followTip.setVisible(false);
-        removeTip.setVisible(false);
-        cancelTip.setVisible(false);
+        trashButtonArea.setVisible(false);
 
     }
     public void setData(AnchorPane mainPage, Author author, boolean isFollowed) {
+        this.visitorMode = true;
         this.actorType = "Author";
         this.authorPreview = author;
         this.mainPage = mainPage;
@@ -387,43 +375,38 @@ public class ActorPreviewController {
 
         this.actorImage.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
         this.actorName.setText(author.getName());
-        this.actorToolTip.setText(author.getName());
 
-        followButtonArea.setVisible(true);
         trashButtonArea.setVisible(false);
         if(isFollowed){
+            followButtonArea.setVisible(true);
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
             followStatus = true;
         }
-
-        followTip.setVisible(false);
-        removeTip.setVisible(false);
-        cancelTip.setVisible(false);
+        else
+            followButtonArea.setVisible(false);
     }
     public void setData(AnchorPane mainPage, User user) {
         this.actorType = "User";
         this.userPreview = user;
         this.mainPage = mainPage;
         this.visitorType = MyPodcastDB.getInstance().getSessionType();
-        if(visitorType.equals("User"))
-            this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        if(visitorType.equals("User")) {
+            this.visitorMode = false;
+            this.visitorName = ((User) MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        }
+        else
+            this.visitorMode = true;
 
         this.actorImage.setImage(ImageCache.getImageFromLocalPath(user.getPicturePath()));
         this.actorName.setText(user.getUsername());
-        this.actorToolTip.setText(user.getUsername());
 
         followButtonArea.setVisible(false);
-        if(visitorType.equals("User"))
-            trashButtonArea.setVisible(true);
-        else
-            trashButtonArea.setVisible(false);
-
-        followTip.setVisible(false);
-        removeTip.setVisible(false);
-        cancelTip.setVisible(false);
+        trashButtonArea.setVisible(false);
     }
 
     public void setData(AnchorPane mainPage, User user, boolean isFollowed) {
+
+        this.visitorMode = true;
         this.actorType = "User";
         this.userPreview = user;
         this.visitorType = "User";
@@ -432,18 +415,16 @@ public class ActorPreviewController {
 
         this.actorImage.setImage(ImageCache.getImageFromLocalPath(user.getPicturePath()));
         this.actorName.setText(user.getUsername());
-        this.actorToolTip.setText(user.getUsername());
 
-        followButtonArea.setVisible(true);
         trashButtonArea.setVisible(false);
         if(isFollowed){
+            followButtonArea.setVisible(true);
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
             followStatus = true;
         }
+        else
+            followButtonArea.setVisible(false);
 
-        followTip.setVisible(false);
-        removeTip.setVisible(false);
-        cancelTip.setVisible(false);
     }
 
 

@@ -16,7 +16,7 @@
    <children>
       <VBox fx:id="podcastContainer" onMouseClicked="#onClick" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" prefHeight="230.0" prefWidth="185.0" style="-fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="165.0">
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="176.0" prefWidth="165.0">
                <children>
                   <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
@@ -51,29 +51,9 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Label fx:id="likeTip" alignment="CENTER" layoutX="62.0" layoutY="-7.0" prefHeight="17.0" prefWidth="36.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Like" textFill="#2c2c2c">
-                     <font>
-                        <Font name="Corbel Light" size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="watchTip" alignment="CENTER" layoutX="28.0" layoutY="-7.0" prefHeight="17.0" prefWidth="54.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Watch later" textFill="#2c2c2c">
-                     <font>
-                        <Font name="Corbel Light" size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="removeTip" alignment="CENTER" layoutX="88.0" layoutY="37.0" prefHeight="17.0" prefWidth="45.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Remove" textFill="#2c2c2c">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="cancelTip" alignment="CENTER" layoutX="88.0" layoutY="37.0" prefHeight="17.0" prefWidth="45.0" style="-fx-background-color: #aeaeae; -fx-background-radius: 5;" text="Cancel" textFill="#2c2c2c">
-                     <font>
-                        <Font size="10.0" />
-                     </font>
-                  </Label>
                </children>
             </Pane>
-            <Label fx:id="PodcastName" alignment="CENTER" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
+            <Label fx:id="PodcastName" alignment="TOP_LEFT" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
                <font>
                   <Font name="Corbel Bold" size="15.0" />
                </font>

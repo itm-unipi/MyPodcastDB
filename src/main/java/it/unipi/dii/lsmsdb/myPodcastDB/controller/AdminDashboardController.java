@@ -239,8 +239,7 @@ public class AdminDashboardController {
         }
         else{
             Logger.error("Operation failed on mongo");
-            DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Operation failed");
-            return;
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Operation failed");return;
         }
         StageManager.showPage(ViewNavigator.LOGIN.getPage());
     }
