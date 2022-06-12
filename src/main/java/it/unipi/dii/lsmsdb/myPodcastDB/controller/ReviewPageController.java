@@ -154,7 +154,7 @@ public class ReviewPageController {
 
     @FXML
     void clickOnAuthor(MouseEvent event) throws IOException {
-        Logger.info("Click on author : " + this.podcast.getAuthorId());
+        Logger.info("Click on author : " + this.podcast.getAuthorName());
         StageManager.showPage(ViewNavigator.AUTHORPROFILE.getPage(), this.podcast.getAuthorName());
     }
 

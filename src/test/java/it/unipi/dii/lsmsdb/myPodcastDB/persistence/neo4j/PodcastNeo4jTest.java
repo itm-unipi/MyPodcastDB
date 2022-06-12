@@ -37,7 +37,7 @@ public class PodcastNeo4jTest {
     }
 
     public void addPodcastTest() {
-        Podcast podcast = new Podcast("0", "Podcast Test", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        Podcast podcast = new Podcast("0", "Podcast Test", "art", "art1600", "5", "Italy", "TestCategory", null, new Date());
 
         if (podcastNeo4j.addPodcast(podcast))
             System.out.println("[+] addPodcast");
@@ -47,7 +47,7 @@ public class PodcastNeo4jTest {
 
     public void addPodcastBelongsToCategoryTest() {
         String category = "Spirituality";
-        Podcast podcast = new Podcast("111", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        Podcast podcast = new Podcast("111", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, new Date());
         podcastNeo4j.addPodcast(podcast);
 
         if (podcastNeo4j.addPodcastBelongsToCategory(podcast, category) &&
@@ -61,7 +61,7 @@ public class PodcastNeo4jTest {
     }
 
     public void addPodcastCreatedByAuthorTest() {
-        Podcast podcast = new Podcast("2", "Podcast Test Author", "art", "Apple Inc.", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        Podcast podcast = new Podcast("2", "Podcast Test Author", "Apple Inc.", "art", "5", "Italy", "TestCategory", null, new Date());
         podcastNeo4j.addPodcast(podcast);
 
         if (podcastNeo4j.addPodcastCreatedByAuthor(podcast) &&
@@ -103,8 +103,8 @@ public class PodcastNeo4jTest {
     }
 
     public void deletePodcastsByNameTest() {
-        Podcast podcast1 = new Podcast("0", "Podcast Test Name", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
-        Podcast podcast2 = new Podcast("0", "Podcast Test Name", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        Podcast podcast1 = new Podcast("0", "Podcast Test Name", "art", "art1600", "5", "Italy", "TestCategory", null, new Date());
+        Podcast podcast2 = new Podcast("0", "Podcast Test Name", "art", "art1600", "5", "Italy", "TestCategory", null, new Date());
 
         podcastNeo4j.addPodcast(podcast1);
         podcastNeo4j.addPodcast(podcast2);
@@ -117,7 +117,7 @@ public class PodcastNeo4jTest {
     }
 
     public void deletePodcastBelongsToCategoryTest() {
-        Podcast podcast = new Podcast("20", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        Podcast podcast = new Podcast("20", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, new Date());
         podcastNeo4j.addPodcast(podcast);
 
         podcastNeo4j.addPodcastBelongsToCategory(podcast, "Spirituality");
@@ -132,7 +132,7 @@ public class PodcastNeo4jTest {
     }
 
     public void deleteAllPodcastBelongsToCategoryTest() {
-        Podcast podcast = new Podcast("15", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, "Spirituality", null, new Date());
+        Podcast podcast = new Podcast("15", "Podcast Test Category", "art", "art1600", "5", "Italy", "TestCategory", null, new Date());
         podcastNeo4j.addPodcast(podcast);
 
         podcastNeo4j.addPodcastBelongsToCategory(podcast, "Spirituality");

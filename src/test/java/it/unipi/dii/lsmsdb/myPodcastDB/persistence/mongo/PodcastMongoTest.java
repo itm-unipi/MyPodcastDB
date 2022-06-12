@@ -31,11 +31,9 @@ public class PodcastMongoTest {
         mongoManager.openConnection();
         
         PodcastMongoTest test = new PodcastMongoTest();
-        test.testEquals();
         test.findPodcastByIdTest();
         test.addPodcastTest();
         test.findPodcastsByNameTest();
-        test.findPodcastsByAuthorIdTest();
         test.findPodcastsByAuthorNameTest();
         test.findPodcastsByPrimaryCategoryTest();
         test.findPodcastsByCategoryTest();
@@ -44,7 +42,6 @@ public class PodcastMongoTest {
         test.addReviewToPodcastTest();
         test.deletePodcastByIdTest();
         test.deletePodcastsByNameTest();
-        test.deletePodcastByAuthorIdTest();
         test.deletePodcastByAuthorNameTest();
         test.deleteEpisodeOfPodcastTest();
         test.deleteAllEpisodesTest();
@@ -62,14 +59,29 @@ public class PodcastMongoTest {
 
     }
 
-    void testEquals(){
-        Podcast p1 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
-        Podcast p2 = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
+    boolean compare(Podcast p1, Podcast p2) {
+        if (!p1.getName().equals(p2.getName()))
+            return false;
+        if (!p1.getAuthorName().equals(p2.getAuthorName()))
+            return false;
+        if (!p1.getArtworkUrl600().equals(p2.getArtworkUrl600()))
+            return false;
+        if (!p1.getCategories().equals(p2.getCategories()))
+            return false;
+        if (!p1.getPrimaryCategory().equals(p2.getPrimaryCategory()))
+            return false;
+        if (!p1.getCountry().equals(p2.getCountry()))
+            return false;
+        if (!p1.getContentAdvisoryRating().equals(p2.getContentAdvisoryRating()))
+            return false;
+        if (!p1.getReleaseDate().equals(p2.getReleaseDate()))
+            return false;
+        if (!p1.getEpisodes().equals(p2.getEpisodes()))
+            return false;
+        if (!p1.getReviews().equals(p2.getReviews()))
+            return false;
 
-        if(!p1.equals(p2))
-            System.err.println("[-] equals");
-        else
-            System.out.println("[+] equals");
+        return true;
     }
     
     void addPodcastTest(){
@@ -104,24 +116,6 @@ public class PodcastMongoTest {
                 }
             if(err)
                 System.out.println("[+] findPodcastsByName");
-        }
-    }
- 
-    void findPodcastsByAuthorIdTest(){
-        String authorId = "000000000000000000016776";
-        List<Podcast> podcasts = this.podcastMongo.findPodcastsByAuthorId(authorId,0);
-        if (podcasts.isEmpty())
-            System.err.println("[-] findPodcastsByAuthorId");
-        else {
-            boolean err = true;
-            for (Podcast newPodcast : podcasts)
-                if (!newPodcast.getAuthorId().equals(authorId)) {
-                    err = false;
-                    System.err.println("[-] findPodcastsByAuthorId");
-                    break;
-                }
-            if(err)
-                System.out.println("[+] findPodcastsByAuthorId");
         }
     }
  
@@ -188,9 +182,8 @@ public class PodcastMongoTest {
 
         p1.setName(name);
         p1.setCountry(p2.getCountry());
-        p1.setArtworkUrl60(p2.getArtworkUrl60());
         p1.setArtworkUrl600(p2.getArtworkUrl600());
-        p1.setAuthor(p2.getAuthorId(), p2.getAuthorName());
+        p1.setAuthorName(p2.getAuthorName());
         p1.setPrimaryCategory(p2.getPrimaryCategory());
         p1.setCategories(p2.getCategories());
         p1.setContentAdvisoryRating(p2.getContentAdvisoryRating());
@@ -201,7 +194,7 @@ public class PodcastMongoTest {
         boolean result = this.podcastMongo.updatePodcast(p1);
         Podcast p3 = this.podcastMongo.findPodcastById(p1.getId());
 
-        if (!result || p3 == null || !p2.equals(p3))
+        if (!result || p3 == null || !compare(p2, p3))
             System.err.println("[-] updatePodcast");
         else
             System.out.println("[+] updatePodcast");
@@ -254,29 +247,13 @@ public class PodcastMongoTest {
         else
             System.err.println("[-] deletePodcastByName");
     }
- 
-    void deletePodcastByAuthorIdTest(){
-        String name = "testPodcast";
-        Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
-        String authorId = "010000000000000000016776";
-        String authorName = podcast.getAuthorName();
-        podcast.setName(name);
-        podcast.setAuthor(authorId, authorName);
-
-        this.podcastMongo.addPodcast(podcast);
-        if ((this.podcastMongo.deletePodcastsByAuthorId(authorId) > 0) && this.podcastMongo.findPodcastsByAuthorId(authorId,0).isEmpty())
-            System.out.println("[+] deletePodcastByAuthorId");
-        else
-            System.err.println("[-] deletePodcastByAuthorId");
-    }
 
     void deletePodcastByAuthorNameTest(){
         String name = "testPodcast";
         Podcast podcast = this.podcastMongo.findPodcastById("54eb342567c94dacfb2a3e50");
-        String authorId = "010000000000000000016776";
         String authorName = "author test";
         podcast.setName(name);
-        podcast.setAuthor(authorId, authorName);
+        podcast.setAuthorName(authorName);
 
         this.podcastMongo.addPodcast(podcast);
         if ((this.podcastMongo.deletePodcastsByAuthorName(authorName) > 0) && this.podcastMongo.findPodcastsByAuthorName(authorName,0).isEmpty())

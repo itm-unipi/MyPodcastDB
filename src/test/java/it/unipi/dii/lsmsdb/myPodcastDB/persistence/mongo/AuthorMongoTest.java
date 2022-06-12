@@ -164,11 +164,11 @@ public class AuthorMongoTest {
 
         // Add a new podcast
         Date date = new Date();
-        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest-1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
+        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest-1","authName", "art1600", "5", "Italy", "TestCategory1", null, date);
 
         am.addPodcastToAuthor(newAuthor.getId(), podcast);
 
-        if (am.deletePodcastOfAuthor(newAuthor.getId(), podcast.getId()))
+        if (am.deletePodcastOfAuthor(newAuthor.getName(), podcast.getId()))
             if (am.findAuthorByPodcastId(podcast.getId()) == null)
                 System.out.println("[+] deletePodcastOfAuthor");
             else
@@ -186,9 +186,9 @@ public class AuthorMongoTest {
         Date date = new Date();
         List<Podcast> pods = new ArrayList<>();
 
-        Podcast podcast1 = new Podcast("000000000000000000000000", "PodcastTest1", "art", "art1600", "5", "Italy", "TestCategory1", null, null, null, date);
+        Podcast podcast1 = new Podcast("000000000000000000000000", "PodcastTest1", "art", "art1600", "5", "Italy", "TestCategory1", null, date);
         pods.add(podcast1);
-        Podcast podcast2 = new Podcast("000000000000000000000000", "PodcastTest2", "art", "art1600", "5", "Italy", "TestCategory2", null, null, null, date);
+        Podcast podcast2 = new Podcast("000000000000000000000000", "PodcastTest2", "art", "art1600", "5", "Italy", "TestCategory2", null, date);
         pods.add(podcast2);
 
         am.addPodcastToAuthor(newAuthor.getId(), podcast1);
@@ -218,7 +218,7 @@ public class AuthorMongoTest {
         String authorId = newAuthor.getId();
 
         Date date = new Date();
-        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
+        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, date);
 
         if (am.addPodcastToAuthor(authorId, podcast)) {
             // try to find the new podcast
@@ -240,7 +240,7 @@ public class AuthorMongoTest {
         String authorId = newAuthor.getId();
 
         Date date = new Date();
-        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest", "art", "art1600", "5", "Italy", "TestCategory", null, null, null, date);
+        Podcast podcast = new Podcast("000000000000000000000000", "PodcastTest", newAuthor.getName(), "art1600", "5", "Italy", "TestCategory", null, date);
         am.addPodcastToAuthor(authorId, podcast);
 
         int podcastIndex = 0;
@@ -248,7 +248,7 @@ public class AuthorMongoTest {
         podcast.setReleaseDate(new Date());
         podcast.setPrimaryCategory("test");
         podcast.setArtworkUrl600("test");
-        if(am.updatePodcastOfAuthor(authorId, podcast))
+        if(am.updatePodcastOfAuthor(podcast.getAuthorName(), podcast))
             if(am.findAuthorByPodcastId(podcast.getId()) != null)
                 System.out.println("[+] updatePodcastOfAuthor");
             else

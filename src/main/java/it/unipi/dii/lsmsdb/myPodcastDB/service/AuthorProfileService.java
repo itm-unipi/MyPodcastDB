@@ -313,7 +313,7 @@ public class AuthorProfileService {
                 } else {
                     if (!oldAuthor.getName().equals(newAuthor.getName())) {
                         for (Podcast podcast : oldAuthor.getOwnPodcasts()) {
-                            podcast.setAuthor(newAuthor.getId(), newAuthor.getName());
+                            podcast.setAuthorName(newAuthor.getName());
                             if (!podcastMongoManager.updatePodcast(podcast)) {
                                 updateResult = -5;
                                 updateAuthorRollback(updateResult, oldAuthor, newAuthor);
@@ -467,20 +467,20 @@ public class AuthorProfileService {
     void addPodcastRollback(int result, Podcast podcast) {
         if (result <= -2) {
             Logger.info("Rollback - Deleting podcast on mongo because add reduced podcast failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
             podcastMongoManager.deletePodcastById(podcast.getId());
         }
 
         if (result <= -3) {
             Logger.info("Rollback - Deleting podcast and reduced podcast on mongo because neo4j failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
             podcastMongoManager.deletePodcastById(podcast.getId());
             podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
         }
 
         if (result <= -4) {
             Logger.info("Rollback - Podcast created by author failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
             podcastMongoManager.deletePodcastById(podcast.getId());
             // Delete podcast uses DETACH keyword so every relationship will be removed as well
             podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
@@ -488,7 +488,7 @@ public class AuthorProfileService {
 
         if (result <= -5) {
             Logger.info("Rollback - Podcast belongs to category failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast.getId());
+            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
             podcastMongoManager.deletePodcastById(podcast.getId());
             podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
         }
@@ -511,7 +511,7 @@ public class AuthorProfileService {
                 deleteResult = -2;
             } else {
                 // Update author embedded podcasts removing the podcast
-                if (!authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcastId)) {
+                if (!authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcastId)) {
                     Logger.error("Error during the update of the embedded podcasts");
                     deleteResult = -3;
                     deletePodcastRollback(deleteResult, podcast);
@@ -655,7 +655,7 @@ public class AuthorProfileService {
         return deleteResult;
     }
 
-    public int deletePodcastAsAdmin(String authorId, String podcastId) {
+    public int deletePodcastAsAdmin(String authorName, String podcastId) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
@@ -682,7 +682,7 @@ public class AuthorProfileService {
 
                 } else {
                     // Update author embedded podcasts
-                    if (!authorMongoManager.deletePodcastOfAuthor(authorId, podcastId)) {
+                    if (!authorMongoManager.deletePodcastOfAuthor(authorName, podcastId)) {
                         Logger.error("Error during the update of the embedded podcasts");
                         deleteResult = -4;
                     }

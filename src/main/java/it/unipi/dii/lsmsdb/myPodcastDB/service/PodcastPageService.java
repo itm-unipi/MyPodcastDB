@@ -152,7 +152,7 @@ public class PodcastPageService {
         } else {
             // update reduced podcast if needed
             if (updateReduced) {
-                Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(newPodcast.getAuthorId(), newPodcast);
+                Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(newPodcast.getAuthorName(), newPodcast);
                 if (!resUpRed) {
                     Logger.error("Reduced podcast not updated");
                     result = -2;
@@ -199,7 +199,7 @@ public class PodcastPageService {
 
         // remove reduced podcast from author
         else {
-            Boolean resDelRedPod = this.authorMongo.deletePodcastOfAuthor(podcast.getAuthorId(), podcast.getId());
+            Boolean resDelRedPod = this.authorMongo.deletePodcastOfAuthor(podcast.getAuthorName(), podcast.getId());
             if (!resDelRedPod) {
                 Logger.error("Reduced podcast not deleted from author");
                 result = -2;
@@ -297,7 +297,7 @@ public class PodcastPageService {
     private void rollbackUpdatePodcast(int result, Podcast oldPodcast, boolean updateReduced) {
         // failed to update reduced podcast
         if (result == -3 && updateReduced) {
-            this.authorMongo.updatePodcastOfAuthor(oldPodcast.getAuthorId(), oldPodcast);
+            this.authorMongo.updatePodcastOfAuthor(oldPodcast.getAuthorName(), oldPodcast);
         }
 
         // failed to update podcast on mongo
@@ -321,7 +321,7 @@ public class PodcastPageService {
 
         // failed to remove podcast entity from neo4j
         if (result <= -3) {
-            this.authorMongo.addPodcastToAuthor(podcast.getAuthorId(), podcast);
+            this.authorMongo.addPodcastToAuthor(podcast.getAuthorName(), podcast);
         }
 
         // failed to remove reduced podcast from author

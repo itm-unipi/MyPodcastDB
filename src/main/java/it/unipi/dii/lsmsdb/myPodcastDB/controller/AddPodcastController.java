@@ -156,7 +156,7 @@ public class AddPodcastController {
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date releaseDate = Date.from(instant);
 
-            Podcast podcast = new Podcast("0", podcastName, authorId, authorName, "", artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+            Podcast podcast = new Podcast("0", podcastName, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
             Logger.info("Podcast to add: " + podcast.toString());
 
             AuthorProfileService authorProfileService = new AuthorProfileService();

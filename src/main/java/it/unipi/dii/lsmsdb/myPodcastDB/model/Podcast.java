@@ -8,8 +8,7 @@ import java.util.Map.Entry;
 public class Podcast {
     private String id;
     private String name;
-    private ReducedAuthor author;
-    private String artworkUrl60;
+    private String authorName;
     private String artworkUrl600;
     private String contentAdvisoryRating;
     private String country;
@@ -36,11 +35,10 @@ public class Podcast {
         this.primaryCategory = category;
     }
 
-    public Podcast(String id, String name, String authorId, String authorName, String artworkUrl60, String artworkUrl600, String contentAdvisoryRating, String country, String primaryCategory, List<String> categories, Date releaseDate) {
+    public Podcast(String id, String name, String authorName, String artworkUrl600, String contentAdvisoryRating, String country, String primaryCategory, List<String> categories, Date releaseDate) {
         this.id = id;
         this.name = name;
-        this.author = new ReducedAuthor(authorId, authorName);
-        this.artworkUrl60 = artworkUrl60;
+        this.authorName = authorName;
         this.artworkUrl600 = artworkUrl600;
         this.contentAdvisoryRating = contentAdvisoryRating;
         this.country = country;
@@ -54,8 +52,7 @@ public class Podcast {
     public Podcast(Podcast podcast) {
         this.id = podcast.id;
         this.name = podcast.name;
-        this.author = new ReducedAuthor(podcast.author);
-        this.artworkUrl60 = podcast.artworkUrl60;
+        this.authorName = podcast.authorName;
         this.artworkUrl600 = podcast.artworkUrl600;
         this.contentAdvisoryRating = podcast.contentAdvisoryRating;
         this.country = podcast.country;
@@ -69,8 +66,7 @@ public class Podcast {
     public void copy(Podcast podcast) {
         this.id = podcast.id;
         this.name = podcast.name;
-        this.author = new ReducedAuthor(podcast.author);
-        this.artworkUrl60 = podcast.artworkUrl60;
+        this.authorName = podcast.authorName;
         this.artworkUrl600 = podcast.artworkUrl600;
         this.contentAdvisoryRating = podcast.contentAdvisoryRating;
         this.country = podcast.country;
@@ -97,26 +93,9 @@ public class Podcast {
         this.name = name;
     }
 
-    protected ReducedAuthor getAuthor() {
-        return author;
-    }
+    public String getAuthorName() { return this.authorName; }
 
-    public String getAuthorId() { return author.getId(); }
-
-    public String getAuthorName() { return author.getName(); }
-
-    public void setAuthor(String authorId, String authorName) {
-        ReducedAuthor newAuthor = new ReducedAuthor(authorId, authorName);
-        this.author = newAuthor;
-    }
-
-    public String getArtworkUrl60() {
-        return artworkUrl60;
-    }
-
-    public void setArtworkUrl60(String artworkUrl60) {
-        this.artworkUrl60 = artworkUrl60;
-    }
+    public void setAuthorName(String authorName) { this.authorName = authorName; }
 
     public String getArtworkUrl600() {
         return artworkUrl600;
@@ -235,8 +214,7 @@ public class Podcast {
         return "Podcast{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", author=" + author +
-                ", artworkUrl60='" + artworkUrl60 + '\'' +
+                ", authorName='" + authorName + '\'' +
                 ", artworkUrl600='" + artworkUrl600 + '\'' +
                 ", contentAdvisoryRating='" + contentAdvisoryRating + '\'' +
                 ", country='" + country + '\'' +
@@ -246,75 +224,6 @@ public class Podcast {
                 ", episodes=" + episodes +
                 ", reviews=" + reviews +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Podcast)) return false;
-        Podcast podcast = (Podcast) o;
-        return Objects.equals(getName(), podcast.getName()) && Objects.equals(getAuthor(), podcast.getAuthor()) && Objects.equals(getArtworkUrl60(), podcast.getArtworkUrl60()) && Objects.equals(getArtworkUrl600(), podcast.getArtworkUrl600()) && Objects.equals(getContentAdvisoryRating(), podcast.getContentAdvisoryRating()) && Objects.equals(getCountry(), podcast.getCountry()) && Objects.equals(getPrimaryCategory(), podcast.getPrimaryCategory()) && Objects.equals(getCategories(), podcast.getCategories()) && Objects.equals(getReleaseDate(), podcast.getReleaseDate()) && Objects.equals(getEpisodes(), podcast.getEpisodes()) && Objects.equals(getReviews(), podcast.getReviews());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName(), getAuthor(), getArtworkUrl60(), getArtworkUrl600(), getContentAdvisoryRating(), getCountry(), getPrimaryCategory(), getCategories(), getReleaseDate(), getEpisodes(), getReviews());
-    }
-}
-
-class ReducedAuthor {
-    private String id;
-    private String name;
-
-    public ReducedAuthor() {
-    }
-
-    public ReducedAuthor(String id, String name) {
-        this.id = id;
-        this.name = name;
-    }
-
-    public ReducedAuthor(ReducedAuthor author) {
-        this.id = author.id;
-        this.name = author.name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "ReducedAuthor{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ReducedAuthor)) return false;
-        ReducedAuthor that = (ReducedAuthor) o;
-        return Objects.equals(getId(), that.getId()) && Objects.equals(getName(), that.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getName());
     }
 }
 
@@ -352,18 +261,5 @@ class ReducedReview {
                 "id='" + id + '\'' +
                 ", rating=" + rating +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ReducedReview)) return false;
-        ReducedReview that = (ReducedReview) o;
-        return getRating() == that.getRating() && Objects.equals(getId(), that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getId(), getRating());
     }
 }

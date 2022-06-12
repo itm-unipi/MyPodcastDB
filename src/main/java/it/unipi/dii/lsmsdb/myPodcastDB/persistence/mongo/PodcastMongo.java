@@ -62,9 +62,7 @@ public class PodcastMongo {
 
         Document newPodcast = new Document()
                 .append("podcastName", podcast.getName())
-                .append("authorId", new ObjectId(podcast.getAuthorId()))
                 .append("authorName", podcast.getAuthorName())
-                .append("artworkUrl60", podcast.getArtworkUrl60())
                 .append("artworkUrl600", podcast.getArtworkUrl600())
                 .append("contentAdvisoryRating", podcast.getContentAdvisoryRating())
                 .append("country", podcast.getCountry())
@@ -103,7 +101,6 @@ public class PodcastMongo {
 
                 String id = podcast.getObjectId("_id").toString();
                 String name = podcast.getString("podcastName");
-                String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String primaryCategory = podcast.getString("primaryCategory");
@@ -111,7 +108,7 @@ public class PodcastMongo {
 
                 Podcast podcastFound = new Podcast(id, name, releaseDate, artworkUrl600, primaryCategory);
                 // AuthorId is needed for delete podcast when an admin is in the search page TODO: remove
-                podcastFound.setAuthor(authorId, authorName);
+                podcastFound.setAuthorName(authorName);
 
                 podcastMatch.add(podcastFound);
             }
@@ -134,16 +131,14 @@ public class PodcastMongo {
                 // podcast attributes
                 String id = podcastId;
                 String name = podcast.getString("podcastName");
-                String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
-                String artworkUrl60 = podcast.getString("artworkUrl60");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
                 Date releaseDate = podcast.getDate("releaseDate");
-                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -186,67 +181,14 @@ public class PodcastMongo {
                 // podcast attributes
                 String id = podcast.getObjectId("_id").toString();
                 String name = podcastName;
-                String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
-                String artworkUrl60 = podcast.getString("artworkUrl60");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
                 Date releaseDate = podcast.getDate("releaseDate");
-                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
-
-                // episodes
-                List<Document> episodes = podcast.getList("episodes", Document.class);
-                for (Document episode : episodes) {
-                    String episodeName = episode.getString("episodeName");
-                    String episodeDescription = episode.getString("episodeDescription");
-                    Date episodeReleaseDate = episode.getDate("episodeReleaseDate");
-                    int episodeTimeMillis = episode.getInteger("episodeTimeMillis");
-
-                    newPodcast.addEpisode(episodeName, episodeDescription, episodeReleaseDate, episodeTimeMillis);
-                }
-
-                // reviews
-                List<Document> reviews = podcast.getList("reviews", Document.class);
-                for (Document review : reviews) {
-                    String reviewId = review.getObjectId("reviewId").toString();
-                    int rating = review.getInteger("rating");
-
-                    newPodcast.addReview(reviewId, rating);
-                }
-
-                podcasts.add(newPodcast);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return podcasts;
-    }
-
-    public List<Podcast> findPodcastsByAuthorId(String podcastAuthorId, int limit) {
-        MongoManager manager = MongoManager.getInstance();
-        List<Podcast> podcasts = new ArrayList<>();
-
-        try (MongoCursor<Document> cursor = manager.getCollection("podcast").find(eq("authorId", new ObjectId(podcastAuthorId))).limit(limit).iterator()) {
-            while (cursor.hasNext()) {
-                Document podcast = cursor.next();
-
-                // podcast attributes
-                String id = podcast.getObjectId("_id").toString();
-                String name = podcast.getString("podcastName");
-                String authorId = podcastAuthorId;
-                String authorName = podcast.getString("authorName");
-                String artworkUrl60 = podcast.getString("artworkUrl60");
-                String artworkUrl600 = podcast.getString("artworkUrl600");
-                String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
-                String country = podcast.getString("country");
-                String primaryCategory = podcast.getString("primaryCategory");
-                List<String> categories = podcast.getList("categories", String.class);
-                Date releaseDate = podcast.getDate("releaseDate");
-                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -294,16 +236,14 @@ public class PodcastMongo {
                 // podcast attributes
                 String id = podcast.getObjectId("_id").toString();
                 String name = podcast.getString("podcastName");
-                String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcastAuthorName;
-                String artworkUrl60 = podcast.getString("artworkUrl60");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
                 Date releaseDate = podcast.getDate("releaseDate");
-                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -345,16 +285,14 @@ public class PodcastMongo {
                 // podcast attributes
                 String id = podcast.getObjectId("_id").toString();
                 String name = podcast.getString("podcastName");
-                String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
-                String artworkUrl60 = podcast.getString("artworkUrl60");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
                 String country = podcast.getString("country");
                 String primaryCategory = podcastPrimaryCategory;
                 List<String> categories = podcast.getList("categories", String.class);
                 Date releaseDate = podcast.getDate("releaseDate");
-                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -396,16 +334,14 @@ public class PodcastMongo {
                 // podcast attributes
                 String id = podcast.getObjectId("_id").toString();
                 String name = podcast.getString("podcastName");
-                String authorId = podcast.getObjectId("authorId").toString();
                 String authorName = podcast.getString("authorName");
-                String artworkUrl60 = podcast.getString("artworkUrl60");
                 String artworkUrl600 = podcast.getString("artworkUrl600");
                 String contentAdvisoryRating = podcast.getString("contentAdvisoryRating");
                 String country = podcast.getString("country");
                 String primaryCategory = podcast.getString("primaryCategory");
                 List<String> categories = podcast.getList("categories", String.class);
                 Date releaseDate = podcast.getDate("releaseDate");
-                Podcast newPodcast = new Podcast(id, name, authorId, authorName, artworkUrl60, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
+                Podcast newPodcast = new Podcast(id, name, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate);
 
                 // episodes
                 List<Document> episodes = podcast.getList("episodes", Document.class);
@@ -445,9 +381,7 @@ public class PodcastMongo {
             Bson filter = eq("_id", new ObjectId(podcast.getId()));
             Bson updates = combine(
                     set("podcastName", podcast.getName()),
-                    set("authorId", new ObjectId(podcast.getAuthorId())),
                     set("authorName", podcast.getAuthorName()),
-                    set("artworkUrl60", podcast.getArtworkUrl60()),
                     set("artworkUrl600", podcast.getArtworkUrl600()),
                     set("contentAdvisoryRating", podcast.getContentAdvisoryRating()),
                     set("country", podcast.getCountry()),
@@ -522,17 +456,6 @@ public class PodcastMongo {
         MongoManager manager = MongoManager.getInstance();
         try{
             DeleteResult result = manager.getCollection("podcast").deleteMany(eq("podcastName", name));
-            return (int) result.getDeletedCount();
-        }catch (Exception e){
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
-    public int deletePodcastsByAuthorId(String authorId) {
-        MongoManager manager = MongoManager.getInstance();
-        try{
-            DeleteResult result = manager.getCollection("podcast").deleteMany(eq("authorId", new ObjectId(authorId)));
             return (int) result.getDeletedCount();
         }catch (Exception e){
             e.printStackTrace();

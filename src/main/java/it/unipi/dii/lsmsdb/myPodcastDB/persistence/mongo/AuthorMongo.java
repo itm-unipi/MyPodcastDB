@@ -293,11 +293,11 @@ public class AuthorMongo {
         }
     }
 
-    public boolean updatePodcastOfAuthor(String authorId, Podcast podcast) {
+    public boolean updatePodcastOfAuthor(String authorName, Podcast podcast) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            Bson filter = and(eq("_id", new ObjectId(authorId)), eq("podcasts.podcastId", new ObjectId(podcast.getId())));
+            Bson filter = and(eq("name", authorName), eq("podcasts.podcastId", new ObjectId(podcast.getId())));
             Bson update = combine(set("podcasts.$.podcastName", podcast.getName()),
                     set("podcasts.$.podcastReleaseDate", podcast.getReleaseDate()),
                     set("podcasts.$.category", podcast.getPrimaryCategory()),
@@ -361,11 +361,11 @@ public class AuthorMongo {
         }
     }
 
-    public boolean deletePodcastOfAuthor(String authorId, String podcastId) {
+    public boolean deletePodcastOfAuthor(String authorName, String podcastId) {
         MongoManager manager = MongoManager.getInstance();
 
         try {
-            Bson filterAuthor = eq("_id", new ObjectId(authorId));
+            Bson filterAuthor = eq("name", authorName);
             Bson update = pull("podcasts", new Document("podcastId", new ObjectId(podcastId)));
             UpdateResult result = manager.getCollection("author").updateOne(filterAuthor, update);
 
