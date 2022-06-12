@@ -19,23 +19,23 @@ public class ImageCache {
     }
 
     public static Image getImageFromURL(String url) {
-        if (getInstance().htImages.containsKey(url)) {
-            return getInstance().htImages.get(url);
-        } else {
-            Image image = new Image(url);
+        Image image = getInstance().htImages.get(url);
+        if (image == null) {
+            image = new Image(url);
             getInstance().htImages.put(url, image);
-            return image;
         }
+
+        return image;
     }
 
     public static Image getImageFromLocalPath(String url) {
-        if (getInstance().htImages.containsKey(url)) {
-            return getInstance().htImages.get(url);
-        } else {
-            Image image = new Image(application.getClass().getResourceAsStream(url));
+        Image image = getInstance().htImages.get(url);
+        if (image == null) {
+            image = new Image(application.getClass().getResourceAsStream(url));
             getInstance().htImages.put(url, image);
-            return image;
         }
+
+        return image;
     }
 
     public static ImageCache getInstance() {
