@@ -91,10 +91,11 @@ public class UserPageService {
                 if(list != null)
                     lPodcastsByVisitor.addAll(list);
 
-                //load followed authors by the visitors
-                list = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
-                if(list != null)
-                    followedAuthorsByVisitor.addAll(list);
+                //load followed authors by the visitors // TODO: da modificare con la cache
+                List<Author> a = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
+                if(a != null)
+                    for (Author author : a)
+                        followedAuthorsByVisitor.add(author.getName());
 
                 //load followed users by the visitors
                 list = userNeo4jManager.showFollowedUsers(visitor);
@@ -106,9 +107,10 @@ public class UserPageService {
             else if(visitorType.equals("Author")){
 
                 //load followed authors by visitor
-                List<String> list = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor);
+                List<Author> list = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor);
                 if(list != null)
-                    followedAuthorsByVisitor.addAll(list);
+                    for (Author author : list)
+                        followedAuthorsByVisitor.add(author.getName());
                 res = 0;
 
             }

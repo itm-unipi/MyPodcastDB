@@ -185,10 +185,10 @@ public class AuthorNeo4j {
         return authors;
     }
 
-    public List<String> showFollowedAuthorsByUser(String username) {
+    public List<Author> showFollowedAuthorsByUser(String username) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u:User { username: $username})-[r:FOLLOWS]->(a:Author)" + "\n" +
-                "RETURN a.name as name";
+                "RETURN a";
         Value params = parameters("username", username);
         List<Record> result = null;
 
@@ -201,9 +201,13 @@ public class AuthorNeo4j {
         if (result == null || !result.iterator().hasNext())
             return null;
 
-        List<String> authors = new ArrayList<>();
-        for (Record record : result)
-            authors.add(record.get("name").asString());
+        List<Author> authors = new ArrayList<>();
+        for (Record record : result) {
+            String name = record.get(0).get("name").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+            Author author = new Author("", name, picturePath);
+            authors.add(author);
+        }
 
         return authors;
     }
@@ -259,30 +263,6 @@ public class AuthorNeo4j {
             String picturePath = record.get(0).get("picturePath").asString();
             Author author = new Author("", authorName, picturePath);
             authors.add(author);
-        }
-
-        return authors;
-    }
-
-    public List<String> showFollowedAuthorsByAuthor(String name) {
-        Neo4jManager manager = Neo4jManager.getInstance();
-        String query = " MATCH (a1:Author { name: $name})-[r:FOLLOWS_AUTHOR]->(a2:Author)" + "\n" +
-                "RETURN a2.name as name";
-        Value params = parameters("name", name);
-        List<Record> result = null;
-
-        try {
-            result = manager.read(query, params);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-        if (result == null || !result.iterator().hasNext())
-            return null;
-
-        List<String> authors = new ArrayList<>();
-        for (Record record : result) {
-            authors.add(record.get("name").asString());
         }
 
         return authors;
