@@ -1,7 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;

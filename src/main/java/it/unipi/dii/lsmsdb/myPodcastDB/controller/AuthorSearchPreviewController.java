@@ -1,14 +1,10 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;

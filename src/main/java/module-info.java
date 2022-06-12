@@ -16,4 +16,5 @@ module myPodcastDB {
     exports it.unipi.dii.lsmsdb.myPodcastDB;
     exports it.unipi.dii.lsmsdb.myPodcastDB.controller;
     opens it.unipi.dii.lsmsdb.myPodcastDB.view to xstream;
+    opens it.unipi.dii.lsmsdb.myPodcastDB.cache to xstream;
 }

@@ -6,7 +6,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.SearchService;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
@@ -21,7 +21,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.*;
-import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
 import java.io.IOException;

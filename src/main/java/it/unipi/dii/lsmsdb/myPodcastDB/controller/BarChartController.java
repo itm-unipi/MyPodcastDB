@@ -1,9 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -21,7 +19,6 @@ import org.javatuples.Pair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class BarChartController {
 

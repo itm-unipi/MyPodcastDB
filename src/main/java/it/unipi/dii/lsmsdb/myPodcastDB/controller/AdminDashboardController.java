@@ -4,7 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminDashboardService;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;

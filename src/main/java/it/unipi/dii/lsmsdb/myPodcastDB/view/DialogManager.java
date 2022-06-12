@@ -1,6 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.view;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;

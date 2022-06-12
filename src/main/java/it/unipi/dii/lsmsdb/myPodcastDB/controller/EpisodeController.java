@@ -5,7 +5,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastPageService;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

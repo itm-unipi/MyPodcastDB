@@ -1,7 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,7 +20,6 @@ import org.javatuples.Pair;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 public class PieChartController {
 

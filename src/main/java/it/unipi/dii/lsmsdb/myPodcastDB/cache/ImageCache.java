@@ -1,4 +1,4 @@
-package it.unipi.dii.lsmsdb.myPodcastDB.utility;
+package it.unipi.dii.lsmsdb.myPodcastDB.cache;
 
 import javafx.application.Application;
 import javafx.scene.image.Image;

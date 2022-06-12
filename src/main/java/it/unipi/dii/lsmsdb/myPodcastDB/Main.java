@@ -1,6 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 
 import javafx.application.Application;
