@@ -11,7 +11,6 @@ public class Logger {
     static private String logMode;
 
     public static void initialize() {
-
         fileName = "log.txt";
         logMode = "verbose";
 
@@ -23,7 +22,6 @@ public class Logger {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void info(String message) {

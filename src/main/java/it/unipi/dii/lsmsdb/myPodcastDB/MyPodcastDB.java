@@ -13,6 +13,7 @@ public class MyPodcastDB {
     public MyPodcastDB() {
         Logger.initialize();
         ConfigManager.importConfig("config.xml", "src/main/java/it/unipi/dii/lsmsdb/myPodcastDB/utility/schema.xsd");
+        Logger.setLogMode(ConfigManager.getLogMode());
         sessionPage = "INIT";
     }
 

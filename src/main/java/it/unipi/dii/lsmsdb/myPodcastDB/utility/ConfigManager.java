@@ -106,4 +106,8 @@ public class ConfigManager {
     public static String getNeo4JUser() { return config.getNeo4JConfig().getNeo4JUser(); }
 
     public static String getNeo4JPassword() { return config.getNeo4JConfig().getNeo4JPassword(); }
+
+    public static String getLogMode() { return config.getLogMode(); }
+
+    public static int getImageCacheSize() { return config.getImageCacheSize(); }
 }

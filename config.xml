@@ -15,4 +15,5 @@
         <neo4JPassword>password</neo4JPassword>
     </neo4JConfig>
     <logMode>verbose</logMode>
+    <imageCacheSize>100</imageCacheSize>
 </xmlConfig>

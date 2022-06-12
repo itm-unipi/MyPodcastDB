@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.cache;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import javafx.application.Application;
 import javafx.scene.image.Image;
@@ -13,13 +14,13 @@ public class ImageCache {
 
     // cache structure
     private int loadedImages;
-    private int cacheSize;                  // TODO: da mettere nel config manager
+    private int cacheSize;
     private Hashtable<String, Image> htImages;
     private LinkedList<String> lruImages;
 
     public ImageCache() {
         this.loadedImages = 0;
-        this.cacheSize = 100;               // TODO: da mettere nel config manager
+        this.cacheSize = ConfigManager.getImageCacheSize();
         this.htImages  = new Hashtable<>();
         this.lruImages = new LinkedList<>();
     }

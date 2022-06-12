@@ -10,6 +10,8 @@ public class XMLconfig implements Serializable {
     private Neo4JConfig neo4JConfig;
     private String logMode;
 
+    private int imageCacheSize;
+
     public XMLconfig() {
     }
 
@@ -37,12 +39,21 @@ public class XMLconfig implements Serializable {
         this.logMode = logMode;
     }
 
+    public int getImageCacheSize() {
+        return imageCacheSize;
+    }
+
+    public void setImageCacheSize(int imageCacheSize) {
+        this.imageCacheSize = imageCacheSize;
+    }
+
     @Override
     public String toString() {
         return "XMLconfig{" +
                 "mongoDBConfig=" + mongoDBConfig +
                 ", neo4JConfig=" + neo4JConfig +
                 ", logMode='" + logMode + '\'' +
+                ", imageCacheSize=" + imageCacheSize +
                 '}';
     }
 }

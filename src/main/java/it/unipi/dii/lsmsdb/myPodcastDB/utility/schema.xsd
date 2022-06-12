@@ -36,6 +36,15 @@
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
+
+                <xs:element name="imageCacheSize">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                            <xs:minInclusive value="1"/>
+                            <xs:maxExclusive value="1000"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
