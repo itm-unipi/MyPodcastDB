@@ -1,12 +1,12 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.LoginService;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
-import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -61,7 +61,14 @@ public class LoginController {
     @FXML
     public void initialize(){
 
+        // clear session routine
         MyPodcastDB.getInstance().setSession(null, null);
+        ImageCache.clearImages();
+        FollowedAuthorCache.clearAuthors();
+        FollowedUserCache.clearUsers();
+        LikedPodcastCache.clearPodcasts();
+        WatchlistCache.clearPodcasts();
+
         ToggleGroup tg = new ToggleGroup();
         loginUserRadioButton.setToggleGroup(tg);
         loginAuthorRadioButton.setToggleGroup(tg);
