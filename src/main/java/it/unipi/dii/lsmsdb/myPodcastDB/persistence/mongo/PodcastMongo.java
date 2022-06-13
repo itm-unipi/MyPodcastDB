@@ -84,7 +84,7 @@ public class PodcastMongo {
                 .append("releaseDate", podcast.getReleaseDate())
                 .append("episodes", episodes)
                 .append("reviews", reviews)
-                .append("preloadedReview", reviews);
+                .append("preloadedReviews", preloadedReviews);
 
         try{
             manager.getCollection("podcast").insertOne(newPodcast);
@@ -187,6 +187,8 @@ public class PodcastMongo {
                     Review newReview = new Review(rid, newPodcast.getId(), authorUsername, title, content, rating, createdAt);
                     newPodcast.addPreloadedReview(newReview);
                 }
+
+                return newPodcast;
             }
         } catch (Exception e) {
             e.printStackTrace();
