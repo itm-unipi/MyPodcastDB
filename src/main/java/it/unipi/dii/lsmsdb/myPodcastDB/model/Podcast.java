@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -17,6 +19,9 @@ public class Podcast {
     private Date releaseDate;
     private List<Episode> episodes;
     private List<ReducedReview> reviews;
+    private List<Review> preloadedReviews;
+
+    static final private int numberOfPreloadedReviews = 10;     // TODO: metterlo nel config manager
 
     public Podcast() {
     }
@@ -47,6 +52,7 @@ public class Podcast {
         this.releaseDate = releaseDate;
         this.episodes = new ArrayList<>();
         this.reviews = new ArrayList<>();
+        this.preloadedReviews = new ArrayList<>();
     }
 
     public Podcast(Podcast podcast) {
@@ -61,6 +67,7 @@ public class Podcast {
         this.releaseDate = podcast.releaseDate;
         this.episodes = new ArrayList<>(podcast.episodes);
         this.reviews = new ArrayList<>(podcast.reviews);
+        this.preloadedReviews = new ArrayList<>(podcast.preloadedReviews);
     }
 
     public void copy(Podcast podcast) {
@@ -75,6 +82,7 @@ public class Podcast {
         this.releaseDate = podcast.releaseDate;
         this.episodes = new ArrayList<>(podcast.episodes);
         this.reviews = new ArrayList<>(podcast.reviews);
+        this.preloadedReviews = new ArrayList<>(podcast.preloadedReviews);
     }
 
     public String getId() {
@@ -209,6 +217,26 @@ public class Podcast {
         return average / this.reviews.size();
     }
 
+    public List<Review> getPreloadedReviews() {
+        return preloadedReviews;
+    }
+
+    public void setPreloadedReviews(List<Review> preloadedReviews) {
+        this.preloadedReviews = preloadedReviews;
+    }
+
+    public void addPreloadedReview(Review review) {
+        this.preloadedReviews.add(review);
+
+        // if there are more than numberOfPreloadedReviews, remove the oldest created
+        if (this.preloadedReviews.size() > numberOfPreloadedReviews)
+            this.preloadedReviews.remove(0);
+    }
+
+    public void removePreloadedReview(Review review) {
+        this.preloadedReviews.remove(review);
+    }
+
     @Override
     public String toString() {
         return "Podcast{" +
@@ -223,6 +251,7 @@ public class Podcast {
                 ", releaseDate=" + releaseDate +
                 ", episodes=" + episodes +
                 ", reviews=" + reviews +
+                ", preloadedReviews=" + preloadedReviews +
                 '}';
     }
 }

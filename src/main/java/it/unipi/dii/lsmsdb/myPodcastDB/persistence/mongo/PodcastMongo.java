@@ -9,6 +9,7 @@ import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -43,6 +44,7 @@ public class PodcastMongo {
         MongoManager manager = MongoManager.getInstance();
         List<Document> episodes = new ArrayList<>();
         List<Document> reviews = new ArrayList<>();
+        List<Document> preloadedReviews = new ArrayList<>();
 
         for (Episode episode : podcast.getEpisodes()) {
             Document newEpisode = new Document()
@@ -60,6 +62,17 @@ public class PodcastMongo {
             reviews.add(newReview);
         }
 
+        for (Review review : podcast.getPreloadedReviews()) {
+            Document newReview = new Document()
+                    .append("_id", new ObjectId(review.getId()))
+                    .append("title", review.getTitle())
+                    .append("content", review.getContent())
+                    .append("rating", review.getRating())
+                    .append("createdAt", review.getCreatedAt())
+                    .append("authorUsername", review.getAuthorUsername());
+            preloadedReviews.add(newReview);
+        }
+
         Document newPodcast = new Document()
                 .append("podcastName", podcast.getName())
                 .append("authorName", podcast.getAuthorName())
@@ -70,7 +83,8 @@ public class PodcastMongo {
                 .append("categories", podcast.getCategories())
                 .append("releaseDate", podcast.getReleaseDate())
                 .append("episodes", episodes)
-                .append("reviews", reviews);
+                .append("reviews", reviews)
+                .append("preloadedReview", reviews);
 
         try{
             manager.getCollection("podcast").insertOne(newPodcast);
@@ -160,7 +174,19 @@ public class PodcastMongo {
                     newPodcast.addReview(reviewId, rating);
                 }
 
-                return newPodcast;
+                // preloaded reviews
+                List<Document> preloadedReviews = podcast.getList("preloadedReviews", Document.class);
+                for (Document review : preloadedReviews) {
+                    String rid = review.getObjectId("_id").toString();
+                    String title = review.getString("title");
+                    String content = review.getString("content");
+                    int rating = review.getInteger("rating");
+                    Date createdAt = review.getDate("createdAt");
+                    String authorUsername = review.getString("authorUsername");
+
+                    Review newReview = new Review(rid, newPodcast.getId(), authorUsername, title, content, rating, createdAt);
+                    newPodcast.addPreloadedReview(newReview);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -208,6 +234,20 @@ public class PodcastMongo {
                     int rating = review.getInteger("rating");
 
                     newPodcast.addReview(reviewId, rating);
+                }
+
+                // preloaded reviews
+                List<Document> preloadedReviews = podcast.getList("preloadedReviews", Document.class);
+                for (Document review : preloadedReviews) {
+                    String rid = review.getObjectId("_id").toString();
+                    String title = review.getString("title");
+                    String content = review.getString("content");
+                    int rating = review.getInteger("rating");
+                    Date createdAt = review.getDate("createdAt");
+                    String authorUsername = review.getString("authorUsername");
+
+                    Review newReview = new Review(rid, newPodcast.getId(), authorUsername, title, content, rating, createdAt);
+                    newPodcast.addPreloadedReview(newReview);
                 }
 
                 podcasts.add(newPodcast);
@@ -265,6 +305,20 @@ public class PodcastMongo {
                     newPodcast.addReview(reviewId, rating);
                 }
 
+                // preloaded reviews
+                List<Document> preloadedReviews = podcast.getList("preloadedReviews", Document.class);
+                for (Document review : preloadedReviews) {
+                    String rid = review.getObjectId("_id").toString();
+                    String title = review.getString("title");
+                    String content = review.getString("content");
+                    int rating = review.getInteger("rating");
+                    Date createdAt = review.getDate("createdAt");
+                    String authorUsername = review.getString("authorUsername");
+
+                    Review newReview = new Review(rid, newPodcast.getId(), authorUsername, title, content, rating, createdAt);
+                    newPodcast.addPreloadedReview(newReview);
+                }
+
                 podcasts.add(newPodcast);
             }
         } catch (Exception e) {
@@ -314,6 +368,20 @@ public class PodcastMongo {
                     newPodcast.addReview(reviewId, rating);
                 }
 
+                // preloaded reviews
+                List<Document> preloadedReviews = podcast.getList("preloadedReviews", Document.class);
+                for (Document review : preloadedReviews) {
+                    String rid = review.getObjectId("_id").toString();
+                    String title = review.getString("title");
+                    String content = review.getString("content");
+                    int rating = review.getInteger("rating");
+                    Date createdAt = review.getDate("createdAt");
+                    String authorUsername = review.getString("authorUsername");
+
+                    Review newReview = new Review(rid, newPodcast.getId(), authorUsername, title, content, rating, createdAt);
+                    newPodcast.addPreloadedReview(newReview);
+                }
+
                 podcasts.add(newPodcast);
             }
         } catch (Exception e) {
@@ -361,6 +429,20 @@ public class PodcastMongo {
                     int rating = review.getInteger("rating");
 
                     newPodcast.addReview(reviewId, rating);
+                }
+
+                // preloaded reviews
+                List<Document> preloadedReviews = podcast.getList("preloadedReviews", Document.class);
+                for (Document review : preloadedReviews) {
+                    String rid = review.getObjectId("_id").toString();
+                    String title = review.getString("title");
+                    String content = review.getString("content");
+                    int rating = review.getInteger("rating");
+                    Date createdAt = review.getDate("createdAt");
+                    String authorUsername = review.getString("authorUsername");
+
+                    Review newReview = new Review(rid, newPodcast.getId(), authorUsername, title, content, rating, createdAt);
+                    newPodcast.addPreloadedReview(newReview);
                 }
 
                 podcasts.add(newPodcast);
@@ -431,6 +513,34 @@ public class PodcastMongo {
             Bson filter = eq("_id", new ObjectId(podcastId));
             Bson update = push("reviews", newReview);
             UpdateResult result = manager.getCollection("podcast").updateOne(filter, update);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updatePreloadedReviewsOfPodcast(Podcast podcast) {
+        MongoManager manager = MongoManager.getInstance();
+
+        // prepare the new list of preloaded reviews
+        List<Document> preloadedReviews = new ArrayList<>();
+        for (Review review : podcast.getPreloadedReviews()) {
+            Document newReview = new Document()
+                    .append("_id", new ObjectId(review.getId()))
+                    .append("title", review.getTitle())
+                    .append("content", review.getContent())
+                    .append("rating", review.getRating())
+                    .append("createdAt", review.getCreatedAt())
+                    .append("authorUsername", review.getAuthorUsername());
+            preloadedReviews.add(newReview);
+        }
+
+        try {
+            Bson filter = eq("_id", new ObjectId(podcast.getId()));
+            Bson updates = combine(set("preloadedReviews", preloadedReviews));
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, updates);
 
             return result.getModifiedCount() == 1;
         } catch (Exception e) {
