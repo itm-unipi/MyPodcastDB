@@ -845,7 +845,7 @@ public class UserPageController {
 
         Logger.info("Session user: " + actorType);
 
-        String pageUsername = StageManager.getObjectIdentifier();
+        String pageUsername = (String)StageManager.getObjectIdentifier();
 
         wPodcasts = new ArrayList<>();
         lPodcasts = new ArrayList<>();

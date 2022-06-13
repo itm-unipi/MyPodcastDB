@@ -211,20 +211,20 @@ public class AuthorProfileController {
         if (this.actorType.equals("Author")) {
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthorAsAuthor(StageManager.getObjectIdentifier());
+                authorService.followAuthorAsAuthor((String)StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                authorService.unfollowAuthorAsAuthor(StageManager.getObjectIdentifier());
+                authorService.unfollowAuthorAsAuthor((String)StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Follow");
             }
 
         } else if (this.actorType.equals("User")) {
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthorAsUser(StageManager.getObjectIdentifier());
+                authorService.followAuthorAsUser((String)StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                authorService.unfollowAuthorAsUser(StageManager.getObjectIdentifier());
+                authorService.unfollowAuthorAsUser((String)StageManager.getObjectIdentifier());
                 btnFollowAuthor.setText("Follow");
             }
 
@@ -560,7 +560,7 @@ public class AuthorProfileController {
 
                 } else {
                     // Author profile requested is different form the session author
-                    this.author.setName(StageManager.getObjectIdentifier());
+                    this.author.setName((String)StageManager.getObjectIdentifier());
                     entityFound = authorProfileService.loadAuthorProfileAsAuthor(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
 
                     // Checking if the session actor follows the visited author (this not count for the author in his own profile)
@@ -591,7 +591,7 @@ public class AuthorProfileController {
                 this.actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
-                this.author.setName(StageManager.getObjectIdentifier());
+                this.author.setName((String)StageManager.getObjectIdentifier());
                 entityFound = authorProfileService.loadAuthorProfileAsUser(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
 
                 // Checking if the session actor follows the visited author (this not count for the author in his own profile)
@@ -621,7 +621,7 @@ public class AuthorProfileController {
                 this.actorPicture.setImage(image);
 
                 // Requesting the author's information from the database
-                this.author.setName(StageManager.getObjectIdentifier());
+                this.author.setName((String)StageManager.getObjectIdentifier());
                 entityFound = authorProfileService.loadAuthorProfileAsAdmin(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                 // Checking if the session actor follows the visited author (this not count for the author in his own profile)
@@ -646,7 +646,7 @@ public class AuthorProfileController {
                 Logger.info("I'm an unregistered user");
 
                 // Requesting the author's information from the database
-                this.author.setName(StageManager.getObjectIdentifier());
+                this.author.setName((String)StageManager.getObjectIdentifier());
                 entityFound = authorProfileService.loadAuthorProfileAsUnregistered(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                 this.authorName.setText(this.author.getName());

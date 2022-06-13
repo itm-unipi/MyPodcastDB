@@ -480,7 +480,7 @@ public class PodcastPageController {
     public void initialize() throws IOException {
         // Get the podcast info from service
         Podcast podcast = new Podcast();
-        podcast.setId(StageManager.getObjectIdentifier());
+        podcast.setId((String)StageManager.getObjectIdentifier());
         this.service = new PodcastPageService();
 
         // load podcast from service

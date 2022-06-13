@@ -544,7 +544,7 @@ public class SearchController {
             default -> Logger.error("Unidentified Actor Type");
         }
 
-        searchText.setText(StageManager.getObjectIdentifier());
+        searchText.setText((String)StageManager.getObjectIdentifier());
         search(searchText.getText());
         loadResults();
     }

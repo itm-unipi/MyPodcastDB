@@ -13,7 +13,7 @@ import java.io.IOException;
 public class StageManager {
     private static Stage primaryStage;
     private static Application application;
-    private static String objectIdentifier;
+    private static Object objectIdentifier;
 
     public static void initialize(Stage stage, String title, Application main) throws IOException {
         primaryStage = stage;
@@ -34,16 +34,16 @@ public class StageManager {
         primaryStage.show();
     }
 
-    public static void showPage(String newPage, String objectIdentifier) throws IOException {
+    public static void showPage(String newPage, Object objectIdentifier) throws IOException {
         setObjectIdentifier(objectIdentifier);
         showPage(newPage);
     }
 
-    public static String getObjectIdentifier() {
+    public static Object getObjectIdentifier() {
         return objectIdentifier;
     }
 
-    public static void setObjectIdentifier(String objectIdentifier) {
+    public static void setObjectIdentifier(Object objectIdentifier) {
         StageManager.objectIdentifier = objectIdentifier;
     }
 }

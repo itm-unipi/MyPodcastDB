@@ -548,7 +548,7 @@ public class ReviewPageController {
         // Initialize structure
         this.service = new ReviewPageService();
         this.podcast = new Podcast();
-        this.podcast.setId(StageManager.getObjectIdentifier());
+        this.podcast.setId((String)StageManager.getObjectIdentifier());
         this.loadedReviews = new ArrayList<>();
         this.limitPerQuery = 10;
         this.selectedOrder = "createdAt";
