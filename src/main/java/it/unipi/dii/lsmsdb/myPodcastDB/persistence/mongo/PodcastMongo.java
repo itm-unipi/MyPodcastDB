@@ -505,6 +505,43 @@ public class PodcastMongo {
         }
     }
 
+    public boolean updateReviewsOfPodcast(Podcast podcast) {
+        MongoManager manager = MongoManager.getInstance();
+
+        // preloaded the new list of reduced reviews
+        List<Document> reviews = new ArrayList<>();
+        for (Entry<String, Integer> review : podcast.getReviews()) {
+            Document newReview = new Document()
+                    .append("reviewId", new ObjectId(review.getKey()))
+                    .append("rating", review.getValue());
+            reviews.add(newReview);
+        }
+
+        // prepare the new list of preloaded reviews
+        List<Document> preloadedReviews = new ArrayList<>();
+        for (Review review : podcast.getPreloadedReviews()) {
+            Document newReview = new Document()
+                    .append("_id", new ObjectId(review.getId()))
+                    .append("title", review.getTitle())
+                    .append("content", review.getContent())
+                    .append("rating", review.getRating())
+                    .append("createdAt", review.getCreatedAt())
+                    .append("authorUsername", review.getAuthorUsername());
+            preloadedReviews.add(newReview);
+        }
+
+        try {
+            Bson filter = eq("_id", new ObjectId(podcast.getId()));
+            Bson updates = combine(set("reviews", reviews), set("preloadedReviews", preloadedReviews));
+            UpdateResult result = manager.getCollection("podcast").updateOne(filter, updates);
+
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean addReviewToPodcast(String podcastId, String reviewId, int rating) {
         MongoManager manager = MongoManager.getInstance();
 

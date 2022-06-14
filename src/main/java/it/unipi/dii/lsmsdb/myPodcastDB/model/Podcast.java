@@ -233,6 +233,10 @@ public class Podcast {
             this.preloadedReviews.remove(0);
     }
 
+    public void addInHeadPreloadedReview(Review review) {
+        this.preloadedReviews.add(0, review);
+    }
+
     public void removePreloadedReview(Review review) {
         this.preloadedReviews.remove(review);
     }

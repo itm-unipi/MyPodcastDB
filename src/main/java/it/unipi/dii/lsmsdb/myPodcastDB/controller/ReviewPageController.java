@@ -300,7 +300,7 @@ public class ReviewPageController {
         // if is successful update the page
         if (result == 0) {
             // update the local podcast
-            this.podcast.addReview(ownReview.getId(), ownReview.getRating());
+            this.podcast = (Podcast)StageManager.getObjectIdentifier();
             int ratingIntermediate = (int)(this.podcast.getRating() * 10);
             this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
             this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");

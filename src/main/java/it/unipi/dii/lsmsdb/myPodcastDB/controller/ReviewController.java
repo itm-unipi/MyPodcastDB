@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.ReviewPageService;
@@ -83,7 +84,7 @@ public class ReviewController {
         boolean confirm = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Do you really want to delete this review?");
         if (confirm) {
             // delete review
-            int result = this.service.deleteReview(this.review);
+            int result = this.service.deleteReview(this.review, ((Podcast)StageManager.getObjectIdentifier()).getPreloadedReviews().contains(review));
 
             // check the status and update the page
             if (result == 0) {
