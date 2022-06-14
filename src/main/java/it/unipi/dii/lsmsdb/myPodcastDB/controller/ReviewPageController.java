@@ -575,8 +575,14 @@ public class ReviewPageController {
                 this.userPictureWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
             }
         } else {
-            // check if user wrote a review
+            // initialize own review
             this.ownReview = new Review();
+            this.ownReview.setPodcastId(podcast.getId());
+            if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+                this.ownReview.setAuthorUsername(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername());
+            this.ownReview.setRating(0);
+
+            // check if user wrote a review
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
             result = this.service.loadReviewPageForUser(this.podcast, username, this.ownReview);
 
@@ -589,7 +595,13 @@ public class ReviewPageController {
             Logger.info(this.ownReview.toString() + " : " + this.ownReview.getTitle());
             if (this.ownReview != null && this.ownReview.getTitle() != null) {
                 this.disableForm();
-                this.loadedReviews.remove(this.ownReview);
+
+                // puth own review as first
+                if (this.loadedReviews.contains(this.ownReview))
+                    this.loadedReviews.remove(this.ownReview);
+                else if (this.loadedReviews.size() > 9)
+                    this.loadedReviews.remove(10);
+                this.loadedReviews.add(0, this.ownReview);
             }
         }
 
@@ -651,33 +663,13 @@ public class ReviewPageController {
             this.fiveStars.setProgress((float) numReview[4] / this.podcast.getReviews().size());
 
             // insert reviews in grid
-            this.row = 0;
-            this.column = 0;
-            for (Review review : this.loadedReviews) {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
-
-                // create new review element
-                AnchorPane newReview = fxmlLoader.load();
-                ReviewController controller = fxmlLoader.getController();
-                controller.setData(review, this.mainPage, this.service, this);
-
-                // add new podcast to grid
-                this.reviewGrid.add(newReview, column, row++);
-            }
+            this.reloadReviewList();
 
             // check if are finished
             if (this.loadedReviews.size() == this.podcast.getReviews().size()) {
                 this.showMoreWrapper.setVisible(false);
                 this.showMoreWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
             }
-
-            // initialize own review
-            this.ownReview = new Review();
-            this.ownReview.setPodcastId(podcast.getId());
-            if (MyPodcastDB.getInstance().getSessionType().equals("User"))
-                this.ownReview.setAuthorUsername(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername());
-            this.ownReview.setRating(0);
 
             // initialize combo box
             this.orderBy.getItems().add("Date of creation");
@@ -760,14 +752,18 @@ public class ReviewPageController {
         
         // if there are reviews yet update the grid
         if (!this.podcast.getReviews().isEmpty()) {
+            // if is user and it has written a review, put it as first
+            if (MyPodcastDB.getInstance().getSessionType().equals("User") && this.ownReview != null) {
+                this.loadedReviews.remove(this.ownReview);
+                this.loadedReviews.add(0, this.ownReview);
+                // TODO this.loadedReviews.remove(this.loadedReviews.size() - 1);
+            }
+
             // insert reviews in grid
             this.row = 0;
             this.column = 0;
             for (Review review : this.loadedReviews) {
-                // if is the own review skip
-                if (review.equals(ownReview))
-                    return;
-
+                // load the element
                 FXMLLoader fxmlLoader = new FXMLLoader();
                 fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
 

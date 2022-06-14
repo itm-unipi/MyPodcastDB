@@ -84,7 +84,7 @@ public class ReviewController {
         boolean confirm = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Do you really want to delete this review?");
         if (confirm) {
             // delete review
-            int result = this.service.deleteReview(this.review, ((Podcast)StageManager.getObjectIdentifier()).getPreloadedReviews().contains(review));
+            int result = this.service.deleteReview(this.review);
 
             // check the status and update the page
             if (result == 0) {

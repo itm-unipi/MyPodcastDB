@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
@@ -61,6 +62,12 @@ public class ReviewPageService {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
+        // if the skip isn't a multiple of 10 reduce of 1 the skip otherwise one review isn't loaded
+        if (skip % 10 == 1) {
+            skip--;
+            limit--;            // the next loadOtherReview will have the correct value
+        }
+
         // get the list of Review ID
         List<Map.Entry<String, Integer>> listOfReviews = podcast.getReviews();
 
@@ -87,10 +94,17 @@ public class ReviewPageService {
 
         // get the reviews from collection
         List<Review> requestedReviews = new ArrayList<>();
-        int k = 0;
         for (int i = skip; i < skip + limit && i < listOfReviews.size(); i++) {
-            k++;
-            Review requestedReview = this.reviewMongo.findReviewById(listOfReviews.get(i).getKey());
+            // get the id of next review
+            String id = listOfReviews.get(i).getKey();
+
+            // if is user and this is the id of review he written don't ask again it to MongoDB
+            if (MyPodcastDB.getInstance().getSessionType().equals("User") && id.equals(own.getId())) {
+                limit++;                                                            // ask always for 10 reviews
+                continue;
+            }
+
+            Review requestedReview = this.reviewMongo.findReviewById(id);
             if (requestedReview != null) {
                 requestedReviews.add(requestedReview);
             } else {
@@ -100,8 +114,10 @@ public class ReviewPageService {
         }
 
         // check the result
-        if (result && !requestedReviews.isEmpty())
+        if (result && !requestedReviews.isEmpty()) {
+            // update the local list
             reviews.addAll(requestedReviews);
+        }
 
         MongoManager.getInstance().closeConnection();
         return result;
@@ -147,7 +163,7 @@ public class ReviewPageService {
         return result;
     }
 
-    public int deleteReview(Review review, boolean isPreloaded) {
+    public int deleteReview(Review review) {
         MongoManager.getInstance().openConnection();
         int result = 0;
 
