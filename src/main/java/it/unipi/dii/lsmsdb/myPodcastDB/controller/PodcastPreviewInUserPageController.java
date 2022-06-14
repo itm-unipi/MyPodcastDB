@@ -81,7 +81,7 @@ public class PodcastPreviewInUserPageController {
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
         }
-        else if(!watchStatus) {
+        else if(!watchStatus && actorType.equals("User")) {
             buttonArea.setVisible(true);
             buttonArea.setOpacity(0.0);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), buttonArea);
@@ -98,7 +98,7 @@ public class PodcastPreviewInUserPageController {
             return;
         if(!visitorMode)
             trashButtonArea.setVisible(false);
-        else if(!watchStatus)
+        else if(!watchStatus && actorType.equals("User"))
             buttonArea.setVisible(false);
     }
 
@@ -108,7 +108,7 @@ public class PodcastPreviewInUserPageController {
         blockClickEvent = true;
         Logger.info("Watch button clicked");
         UserPageService service = new UserPageService();
-        int res = -1;
+        int res;
         if(watchStatus) {
             res = service.updateWatchlist(actorName, podcastPreview, false);
             if(res == 0){
@@ -116,9 +116,9 @@ public class PodcastPreviewInUserPageController {
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
                 watchStatus = false;
             }
-            else if(res == 3)
+            else if(res == 4)
                 Logger.error("Watch later relation already not exists");
-            else if(res == 4){
+            else if(res == 5){
                 Logger.error("Removing watch later relation failed");
                 DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
             }
@@ -137,7 +137,11 @@ public class PodcastPreviewInUserPageController {
             }
             else if(res == 1)
                 Logger.error("Watch later relation already exists");
-            else if(res == 2){
+            else if(res == 2) {
+                Logger.error("Watchlist is full");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Your watchlist is full");
+            }
+            else if(res == 3){
                 Logger.error("Adding watch later relation failed");
                 DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
             }
@@ -176,9 +180,9 @@ public class PodcastPreviewInUserPageController {
                 res = service.updateWatchlist(actorName, podcastPreview, false);
                 if (res == 0) {
                     Logger.success("Removed watch later relation successfully");
-                } else if (res == 3)
+                } else if (res == 4)
                     Logger.error("Watch later relation already not exists");
-                else if (res == 4) {
+                else if (res == 5) {
                     Logger.error("Removing watch later relation failed");
                     DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
                     return;
@@ -225,6 +229,11 @@ public class PodcastPreviewInUserPageController {
                 } else if (res == 1)
                     Logger.error("Watch later relation already exists");
                 else if (res == 2) {
+                    Logger.error("Watchlist is full");
+                    DialogManager.getInstance().createErrorAlert(mainPage, "Your watchlist is full");
+                    return;
+                }
+                else if (res == 3) {
                     Logger.error("Adding watch later relation failed");
                     DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
                     return;

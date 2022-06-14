@@ -347,13 +347,16 @@ public class ActorPreviewController {
     }
 
 
-    public void setData(AnchorPane mainPage, Author author) { //the visitor it's always the page owner
+    public void setData(AnchorPane mainPage, Author author) {
         this.visitorMode = false;
         this.actorType = "Author";
         this.authorPreview = author;
         this.mainPage = mainPage;
         this.visitorType = MyPodcastDB.getInstance().getSessionType();
-        this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        if(!visitorType.equals("Admin"))
+            this.visitorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
+        else
+            this.visitorMode = true;
 
         this.actorImage.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
         this.actorName.setText(author.getName());

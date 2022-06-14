@@ -366,21 +366,24 @@ public class UserPageService {
             //check if watch later relation already exists
             if(userNeo4jManager.checkUserWatchLaterPodcastExists(username, podcast.getId()))
                 res = 1;
-            //adding watch later relation
-            else if (!userNeo4jManager.addUserWatchLaterPodcast(username, podcast.getId()))
+            //check if the watchlist is full
+            else if(!WatchlistCache.addPodcast(podcast))
                 res = 2;
-            else {
-                WatchlistCache.addPodcast(podcast);
-                res = 0;
+            //adding watch later relation
+            else if (!userNeo4jManager.addUserWatchLaterPodcast(username, podcast.getId())) {
+                res = 3;
+                WatchlistCache.removePodcast(podcast.getId());
             }
+            else
+                res = 0;
         }
         else{
             //check if watch later relation already not exists
             if(!userNeo4jManager.checkUserWatchLaterPodcastExists(username, podcast.getId()))
-                res = 3;
+                res = 4;
             //removing watch later relation
             else if (!userNeo4jManager.deleteUserWatchLaterPodcast(username, podcast.getId()))
-                res = 4;
+                res = 5;
             else {
                 WatchlistCache.removePodcast(podcast.getId());
                 res = 0;

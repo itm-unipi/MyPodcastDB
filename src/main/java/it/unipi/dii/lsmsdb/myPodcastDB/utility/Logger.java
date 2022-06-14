@@ -4,6 +4,8 @@ import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class Logger {
@@ -38,7 +40,7 @@ public class Logger {
 
         try {
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write(log + "\n");
+            fw.write("[ " + LocalDateTime.now() + " ] " + log + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -58,7 +60,7 @@ public class Logger {
 
         try {
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write(log + "\n");
+            fw.write("[ " + LocalDateTime.now() + " ] " + log + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +77,7 @@ public class Logger {
 
         try {
             FileWriter fw = new FileWriter(fileName, true);
-            fw.write(log + "\n");
+            fw.write("[ " + LocalDateTime.now() + " ] " + log + "\n");
             fw.close();
         } catch (IOException e) {
             e.printStackTrace();
