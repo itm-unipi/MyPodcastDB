@@ -1,6 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedAuthorCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedUserCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.WatchlistCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
@@ -197,9 +200,6 @@ public class UserPageController {
     private List<Podcast> lPodcasts;
     private List<Author> authors;
     private List<User> users;
-    private List<String> wPodcastsByVisitor;
-    private List<String> authorsByVisitor;
-    private List<String> usersByVisitor;
 
     private int podcastRowSize = 5;
     private int actorRowSize = 8;
@@ -579,18 +579,17 @@ public class UserPageController {
     @FXML
     void followButtonClick(MouseEvent event) {
         Logger.info("Follow button pressed");
-        String owner = pageOwner.getUsername();
         String visitor = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         int res = -1;
         if(isFollowed) {
-            res = service.updateFollowUser(visitor, owner, false);
+            res = service.updateFollowUser(visitor, pageOwner, false);
             if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
                 isFollowed = false;
             }
         }
         else{
-            res = service.updateFollowUser(visitor, owner, true);
+            res = service.updateFollowUser(visitor, pageOwner, true);
             if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
                 isFollowed = true;
@@ -707,7 +706,6 @@ public class UserPageController {
 
         enableTextFields(false);
         pageOwner.copy(newUser);
-        MyPodcastDB.getInstance().setSession(pageOwner, "User");
         actorPageButton.setImage(ImageCache.getImageFromLocalPath(pageOwner.getPicturePath()));
         userPageSettingsButton.setVisible(true);
         userPageConfirmButton.setVisible(false);
@@ -850,9 +848,6 @@ public class UserPageController {
         lPodcasts = new ArrayList<>();
         authors = new ArrayList<>();
         users = new ArrayList<>();
-        wPodcastsByVisitor = new ArrayList<>();
-        authorsByVisitor = new ArrayList<>();
-        usersByVisitor = new ArrayList<>();
         pageOwner = new User();
         ObservableList<String> countryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCountries());
         ObservableList<String> categoryList = FXCollections.observableArrayList(JsonDecode.getInstance().getCategories());
@@ -868,8 +863,7 @@ public class UserPageController {
                 actorType,
                 sessionActorName,
                 pageOwner, wPodcasts, lPodcasts, authors, users,
-                wPodcastsByVisitor, authorsByVisitor, usersByVisitor,
-                newRequestPodcast, newRequestActor
+                newRequestPodcast
                 );
 
         if(res == 1){
@@ -909,7 +903,7 @@ public class UserPageController {
         }
         else if (actorType.equals("User")){
             Logger.info("User visitor mode");
-            res = service.checkFollowUser(sessionActorName, pageOwner.getUsername());
+            res = service.checkFollowUser(sessionActorName, pageOwner);
 
             if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
@@ -1154,9 +1148,8 @@ public class UserPageController {
         PodcastPreviewInUserPageController whatchlistController = likedfxmlLoader.getController();
 
         boolean isInWatchlist = false;
-        boolean isLiked = false;
         if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
-            if(wPodcastsByVisitor.contains(podcast.getId()))
+            if(WatchlistCache.getPodcast(podcast.getId()) != null)
                 isInWatchlist = true;
 
             whatchlistController.setData(userPageAnchorPane, podcast, isInWatchlist);
@@ -1187,9 +1180,8 @@ public class UserPageController {
         PodcastPreviewInUserPageController likedController = likedfxmlLoader.getController();
 
         boolean isInWatchlist = false;
-        boolean isLiked = false;
         if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
-            if(wPodcastsByVisitor.contains(podcast.getId()))
+            if(WatchlistCache.getPodcast(podcast.getId()) != null)
                 isInWatchlist = true;
 
             likedController.setData(userPageAnchorPane, podcast, isInWatchlist);
@@ -1217,7 +1209,7 @@ public class UserPageController {
         boolean isFollowed = false;
         if(MyPodcastDB.getInstance().getSessionType().equals("Author") ||
                 (MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername()))){
-            if(authorsByVisitor.contains(author.getName()))
+            if(FollowedAuthorCache.getAuthor(author.getName()) != null)
                 isFollowed = true;
 
             authorController.setData(userPageAnchorPane, author, isFollowed);
@@ -1243,7 +1235,7 @@ public class UserPageController {
         ActorPreviewController actorController = userfxmlLoader.getController();
         boolean isFollowed = false;
         if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
-            if(usersByVisitor.contains(user.getUsername()))
+            if(FollowedUserCache.getUser(user.getUsername()) != null)
                 isFollowed = true;
 
             actorController.setData(userPageAnchorPane, user, isFollowed);
@@ -1255,16 +1247,17 @@ public class UserPageController {
     }
 
     public void getWpodcasts(){
-        int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
-        if(res == 1){
+        /*int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
+        if(res == 1){*/
             Logger.info("No podcasts to show");
             numberOfWpodcastsToAdd = 0;
-        }
+        /*}
         else if(res == 0)
             Logger.success("New Podcasts loaded");
         else
-            Logger.error("Unknown error");
+            Logger.error("Unknown error");*/
     }
+
 
     public void getLpodcasts(){
         int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequestPodcast);
@@ -1277,24 +1270,26 @@ public class UserPageController {
     }
 
     public void getAuthors(){
-        int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
-        if(res == 1){
+        /*int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
+        if(res == 1){*/
             Logger.info("No authors to show");
             numberOfAuthorsToAdd = 0;
-        }
+        /*}
         else if(res == 0)
-            Logger.success("New authors loaded");
+            Logger.success("New authors loaded");*/
 
     }
 
     public void getUsers(){
-        int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
-        if(res == 1){
+        /*int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
+        if(res == 1){*/
             Logger.info("No users to show");
             numberOfUsersToAdd = 0;
-        }
+        /*}
         else if(res == 0)
-            Logger.success("New users loaded");
+            Logger.success("New users loaded");*/
 
     }
+
+
 }

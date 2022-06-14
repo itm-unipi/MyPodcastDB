@@ -133,7 +133,7 @@ public class ActorPreviewController {
         int res = -1;
         if(actorType.equals("User")) {
             if (followStatus) {
-                res = service.updateFollowedUser(visitorName, actorName.getText(), false);
+                res = service.updateFollowedUser(visitorName, userPreview, false);
                 if (res == 0) {
                     Logger.success("Removed follow user relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
@@ -151,7 +151,7 @@ public class ActorPreviewController {
                 }
 
             } else {
-                res = service.updateFollowedUser(visitorName, actorName.getText(), true);
+                res = service.updateFollowedUser(visitorName, userPreview, true);
                 if (res == 0) {
                     Logger.success("Added follow user relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
@@ -171,7 +171,7 @@ public class ActorPreviewController {
         }
         if(actorType.equals("Author")){
             if (followStatus) {
-                res = service.updateFollowedAuthor(visitorName, visitorType, actorName.getText(), false);
+                res = service.updateFollowedAuthor(visitorName, visitorType, authorPreview, false);
                 if (res == 0) {
                     Logger.info("Removed author follows author relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
@@ -194,7 +194,7 @@ public class ActorPreviewController {
                     DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
                 }
             } else {
-                res = service.updateFollowedAuthor(visitorName, visitorType, actorName.getText(), true);
+                res = service.updateFollowedAuthor(visitorName, visitorType, authorPreview, true);
                 if (res == 0) {
                     Logger.success("Added author follows author relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
@@ -228,7 +228,7 @@ public class ActorPreviewController {
             UserPageService service = new UserPageService();
             int res = -1;
             if (actorType.equals("Author")) {
-                res = service.updateFollowedAuthor(visitorName, "User", authorPreview.getName(), false);
+                res = service.updateFollowedAuthor(visitorName, "User",authorPreview, false);
                 if (res == 0)
                     Logger.info("Removed author follows author relation successfully");
                 else if(res == 3)
@@ -249,7 +249,7 @@ public class ActorPreviewController {
                 }
             }
             else if(actorType.equals("User")) {
-                res = service.updateFollowedUser(visitorName, userPreview.getUsername(), false);
+                res = service.updateFollowedUser(visitorName, userPreview, false);
                 if (res == 0)
                     Logger.success("Removed follow user relation successfully");
                 else if(res == 3)
@@ -277,7 +277,7 @@ public class ActorPreviewController {
             UserPageService service = new UserPageService();
             int res = -1;
             if (actorType.equals("Author")) {
-                res = service.updateFollowedAuthor(visitorName, "User", authorPreview.getName(), true);
+                res = service.updateFollowedAuthor(visitorName, "User", authorPreview, true);
                 if (res == 0)
                     Logger.success("Added author follows author relation successfully");
                 else if(res == 1)
@@ -298,7 +298,7 @@ public class ActorPreviewController {
                 }
             }
             else if(actorType.equals("User")) {
-                res = service.updateFollowedUser(visitorName, userPreview.getUsername(), true);
+                res = service.updateFollowedUser(visitorName, userPreview, true);
                 if (res == 0)
                     Logger.success("Added follow user relation successfully");
                 else if(res == 1)

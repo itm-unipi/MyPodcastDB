@@ -26,7 +26,7 @@ public class FollowedUserCache {
 
     public static void addUserList(List<User> users) {
         for (User user : users)
-            getInstance().htUser.put(user.getId(), user);
+            getInstance().htUser.put(user.getUsername(), user);
     }
 
     public static void removeUser(String username) {

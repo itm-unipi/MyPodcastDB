@@ -106,7 +106,7 @@ public class PodcastPreviewInUserPageController {
         UserPageService service = new UserPageService();
         int res = -1;
         if(watchStatus) {
-            res = service.updateWatchlist(actorName, podcastPreview.getId(), false);
+            res = service.updateWatchlist(actorName, podcastPreview, false);
             if(res == 0){
                 Logger.success("Removed watch later relation successfully");
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
@@ -125,7 +125,7 @@ public class PodcastPreviewInUserPageController {
 
         }
         else{
-            res = service.updateWatchlist(actorName, podcastPreview.getId(), true);
+            res = service.updateWatchlist(actorName, podcastPreview, true);
             if(res == 0) {
                 Logger.success("Added watch later relation successfully");
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
@@ -169,7 +169,7 @@ public class PodcastPreviewInUserPageController {
             UserPageService service = new UserPageService();
             int res = -1;
             if(listType.equals("watchlist")) {
-                res = service.updateWatchlist(actorName, podcastPreview.getId(), false);
+                res = service.updateWatchlist(actorName, podcastPreview, false);
                 if (res == 0) {
                     Logger.success("Removed watch later relation successfully");
                 } else if (res == 3)
@@ -185,7 +185,7 @@ public class PodcastPreviewInUserPageController {
                 }
             }
             else if(listType.equals("liked")) {
-                res = service.updateLiked(actorName, podcastPreview.getId(), false);
+                res = service.updateLiked(actorName, podcastPreview, false);
                 if(res==0)
                     Logger.success("Removed like relation successfully");
                 else if(res == 3)
@@ -215,7 +215,7 @@ public class PodcastPreviewInUserPageController {
             UserPageService service = new UserPageService();
             int res = -1;
             if(listType.equals("watchlist")) {
-                res = service.updateWatchlist(actorName, podcastPreview.getId(), true);
+                res = service.updateWatchlist(actorName, podcastPreview, true);
                 if (res == 0) {
                     Logger.success("Added watch later relation successfully");
                 } else if (res == 1)
@@ -231,7 +231,7 @@ public class PodcastPreviewInUserPageController {
                 }
             }
             else if(listType.equals("liked")) {
-                res = service.updateLiked(actorName, podcastPreview.getId(), true);
+                res = service.updateLiked(actorName, podcastPreview, true);
                 if(res == 0)
                     Logger.success("Added like relation successfully");
                 else if(res == 1)
@@ -309,7 +309,7 @@ public class PodcastPreviewInUserPageController {
         this.mainPage = mainPage;
         this.podcastPreview = podcast;
 
-        Image image = ImageCache.getImageFromLocalPath("/img/logo.png");
+        Image image = ImageCache.getImageFromLocalPath("/img/loading.jpg");
         this.podcastImage.setImage(image);
         this.PodcastName.setText(podcast.getName());
 

@@ -26,7 +26,7 @@ public class FollowedAuthorCache {
 
     public static void addAuthorList(List<Author> authors) {
         for (Author author : authors)
-            getInstance().htAuthor.put(author.getId(), author);
+            getInstance().htAuthor.put(author.getName(), author);
     }
 
     public static void removeAuthor(String authorName) {
