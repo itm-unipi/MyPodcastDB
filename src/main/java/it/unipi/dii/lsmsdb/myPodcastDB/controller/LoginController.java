@@ -197,6 +197,7 @@ public class LoginController {
     void login() throws IOException {
         String actorName = loginUsernameTextField.getText();
         String password = loginPasswordTextField.getText();
+        int res;
 
         if(loginUserRadioButton.isSelected()) {
             Logger.info("User actor selected");
@@ -205,27 +206,24 @@ public class LoginController {
             user.setUsername(actorName);
             user.setPassword(password);
             //user = (User)simActorService(actorName, password, actorType);
-            int res = service.getUserLogin(user);
-            String msg = "";
+            res = service.getUserLogin(user);
             switch (res){
                 case 0:
                     Logger.success("Login user success");
                     MyPodcastDB.getInstance().setSession(user, actorType);
                     break;
                 case 1:
-                    msg = "User not registered";
+                    Logger.error("Unregistered user mongo");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect user account or password");
                     break;
                 case 2:
-                    msg = "Incorrect password";
+                    Logger.error("Unregistered user on neo4j");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect user account or password");
                     break;
-                case -1:
-                    msg = "Unknown error";
+                case 3:
+                    Logger.error("Incorrect password");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect user account or password");
                     break;
-            }
-            if(res > 0 || res == -1){
-                Logger.error(msg);
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
-                return;
             }
         }
         else if(loginAuthorRadioButton.isSelected()) {
@@ -235,28 +233,26 @@ public class LoginController {
             author.setName(actorName);
             author.setPassword(password);
             //author = (Author)simActorService(actorName, password, actorType);
-            int res = service.getAuthorLogin(author);
-            String msg = "";
+            res = service.getAuthorLogin(author);
             switch (res){
                 case 0:
                     Logger.success("Login author success");
                     MyPodcastDB.getInstance().setSession(author, actorType);
                     break;
                 case 1:
-                    msg = "Author not registered";
+                    Logger.error("Unregistered author on mongo");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect author account or password");
                     break;
                 case 2:
-                    msg = "Incorrect password";
+                    Logger.error("Unregistered author on neo4j");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect author account or password");
                     break;
-                case -1:
-                    msg = "Unknown error";
+                case 3:
+                    Logger.error("Incorrect password");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect author account or password");
                     break;
             }
-            if(res > 0 || res == -1){
-                Logger.error(msg);
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
-                return;
-            }
+
         }
         else if(loginAdminRadioButton.isSelected()){
             Logger.info("Admin actor selected");
@@ -265,27 +261,20 @@ public class LoginController {
             admin.setName(actorName);
             admin.setPassword(password);
             //admin = (Admin)simActorService(actorName, password, actorType);
-            int res = service.getAdminLogin(admin);
-            String msg = "";
+            res = service.getAdminLogin(admin);
             switch (res){
                 case 0:
                     Logger.success("Login admin success");
                     MyPodcastDB.getInstance().setSession(admin, actorType);
                     break;
                 case 1:
-                    msg = "Admin not registered";
+                    Logger.error("Unregistered admin on mongo");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect admin account or password");
                     break;
                 case 2:
-                    msg = "Incorrect password";
+                    Logger.error("Incorrect password");
+                    DialogManager.getInstance().createErrorAlert(loginAnchorPane, "Incorrect admin account or password");
                     break;
-                case -1:
-                    msg = "Unknown error";
-                    break;
-            }
-            if(res > 0 || res == -1){
-                Logger.error(msg);
-                DialogManager.getInstance().createErrorAlert(loginAnchorPane, msg);
-                return;
             }
         }
         else {
@@ -293,9 +282,11 @@ public class LoginController {
             return;
         }
 
-        String log = "Login clicked: (" + actorName + ", " + password +")";
-        Logger.info(log);
-        StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+        if(res == 0){
+            String log = "Login clicked: (" + actorName + ", " + password +")";
+            Logger.info(log);
+            StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+        }
     }
 
     Object simActorService(String actorname, String password, String actorType){

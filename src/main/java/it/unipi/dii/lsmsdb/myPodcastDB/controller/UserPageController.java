@@ -863,7 +863,8 @@ public class UserPageController {
                 actorType,
                 sessionActorName,
                 pageOwner, wPodcasts, lPodcasts, authors, users,
-                newRequestPodcast
+                newRequestPodcast,
+                podcastRowSize
                 );
 
         if(res == 1){
@@ -903,7 +904,7 @@ public class UserPageController {
         }
         else if (actorType.equals("User")){
             Logger.info("User visitor mode");
-            res = service.checkFollowUser(sessionActorName, pageOwner);
+            res = service.checkFollowUser(/*sessionActorName,*/ pageOwner);
 
             if(res == 0) {
                 userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));

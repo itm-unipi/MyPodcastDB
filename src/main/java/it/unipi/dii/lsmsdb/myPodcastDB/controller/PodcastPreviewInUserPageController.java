@@ -71,6 +71,8 @@ public class PodcastPreviewInUserPageController {
     @FXML
     void podcastIn(MouseEvent event) {
         podcastContainer.setStyle("-fx-background-color: #E5E5E5; -fx-background-radius: 10;");
+        if(actorType.equals("Author"))
+            return;
         if(!visitorMode) {
             trashButtonArea.setVisible(true);
             trashButtonArea.setOpacity(0.0);
@@ -92,6 +94,8 @@ public class PodcastPreviewInUserPageController {
     @FXML
     void podcastOut(MouseEvent event) {
         podcastContainer.setStyle("-fx-background-color: transparent;");
+        if(actorType.equals("Author"))
+            return;
         if(!visitorMode)
             trashButtonArea.setVisible(false);
         else if(!watchStatus)
@@ -308,7 +312,7 @@ public class PodcastPreviewInUserPageController {
         this.visitorMode = true;
         this.mainPage = mainPage;
         this.podcastPreview = podcast;
-
+        this.actorType = "User";
         Image image = ImageCache.getImageFromLocalPath("/img/loading.jpg");
         this.podcastImage.setImage(image);
         this.PodcastName.setText(podcast.getName());

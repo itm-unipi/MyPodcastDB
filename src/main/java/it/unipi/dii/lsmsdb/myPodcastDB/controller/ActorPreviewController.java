@@ -68,7 +68,7 @@ public class ActorPreviewController {
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
         }
-        else if(!followStatus) {
+        else if(!followStatus && (visitorType.equals("User") || visitorType.equals(actorType))) {
             followButtonArea.setVisible(true);
             followButtonArea.setOpacity(0.0);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), followButtonArea);
@@ -84,7 +84,7 @@ public class ActorPreviewController {
         actorContainer.setStyle("-fx-background-color: transparent");
         if(!visitorMode)
             trashButtonArea.setVisible(false);
-        else if(!followStatus)
+        else if(!followStatus  && (visitorType.equals("User") || visitorType.equals(actorType)))
             followButtonArea.setVisible(false);
     }
 

@@ -15,6 +15,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 
 import java.util.List;
@@ -45,7 +46,8 @@ public class UserPageService {
             List<Podcast> lPodcasts,
             List<Author> followedAuthors,
             List<User> followedUsers,
-            int limitPodcast
+            int limitPodcast,
+            int podcastRowSize
             ){
 
         int res;
@@ -76,20 +78,21 @@ public class UserPageService {
             List<User> users;
 
             //load podcasts in watchlist from neo4j
-            if(ownerMode && !WatchlistCache.getAllPodcastsInWatchlist().isEmpty())
+            if(ownerMode) {
+                Logger.info("watchlist loaded from cache");
                 wPodcasts.addAll(WatchlistCache.getAllPodcastsInWatchlist());
+            }
             else {
                 podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner.getUsername());
-                if (podcasts != null) {
+                if (podcasts != null)
                     wPodcasts.addAll(podcasts);
-                    if (ownerMode)
-                        WatchlistCache.addPodcastList(podcasts);
-                }
             }
 
             //load liked podcasts from neo4j
-            if(ownerMode && !LikedPodcastCache.getAllLikedPodcasts().isEmpty())
+            if(ownerMode && LikedPodcastCache.getAllLikedPodcasts().size() >= podcastRowSize) {
+                Logger.info("Liked podcast loaded from cache");
                 lPodcasts.addAll(LikedPodcastCache.getAllLikedPodcasts());
+            }
             else {
                 podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner.getUsername(), limitPodcast, 0);
                 if (podcasts != null) {
@@ -100,29 +103,28 @@ public class UserPageService {
             }
 
             //load followed authors from neo4j
-            if(ownerMode && !FollowedAuthorCache.getAllFollowedAuthors().isEmpty())
+            if(ownerMode) {
+                Logger.info("Followed Authors loaded from cache");
                 followedAuthors.addAll(FollowedAuthorCache.getAllFollowedAuthors());
+            }
             else {
                 authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner.getUsername());
-                if (authors != null) {
+                if (authors != null)
                     followedAuthors.addAll(authors);
-                    if(ownerMode)
-                        FollowedAuthorCache.addAuthorList(authors);
-                }
             }
 
             //load followed users from neo4j
-            if(ownerMode && !FollowedUserCache.getAllFollowedUsers().isEmpty())
+            if(ownerMode) {
+                Logger.info("Followed users loaded from cache");
                 followedUsers.addAll(FollowedUserCache.getAllFollowedUsers());
+            }
             else {
                 users = userNeo4jManager.showFollowedUsers(pageOwner.getUsername());
-                if (users != null) {
+                if (users != null)
                     followedUsers.addAll(users);
-                    if(ownerMode)
-                        FollowedUserCache.addUserList(users);
-                }
             }
-            if(visitorType.equals("User") && !ownerMode){
+            /*if(visitorType.equals("User") && !ownerMode){
+
 
                 //load podcasts in the visitor's watchlist
                 if(WatchlistCache.getAllPodcastsInWatchlist().isEmpty()) {
@@ -158,7 +160,7 @@ public class UserPageService {
                 res = 0;
 
             }
-            else
+            else*/
                 res = 0;
         }
 
@@ -281,7 +283,7 @@ public class UserPageService {
         return res;
     }
 
-    public int checkFollowUser(String user1, User user2){
+    public int checkFollowUser(/*String user1,*/ User user2){
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
