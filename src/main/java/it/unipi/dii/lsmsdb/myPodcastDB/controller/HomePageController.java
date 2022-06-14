@@ -700,7 +700,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowAuthorsBasedOnUser.setVisible(scrollSuggestedAuthors.getHvalue() != 0);
         // Hide right arrow
-        rightArrowAuthorsBasedOnUser.setVisible(scrollSuggestedAuthors.getHvalue() != 1.0 && (gridSuggestedAuthors.getColumnCount() != authorsToLoadInGrid - 1));
+        rightArrowAuthorsBasedOnUser.setVisible(scrollSuggestedAuthors.getHvalue() != 1.0
+                && (gridSuggestedAuthors.getColumnCount() != authorsToLoadInGrid - 1)
+                && !(suggestedAuthors.size() < authorsToLoadInGrid));
         updateAuthorsBasedOnUserGrid();
     }
 
@@ -716,10 +718,7 @@ public class HomePageController {
 
                 Logger.info("(End call service) Total authors loaded in memory: " + this.suggestedAuthors.size() + " | Authors available to be shown: " + (this.suggestedAuthors.size() - this.gridSuggestedAuthors.getColumnCount()));
                 // Updating arrows
-                if ((this.suggestedAuthors.size() - this.gridSuggestedAuthors.getColumnCount()) > 0)
-                    rightArrowAuthorsBasedOnUser.setVisible(true);
-                else
-                    leftArrowAuthorsBasedOnUser.setVisible(false);
+                this.rightArrowAuthorsBasedOnUser.setVisible((this.suggestedAuthors.size() - this.gridSuggestedAuthors.getColumnCount()) > 0);
                 loadSuggestedAuthorsBasedOnUserGrid(true);
 
             } else {
@@ -735,7 +734,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowPodcastsBasedOnUsers.setVisible(scrollPodcastsSuggestedForUsers.getHvalue() != 0);
         // Hide right arrow
-        rightArrowPodcastsBasedOnUsers.setVisible(scrollPodcastsSuggestedForUsers.getHvalue() != 1.0 && (gridPodcastsSuggestedForUsers.getColumnCount() != podcastsToLoadInGrid - 1));
+        rightArrowPodcastsBasedOnUsers.setVisible(scrollPodcastsSuggestedForUsers.getHvalue() != 1.0
+                && (gridPodcastsSuggestedForUsers.getColumnCount() != podcastsToLoadInGrid - 1)
+                && !(podcastsBasedOnFollowedUsers.size() < podcastsToLoadInGrid));
         updatePodcastsBasedOnUsersGrid();
     }
 
@@ -751,10 +752,7 @@ public class HomePageController {
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.podcastsBasedOnFollowedUsers.size() + " | Podcasts available to be shown: " + (this.podcastsBasedOnFollowedUsers.size() - this.gridPodcastsSuggestedForUsers.getColumnCount()));
                 // Updating arrows
-                if ((this.podcastsBasedOnFollowedUsers.size() - this.gridPodcastsSuggestedForUsers.getColumnCount()) > 0)
-                    rightArrowPodcastsBasedOnUsers.setVisible(true);
-                else
-                    leftArrowPodcastsBasedOnUsers.setVisible(false);
+                this.rightArrowPodcastsBasedOnUsers.setVisible((this.podcastsBasedOnFollowedUsers.size() - this.gridPodcastsSuggestedForUsers.getColumnCount()) > 0);
                 loadSuggestedOnFollowedUsers(true);
 
             } else {
@@ -770,7 +768,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowBasedOnWatchlist.setVisible(scrollPodcastsBasedOnWatchlist.getHvalue() != 0);
         // Hide right arrow
-        rightArrowBasedOnWatchlist.setVisible(scrollPodcastsBasedOnWatchlist.getHvalue() != 1.0  && (gridPodcastsBasedOnWatchlist.getColumnCount() != podcastsToLoadInGrid - 1));
+        rightArrowBasedOnWatchlist.setVisible(scrollPodcastsBasedOnWatchlist.getHvalue() != 1.0
+                && (gridPodcastsBasedOnWatchlist.getColumnCount() != podcastsToLoadInGrid - 1)
+                && !(basedOnWatchlist.size() < podcastsToLoadInGrid));
         updateBasedOnWatchlistGrid();
     }
 
@@ -786,10 +786,7 @@ public class HomePageController {
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.basedOnWatchlist.size() + " | Podcasts available to be shown: " + (this.basedOnWatchlist.size() - this.gridPodcastsBasedOnWatchlist.getColumnCount()));
                 // Updating arrows
-                if ((this.basedOnWatchlist.size() - this.gridPodcastsBasedOnWatchlist.getColumnCount()) > 0)
-                    rightArrowBasedOnWatchlist.setVisible(true);
-                else
-                    rightArrowBasedOnWatchlist.setVisible(false);
+                rightArrowBasedOnWatchlist.setVisible((this.basedOnWatchlist.size() - this.gridPodcastsBasedOnWatchlist.getColumnCount()) > 0);
                 loadSuggestedBasedOnWatchlistGrid(true);
 
             } else {
@@ -805,7 +802,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowMostFollowedAuthors.setVisible(scrollMostFollowedAuthors.getHvalue() != 0);
         // Hide right arrow
-        rightArrowMostFollowedAuthors.setVisible(scrollMostFollowedAuthors.getHvalue() != 1.0 && (gridMostFollowedAuthors.getColumnCount() != authorsToLoadInGrid - 1));
+        rightArrowMostFollowedAuthors.setVisible(scrollMostFollowedAuthors.getHvalue() != 1.0
+                && (gridMostFollowedAuthors.getColumnCount() != authorsToLoadInGrid - 1)
+                && !(mostFollowedAuthors.size() < authorsToLoadInGrid));
         updateMostFollowedGrid();
     }
 
@@ -823,7 +822,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowMostLiked.setVisible(scrollMostLikedPodcasts.getHvalue() != 0);
         // Hide right arrow
-        rightArrowMostLiked.setVisible(scrollMostLikedPodcasts.getHvalue() != 1.0 && (gridMostLikedPodcasts.getColumnCount() != podcastsToLoadInGrid - 1));
+        rightArrowMostLiked.setVisible(scrollMostLikedPodcasts.getHvalue() != 1.0
+                && (gridMostLikedPodcasts.getColumnCount() != podcastsToLoadInGrid - 1)
+                && !(mostLikedPodcasts.size() < podcastsToLoadInGrid));
         updateMostLikedGrid();
     }
 
@@ -841,7 +842,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowTopGenres.setVisible(scrollSuggestedForCategory.getHvalue() != 0);
         // Hide right arrow
-        rightArrowTopGenres.setVisible(scrollSuggestedForCategory.getHvalue() != 1.0 && (gridSuggestedForCategory.getColumnCount() != podcastsToLoadInGrid - 1));
+        rightArrowTopGenres.setVisible(scrollSuggestedForCategory.getHvalue() != 1.0
+                && (gridSuggestedForCategory.getColumnCount() != podcastsToLoadInGrid - 1)
+                && !(topGenres.size() < podcastsToLoadInGrid));
         updateTopGenresGrid();
     }
 
@@ -857,10 +860,7 @@ public class HomePageController {
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.topGenres.size() + " | Podcasts available to be shown: " + (this.topGenres.size() - this.gridSuggestedForCategory.getColumnCount()));
                 // Updating arrows
-                if ((this.topGenres.size() - this.gridSuggestedForCategory.getColumnCount()) > 0)
-                    rightArrowTopGenres.setVisible(true);
-                else
-                    rightArrowTopGenres.setVisible(false);
+                rightArrowTopGenres.setVisible((this.topGenres.size() - this.gridSuggestedForCategory.getColumnCount()) > 0);
                 loadSuggestedBasedOnCategoryGrid(true);
 
             } else {
@@ -876,7 +876,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowTopRated.setVisible(scrollTopRated.getHvalue() != 0);
         // Hide right arrow
-        rightArrowTopRated.setVisible(scrollTopRated.getHvalue() != 1.0 && (gridTopRated.getColumnCount() != podcastsToLoadInGrid - 1));
+        rightArrowTopRated.setVisible(scrollTopRated.getHvalue() != 1.0
+                && (gridTopRated.getColumnCount() != podcastsToLoadInGrid - 1)
+                && !(topRated.size() < podcastsToLoadInGrid));
         updateTopRatedGrid();
     }
 
@@ -894,7 +896,9 @@ public class HomePageController {
         // Hide left arrow
         leftArrowWatchlist.setVisible(scrollWatchlist.getHvalue() != 0);
         // Hide right arrow
-        rightArrowWatchlist.setVisible(scrollWatchlist.getHvalue() != 1.0 && (gridWatchlist.getColumnCount() != podcastsToLoadInGrid - 1));
+        rightArrowWatchlist.setVisible(scrollWatchlist.getHvalue() != 1.0
+                && (gridWatchlist.getColumnCount() != podcastsToLoadInGrid - 1)
+                && !(watchlist.size() < podcastsToLoadInGrid));
         updateWatchlistGrid();
     }
 
@@ -910,10 +914,7 @@ public class HomePageController {
 
                 Logger.info("(End call service) Total podcasts loaded in memory: " + this.watchlist.size() + " | Podcasts available to be shown: " + (this.watchlist.size() - this.gridWatchlist.getColumnCount()));
                 // Updating arrows
-                if ((this.watchlist.size() - this.gridWatchlist.getColumnCount()) > 0)
-                    rightArrowWatchlist.setVisible(true);
-                else
-                    rightArrowWatchlist.setVisible(false);
+                rightArrowWatchlist.setVisible((this.watchlist.size() - this.gridWatchlist.getColumnCount()) > 0);
                 loadWatchlistGrid(true);
 
             } else {

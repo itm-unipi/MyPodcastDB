@@ -138,7 +138,7 @@
                <children>
                   <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" style="-fx-background-color: transparent;" vbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                      <content>
-                        <VBox alignment="CENTER" prefHeight="1180.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="1180.0">
                            <children>
                               <Label fx:id="username" prefHeight="36.0" prefWidth="1050.0">
                                  <font>
@@ -422,7 +422,7 @@
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                           </ImageView>
-                                          <ScrollPane fx:id="scrollSuggestedAuthors" fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" minViewportHeight="195.0" prefWidth="1050.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+                                          <ScrollPane fx:id="scrollSuggestedAuthors" fitToHeight="true" hbarPolicy="NEVER" minViewportHeight="195.0" prefWidth="1050.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
                                              <content>
                                                 <GridPane fx:id="gridSuggestedAuthors" alignment="CENTER_LEFT" onScroll="#onScrollAuthorsBasedOnUsers" prefHeight="0.0" prefWidth="0.0">
                                                    <rowConstraints>

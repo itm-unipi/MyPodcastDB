@@ -5,6 +5,7 @@ import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
+import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
@@ -479,11 +480,25 @@ public class PodcastMongo {
 
             return result.getModifiedCount() == 1;
 
-        }catch (Exception e){
+        } catch (Exception e){
             e.printStackTrace();
             return false;
         }
+    }
 
+    public boolean updateAllPodcasts(String oldAuthorName, String newAuthorName) {
+        MongoManager manager = MongoManager.getInstance();
+
+        try{
+            UpdateResult result = manager.getCollection("podcast").updateMany(
+                    Filters.eq("authorName", oldAuthorName),
+                    Updates.set("authorName", newAuthorName));
+
+            return result.getModifiedCount() >= 0;
+        } catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public boolean addEpisodeToPodcast(String podcastId, Episode episode) {

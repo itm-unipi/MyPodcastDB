@@ -428,7 +428,9 @@ public class AuthorProfileController {
         // Hide left arrow
         leftArrow.setVisible(scrollFollowedAuthors.getHvalue() != 0);
         // Hide right arrow
-        rightArrow.setVisible(scrollFollowedAuthors.getHvalue() != 1.0  && (gridAuthorsFollowed.getColumnCount() != authorsToLoadInGrid - 1));
+        rightArrow.setVisible(scrollFollowedAuthors.getHvalue() != 1.0
+                && (gridAuthorsFollowed.getColumnCount() != authorsToLoadInGrid - 1)
+                && !(followedAuthorsByAuthor.size() < authorsToLoadInGrid));
         updateAuthorsGrid();
     }
 

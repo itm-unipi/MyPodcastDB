@@ -38,6 +38,7 @@ public class PodcastMongoTest {
         test.findPodcastsByPrimaryCategoryTest();
         test.findPodcastsByCategoryTest();
         test.updatePodcastTest();
+        test.updateAllPodcastsTest();
         test.addEpisodeToPodcastTest();
         test.addReviewToPodcastTest();
         test.deletePodcastByIdTest();
@@ -198,6 +199,32 @@ public class PodcastMongoTest {
             System.err.println("[-] updatePodcast");
         else
             System.out.println("[+] updatePodcast");
+    }
+
+    void updateAllPodcastsTest() {
+        String oldAuthorName = "authorName";
+
+        // Retrieving some podcasts to modify for the test
+        Podcast podcast1 = this.podcastMongo.findPodcastById("f6c61facba144c1b39e483f9");
+        podcast1.setAuthorName(oldAuthorName);
+        Podcast podcast2 = this.podcastMongo.findPodcastById("f6c61facba144c1b39e483f9");
+        podcast2.setAuthorName(oldAuthorName);
+
+        // Adding podcasts on mongo
+        this.podcastMongo.addPodcast(podcast1);
+        this.podcastMongo.addPodcast(podcast2);
+
+        if (!this.podcastMongo.updateAllPodcasts(oldAuthorName, "newAuthorName")) {
+            System.err.println("[-] updateAllPodcastsTest");
+        } else if (!this.podcastMongo.findPodcastById(podcast1.getId()).getAuthorName().equals(oldAuthorName)
+                    &&  !this.podcastMongo.findPodcastById(podcast2.getId()).getAuthorName().equals(oldAuthorName) ) {
+            System.out.println("[+] updateAllPodcastsTest");
+        } else {
+            System.err.println("[-] updateAllPodcastsTest");
+        }
+
+        this.podcastMongo.deletePodcastById(podcast1.getId());
+        this.podcastMongo.deletePodcastById(podcast2.getId());
     }
  
     void addEpisodeToPodcastTest(){

@@ -311,15 +311,43 @@ public class AuthorProfileService {
                     updateResult = -4;
                     updateAuthorRollback(updateResult, oldAuthor, newAuthor);
                 } else {
+                    // if author name changed it is necessary to update all the podcasts of that author (if there are any)
                     if (!oldAuthor.getName().equals(newAuthor.getName())) {
+
+                        // START WITHOUT UPDATE MANY
+                        /*
+                        List<Podcast> podcasts = new ArrayList<>();
                         for (Podcast podcast : oldAuthor.getOwnPodcasts()) {
                             podcast.setAuthorName(newAuthor.getName());
+                            podcasts.add(podcast);
+
                             if (!podcastMongoManager.updatePodcast(podcast)) {
                                 updateResult = -5;
                                 updateAuthorRollback(updateResult, oldAuthor, newAuthor);
                                 break;
                             }
                         }
+
+                        if (updateResult == 0)
+                            newAuthor.setOwnPodcasts(podcasts);
+                        // END WITHOUT UPDATE MANY
+
+                         */
+
+                        // Start with update many:
+                        List<Podcast> podcasts = new ArrayList<>();
+                        for (Podcast podcast : oldAuthor.getOwnPodcasts()) {
+                            podcast.setAuthorName(newAuthor.getName());
+                            podcasts.add(podcast);
+                        }
+
+                        newAuthor.setOwnPodcasts(podcasts);
+
+                        if (!podcastMongoManager.updateAllPodcasts(oldAuthor.getName(), newAuthor.getName())) {
+                            updateResult = -5;
+                            updateAuthorRollback(updateResult, oldAuthor, newAuthor);
+                        }
+                        // End with update many
                     }
                 }
             }
