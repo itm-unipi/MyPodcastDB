@@ -352,7 +352,7 @@ public class PodcastPageController {
 
     @FXML
     void clickOnReviews(MouseEvent event) throws IOException {
-        StageManager.showPage("ReviewPage.fxml", this.podcast.getId());
+        StageManager.showPage("ReviewPage.fxml", this.podcast);
     }
 
     @FXML

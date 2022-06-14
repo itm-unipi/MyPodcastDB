@@ -7,7 +7,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
-import java.util.List;
+import java.util.*;
 
 public class ReviewPageService {
 
@@ -19,31 +19,17 @@ public class ReviewPageService {
         this.reviewMongo  = new ReviewMongo();
     }
 
-    public Boolean loadReviewPageForUser(Podcast podcast, String username, List<Review> reviews, Review ownReview, int limit, String attributeToOrder, Boolean ascending) {
+    public Boolean loadReviewPageForUser(Podcast podcast, String username, Review ownReview) {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
-
-        // search the podcast
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Podcast requested not found");
-            result = false;
-        } else {
-            podcast.copy(foundPodcast);
-        }
-
-        // load the podcast's reviews (limited)
-        List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending);
 
         // load own review if exists
         Review own = this.reviewMongo.findSpecificReviewByAuthorName(podcast.getId(), username);
         if (own != null) {
             ownReview.copy(own);
-            loaded.remove(ownReview);
         } else {
             ownReview.setTitle(null);
         }
-        reviews.addAll(loaded);
 
         MongoManager.getInstance().closeConnection();
         return result;
@@ -74,20 +60,47 @@ public class ReviewPageService {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
-        // search the podcast
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Podcast requested not found");
-            result = false;
-        } else {
-            podcast.copy(foundPodcast);
+        // get the list of Review ID
+        List<Map.Entry<String, Integer>> listOfReviews = podcast.getReviews();
+
+        // sort them
+        if (attributeToOrder.equals("rating")) {
+            if (ascending) {
+                listOfReviews.sort(new Comparator<Map.Entry<String, Integer>>() {
+                    @Override
+                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                        return o1.getValue().compareTo(o2.getValue());
+                    }
+                });
+            } else {
+                listOfReviews.sort(new Comparator<Map.Entry<String, Integer>>() {
+                    @Override
+                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                        return o2.getValue().compareTo(o1.getValue());
+                    }
+                });
+            }
+        } else if (attributeToOrder.equals("createdAt") && !ascending) {
+            Collections.reverse(listOfReviews);
         }
 
-        // load the podcast's reviews
-        List<Review> loaded = this.reviewMongo.findReviewsByPodcastId(podcast.getId(), skip, limit, attributeToOrder, ascending);
-        if (own != null && loaded.contains(own))
-            loaded.remove(own);
-        reviews.addAll(loaded);
+        // get the reviews from collection
+        List<Review> requestedReviews = new ArrayList<>();
+        int k = 0;
+        for (int i = skip; i < skip + limit && i < listOfReviews.size(); i++) {
+            k++;
+            Review requestedReview = this.reviewMongo.findReviewById(listOfReviews.get(i).getKey());
+            if (requestedReview != null) {
+                requestedReviews.add(requestedReview);
+            } else {
+                result = false;
+                break;
+            }
+        }
+
+        // check the result
+        if (result && !requestedReviews.isEmpty())
+            reviews.addAll(requestedReviews);
 
         MongoManager.getInstance().closeConnection();
         return result;

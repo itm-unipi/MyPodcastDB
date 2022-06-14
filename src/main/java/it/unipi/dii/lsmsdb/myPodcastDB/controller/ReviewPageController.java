@@ -547,9 +547,9 @@ public class ReviewPageController {
     public void initialize() throws IOException {
         // Initialize structure
         this.service = new ReviewPageService();
-        this.podcast = new Podcast();
-        this.podcast.setId((String)StageManager.getObjectIdentifier());
-        this.loadedReviews = new ArrayList<>();
+        this.podcast = (Podcast)StageManager.getObjectIdentifier();
+        this.loadedReviews = new ArrayList<>(this.podcast.getPreloadedReviews());
+        Collections.reverse(this.loadedReviews);
         this.limitPerQuery = 10;
         this.selectedOrder = "createdAt";
         this.selectedAscending = false;
@@ -561,7 +561,6 @@ public class ReviewPageController {
             // only the user can write review
             this.ownReview = null;
             this.disableForm();
-            result = this.service.loadReviewPageForNotUser(this.podcast, this.loadedReviews, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
 
             // if author update the profile picture
             if (sessionType.equals("Author")) {
@@ -576,9 +575,10 @@ public class ReviewPageController {
                 this.userPictureWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0; -fx-min-height: 0; -fx-pref-height: 0; -fx-max-height: 0; -fx-padding: 0; -fx-margin: 0;");
             }
         } else {
+            // check if user wrote a review
             this.ownReview = new Review();
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-            result = this.service.loadReviewPageForUser(this.podcast, username, this.loadedReviews, this.ownReview, this.limitPerQuery, this.selectedOrder, this.selectedAscending);
+            result = this.service.loadReviewPageForUser(this.podcast, username, this.ownReview);
 
             // profile picture
             User user = (User)MyPodcastDB.getInstance().getSessionActor();
@@ -587,8 +587,10 @@ public class ReviewPageController {
 
             // if user has already writter a review, disable form
             Logger.info(this.ownReview.toString() + " : " + this.ownReview.getTitle());
-            if (this.ownReview != null && this.ownReview.getTitle() != null)
+            if (this.ownReview != null && this.ownReview.getTitle() != null) {
                 this.disableForm();
+                this.loadedReviews.remove(this.ownReview);
+            }
         }
 
         // check service result
@@ -680,9 +682,10 @@ public class ReviewPageController {
             // initialize combo box
             this.orderBy.getItems().add("Date of creation");
             this.orderBy.getItems().add("Rating");
+            this.orderBy.setValue("Date of creation");
             this.ascending.getItems().add("Ascending");
             this.ascending.getItems().add("Descending");
-            this.ascending.setValue("Ascending");
+            this.ascending.setValue("Descending");
         }
     }
 
