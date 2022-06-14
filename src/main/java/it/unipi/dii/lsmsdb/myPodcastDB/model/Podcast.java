@@ -1,9 +1,5 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -237,7 +233,7 @@ public class Podcast {
         this.preloadedReviews.add(0, review);
     }
 
-    public void removePreloadedReview(Review review) {
+    public void deletePreloadedReview(Review review) {
         this.preloadedReviews.remove(review);
     }
 

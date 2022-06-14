@@ -1,6 +1,5 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
-import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
@@ -166,7 +165,7 @@ public class ReviewPageService {
 
             // remove from reduced reviews and from preloaded review
             podcast.deleteReview(review);
-            podcast.removePreloadedReview(review);
+            podcast.deletePreloadedReview(review);
 
             // if the podcast has more than 9 other reviews load another one as preloaded
             int totalReviews = podcast.getReviews().size();
