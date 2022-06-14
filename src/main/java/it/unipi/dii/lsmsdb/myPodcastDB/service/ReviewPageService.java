@@ -172,7 +172,7 @@ public class ReviewPageService {
             if (totalReviews > 9) {
                 Review otherReview = this.reviewMongo.findReviewById(podcast.getReviews().get(totalReviews - 10).getKey());
                 if (otherReview != null)
-                    podcast.addInHeadPreloadedReview(review);
+                    podcast.addInHeadPreloadedReview(otherReview);
                 else
                     result = -2;
             }

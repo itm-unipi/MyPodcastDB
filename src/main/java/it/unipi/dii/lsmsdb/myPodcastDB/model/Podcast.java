@@ -1,5 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.model;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -290,5 +292,18 @@ class ReducedReview {
                 "id='" + id + '\'' +
                 ", rating=" + rating +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ReducedReview that = (ReducedReview) o;
+        return rating == that.rating && Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, rating);
     }
 }

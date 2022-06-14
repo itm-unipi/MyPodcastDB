@@ -155,7 +155,7 @@
                                        <children>
                                           <HBox alignment="BOTTOM_LEFT" prefWidth="232.0">
                                              <children>
-                                                <Label fx:id="rating" alignment="BOTTOM_LEFT" maxHeight="-Infinity" prefWidth="48.0" text="#.#">
+                                                <Label fx:id="rating" alignment="BOTTOM_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="49.0" text="#.#">
                                                    <font>
                                                       <Font name="Dubai Light" size="38.0" />
                                                    </font>

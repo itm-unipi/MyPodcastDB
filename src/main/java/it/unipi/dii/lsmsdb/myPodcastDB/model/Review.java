@@ -3,6 +3,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.model;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 public class Review {
     private String id;
@@ -103,5 +104,18 @@ public class Review {
                 ", rating=" + rating +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Review review = (Review) o;
+        return rating == review.rating && Objects.equals(id, review.id) && Objects.equals(podcastId, review.podcastId) && Objects.equals(authorUsername, review.authorUsername) && Objects.equals(title, review.title) && Objects.equals(content, review.content) && Objects.equals(createdAt, review.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, podcastId, authorUsername, title, content, rating, createdAt);
     }
 }
