@@ -584,7 +584,7 @@ public class HomePageController {
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(author, false, 0, null);
+            controller.setData(author, 0, null);
 
             this.gridSuggestedAuthors.add(newAuthor, this.column++, this.row);
         }
@@ -664,7 +664,7 @@ public class HomePageController {
 
             AnchorPane newAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(author.getValue0(), false, 1, author.getValue1().toString());
+            controller.setData(author.getValue0(), 1, author.getValue1().toString());
 
             this.gridMostFollowedAuthors.add(newAuthor, this.column++, this.row);
         }
@@ -903,25 +903,11 @@ public class HomePageController {
     }
 
     void updateWatchlistGrid() throws IOException {
-        if (this.scrollWatchlist.getHvalue() >= 0.99) {
+        if (scrollWatchlist.getHvalue() >= 0.99) {
             Logger.info("Podcasts loaded and ready to be shown in the grid: " + (this.watchlist.size() - this.gridWatchlist.getColumnCount()));
-
-            if ((this.watchlist.size() - this.gridWatchlist.getColumnCount()) == 0 && !this.noMorePodcastsWatchlist) {
-                Logger.info("(Call to the service) Trying to load new " + this.podcastsToRetrieve + " podcasts in memory");
-
-                HomePageService homepageService = new HomePageService();
-                this.noMorePodcastsWatchlist = homepageService.loadWatchlist(this.watchlist, this.podcastsToRetrieve, this.watchlist.size());
-
-                Logger.info("(End call service) Total podcasts loaded in memory: " + this.watchlist.size() + " | Podcasts available to be shown: " + (this.watchlist.size() - this.gridWatchlist.getColumnCount()));
-                // Updating arrows
-                rightArrowWatchlist.setVisible((this.watchlist.size() - this.gridWatchlist.getColumnCount()) > 0);
-                loadWatchlistGrid(true);
-
-            } else {
-                Logger.info("Podcasts loaded in the grid: " + this.gridWatchlist.getColumnCount() + " | Podcasts in memory: " + this.watchlist.size());
-                // Show podcasts already retrieved from the database
-                loadWatchlistGrid(true);
-            }
+            Logger.info("Podcasts loaded in the grid: " + this.gridWatchlist.getColumnCount() + " | Podcasts in memory: " + this.watchlist.size());
+            // Show podcasts already retrieved from the database
+            loadWatchlistGrid(true);
         }
     }
 

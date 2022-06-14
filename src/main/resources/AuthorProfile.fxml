@@ -145,8 +145,23 @@
                               <Insets bottom="10.0" left="120.0" right="120.0" top="15.0" />
                            </VBox.margin>
                            <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="37.0" prefWidth="804.0">
+                              <HBox alignment="CENTER_LEFT" prefWidth="804.0">
                                  <children>
+                                    <VBox alignment="CENTER" style="-fx-background-color: white; -fx-background-radius: 30; -fx-border-color: #eaeaea; -fx-border-radius: 30;">
+                                       <children>
+                                          <ImageView fx:id="authorPicture" fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@img/authors/author1.png" />
+                                             </image>
+                                          </ImageView>
+                                       </children>
+                                       <HBox.margin>
+                                          <Insets right="7.0" />
+                                       </HBox.margin>
+                                       <padding>
+                                          <Insets bottom="8.0" left="9.0" right="9.0" top="8.0" />
+                                       </padding>
+                                    </VBox>
                                     <Label fx:id="authorName" maxWidth="540.0" text="&lt;author_name&gt;">
                                        <font>
                                           <Font name="Corbel Light" size="30.0" />
@@ -173,7 +188,7 @@
                                           <Cursor fx:constant="HAND" />
                                        </cursor>
                                        <padding>
-                                          <Insets bottom="8.0" left="20.0" right="20.0" top="8.0" />
+                                          <Insets bottom="5.0" left="14.0" right="14.0" top="5.0" />
                                        </padding>
                                     </Button>
                                     <Button fx:id="btnDeleteAuthor" mnemonicParsing="false" onMouseClicked="#deleteAuthorByAdmin" onMouseEntered="#onHoverBtnDeleteAuthor" onMouseExited="#onExitedBtnDeleteAuthor" style="-fx-background-color: #555555; -fx-border-color: #555555; -fx-background-insets: 0; -fx-background-radius: 4; -fx-border-radius: 4;" text="Delete Author" textFill="WHITE">
@@ -251,7 +266,7 @@
                            <children>
                               <Label fx:id="podcastLabel" prefWidth="1045.0" text="Podcasts">
                                  <font>
-                                    <Font name="Corbel Light" size="22.0" />
+                                    <Font name="Corbel Light" size="21.0" />
                                  </font>
                                  <VBox.margin>
                                     <Insets bottom="6.0" left="-1.0" top="-5.0" />
@@ -301,7 +316,7 @@
                <children>
                   <Label prefWidth="1045.0" text="Following">
                      <font>
-                        <Font name="Corbel Light" size="22.0" />
+                        <Font name="Corbel Light" size="21.0" />
                      </font>
                   </Label>
                   <Label fx:id="authorFollowing" prefWidth="1045.0" text="Authors followed by AuthorName">

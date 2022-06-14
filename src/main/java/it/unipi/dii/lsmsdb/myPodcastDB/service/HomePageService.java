@@ -1,6 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedAuthorCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedUserCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.WatchlistCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
@@ -38,6 +41,19 @@ public class HomePageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
+        /********************************************/
+        // TODO: da rimuovere
+        List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByUser(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        if (followed != null)
+            FollowedAuthorCache.addAuthorList(followed);
+        List<Podcast> pods = this.podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        if (pods != null)
+            WatchlistCache.addPodcastList(pods);
+        List<User> followedUsers = this.userNeo4jManager.showFollowedUsers(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
+        if (followedUsers != null)
+            FollowedUserCache.addUserList(followedUsers);
+        /********************************************/
+
         // Loading top rated in user's country
         List<Triplet<Podcast, String, Float>> resultsTopCountry = new ArrayList<>();
         this.queryMongoManager.getPodcastWithHighestAverageRatingPerCountry(resultsTopCountry);
@@ -60,10 +76,11 @@ public class HomePageService {
         List<Podcast> podcasts;
         List<Author> authors;
 
-        // Load podcasts in watchlist
-        podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, 0);
-        if(podcasts != null)
-            watchlist.addAll(podcasts);
+        // Load podcasts in watchlist from cache
+        Logger.info("Podcasts in watchlist loaded in cache: " + WatchlistCache.getAllPodcastsInWatchlist().toString());
+        List<Podcast> podcastsInWatchlist = WatchlistCache.getAllPodcastsInWatchlist();
+        if(!podcastsInWatchlist.isEmpty())
+            watchlist.addAll(podcastsInWatchlist);
 
         // Load your top genres
         podcasts = podcastNeo4jManager.showSuggestedPodcastsBasedOnCategoryOfPodcastsUserLiked(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, 0);
@@ -123,22 +140,6 @@ public class HomePageService {
         return noMorePodcasts;
     }
 
-    public boolean loadWatchlist(List<Podcast> watchlist, int limit, int skip) {
-        Logger.info("Retrieving podcasts in watchlist");
-        Neo4jManager.getInstance().openConnection();
-
-        List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), limit, skip);
-        if(podcasts != null) {
-            watchlist.addAll(podcasts);
-        }
-
-        boolean noMorePodcastsWatchlist = (podcasts == null || podcasts.size() < limit);
-        Logger.info("No more podcasts: " + noMorePodcastsWatchlist);
-
-        Neo4jManager.getInstance().closeConnection();
-        return noMorePodcastsWatchlist;
-    }
-
     public boolean loadTopGenres(List<Podcast> topGenres, int limit, int skip) {
         Logger.info("Retrieving top genres podcasts");
         Neo4jManager.getInstance().openConnection();
@@ -187,6 +188,82 @@ public class HomePageService {
         return noMoreAuthors;
     }
 
+    public boolean followAuthorAsUser(Author author) {
+        Neo4jManager.getInstance().openConnection();
+        boolean result = userNeo4jManager.addUserFollowAuthor(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
+
+        if (result) {
+            Logger.success("(User) You started following " + author.getName());
+
+            // Updating cache
+            FollowedAuthorCache.addAuthor(author);
+            Logger.info("Added in cache");
+            Logger.info("Authors in cache: " + FollowedAuthorCache.getAllFollowedAuthors().toString());
+        } else {
+            Logger.error("(User) Error during the following operation");
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        return result;
+    }
+
+    public boolean unfollowAuthorAsUser(Author author) {
+        Neo4jManager.getInstance().openConnection();
+        boolean result = userNeo4jManager.deleteUserFollowAuthor(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
+
+        if (result) {
+            Logger.success("(User) You unfollowed " + author.getName());
+
+            // Updating cache
+            FollowedAuthorCache.removeAuthor(author.getName());
+            Logger.info("Remove from cache");
+            Logger.info("Authors in cache: " + FollowedAuthorCache.getAllFollowedAuthors().toString());
+        } else {
+            Logger.error("(User) Error during the unfollowing operation");
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        return result;
+    }
+
+    public boolean addPodcastInWatchlist(Podcast podcast) {
+        Neo4jManager.getInstance().openConnection();
+        boolean result = userNeo4jManager.addUserWatchLaterPodcast(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
+
+        if (result) {
+            Logger.success("Podcast added into the watchlist: " + podcast);
+
+            // Updating cache
+            WatchlistCache.addPodcast(podcast);
+            Logger.info("Podcast added in cache " + podcast);
+            Logger.info("Podcast in watchlist: " + WatchlistCache.getAllPodcastsInWatchlist().toString());
+        } else {
+            Logger.error("Error during the creation of the relationship");
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        return result;
+    }
+
+    public boolean removePodcastFromWatchlist(Podcast podcast) {
+        Neo4jManager.getInstance().openConnection();
+        boolean result = userNeo4jManager.deleteUserWatchLaterPodcast(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
+
+        if (result) {
+            Logger.success("Podcast removed from the watchlist: " + podcast);
+
+            // Updating cache
+            WatchlistCache.removePodcast(podcast.getId());
+            Logger.info("Podcast removed from the cache ");
+            Logger.info("Podcast in watchlist: " + WatchlistCache.getAllPodcastsInWatchlist().toString());
+        } else {
+            Logger.error("Error during the delete of the relationship");
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        return result;
+    }
+
     /***** ADMIN HOMEPAGE ******/
     public void loadHomepageAsAdmin(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
         Logger.info("Loading Homepage as Admin");
@@ -210,10 +287,51 @@ public class HomePageService {
         MongoManager.getInstance().closeConnection();
     }
 
+    public boolean followAuthorAsAuthor(Author author) {
+        Neo4jManager.getInstance().openConnection();
+        boolean result = authorNeo4jManager.addAuthorFollowsAuthor(((Author) (MyPodcastDB.getInstance().getSessionActor())).getName(), author.getName());
+
+        if (result) {
+            Logger.success("(Author) You started following " + author.getName());
+
+            // Updating cache
+            FollowedAuthorCache.addAuthor(author);
+            Logger.info("Added from cache");
+            Logger.info("Authors in cache: " + FollowedAuthorCache.getAllFollowedAuthors().toString());
+        } else {
+            Logger.error("(Author) Error during the following operation");
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        return result;
+    }
+
+    public boolean unfollowAuthorAsAuthor(Author author) {
+        Neo4jManager.getInstance().openConnection();
+        boolean result = authorNeo4jManager.deleteAuthorFollowsAuthor(((Author) (MyPodcastDB.getInstance().getSessionActor())).getName(), author.getName());
+
+        if (result) {
+            Logger.success("(Author) You unfollowed " + author.getName());
+
+            // Updating cache
+            FollowedAuthorCache.removeAuthor(author.getName());
+            Logger.info("Remove from cache");
+            Logger.info("Authors in cache: " + FollowedAuthorCache.getAllFollowedAuthors().toString());
+        } else {
+            Logger.error("(Author) Error during the unfollowing operation");
+        }
+
+        Neo4jManager.getInstance().closeConnection();
+        return result;
+    }
+
     /***** AUTHOR HOMEPAGE ******/
     public void loadHomepageAsAuthor(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
+
+        // TODO: da rimuovere
+        FollowedAuthorCache.addAuthorList(this.authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()));
 
         // Loading Top Rated Podcasts
         List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();

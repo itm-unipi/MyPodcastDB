@@ -1,9 +1,11 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedAuthorCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AuthorProfileService;
 import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.HomePageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
@@ -25,6 +27,8 @@ public class AuthorPreviewController {
 
     private final String actorType;
 
+    private boolean isFollowing;
+
     @FXML
     private ImageView authorPicture;
 
@@ -32,7 +36,10 @@ public class AuthorPreviewController {
     private VBox boxAuthorImage;
 
     @FXML
-    private Button btnFollowAuthor;
+    private VBox boxFollowAuthor;
+
+    @FXML
+    private ImageView followStatus;
 
     @FXML
     private Label nameAuthorFollowed;
@@ -49,23 +56,15 @@ public class AuthorPreviewController {
 
     @FXML
     void onAuthor(MouseEvent event) {
-        boxAuthorImage.setStyle("-fx-background-color:  #eaeaea; -fx-background-radius: 100; -fx-border-color: #d3d3d3; -fx-border-radius: 100;");
+        boxAuthorImage.setStyle("-fx-background-color:  #e7e7e7; -fx-background-radius: 100; -fx-border-color: #c9c9c9; -fx-border-radius: 100;");
 
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
-            if (!MyPodcastDB.getInstance().getSessionPage().equals("HomePage.fxml")) {
-                FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), authorPicture);
-                fadeAuthorImage.setFromValue(1.0);
-                fadeAuthorImage.setToValue(0.2);
-                fadeAuthorImage.play();
-
-                btnFollowAuthor.setVisible(true);
-                btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
-
-                FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.7), btnFollowAuthor);
-                fadeButton.setFromValue(0);
-                fadeButton.setToValue(1.0);
-                fadeButton.play();
-            }
+            boxFollowAuthor.setVisible(true);
+            boxFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color:  #f7f7f7");
+            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.4), boxFollowAuthor);
+            fadeButton.setFromValue(0);
+            fadeButton.setToValue(1.0);
+            fadeButton.play();
         }
     }
 
@@ -74,31 +73,22 @@ public class AuthorPreviewController {
         boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
 
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
-            if (!MyPodcastDB.getInstance().getSessionPage().equals("HomePage.fxml")) {
-                FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), authorPicture);
-                fadeAuthorImage.setFromValue(0.3);
-                fadeAuthorImage.setToValue(1.0);
-                fadeAuthorImage.play();
-
-                btnFollowAuthor.setVisible(false);
-                btnFollowAuthor.setStyle("-fx-pref-width: 0; -fx-min-width: 0; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
-
-                FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.3), btnFollowAuthor);
-                fadeButton.setFromValue(1.0);
-                fadeButton.setToValue(0);
-                fadeButton.play();
-            }
+            boxFollowAuthor.setVisible(false);
+            FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.4), boxFollowAuthor);
+            fadeButton.setFromValue(1.0);
+            fadeButton.setToValue(0);
+            fadeButton.play();
         }
     }
 
     @FXML
-    void onMouseHoverFollowButton(MouseEvent event) {
-        btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: #FAFAFAFF; -fx-background-radius: 12; -fx-border-radius: 12;");
+    void onHoverFollow(MouseEvent event) {
+        boxFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color:  #eaeaea");
     }
 
     @FXML
-    void onMouseExitedFollowButton(MouseEvent event) {
-        btnFollowAuthor.setStyle("-fx-pref-width: 80; -fx-min-width: 80; -fx-pref-height: 30; -fx-min-height: 30; -fx-background-color: white; -fx-background-radius: 12; -fx-border-radius: 12;");
+    void onExitedFollow(MouseEvent event) {
+        boxFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color:  #f7f7f7");
     }
 
     @FXML
@@ -112,42 +102,69 @@ public class AuthorPreviewController {
     }
 
     @FXML
-    void onClickBtnFollowAuthor(MouseEvent event) {
+    void onClickFollowAuthor(MouseEvent event) {
+        if (MyPodcastDB.getInstance().getSessionPage().equals("AuthorProfile.fxml")) {
+            Logger.info("Follow/Unfollow from author profile page");
+            fromAuthorProfile();
+        } else if (MyPodcastDB.getInstance().getSessionPage().equals("HomePage.fxml")) {
+            Logger.info("Follow/Unfollow from homepage");
+            fromHomepage();
+        } else {
+            Logger.error("Error: page undefined");
+        }
+    }
 
+    void fromAuthorProfile() {
         AuthorProfileService authorProfileService = new AuthorProfileService();
         if (this.actorType.equals("Author")) {
 
-            if (btnFollowAuthor.getText().equals("Follow")) {
-                authorProfileService.followAuthorAsAuthor(this.author.getName());
-                btnFollowAuthor.setText("Unfollow");
-
-                // Increment followers counter
-                updateFollowerCounter(true);
+            if (!this.isFollowing) {
+                this.isFollowing = authorProfileService.followAuthorAsAuthor(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             } else {
-                authorProfileService.unfollowAuthorAsAuthor(this.author.getName());
-                btnFollowAuthor.setText("Follow");
-
-                // Decrement followers counter
-                updateFollowerCounter(false);
+                this.isFollowing = !authorProfileService.unfollowAuthorAsAuthor(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
             }
         } else if (this.actorType.equals("User")) {
 
-            if (btnFollowAuthor.getText().equals("Follow")) {
-                authorProfileService.followAuthorAsUser(this.author.getName());
-                btnFollowAuthor.setText("Unfollow");
-                updateFollowerCounter(true);
+            if (!this.isFollowing) {
+                this.isFollowing = authorProfileService.followAuthorAsUser(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             } else {
-                authorProfileService.unfollowAuthorAsUser(this.author.getName());
-                btnFollowAuthor.setText("Follow");
-                updateFollowerCounter(false);
+                this.isFollowing = !authorProfileService.unfollowAuthorAsUser(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
             }
-
         } else {
             Logger.error("Operation not allowed!");
         }
     }
 
-    void updateFollowerCounter(boolean increment) {
+    void fromHomepage() {
+        HomePageService homePageService = new HomePageService();
+        if (this.actorType.equals("Author")) {
+
+            if (!this.isFollowing) {
+                this.isFollowing = homePageService.followAuthorAsAuthor(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+            } else {
+                this.isFollowing = !homePageService.unfollowAuthorAsAuthor(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
+            }
+        } else if (this.actorType.equals("User")) {
+
+            if (!this.isFollowing) {
+                this.isFollowing = homePageService.followAuthorAsUser(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+            } else {
+                this.isFollowing = !homePageService.unfollowAuthorAsUser(this.author);
+                this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
+            }
+        } else {
+            Logger.error("Operation not allowed!");
+        }
+    }
+
+    void updateFollowersCounter(boolean increment) {
         int followers = Integer.parseInt(counterFollowersLabel.getText());
 
         if (increment)
@@ -158,15 +175,17 @@ public class AuthorPreviewController {
         counterFollowersLabel.setText(String.valueOf(followers));
     }
 
-    public void setData(Author author, boolean follow, int typeLabel, String valueLabel) {
+    public void setData(Author author, int typeLabel, String valueLabel) {
         this.author = author;
         this.nameAuthorFollowed.setText(author.getName());
 
         Image image = ImageCache.getImageFromLocalPath(this.author.getPicturePath());
         this.authorPicture.setImage(image);
 
-        if (follow)
-            this.btnFollowAuthor.setText("Unfollow");
+        this.isFollowing = (FollowedAuthorCache.getAuthor(author.getName()) != null);
+        if (this.isFollowing) {
+            this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+        }
 
         if (typeLabel == 1) {
             this.boxCounterFollowers.setVisible(true);

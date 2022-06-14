@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedAuthorCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
@@ -36,12 +37,7 @@ public class AuthorProfileController {
 
     private final String actorType;
 
-    private final List<Pair<Author, Boolean>> followedAuthorsByAuthor;
-
-    // List of following authors of the session actor
-    private List<String> following;
-
-    private boolean followingAuthor;
+    private final List<Author> followedAuthorsByAuthor;
 
     private int row;
 
@@ -87,6 +83,9 @@ public class AuthorProfileController {
 
     @FXML
     private ImageView actorPicture;
+
+    @FXML
+    private ImageView authorPicture;
 
     @FXML
     private ImageView logout;
@@ -138,10 +137,8 @@ public class AuthorProfileController {
 
     public AuthorProfileController() {
         this.actorType = MyPodcastDB.getInstance().getSessionType();
-        this.followingAuthor = false;
         this.author = new Author();
         this.followedAuthorsByAuthor = new ArrayList<>();
-        this.following = new ArrayList<>();
 
         // Authors retrieved from the databases in one request (corresponds to the "limit")
         this.authorsToRetrieve = 16;
@@ -211,20 +208,20 @@ public class AuthorProfileController {
         if (this.actorType.equals("Author")) {
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthorAsAuthor((String)StageManager.getObjectIdentifier());
+                authorService.followAuthorAsAuthor(new Author(null, this.author.getName(), this.author.getPicturePath()));
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                authorService.unfollowAuthorAsAuthor((String)StageManager.getObjectIdentifier());
+                authorService.unfollowAuthorAsAuthor(new Author(null, this.author.getName(), this.author.getPicturePath()));
                 btnFollowAuthor.setText("Follow");
             }
 
         } else if (this.actorType.equals("User")) {
 
             if (btnFollowAuthor.getText().equals("Follow")) {
-                authorService.followAuthorAsUser((String)StageManager.getObjectIdentifier());
+                authorService.followAuthorAsUser(new Author(null, this.author.getName(), this.author.getPicturePath()));
                 btnFollowAuthor.setText("Unfollow");
             } else {
-                authorService.unfollowAuthorAsUser((String)StageManager.getObjectIdentifier());
+                authorService.unfollowAuthorAsUser(new Author(null, this.author.getName(), this.author.getPicturePath()));
                 btnFollowAuthor.setText("Follow");
             }
 
@@ -377,13 +374,13 @@ public class AuthorProfileController {
         clearIndexes(newLoad, false);
 
         int maxValue = Math.min(this.followedAuthorsByAuthor.size(), (gridAuthorsFollowed.getColumnCount() + this.authorsToLoadInGrid));
-        for (Pair<Author, Boolean> followedAuthor: this.followedAuthorsByAuthor.subList(gridAuthorsFollowed.getColumnCount(), maxValue)) {
+        for (Author followedAuthor: this.followedAuthorsByAuthor.subList(gridAuthorsFollowed.getColumnCount(), maxValue)) {
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(getClass().getClassLoader().getResource("AuthorPreview.fxml"));
 
             AnchorPane newFollowedAuthor = fxmlLoader.load();
             AuthorPreviewController controller = fxmlLoader.getController();
-            controller.setData(followedAuthor.getValue0(), followedAuthor.getValue1(), 0, null);
+            controller.setData(followedAuthor, 0, null);
 
             this.gridAuthorsFollowed.add(newFollowedAuthor, this.column++, this.row);
         }
@@ -444,16 +441,12 @@ public class AuthorProfileController {
                 AuthorProfileService authorProfileService = new AuthorProfileService();
                 switch (this.actorType) {
                     case "Author" -> {
-
                         // Need to distinguish if the session author is also the visited author
-                        if (StageManager.getObjectIdentifier().equals(this.author.getName())) {
-                            this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsPageOwner(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve, this.followedAuthorsByAuthor.size());
-                        } else {
-                            this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsAuthor(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve, this.followedAuthorsByAuthor.size());
-                        }
+                        if (!StageManager.getObjectIdentifier().equals(this.author.getName()))
+                            this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsAuthor(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve, this.followedAuthorsByAuthor.size());
                     }
                     case "User" -> {
-                        this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsUser(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve, this.followedAuthorsByAuthor.size());
+                        this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsUser(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve, this.followedAuthorsByAuthor.size());
                     }
                     case "Admin" -> {
                         this.noMoreAuthors = authorProfileService.loadFollowedAuthorsAsAdmin(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve, this.followedAuthorsByAuthor.size());
@@ -481,7 +474,6 @@ public class AuthorProfileController {
     }
 
     void setupScrollArrows() {
-
         if (this.followedAuthorsByAuthor.size() >= this.authorsToLoadInGrid) {
             this.rightArrow.setVisible(true);
             Logger.info("There are authors to load");
@@ -551,6 +543,7 @@ public class AuthorProfileController {
 
                     authorName.setText(sessionActor.getName());
                     tooltipAuthorName.setText(sessionActor.getName());
+                    authorPicture.setImage(ImageCache.getImageFromLocalPath(sessionActor.getPicturePath()));
                     authorFollowing.setText("Authors you follow");
                     podcastLabel.setText("Your podcasts");
 
@@ -563,17 +556,16 @@ public class AuthorProfileController {
                 } else {
                     // Author profile requested is different form the session author
                     this.author.setName((String)StageManager.getObjectIdentifier());
-                    entityFound = authorProfileService.loadAuthorProfileAsAuthor(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
+                    entityFound = authorProfileService.loadAuthorProfileAsAuthor(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                     // Checking if the session actor follows the visited author (this not count for the author in his own profile)
-                    this.followingAuthor = this.following.contains(StageManager.getObjectIdentifier());
-
-                    if (this.followingAuthor)
+                    if (FollowedAuthorCache.getAuthor(this.author.getName()) != null)
                         btnFollowAuthor.setText("Unfollow");
 
                     // Setting GUI information about the author visited
                     authorName.setText(this.author.getName());
                     tooltipAuthorName.setText(this.author.getName());
+                    authorPicture.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
                     authorFollowing.setText("Authors followed by " + this.author.getName());
                     podcastLabel.setText("Podcasts");
 
@@ -594,17 +586,16 @@ public class AuthorProfileController {
 
                 // Requesting the author's information from the database
                 this.author.setName((String)StageManager.getObjectIdentifier());
-                entityFound = authorProfileService.loadAuthorProfileAsUser(this.author, this.followedAuthorsByAuthor, this.following, this.authorsToRetrieve);
+                entityFound = authorProfileService.loadAuthorProfileAsUser(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                 // Checking if the session actor follows the visited author (this not count for the author in his own profile)
-                this.followingAuthor = this.following.contains(StageManager.getObjectIdentifier());
-
-                if (this.followingAuthor)
+                if (FollowedAuthorCache.getAuthor(this.author.getName()) != null)
                     btnFollowAuthor.setText("Unfollow");
 
                 // Setting GUI information about the author visited
-                this.authorName.setText(author.getName());
+                this.authorName.setText(this.author.getName());
                 this.tooltipAuthorName.setText(this.author.getName());
+                this.authorPicture.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
                 this.authorFollowing.setText("Authors followed by " + this.author.getName());
                 this.podcastLabel.setText("Podcasts");
 
@@ -627,14 +618,13 @@ public class AuthorProfileController {
                 entityFound = authorProfileService.loadAuthorProfileAsAdmin(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                 // Checking if the session actor follows the visited author (this not count for the author in his own profile)
-                this.followingAuthor = this.following.contains(StageManager.getObjectIdentifier());
-
-                if (this.followingAuthor)
+                if (FollowedAuthorCache.getAuthor(this.author.getName()) != null)
                     btnFollowAuthor.setText("Unfollow");
 
                 // Setting GUI information of the author visited
                 this.authorName.setText(this.author.getName());
                 this.tooltipAuthorName.setText(this.author.getName());
+                this.authorPicture.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
                 this.authorFollowing.setText("Authors followed by " + this.author.getName());
                 this.podcastLabel.setText("Podcasts");
 
@@ -653,6 +643,7 @@ public class AuthorProfileController {
 
                 this.authorName.setText(this.author.getName());
                 this.tooltipAuthorName.setText(this.author.getName());
+                this.authorPicture.setImage(ImageCache.getImageFromLocalPath(this.author.getPicturePath()));
                 this.authorFollowing.setText("Authors followed by " + this.author.getName());
                 this.podcastLabel.setText("Podcasts");
 

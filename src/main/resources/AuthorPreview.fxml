@@ -2,45 +2,53 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.AuthorPreviewController">
    <children>
-      <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onAuthor" onMouseExited="#outAuthor" prefWidth="150.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="boxAuthorImage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickAuthor" onMouseEntered="#onAuthor" onMouseExited="#outAuthor" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 100; -fx-border-radius: 100; -fx-border-color: #eaeaea;">
+            <StackPane>
                <children>
-                  <ImageView fx:id="authorPicture" fitHeight="50.0" fitWidth="83.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@img/authorAnonymousPicture.png" />
-                     </image>
-                     <VBox.margin>
-                        <Insets bottom="-38.0" />
-                     </VBox.margin>
-                  </ImageView>
-                  <Button fx:id="btnFollowAuthor" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#onClickBtnFollowAuthor" onMouseEntered="#onMouseHoverFollowButton" onMouseExited="#onMouseExitedFollowButton" prefHeight="30.0" prefWidth="0.0" style="-fx-background-color: white; -fx-background-radius: 12;" text="Follow">
-                     <font>
-                        <Font name="Corbel Light" size="14.0" />
-                     </font>
+                  <VBox fx:id="boxAuthorImage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickAuthor" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 100; -fx-border-radius: 100; -fx-border-color: #eaeaea;">
+                     <children>
+                        <ImageView fx:id="authorPicture" fitHeight="50.0" fitWidth="83.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/authorAnonymousPicture.png" />
+                           </image>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </ImageView>
+                     </children>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </Button>
+                  </VBox>
+                  <VBox fx:id="boxFollowAuthor" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onHoverFollow" onMouseExited="#onExitedFollow" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color: #f7f7f7;" translateX="45.0" translateY="-45.0" visible="false">
+                     <children>
+                        <ImageView fx:id="followStatus" fitHeight="26.0" fitWidth="26.0" onMouseClicked="#onClickFollowAuthor" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/follow.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </VBox>
                </children>
-               <cursor>
-                  <Cursor fx:constant="HAND" />
-               </cursor>
-            </VBox>
+            </StackPane>
             <Label fx:id="nameAuthorFollowed" alignment="CENTER" onMouseClicked="#onClickAuthorName" text="&lt;author_name&gt;">
                <font>
                   <Font name="Corbel Light" size="18.0" />

@@ -14,9 +14,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="235.0" prefWidth="205.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewController">
    <children>
-      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <StackPane onMouseEntered="#onHoverPodcast" onMouseExited="#onExitedPodcast" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox fx:id="podcastPreviewBox" alignment="CENTER" onMouseClicked="#podcastInfo" onMouseEntered="#onFocus" onMouseExited="#onExit" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: transparent; -fx-border-color: transparent;">
+            <VBox fx:id="podcastPreviewBox" alignment="CENTER" onMouseClicked="#onClickPodcast" style="-fx-background-radius: 5; -fx-border-radius: 5; -fx-background-color: transparent; -fx-border-color: transparent;">
                <children>
                   <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="185.0" prefWidth="185.0" style="-fx-background-color: #eaeaea;">
                      <children>
@@ -43,6 +43,18 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
+            <HBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" translateX="-78.0" translateY="-89.0" visible="false">
+               <children>
+                  <ImageView fx:id="watchlistStatus" fitHeight="28.0" fitWidth="28.0" onMouseClicked="#onClickBtnWatchlist" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@img/addWatchlist.png" />
+                     </image>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </HBox>
             <HBox fx:id="boxRating" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="58.0" translateY="-90.0" visible="false">
                <children>
                   <ImageView fitHeight="19.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">

@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.neo4j.driver.Value;
 import org.neo4j.driver.Record;
@@ -474,6 +475,7 @@ public class UserNeo4j {
 
         return users;
     }
+
     public List<User> showFollowedUsers(String username) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u1:User { username: $username})-[r:FOLLOWS_USER]->(u2:User)" + "\n" +

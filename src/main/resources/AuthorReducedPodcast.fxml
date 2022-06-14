@@ -7,6 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -56,34 +57,63 @@
                   <Insets left="5.0" />
                </padding>
             </VBox>
-            <VBox fx:id="boxDeletePodcast" alignment="CENTER">
-               <children>
-                  <VBox fx:id="boxDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="31.0" prefWidth="31.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <children>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#deletePodcast" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@img/deleteActor.png" />
-                           </image>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                     </padding>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                  </VBox>
-               </children>
+            <StackPane>
                <HBox.margin>
                   <Insets left="6.0" right="1.0" />
                </HBox.margin>
-            </VBox>
+               <children>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <VBox fx:id="boxDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="31.0" prefWidth="31.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <children>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#deletePodcast" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/deleteActor.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER">
+                     <children>
+                        <VBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverWatchlist" onMouseExited="#onMouseExitedWatchlist" prefHeight="31.0" prefWidth="31.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <children>
+                              <ImageView fx:id="watchlistStatus" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onClickWatchlist" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/addWatchlist.png" />
+                                 </image>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </ImageView>
+                           </children>
+                           <padding>
+                              <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                           </padding>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </VBox>
+                     </children>
+                  </VBox>
+               </children>
+            </StackPane>
             <VBox alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="92.0">
                <children>
                   <Label fx:id="podcastReleaseDate" alignment="CENTER_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" text="&lt;release_date&gt;">

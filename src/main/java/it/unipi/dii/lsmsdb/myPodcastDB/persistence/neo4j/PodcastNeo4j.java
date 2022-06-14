@@ -308,10 +308,8 @@ public class PodcastNeo4j {
     }
 
     public List<Podcast> showPodcastsInWatchlist(String username) {
-
         Neo4jManager manager = Neo4jManager.getInstance();
-        String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast)" + "\n"+
-                "RETURN p";
+        String query = "MATCH (u:User { username: $username})-[r:WATCH_LATER]->(p:Podcast) RETURN p";
         Value params = parameters("username", username);
         List<Record> result = null;
 
@@ -325,7 +323,6 @@ public class PodcastNeo4j {
 
         if(result == null || !result.iterator().hasNext())
             return null;
-
 
         List<Podcast> podcasts = new ArrayList<>();
         for(Record record : result){
