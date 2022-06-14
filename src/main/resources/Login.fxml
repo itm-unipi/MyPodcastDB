@@ -47,7 +47,7 @@
             <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
                <children>
                   <Pane prefHeight="101.0" prefWidth="920.0" />
-                  <Label fx:id="loginUsernameLabel" alignment="CENTER" prefHeight="17.0" prefWidth="921.0" text="Username" textFill="#636366">
+                  <Label fx:id="loginUsernameLabel" alignment="CENTER" prefHeight="17.0" prefWidth="921.0" text="Username or Email" textFill="#636366">
                      <font>
                         <Font name="Corbel Bold" size="20.0" />
                      </font>

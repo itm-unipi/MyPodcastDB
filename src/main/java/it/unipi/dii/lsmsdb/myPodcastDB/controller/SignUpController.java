@@ -155,6 +155,11 @@ public class SignUpController {
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
                 return;
             }
+            else if(username.indexOf('@') != -1){
+                Logger.error("Username not valid [@]");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Username not valid [@]");
+                return;
+            }
             else if(email.indexOf('@') == -1){
                 Logger.error("Email not valid");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Email not valid");
@@ -221,6 +226,11 @@ public class SignUpController {
             if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty()) {
                 Logger.error("Invalid values");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
+                return;
+            }
+            else if(name.indexOf('@') != -1){
+                Logger.error("Name not valid [@]");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Name not valid [@]");
                 return;
             }
             else if(email.indexOf('@') == -1){

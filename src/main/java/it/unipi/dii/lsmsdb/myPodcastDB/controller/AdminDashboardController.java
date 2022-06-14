@@ -296,6 +296,11 @@ public class AdminDashboardController {
             DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Invalid values");
             return;
         }
+        if(name.indexOf('@') != -1){
+            Logger.error("Username not valid [@]");
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Username not valid [@]");
+            return;
+        }
         if(email.indexOf('@') == -1){
             Logger.error("Invalid email");
             DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Invalid email");

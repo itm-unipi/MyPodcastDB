@@ -678,6 +678,11 @@ public class UserPageController {
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid inputs");
             return;
         }
+        else if(newUser.getUsername().indexOf('@') != -1){
+            Logger.error("Username not valid [@]");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Username not valid [@]");
+            return;
+        }
         if(newUser.getEmail().indexOf('@') == -1){
             Logger.error("Invalid email");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid email");

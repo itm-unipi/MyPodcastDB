@@ -60,6 +60,11 @@ public class AddAdminController {
             DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid inputs");
             return;
         }
+        if(name.indexOf('@') != -1){
+            Logger.error("Username not valid [@]");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Username not valid [@]");
+            return;
+        }
         if(!password.equals(rpPassword)){
             Logger.error("Passwords not the same");
             DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Password not the same");

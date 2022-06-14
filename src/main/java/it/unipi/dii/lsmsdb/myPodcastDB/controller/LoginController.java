@@ -150,17 +150,17 @@ public class LoginController {
     @FXML
     void userRadioButtonClick(){
 
-        loginUsernameLabel.setText("Username");
+        loginUsernameLabel.setText("Username or Email");
     }
 
     @FXML
     void authorRadioButtonClick(){
-        loginUsernameLabel.setText("Author Name");
+        loginUsernameLabel.setText("Author Name or Email");
     }
 
     @FXML
     void adminRadioButtonClick(){
-        loginUsernameLabel.setText("Admin Name");
+        loginUsernameLabel.setText("Admin Name or Email");
     }
 
     @FXML
@@ -203,7 +203,10 @@ public class LoginController {
             Logger.info("User actor selected");
             String actorType = "User";
             User user = new User();
-            user.setUsername(actorName);
+            if(actorName.indexOf('@') == -1)
+                user.setUsername(actorName);
+            else
+                user.setEmail(actorName);
             user.setPassword(password);
             //user = (User)simActorService(actorName, password, actorType);
             res = service.getUserLogin(user);
@@ -230,7 +233,10 @@ public class LoginController {
             Logger.info("Author actor selected");
             String actorType = "Author";
             Author author = new Author();
-            author.setName(actorName);
+            if(actorName.indexOf('@') == -1)
+                author.setName(actorName);
+            else
+                author.setEmail(actorName);
             author.setPassword(password);
             //author = (Author)simActorService(actorName, password, actorType);
             res = service.getAuthorLogin(author);
@@ -258,7 +264,10 @@ public class LoginController {
             Logger.info("Admin actor selected");
             String actorType = "Admin";
             Admin admin = new Admin();
-            admin.setName(actorName);
+            if(actorName.indexOf('@') == -1)
+                admin.setName(actorName);
+            else
+                admin.setEmail(actorName);
             admin.setPassword(password);
             //admin = (Admin)simActorService(actorName, password, actorType);
             res = service.getAdminLogin(admin);

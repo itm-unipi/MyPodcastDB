@@ -47,11 +47,15 @@ public class LoginService {
         Neo4jManager.getInstance().openConnection();
 
         //check if user exists
-        User newUser = userMongoManager.findUserByUsername(user.getUsername());
+        User newUser;
+        if(user.getUsername() != null && !user.getUsername().isEmpty())
+            newUser = userMongoManager.findUserByUsername(user.getUsername());
+        else
+            newUser = userMongoManager.findUserByEmail(user.getEmail());
         if(newUser == null)
             res = 1;
         //check if user exists on neo4j
-        else if(!userNeo4jManager.findUserByUsername(user.getUsername()))
+        else if(!userNeo4jManager.findUserByUsername(newUser.getUsername()))
             res = 2;
         //check if password is correct
         else if(!user.getPassword().equals(newUser.getPassword()))
@@ -93,11 +97,15 @@ public class LoginService {
         Neo4jManager.getInstance().openConnection();
 
         //check if author exists on mongo
-        Author newAuthor = authorMongoManager.findAuthorByName(author.getName());
+        Author newAuthor;
+        if(author.getName() != null && !author.getName().isEmpty())
+            newAuthor = authorMongoManager.findAuthorByName(author.getName());
+        else
+            newAuthor = authorMongoManager.findAuthorByEmail(author.getEmail());
         if(newAuthor == null)
             res = 1;
         //check if author exists on neo4j
-        else if(!authorNeo4jManager.findAuthorByName(author.getName()))
+        else if(!authorNeo4jManager.findAuthorByName(newAuthor.getName()))
             res = 2;
         //check if password is correct
         else if(!author.getPassword().equals(newAuthor.getPassword()))
@@ -126,7 +134,11 @@ public class LoginService {
         MongoManager.getInstance().openConnection();
 
         //check if admin exists
-        Admin newAdmin = adminMongoManager.findAdminByName(admin.getName());
+        Admin newAdmin;
+        if(admin.getName() != null && !admin.getName().isEmpty())
+            newAdmin = adminMongoManager.findAdminByName(admin.getName());
+        else
+            newAdmin = adminMongoManager.findAdminByEmail(admin.getEmail());
         if(newAdmin == null)
             res = 1;
         //check if password is correct
