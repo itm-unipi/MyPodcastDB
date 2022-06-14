@@ -474,10 +474,10 @@ public class UserNeo4j {
 
         return users;
     }
-    public List<String> showFollowedUsers(String username) {
+    public List<User> showFollowedUsers(String username) {
         Neo4jManager manager = Neo4jManager.getInstance();
         String query = " MATCH (u1:User { username: $username})-[r:FOLLOWS_USER]->(u2:User)" + "\n" +
-                "RETURN u2.username as username";
+                "RETURN u2";
         Value params = parameters("username", username);
         List<Record> result = null;
 
@@ -491,9 +491,13 @@ public class UserNeo4j {
         if (result == null || !result.iterator().hasNext())
             return null;
 
-        List<String> users = new ArrayList<>();
+        List<User> users = new ArrayList<>();
         for (Record record : result) {
-            users.add(record.get("username").asString());
+            String followedUsername = record.get(0).get("username").asString();
+            String picturePath = record.get(0).get("picturePath").asString();
+
+            User user = new User(followedUsername, picturePath);
+            users.add(user);
         }
 
         return users;

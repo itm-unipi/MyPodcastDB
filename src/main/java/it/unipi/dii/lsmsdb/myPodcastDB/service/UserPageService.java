@@ -42,7 +42,6 @@ public class UserPageService {
             List<Author> followedAuthors,
             List<User> followedUsers,
             List<String> wPodcastsByVisitor,
-            List<String> lPodcastsByVisitor,
             List<String> followedAuthorsByVisitor,
             List<String> followedUsersByVisitor,
             int limitPodcast,
@@ -80,27 +79,23 @@ public class UserPageService {
 
             if(visitorType.equals("User") && !visitor.equals(pageOwner.getUsername())){
 
-                List<String> list = new ArrayList<>();
                 //load podcasts in the visitor's watchlist
-                list = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
-                if(list != null)
-                    wPodcastsByVisitor.addAll(list);
+                podcasts = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
+                if(podcasts != null)
+                    for(Podcast podcast : podcasts )
+                        wPodcastsByVisitor.add(podcast.getId());
 
-                //load liked podcasts by the visitor
-                list = podcastNeo4jManager.showLikedPodcastsByUser(visitor);
-                if(list != null)
-                    lPodcastsByVisitor.addAll(list);
-
-                //load followed authors by the visitors // TODO: da modificare con la cache
-                List<Author> a = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
-                if(a != null)
-                    for (Author author : a)
+                //load followed authors by the visitors
+                authors = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
+                if(authors != null)
+                    for (Author author : authors)
                         followedAuthorsByVisitor.add(author.getName());
 
                 //load followed users by the visitors
-                list = userNeo4jManager.showFollowedUsers(visitor);
-                if(list != null)
-                    followedUsersByVisitor.addAll(list);
+                users = userNeo4jManager.showFollowedUsers(visitor);
+                if(users != null)
+                    for(User u : users)
+                        followedUsersByVisitor.add(u.getUsername());
 
                 res = 0;
             }

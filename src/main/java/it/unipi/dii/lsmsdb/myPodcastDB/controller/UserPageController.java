@@ -198,7 +198,6 @@ public class UserPageController {
     private List<Author> authors;
     private List<User> users;
     private List<String> wPodcastsByVisitor;
-    private List<String> lPodcastsByVisitor;
     private List<String> authorsByVisitor;
     private List<String> usersByVisitor;
 
@@ -852,7 +851,6 @@ public class UserPageController {
         authors = new ArrayList<>();
         users = new ArrayList<>();
         wPodcastsByVisitor = new ArrayList<>();
-        lPodcastsByVisitor = new ArrayList<>();
         authorsByVisitor = new ArrayList<>();
         usersByVisitor = new ArrayList<>();
         pageOwner = new User();
@@ -870,7 +868,7 @@ public class UserPageController {
                 actorType,
                 sessionActorName,
                 pageOwner, wPodcasts, lPodcasts, authors, users,
-                wPodcastsByVisitor, lPodcastsByVisitor, authorsByVisitor, usersByVisitor,
+                wPodcastsByVisitor, authorsByVisitor, usersByVisitor,
                 newRequestPodcast, newRequestActor
                 );
 
@@ -1160,8 +1158,6 @@ public class UserPageController {
         if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
             if(wPodcastsByVisitor.contains(podcast.getId()))
                 isInWatchlist = true;
-            if(lPodcastsByVisitor.contains(podcast.getId()))
-                isLiked = true;
 
             whatchlistController.setData(userPageAnchorPane, podcast, isInWatchlist);
         }
@@ -1195,8 +1191,6 @@ public class UserPageController {
         if(MyPodcastDB.getInstance().getSessionType().equals("User") && !((User)(MyPodcastDB.getInstance().getSessionActor())).getUsername().equals(pageOwner.getUsername())){
             if(wPodcastsByVisitor.contains(podcast.getId()))
                 isInWatchlist = true;
-            if(lPodcastsByVisitor.contains(podcast.getId()))
-                isLiked = true;
 
             likedController.setData(userPageAnchorPane, podcast, isInWatchlist);
         }
