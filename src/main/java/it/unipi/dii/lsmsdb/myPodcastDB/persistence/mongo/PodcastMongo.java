@@ -731,9 +731,10 @@ public class PodcastMongo {
             Bson project = project(fields(
                     computed("name", "$podcastName"),
                     computed("artwork", "$artworkUrl600"),
-                    computed("meanRating", computed("$avg", "$reviews.rating")))
-            );
-            Bson sort = sort(Sorts.descending("meanRating"));
+                    computed("meanRating", computed("$avg", "$reviews.rating")),
+                    computed("numberOfReviews", computed("$sum", "$reviews.rating"))
+            ));
+            Bson sort = sort(Sorts.descending("meanRating", "numberOfReviews"));
             Bson lim = limit(limit);
 
             List<Pair<Podcast, Float>> results = new ArrayList<>();
@@ -765,9 +766,10 @@ public class PodcastMongo {
                     computed("name", "$podcastName"),
                     computed("artwork", "$artworkUrl600"),
                     include("country"),
-                    computed("meanRating", computed("$avg", "$reviews.rating")))
+                    computed("meanRating", computed("$avg", "$reviews.rating")),
+                    computed("numberOfReviews", computed("$sum", "$reviews.rating")))
             );
-            Bson sort = sort(Sorts.descending("meanRating"));
+            Bson sort = sort(Sorts.descending("meanRating", "numberOfReviews"));
             Bson group = group("$country",
                     Accumulators.first("podcastId", "$_id"),
                     Accumulators.first("podcastName", "$name"),
