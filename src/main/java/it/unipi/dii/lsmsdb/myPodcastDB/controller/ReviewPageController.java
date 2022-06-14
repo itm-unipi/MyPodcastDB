@@ -204,7 +204,6 @@ public class ReviewPageController {
 
     @FXML
     void clickOnHome(MouseEvent event) throws IOException {
-        Logger.info("Click on home");
         StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
     }
 
@@ -235,7 +234,6 @@ public class ReviewPageController {
 
     @FXML
     void clickOnSearch(MouseEvent event) throws IOException {
-        Logger.info("Click on search");
         if (!this.searchBarText.getText().equals("")) {
             String searchString = this.searchBarText.getText();
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
@@ -356,7 +354,6 @@ public class ReviewPageController {
 
     @FXML
     void clickOnUser(MouseEvent event) throws IOException {
-        Logger.info("Click on user");
         String actorType = MyPodcastDB.getInstance().getSessionType();
 
         if (actorType.equals("Author"))
@@ -371,8 +368,6 @@ public class ReviewPageController {
 
     @FXML
     void enterOnSearch(KeyEvent event) throws IOException {
-        Logger.info("Enter on search");
-
         if (event.getCode().equals(KeyCode.ENTER) && !this.searchBarText.getText().equals("")) {
             String searchString = this.searchBarText.getText();
             StageManager.showPage(ViewNavigator.SEARCH.getPage(), searchString);
@@ -592,7 +587,6 @@ public class ReviewPageController {
             userPicture.setImage(picture);
 
             // if user has already writter a review, disable form
-            Logger.info(this.ownReview.toString() + " : " + this.ownReview.getTitle());
             if (this.ownReview != null && this.ownReview.getTitle() != null) {
                 this.disableForm();
 
@@ -756,7 +750,6 @@ public class ReviewPageController {
             if (MyPodcastDB.getInstance().getSessionType().equals("User") && this.ownReview != null) {
                 this.loadedReviews.remove(this.ownReview);
                 this.loadedReviews.add(0, this.ownReview);
-                // TODO this.loadedReviews.remove(this.loadedReviews.size() - 1);
             }
 
             // insert reviews in grid
@@ -816,8 +809,7 @@ public class ReviewPageController {
     }
 
     private int getLoaded() {
-        int toAdd = this.ownReview.getTitle() != null ? 1 : 0;
-        return this.loadedReviews.size() + toAdd;
+        return this.loadedReviews.size();
     }
 
     private void redirect() throws IOException {

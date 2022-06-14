@@ -126,7 +126,7 @@
                                           <ImageView fx:id="podcastImage" fitHeight="150.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" />
                                        </children>
                                     </VBox>
-                                    <VBox maxWidth="-Infinity" prefHeight="150.0" prefWidth="528.0">
+                                    <VBox maxWidth="-Infinity" prefHeight="150.0" prefWidth="497.0">
                                        <children>
                                           <Label fx:id="title" onMouseClicked="#clickOnTitle" onMouseEntered="#mouseOnTitle" onMouseExited="#mouseOutTitle" text="Title">
                                              <font>
@@ -151,7 +151,7 @@
                                           <Insets left="10.0" />
                                        </HBox.margin>
                                     </VBox>
-                                    <VBox maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="233.0">
+                                    <VBox maxWidth="1.7976931348623157E308" prefHeight="150.0" prefWidth="263.0">
                                        <children>
                                           <HBox alignment="BOTTOM_LEFT" prefWidth="232.0">
                                              <children>
@@ -166,7 +166,7 @@
                                                       <Insets bottom="-17.0" top="-20.0" />
                                                    </padding>
                                                 </Label>
-                                                <Label fx:id="numReviews" scaleY="1.06" text=" out of 5.0 on # reviews">
+                                                <Label fx:id="numReviews" scaleY="1.06" text=" out of 5.0 on #### reviews">
                                                    <font>
                                                       <Font name="Dubai Light" size="19.0" />
                                                    </font>
@@ -215,7 +215,7 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="fiveStars" prefHeight="10.0" prefWidth="145.0" progress="0.0" style="-fx-accent: black; -fx-padding: 0;">
+                                                <ProgressBar fx:id="fiveStars" prefHeight="10.0" prefWidth="178.0" progress="0.0" style="-fx-accent: black; -fx-padding: 0;">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
@@ -248,7 +248,7 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="fourStars" prefHeight="10.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="fourStars" prefHeight="10.0" prefWidth="178.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
@@ -277,7 +277,7 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="threeStars" prefHeight="10.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="threeStars" prefHeight="10.0" prefWidth="178.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
@@ -302,7 +302,7 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="twoStars" prefHeight="10.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="twoStars" prefHeight="10.0" prefWidth="178.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>
@@ -323,7 +323,7 @@
                                                       <Image url="@img/star.png" />
                                                    </image>
                                                 </ImageView>
-                                                <ProgressBar fx:id="oneStar" prefHeight="10.0" prefWidth="145.0" progress="0.0">
+                                                <ProgressBar fx:id="oneStar" prefHeight="10.0" prefWidth="178.0" progress="0.0">
                                                    <opaqueInsets>
                                                       <Insets />
                                                    </opaqueInsets>

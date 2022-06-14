@@ -159,6 +159,12 @@ public class ReviewController {
                 this.authorName.setDisable(true);
             }
         }
+
+        // if the author was removed disable the name
+        if (this.authorName.equals("Removed account")) {
+            this.authorName.setText("Removed user");
+            this.authorName.setDisable(true);
+        }
     }
 
     private String dateAsString(Date date) {
