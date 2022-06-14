@@ -42,9 +42,12 @@ public class AdminDashboardService {
         //check if an admin with the same name already exists
         if(adminMongo.findAdminByName(admin.getName()) != null)
             res = 1;
+        //check if an admin with the same email already exists
+        else if(adminMongo.findAdminByEmail(admin.getEmail()) != null)
+            res = 2;
         //adding new admin to mongo
         else if (!adminMongo.addAdmin(admin))
-            res = 2;
+            res = 3;
         else
             res = 0;
         MongoManager.getInstance().closeConnection();

@@ -287,12 +287,27 @@ public class AdminDashboardController {
 
         Logger.info("Update button clicked");
 
+        String name = this.nameTextField.getText();
+        String email = this.emailTextField.getText();
+        String password = this.passwordTextField.getText();
+
+        if(name.isEmpty() || email.isEmpty() || password.isEmpty()){
+            Logger.error("Invalid inputs");
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Invalid values");
+            return;
+        }
+        if(email.indexOf('@') == -1){
+            Logger.error("Invalid email");
+            DialogManager.getInstance().createErrorAlert(adminAnchorPane, "Invalid email");
+            return;
+        }
+
         Admin newAdmin = new Admin();
         // update admin
         newAdmin.setId(this.admin.getId());
-        newAdmin.setName(this.nameTextField.getText());
-        newAdmin.setEmail(this.emailTextField.getText());
-        newAdmin.setPassword(this.passwordTextField.getText());
+        newAdmin.setName(name);
+        newAdmin.setEmail(email);
+        newAdmin.setPassword(password);
 
         AdminDashboardService service = new AdminDashboardService();
         int res = service.updateAdmin(this.admin, newAdmin);

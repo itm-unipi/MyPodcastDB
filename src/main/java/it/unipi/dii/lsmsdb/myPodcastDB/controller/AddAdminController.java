@@ -55,31 +55,42 @@ public class AddAdminController {
         String rpPassword = adminRpPwdTextFiled.getText();
         String email = adminEmailTextFiled.getText();
 
-        if( !name.isEmpty() && !password.isEmpty() && !rpPassword.isEmpty() && password.equals(rpPassword) && !email.isEmpty()) {
+        if( name.isEmpty() || password.isEmpty() || rpPassword.isEmpty() || email.isEmpty()) {
+            Logger.error("Invalid inputs");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid inputs");
+            return;
+        }
+        if(!password.equals(rpPassword)){
+            Logger.error("Passwords not the same");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Password not the same");
+            return;
+        }
+        if(email.indexOf('@') == -1){
+            Logger.error("Invalid email");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid email");
+            return;
+        }
+        Admin admin = new Admin("",name, password, email);
+        Logger.info(admin.toString());
 
-            Admin admin = new Admin("",name, password, email);
-            Logger.info(admin.toString());
-
-            AdminDashboardService service = new AdminDashboardService();
-            int res = service.addAdmin(admin);
-            if(res == 0) {
-                Logger.success("admin account created");
-                DialogManager.getInstance().createInformationAlert(addAdminAnchorPane, "Account created");
-                closeStage(event);
-            }
-            else if(res == 1){
-                Logger.error("admin already exists");
-                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "admin already exists");
-            }
-            else{
-                Logger.error("unknown error");
-                DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "unknown error");
-            }
-
+        AdminDashboardService service = new AdminDashboardService();
+        int res = service.addAdmin(admin);
+        if(res == 0) {
+            Logger.success("admin account created");
+            DialogManager.getInstance().createInformationAlert(addAdminAnchorPane, "Account created");
+            closeStage(event);
+        }
+        else if(res == 1){
+            Logger.error("admin already exists");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Admin already exists");
+        }
+        else if(res == 2){
+            Logger.error("admin with the same email already exists");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Admin with the same email already exists");
         }
         else{
-            Logger.error("no new admin created, invalid inputs typed");
-            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Invalid inputs");
+            Logger.error("Adding admin on mongo failed");
+            DialogManager.getInstance().createErrorAlert(addAdminAnchorPane, "Operation failed");
         }
     }
 
