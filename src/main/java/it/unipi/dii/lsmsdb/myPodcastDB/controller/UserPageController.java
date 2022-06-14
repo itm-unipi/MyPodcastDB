@@ -79,7 +79,7 @@ public class UserPageController {
     private ComboBox userPageFavGenreComboBox;
 
     @FXML
-    private ImageView userPageFollowButton;
+    private Button userPageFollowButton;
 
     @FXML
     private ComboBox userPageGenderComboBox;
@@ -154,16 +154,16 @@ public class UserPageController {
     private Label userPageUsersLabel;
 
     @FXML
-    private HBox userPageWatchlistAreaHBox;
+    private VBox userPageWatchlistAreaVBox;
 
     @FXML
-    private HBox userPageLikedAreaHBox;
+    private VBox userPageLikedAreaVBox;
 
     @FXML
-    private HBox userPageAuthorsAreaHBox;
+    private VBox userPageAuthorsAreaVBox;
 
     @FXML
-    private HBox userPageUsersAreaHBox;
+    private VBox userPageUsersAreaVBox;
 
     @FXML
     private AnchorPane userPageAnchorPane;
@@ -590,14 +590,14 @@ public class UserPageController {
         if(isFollowed) {
             res = service.updateFollowUser(visitor, pageOwner, false);
             if(res == 0) {
-                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
+                userPageFollowButton.setText("Follow");
                 isFollowed = false;
             }
         }
         else{
             res = service.updateFollowUser(visitor, pageOwner, true);
             if(res == 0) {
-                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
+                userPageFollowButton.setText("Unfollow");
                 isFollowed = true;
             }
         }
@@ -629,6 +629,30 @@ public class UserPageController {
             Logger.error(logMsg);
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
         }
+    }
+
+    @FXML
+    void followButtonIn(MouseEvent event){
+        userPageFollowButton.setStyle(
+                "-fx-background-color:  white;" +
+                        "-fx-border-color:   #db55e7;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
+        );
+    }
+
+    @FXML
+    void followButtonOut(MouseEvent event){
+        userPageFollowButton.setStyle(
+                "-fx-background-color:   #db55e7;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
+        );
     }
 
     @FXML
@@ -941,11 +965,11 @@ public class UserPageController {
             res = service.checkFollowUser(/*sessionActorName,*/ pageOwner);
 
             if(res == 0) {
-                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_52px.png"));
+                userPageFollowButton.setText("Unfollow");
                 isFollowed = true;
             }
             else if(res == 1) {
-                userPageFollowButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_50px.png"));
+                userPageFollowButton.setText("Follow");
                 isFollowed = false;
             }
 
@@ -992,8 +1016,8 @@ public class UserPageController {
         }
         else{
             userPageWatchlistLabel.setText("Watchlist is empty");
-            userPageWatchlistAreaHBox.setVisible(false);
-            userPageWatchlistAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageWatchlistAreaVBox.setVisible(false);
+            userPageWatchlistAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         // fill the liked grid
@@ -1004,8 +1028,8 @@ public class UserPageController {
         }
         else{
             userPageLikedLabel.setText("There are no liked podcasts");
-            userPageLikedAreaHBox.setVisible(false);
-            userPageLikedAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageLikedAreaVBox.setVisible(false);
+            userPageLikedAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         //fill the authors grid
@@ -1016,8 +1040,8 @@ public class UserPageController {
         }
         else{
             userPageAuthorsLabel.setText("There are no followed authors");
-            userPageAuthorsAreaHBox.setVisible(false);
-            userPageAuthorsAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageAuthorsAreaVBox.setVisible(false);
+            userPageAuthorsAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         //fill the users grid
@@ -1028,8 +1052,8 @@ public class UserPageController {
         }
         else{
             userPageUsersLabel.setText("There are no followed users");
-            userPageUsersAreaHBox.setVisible(false);
-            userPageUsersAreaHBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageUsersAreaVBox.setVisible(false);
+            userPageUsersAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         userPageWatchlistScrollPane.setHvalue(0.0);
