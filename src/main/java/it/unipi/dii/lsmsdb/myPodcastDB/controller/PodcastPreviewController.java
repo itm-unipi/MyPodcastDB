@@ -67,6 +67,12 @@ public class PodcastPreviewController {
     private Label ratingCountryLabel;
 
     @FXML
+    private HBox watchlistAddedMessage;
+
+    @FXML
+    private HBox watchlistRemovedMessage;
+
+    @FXML
     void onHoverPodcast(MouseEvent event) {
         this.podcastPreviewBox.setStyle("-fx-border-color: #DBDBDB; -fx-background-color: #E5E5E5; -fx-background-radius: 7px; -fx-border-radius: 7px;");
 
@@ -90,6 +96,9 @@ public class PodcastPreviewController {
             fadeButton.setFromValue(1.0);
             fadeButton.setToValue(0);
             fadeButton.play();
+
+            watchlistAddedMessage.setVisible(false);
+            watchlistRemovedMessage.setVisible(false);
         }
     }
 
@@ -100,11 +109,26 @@ public class PodcastPreviewController {
             Logger.info("Removing from watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
             this.inWatchlist = !homePageService.removePodcastFromWatchlist(podcastPreview);
+
+            watchlistAddedMessage.setVisible(false);
+            watchlistRemovedMessage.setVisible(true);
+            FadeTransition boxMessage = new FadeTransition(Duration.seconds(1.5), watchlistRemovedMessage);
+            boxMessage.setFromValue(1.0);
+            boxMessage.setToValue(0);
+            boxMessage.play();
+
         } else {
             // TODO: aggiungere alert se watchlist è troppo grande
             Logger.info("Adding in watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
             this.inWatchlist = homePageService.addPodcastInWatchlist(podcastPreview);
+
+            watchlistAddedMessage.setVisible(true);
+            watchlistRemovedMessage.setVisible(false);
+            FadeTransition boxMessage = new FadeTransition(Duration.seconds(1.5), watchlistAddedMessage);
+            boxMessage.setFromValue(1.0);
+            boxMessage.setToValue(0);
+            boxMessage.play();
         }
     }
 

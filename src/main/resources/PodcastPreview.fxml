@@ -75,6 +75,30 @@
                   <Insets left="6.0" right="7.0" top="1.0" />
                </padding>
             </HBox>
+            <HBox fx:id="watchlistAddedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-32.0" translateY="-88.0">
+               <children>
+                  <Label text="Added">
+                     <font>
+                        <Font name="Corbel" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="3.0" left="7.0" right="7.0" top="1.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="watchlistRemovedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-23.0" translateY="-88.0">
+               <children>
+                  <Label fx:id="messageText1" text="Removed">
+                     <font>
+                        <Font name="Corbel" size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="3.0" left="7.0" right="7.0" top="1.0" />
+               </padding>
+            </HBox>
             <HBox fx:id="boxTopCountry" alignment="CENTER" fillHeight="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="24.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-color: #eaeaea; -fx-border-radius: 10;" translateX="58.0" translateY="-90.0" visible="false">
                <children>
                   <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true" translateY="-2.0">
