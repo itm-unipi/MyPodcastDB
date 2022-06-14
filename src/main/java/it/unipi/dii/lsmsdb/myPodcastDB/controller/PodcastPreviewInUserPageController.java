@@ -34,9 +34,6 @@ public class PodcastPreviewInUserPageController {
     private VBox podcastContainer;
 
     @FXML
-    private ImageView likeButton;
-
-    @FXML
     private ImageView watchlistButton;
 
     @FXML
@@ -52,7 +49,6 @@ public class PodcastPreviewInUserPageController {
     private Podcast podcastPreview;
     private String actorName = "";
     private String actorType = "";
-    boolean likeStatus = false;
     boolean watchStatus = false;
     boolean blockClickEvent = false;
     private AnchorPane mainPage;
@@ -83,7 +79,7 @@ public class PodcastPreviewInUserPageController {
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
         }
-        else if(!watchStatus && !likeStatus) {
+        else if(!watchStatus) {
             buttonArea.setVisible(true);
             buttonArea.setOpacity(0.0);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), buttonArea);
@@ -98,7 +94,7 @@ public class PodcastPreviewInUserPageController {
         podcastContainer.setStyle("-fx-background-color: transparent;");
         if(!visitorMode)
             trashButtonArea.setVisible(false);
-        else if(!watchStatus && !likeStatus)
+        else if(!watchStatus)
             buttonArea.setVisible(false);
     }
 
@@ -163,69 +159,6 @@ public class PodcastPreviewInUserPageController {
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
         else
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
-    }
-
-    @FXML
-    void likeClick(MouseEvent event){
-
-        Logger.info("Like button clicked");
-        blockClickEvent = true;
-        UserPageService service = new UserPageService();
-        int res = -1;
-        if(likeStatus) {
-            res = service.updateLiked(actorName, podcastPreview.getId(), false);
-            if(res==0) {
-                Logger.success("Removed like relation successfully");
-                likeButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-                likeStatus = false;
-            }
-            else if(res == 3)
-                Logger.error("Like relation already not exists");
-            else if(res == 4){
-                Logger.error("Removing like relation failed");
-                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
-            }
-            else{
-                Logger.error("Unknown error");
-                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
-            }
-
-        }
-        else{
-            res = service.updateLiked(actorName, podcastPreview.getId(), true);
-            if(res == 0){
-                Logger.success("Added like relation successfully");
-                likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
-                likeStatus = true;
-            }
-            else if(res == 1)
-                Logger.error("Like relation already exists");
-            else if(res == 2){
-                Logger.error("Adding like relation failed");
-                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
-            }
-            else{
-                Logger.error("Unknown error");
-                DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
-            }
-        }
-
-    }
-
-    @FXML
-    void likeIn(MouseEvent event){
-        if(likeStatus)
-            likeButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-        else
-            likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
-    }
-
-    @FXML
-    void likeOut(MouseEvent event){
-        if(!likeStatus)
-            likeButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-        else
-            likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
     }
 
     @FXML
@@ -371,7 +304,7 @@ public class PodcastPreviewInUserPageController {
 
     }
 
-    public void setData(AnchorPane mainPage, Podcast podcast, boolean ifInWatchlist, boolean ifLiked) {
+    public void setData(AnchorPane mainPage, Podcast podcast, boolean ifInWatchlist) {
         this.visitorMode = true;
         this.mainPage = mainPage;
         this.podcastPreview = podcast;
@@ -392,11 +325,7 @@ public class PodcastPreviewInUserPageController {
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
             watchStatus = true;
         }
-        if(ifLiked) {
-            likeButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
-            likeStatus = true;
-        }
-        if(ifInWatchlist || ifLiked)
+        if(ifInWatchlist)
             buttonArea.setVisible(true);
 
     }

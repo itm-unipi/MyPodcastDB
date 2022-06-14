@@ -1163,7 +1163,7 @@ public class UserPageController {
             if(lPodcastsByVisitor.contains(podcast.getId()))
                 isLiked = true;
 
-            whatchlistController.setData(userPageAnchorPane, podcast, isInWatchlist, isLiked);
+            whatchlistController.setData(userPageAnchorPane, podcast, isInWatchlist);
         }
         else
             whatchlistController.setData(userPageAnchorPane,  "watchlist", podcast);
@@ -1198,7 +1198,7 @@ public class UserPageController {
             if(lPodcastsByVisitor.contains(podcast.getId()))
                 isLiked = true;
 
-            likedController.setData(userPageAnchorPane, podcast, isInWatchlist, isLiked);
+            likedController.setData(userPageAnchorPane, podcast, isInWatchlist);
         }
         else
             likedController.setData(userPageAnchorPane, "liked", podcast);

@@ -29,14 +29,6 @@
                               <Image url="@img/star_64px.png" />
                            </image>
                         </ImageView>
-                        <ImageView fx:id="likeButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#likeClick" onMouseEntered="#likeIn" onMouseExited="#likeOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                           <image>
-                              <Image url="@img/following_30px.png" />
-                           </image>
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </ImageView>
                      </children>
                   </HBox>
                   <Pane fx:id="trashButtonArea" layoutX="126.0" layoutY="3.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="36.0" prefWidth="36.0" style="-fx-background-color: white; -fx-background-radius: 25;">
