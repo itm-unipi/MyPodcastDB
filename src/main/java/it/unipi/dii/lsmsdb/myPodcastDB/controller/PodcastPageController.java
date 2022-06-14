@@ -277,7 +277,7 @@ public class PodcastPageController {
 
     @FXML
     void clickOnLike(MouseEvent event) {
-        Boolean result = this.service.setLike(this.podcast.getId(), !this.liked);
+        Boolean result = this.service.setLike(this.podcast, !this.liked);
         if (result) {
             this.liked = !this.liked;
 
@@ -382,7 +382,7 @@ public class PodcastPageController {
 
     @FXML
     void clickOnWatchlater(MouseEvent event) {
-        Boolean result = this.service.setWatchLater(this.podcast.getId(), !this.watchLatered);
+        Boolean result = this.service.setWatchLater(this.podcast, !this.watchLatered);
         if (result) {
             this.watchLatered = !this.watchLatered;
 

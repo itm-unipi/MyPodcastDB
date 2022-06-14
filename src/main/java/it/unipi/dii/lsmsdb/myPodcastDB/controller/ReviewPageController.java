@@ -590,7 +590,7 @@ public class ReviewPageController {
             if (this.ownReview != null && this.ownReview.getTitle() != null) {
                 this.disableForm();
 
-                // puth own review as first
+                // put own review as first
                 if (this.loadedReviews.contains(this.ownReview))
                     this.loadedReviews.remove(this.ownReview);
                 else if (this.loadedReviews.size() > 9)
@@ -747,7 +747,7 @@ public class ReviewPageController {
         // if there are reviews yet update the grid
         if (!this.podcast.getReviews().isEmpty()) {
             // if is user and it has written a review, put it as first
-            if (MyPodcastDB.getInstance().getSessionType().equals("User") && this.ownReview != null) {
+            if (MyPodcastDB.getInstance().getSessionType().equals("User") && this.ownReview != null && this.ownReview.getTitle() != null) {
                 this.loadedReviews.remove(this.ownReview);
                 this.loadedReviews.add(0, this.ownReview);
             }

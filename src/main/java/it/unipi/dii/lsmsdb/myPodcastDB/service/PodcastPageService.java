@@ -1,6 +1,8 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.service;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.LikedPodcastCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.WatchlistCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
@@ -42,10 +44,27 @@ public class PodcastPageService {
             // update the local object
             podcast.copy(foundPodcast);
 
-            // get like and watchlater status
+            // check if like and watchlater are in cache
+            boolean watchlaterInCache = false;
+            boolean likeInCache = false;
+            if (WatchlistCache.getPodcast(podcast.getId()) != null)
+                watchlaterInCache = true;
+            if (LikedPodcastCache.getPodcast(podcast.getId()) != null)
+                likeInCache = true;
+
+            Logger.info("watchlater in cache : " + watchlaterInCache);
+            Logger.info("like in cache : " + likeInCache);
+
+            // get like and watchlater status (from cache or from db)
             String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-            status[0] = this.userNeo4j.checkUserWatchLaterPodcastExists(username, podcast.getId());
-            status[1] = this.userNeo4j.checkUserLikesPodcastExists(username, podcast.getId());
+            status[0] = watchlaterInCache || this.userNeo4j.checkUserWatchLaterPodcastExists(username, podcast.getId());
+            status[1] = likeInCache || this.userNeo4j.checkUserLikesPodcastExists(username, podcast.getId());
+
+            // update cache if needed
+            if (!watchlaterInCache && status[0])
+                WatchlistCache.addPodcast(podcast);
+            if (!likeInCache && status[1])
+                LikedPodcastCache.addPodcast(podcast);
 
             // check the result
             if (status[0] == null || status[1] == null) {
@@ -76,23 +95,28 @@ public class PodcastPageService {
         return result;
     }
 
-    public Boolean setWatchLater(String podcastId, Boolean newStatus) {
+    public Boolean setWatchLater(Podcast podcast, Boolean newStatus) {
         Neo4jManager.getInstance().openConnection();
 
         // find if it has to add or delete the relation
         String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         Boolean result;
         if (newStatus)
-            result = this.userNeo4j.addUserWatchLaterPodcast(username, podcastId);
+            result = this.userNeo4j.addUserWatchLaterPodcast(username, podcast.getId());
         else
-            result = this.userNeo4j.deleteUserWatchLaterPodcast(username, podcastId);
+            result = this.userNeo4j.deleteUserWatchLaterPodcast(username, podcast.getId());
 
         // check the result of operation
         if (result) {
-            if (newStatus)
+            if (newStatus) {
+                // update cache
+                WatchlistCache.addPodcast(podcast);
                 Logger.success("Added to watchlater");
-            else
+            } else {
+                // update cache
+                WatchlistCache.removePodcast(podcast.getId());
                 Logger.success("Removed from watchlater");
+            }
         } else {
             Logger.error("Watchlater status not modified");
         }
@@ -101,23 +125,28 @@ public class PodcastPageService {
         return result;
     }
 
-    public Boolean setLike(String podcastId, Boolean newStatus) {
+    public Boolean setLike(Podcast podcast, Boolean newStatus) {
         Neo4jManager.getInstance().openConnection();
 
         // find if it has to add or delete the relation
         String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         Boolean result;
         if (newStatus)
-            result = this.userNeo4j.addUserLikesPodcast(username, podcastId);
+            result = this.userNeo4j.addUserLikesPodcast(username, podcast.getId());
         else
-            result = this.userNeo4j.deleteUserLikesPodcast(username, podcastId);
+            result = this.userNeo4j.deleteUserLikesPodcast(username, podcast.getId());
 
         // check the result of operation
         if (result) {
-            if (newStatus)
+            if (newStatus) {
+                // update cache
+                LikedPodcastCache.addPodcast(podcast);
                 Logger.success("Liked podcast");
-            else
+            } else {
+                // update cache
+                LikedPodcastCache.removePodcast(podcast.getId());
                 Logger.success("Unliked podcast");
+            }
         } else {
             Logger.error("Like status not modified");
         }
