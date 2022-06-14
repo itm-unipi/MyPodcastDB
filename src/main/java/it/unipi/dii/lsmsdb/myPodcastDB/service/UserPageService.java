@@ -249,7 +249,8 @@ public class UserPageService {
                 oldUser.getSurname().equals(newUser.getSurname()) &&
                 oldUser.getEmail().equals(newUser.getEmail()) &&
                 oldUser.getAge() == newUser.getAge() &&
-                oldUser.getPicturePath().equals(newUser.getPicturePath())
+                oldUser.getPicturePath().equals(newUser.getPicturePath()) &&
+                oldUser.getPassword().equals(newUser.getPassword())
         )
             return 1;
 

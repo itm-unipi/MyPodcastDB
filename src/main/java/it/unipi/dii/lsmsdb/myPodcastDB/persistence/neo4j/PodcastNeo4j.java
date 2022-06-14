@@ -579,7 +579,7 @@ public class PodcastNeo4j {
         String query = "MATCH (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
                 "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
                 "WHERE NOT EXISTS { match (s)-[:WATCH_LATER]->(p2) }" + "\n" +
-                "RETURN p2.name as name, p2.podcastId as id, p2.artworkUrl600 as artwork" + "\n" +
+                "RETURN DISTINCT p2.name as name, p2.podcastId as id, p2.artworkUrl600 as artwork" + "\n" +
                 "SKIP $skip" + "\n" +
                 "LIMIT $limit";
 

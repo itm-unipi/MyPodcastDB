@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -110,7 +111,7 @@
                   <VBox minHeight="640.0" minWidth="1104.0" prefHeight="1362.0" prefWidth="1191.0" style="-fx-border-color: transparent;">
                      <children>
                         <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="920.0" />
-                        <HBox style="-fx-background-color: transparent;">
+                        <HBox minHeight="-Infinity" prefHeight="305.0" prefWidth="1176.0" style="-fx-background-color: transparent;">
                            <children>
                               <HBox prefHeight="262.0" prefWidth="260.0">
                                  <children>
@@ -200,6 +201,19 @@
                                           </Label>
                                        </children>
                                     </Pane>
+                                    <Label fx:id="userPagePasswordLabel" minHeight="-Infinity" prefHeight="37.0" prefWidth="178.0" text="Password" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <PasswordField fx:id="userPagePasswordTextField" editable="false" prefHeight="30.0" prefWidth="120.0" style="-fx-background-color: transparent;" text="000000">
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                    </PasswordField>
                                  </children>
                                  <HBox.margin>
                                     <Insets right="50.0" />
@@ -207,7 +221,7 @@
                               </VBox>
                               <Pane fx:id="userPagePrivateArea" prefHeight="200.0" prefWidth="208.0">
                                  <children>
-                                    <VBox prefHeight="240.0" prefWidth="210.0">
+                                    <VBox prefWidth="210.0">
                                        <children>
                                           <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Name" textFill="#434343">
                                              <font>
@@ -259,9 +273,9 @@
                                                 <Font name="Corbel Bold" size="18.0" />
                                              </font>
                                           </Label>
-                                          <Pane prefHeight="200.0" prefWidth="200.0">
+                                          <Pane prefHeight="38.0" prefWidth="210.0">
                                              <children>
-                                                <DatePicker fx:id="userPageDatePicker" layoutX="-4.0" layoutY="1.0" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
+                                                <DatePicker fx:id="userPageDatePicker" layoutY="1.0" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
                                                 <Label fx:id="userPageAgeLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="120.0" text="21" textFill="#434343">
                                                    <font>
                                                       <Font name="Dubai Light" size="14.0" />
@@ -310,7 +324,7 @@
                               </Pane>
                            </children>
                         </HBox>
-                        <VBox>
+                        <VBox prefHeight="990.0" prefWidth="1176.0">
                            <children>
                               <VBox>
                                  <children>
@@ -508,7 +522,7 @@
                               </VBox>
                            </children>
                            <VBox.margin>
-                              <Insets bottom="50.0" top="30.0" />
+                              <Insets bottom="50.0" />
                            </VBox.margin>
                         </VBox>
                      </children>

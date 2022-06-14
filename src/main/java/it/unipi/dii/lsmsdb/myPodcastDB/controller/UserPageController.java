@@ -186,6 +186,12 @@ public class UserPageController {
     @FXML
     private DatePicker userPageDatePicker;
 
+    @FXML
+    private Label userPagePasswordLabel;
+
+    @FXML
+    private  PasswordField userPagePasswordTextField;
+
     private User pageOwner;
 
     private boolean isFollowed;
@@ -638,6 +644,7 @@ public class UserPageController {
         userPageNameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageSurnameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageEmailTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        userPagePasswordTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         imageNumber = 0;
     }
 
@@ -655,6 +662,8 @@ public class UserPageController {
         userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPagePasswordTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+
 
     }
 
@@ -664,9 +673,14 @@ public class UserPageController {
         Logger.info("Confirm button clicked");
         User newUser = getDataFromTextFields();
 
-        if(newUser.getUsername().isEmpty() || newUser.getEmail().isEmpty() || (Integer)newUser.getAge() < 0){
+        if(newUser.getUsername().isEmpty() || newUser.getEmail().isEmpty() || (Integer)newUser.getAge() < 0 || newUser.getPassword().isEmpty()){
             Logger.error("Invalid inputs typed");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid inputs");
+            return;
+        }
+        if(newUser.getEmail().indexOf('@') == -1){
+            Logger.error("Invalid email");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid email");
             return;
         }
         Logger.info(newUser.toString());
@@ -724,6 +738,7 @@ public class UserPageController {
         userPageNameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
+        userPagePasswordTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageCountryLabel.setText(pageOwner.getCountry());
         userPageGenderLabel.setText(pageOwner.getGender());
         userPageFavGenreLabel.setText(pageOwner.getFavouriteGenre());
@@ -911,6 +926,8 @@ public class UserPageController {
             Logger.info("Owner mode");
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(true);
+            userPagePasswordTextField.setVisible(true);
+            userPagePasswordLabel.setVisible(true);
             userPageSettingsButton.setVisible(true);
 
         }
@@ -929,6 +946,8 @@ public class UserPageController {
 
             userPageFollowButton.setVisible(true);
             userPagePrivateArea.setVisible(false);
+            userPagePasswordTextField.setVisible(false);
+            userPagePasswordLabel.setVisible(false);
             userPageSettingsButton.setVisible(false);
             userPageDeleteButton.setVisible(false);
         }
@@ -937,6 +956,8 @@ public class UserPageController {
 
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(false);
+            userPagePasswordTextField.setVisible(false);
+            userPagePasswordLabel.setVisible(false);
             userPageSettingsButton.setVisible(false);
             userPageDeleteButton.setVisible(false);
         }
@@ -944,6 +965,8 @@ public class UserPageController {
             Logger.info("Admin mode");
             userPageFollowButton.setVisible(false);
             userPagePrivateArea.setVisible(true);
+            userPagePasswordTextField.setVisible(true);
+            userPagePasswordLabel.setVisible(true);
             userPageSettingsButton.setVisible(false);
             userPageDeleteButton.setVisible(true);
         }
@@ -1089,6 +1112,7 @@ public class UserPageController {
         userPageNameTextField.setEditable(value);
         userPageSurnameTextField.setEditable(value);
         userPageEmailTextField.setEditable(value);
+        userPagePasswordTextField.setEditable(value);
         userPageUsernameTextField.setPadding(new Insets(0,0,0,padding));
         userPageNameTextField.setPadding(new Insets(0,0,0,padding));
         userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
@@ -1104,6 +1128,7 @@ public class UserPageController {
         userPageGenderLabel.setVisible(!value);
         userPageFavGenreLabel.setVisible(!value);
         userPageAgeLabel.setVisible(!value);
+        userPagePasswordTextField.setPadding(new Insets(0,0,0,padding));
 
 
     }
@@ -1121,6 +1146,7 @@ public class UserPageController {
         newUser.setGender(userPageGenderComboBox.getValue().toString());
         newUser.setFavouriteGenre(userPageFavGenreComboBox.getValue().toString());
         newUser.setPicturePath(imagePath);
+        newUser.setPassword(userPagePasswordTextField.getText());
         return newUser;
     }
 
@@ -1140,6 +1166,7 @@ public class UserPageController {
         userPageFavGenreLabel.setText(pageOwner.getFavouriteGenre());
         userPageCountryLabel.setText(pageOwner.getCountry());
         userPageGenderLabel.setText(pageOwner.getGender());
+        userPagePasswordTextField.setText(pageOwner.getPassword());
     }
 
     void loadWatchlaterPodcast(boolean first) throws IOException {

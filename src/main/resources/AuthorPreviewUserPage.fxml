@@ -38,7 +38,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane fx:id="followButtonArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                  <Pane fx:id="followButtonArea" layoutX="70.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                      <children>
                         <ImageView fx:id="followButton" fitHeight="25.0" fitWidth="25.0" layoutX="-2.0" layoutY="-2.0" onMouseClicked="#followClick" onMouseEntered="#followIn" onMouseExited="#followOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
