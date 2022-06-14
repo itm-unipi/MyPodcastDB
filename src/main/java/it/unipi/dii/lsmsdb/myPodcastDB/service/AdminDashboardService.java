@@ -67,9 +67,12 @@ public class AdminDashboardService {
         //check if an admin with the same name already exists
         if(!oldAdmin.getName().equals(newAdmin.getName()) && adminMongo.findAdminByName(newAdmin.getName()) != null)
             res = 2;
+        //check if an admin with the same email already exists
+        else if(!oldAdmin.getEmail().equals(newAdmin.getEmail()) && adminMongo.findAdminByEmail(newAdmin.getEmail()) != null)
+            res = 3;
         //updating admin
         else if (!adminMongo.updateAdmin(newAdmin))
-            res = 3;
+            res = 4;
         else
             res = 0;
         MongoManager.getInstance().closeConnection();

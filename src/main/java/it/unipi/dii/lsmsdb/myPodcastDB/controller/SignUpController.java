@@ -150,14 +150,20 @@ public class SignUpController {
 
             Date dateOfBirth = Date.from(Instant.from(birthDate.atStartOfDay(ZoneId.systemDefault())));
 
-            if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
+            if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty()) {
                 Logger.error("Invalid values");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
+                return;
+            }
+            else if(!password.equals(repPassword)){
+                Logger.error("Passwords not the same");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Passwords not the same");
                 return;
             }
             else if(username.equals("Removed user")){
                 Logger.error("username not valid");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid username");
+                return;
             }
 
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender);
@@ -180,20 +186,20 @@ public class SignUpController {
                     dialogMsg = "A user with the same username already exists";
                     break;
                 case 3:
+                    logMsg = "A user with the same email already exists";
+                    dialogMsg = "A user with the same email already exists";
+                    break;
+                case 4:
                     logMsg = "Operation failed on mongo";
                     dialogMsg = "Operation failed";
                     break;
-                case 4:
+                case 5:
                     logMsg = "Operation failed on neo4j";
                     dialogMsg = "Operation failed";
                     break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
             }
 
-            if(res > 0 || res == -1){
+            if(res > 0){
                 Logger.error(logMsg);
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, dialogMsg);
                 return;
@@ -207,9 +213,14 @@ public class SignUpController {
             String email = signUpEmailTextField.getText();
             String picturePath = "/img/authors/author" + (Integer)imageNumber + ".png";
 
-            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty() || !password.equals(repPassword)) {
+            if (name.isEmpty() || email.isEmpty() || password.isEmpty() || repPassword.isEmpty()) {
                 Logger.error("Invalid values");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
+                return;
+            }
+            else if(!password.equals(repPassword)){
+                Logger.error("Passwords not the same");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Passwords not the same");
                 return;
             }
 
@@ -233,20 +244,20 @@ public class SignUpController {
                     dialogMsg = "An author with the same name already exists";
                     break;
                 case 3:
+                    logMsg = "An author with the same email already exists";
+                    dialogMsg = "An author with the same email already exists";
+                    break;
+                case 4:
                     logMsg = "Operation failed on mongo";
                     dialogMsg = "Operation failed";
                     break;
-                case 4:
+                case 5:
                     logMsg = "Operation failed on neo4j";
                     dialogMsg = "Operation failed";
                     break;
-                case -1:
-                    logMsg = "Unknown error";
-                    dialogMsg = "Unknown error";
-                    break;
             }
 
-            if(res > 0 || res == -1){
+            if(res > 0){
                 Logger.error(logMsg);
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, dialogMsg);
                 return;

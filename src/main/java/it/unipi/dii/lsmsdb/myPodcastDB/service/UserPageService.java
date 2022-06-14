@@ -256,22 +256,34 @@ public class UserPageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        //check if a user with the new username already exists
-        if (!oldUser.getUsername().equals(newUser.getUsername()) && userMongoManager.findUserByUsername(newUser.getUsername()) != null)
+        //check if a user with the same username already exists
+        if(!oldUser.getUsername().equals(newUser.getUsername()) && userMongoManager.findUserByUsername(newUser.getUsername()) != null)
             res = 2;
+        //check if a user with the same email already exists
+        else if(!oldUser.getEmail().equals(newUser.getEmail()) && userMongoManager.findUserByEmail(newUser.getEmail()) != null)
+            res = 3;
         //update user on mongo
         else if (!userMongoManager.updateUser(newUser))
-            res = 3;
-        //update user on neo4j
-        else if (!userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())) {
-            userMongoManager.updateUser(oldUser);
             res = 4;
+        //update user on neo4j
+        else if (!oldUser.getUsername().equals(newUser.getUsername()) && !userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())) {
+            userMongoManager.updateUser(oldUser);
+            res = 5;
         }
         //update reviews' authorUsername written by the user
+        //TODO farlo con un clco for per reviewid sfruttando le review embedded nello user
         else if (!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1){
             userMongoManager.updateUser(oldUser);
             userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
-            res = 4;
+            res = 6;
+        }
+        //update review embedded in podcast
+        //TODO farlo sfruttando il podcastId nelle review embedded nello user
+        else if(!oldUser.getUsername().equals(newUser.getUsername()) && false){
+            userMongoManager.updateUser(oldUser);
+            userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+            reviewMongoManager.updateReviewsByAuthorUsername(newUser.getUsername(), oldUser.getUsername());
+            res = 7;
         }
         else {
             MyPodcastDB.getInstance().setSession(newUser, "User");
@@ -306,16 +318,29 @@ public class UserPageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
+        //delete user on mongo
         if(!userMongoManager.deleteUserByUsername(user.getUsername()))
             res = 1;
+        //delete user on neo4j
         else if(!userNeo4jManager.deleteUser(user.getUsername())){
             userMongoManager.addUser(user);
             res =  2;
         }
+        //update author username in reviews written by the removed user
+        //TODO farlo con un clco for per reviewid sfruttando le review embedded nello user
         else if(reviewMongoManager.updateReviewsByAuthorUsername(user.getUsername(), "Removed account") == -1){
             userMongoManager.addUser(user);
             userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
             res = 3;
+        }
+        //update authore username in reviews embedded in podcast
+        //TODO farlo sfruttando il podcastId nelle review embedded nello user
+        else if(false){
+            userMongoManager.addUser(user);
+            userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
+            reviewMongoManager.updateReviewsByAuthorUsername("Removed account", user.getUsername());
+            res = 4;
+
         }
         else
             res = 0;

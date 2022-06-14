@@ -34,24 +34,26 @@ public class SignUpService {
 
     public int addUserSignUp(User user){
 
-        int res = -1;
+        int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
         //check if a user with the same username already exists in mongo
-        User newUser = userMongoManager.findUserByUsername(user.getUsername());
-        if(newUser != null)
+        if(userMongoManager.findUserByUsername(user.getUsername()) != null)
             res = 1;
         //check if a user with the same username already exists in neo4j
         else if(userNeo4jManager.findUserByUsername(user.getUsername()))
             res = 2;
+        //check if a user with the same email already exists
+        else if(userMongoManager.findUserByEmail(user.getEmail()) != null)
+            res = 3;
         //failure mongo operation
         else if(!userMongoManager.addUser(user))
-            res = 3;
+            res = 4;
         //failure neo4j operation
         else if(!userNeo4jManager.addUser(user.getUsername(), user.getPicturePath())){
             userMongoManager.deleteUserByUsername(user.getUsername());
-            res = 4;
+            res = 5;
         }
         else
             res = 0;
@@ -64,7 +66,7 @@ public class SignUpService {
 
     public int addAuthorSignUp(Author author){
 
-        int res = -1;
+        int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
@@ -74,13 +76,16 @@ public class SignUpService {
         //check if author with the same name already exists in neo4j
         else if(authorNeo4jManager.findAuthorByName(author.getName()))
             res = 2;
+        //check if author with the same email already exists
+        else if(authorMongoManager.findAuthorByEmail(author.getEmail()) != null)
+            res = 3;
         //check failure mongo operation
         else if(!authorMongoManager.addAuthor(author))
-                res = 3;
+            res = 4;
         //check failure neo4j operation
         else if(!authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath())){
             authorMongoManager.deleteAuthorByName(author.getName());
-            res = 4;
+            res = 5;
         }
         else
             res = 0;

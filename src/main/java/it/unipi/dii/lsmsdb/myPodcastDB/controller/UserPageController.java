@@ -685,15 +685,23 @@ public class UserPageController {
                 dialogMsg = "Username already in use";
                 break;
             case 3 :
+                logMsg = "User with the same email already exists";
+                dialogMsg = "Email already in use";
+                break;
+            case 4 :
                 logMsg = "Mongo operation failed";
                 dialogMsg = "Updating failed";
                 break;
-            case 4 :
+            case 5 :
                 logMsg = "Neo4j operation failed";
                 dialogMsg = "Updating failed";
                 break;
-            case 5 :
+            case 6 :
                 logMsg = "Updating reviews' author username failed";
+                dialogMsg = "Updating failed";
+                break;
+            case 7 :
+                logMsg = "Updating reviews' embedded in podcast failed";
                 dialogMsg = "Updating failed";
                 break;
 
@@ -763,9 +771,13 @@ public class UserPageController {
                     logMsg = "Delete operation failed on neo4j";
                     dialogMsg = "Operation failed";
                     break;
-                case 5:
+                case 3:
                     logMsg = "Updating reviews' author username failed";
                     dialogMsg = "Operation failed";
+                    break;
+                case 4:
+                    logMsg = "Updating reviews' embedded in podcast failed";
+                    dialogMsg = "Updating failed";
                     break;
             }
             if(res > 0){

@@ -311,6 +311,10 @@ public class AdminDashboardController {
                 dialogMsg = "Admin with the same name already exists";
                 break;
             case 3:
+                logMsg = "Admin with the same email already exists";
+                dialogMsg = "Admin with the same email already exists";
+                break;
+            case 4:
                 logMsg = "Operation on mongo failed";
                 dialogMsg = "Operation failed";
                 break;
