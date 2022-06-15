@@ -5,6 +5,7 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -32,6 +33,15 @@ public class UserMongo {
     public boolean addUser(User user) {
         MongoManager manager = MongoManager.getInstance();
 
+        // create the array of reviews
+        List<Document> reviews = new ArrayList<>();
+        for (Review review : user.getReviews()) {
+            Document newReview = new Document()
+                    .append("reviewId", new ObjectId(review.getId()))
+                    .append("podcastId", new ObjectId(review.getPodcastId()));
+            reviews.add(newReview);
+        }
+
         Document newUser = new Document()
                 .append("username", user.getUsername())
                 .append("password", user.getPassword())
@@ -43,7 +53,9 @@ public class UserMongo {
                 .append("favouriteGenre", user.getFavouriteGenre())
                 .append("dateOfBirth", user.getDateOfBirth())
                 .append("age", user.getAge())
-                .append("gender", user.getGender());
+                .append("gender", user.getGender())
+                .append("usernameChanges", user.getUsernameChanges())
+                .append("reviews", reviews);
 
         try {
             manager.getCollection("user").insertOne(newUser);
@@ -104,8 +116,17 @@ public class UserMongo {
                 String favouriteGenre = user.getString("favouriteGenre");
                 Date dateOfBirth = user.getDate("dateOfBirth");
                 String gender = user.getString("gender");
+                int usernameChanges = user.getInteger("usernameChanges");
 
-                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender);
+                // extract the reviews
+                List<Review> reviews = new ArrayList<>();
+                for (Document review : user.getList("reviews", Document.class)) {
+                    String reviewId = review.getString("reviewId");
+                    String podcastId = review.getString("podcastId");
+                    reviews.add(new Review(reviewId, podcastId));
+                }
+
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender, usernameChanges, reviews);
                 return newUser;
             }
         } catch (Exception e) {
@@ -134,8 +155,17 @@ public class UserMongo {
                 String favouriteGenre = user.getString("favouriteGenre");
                 Date dateOfBirth = user.getDate("dateOfBirth");
                 String gender = user.getString("gender");
+                int usernameChanges = user.getInteger("usernameChanges");
 
-                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender);
+                // extract the reviews
+                List<Review> reviews = new ArrayList<>();
+                for (Document review : user.getList("reviews", Document.class)) {
+                    String reviewId = review.getString("reviewId");
+                    String podcastId = review.getString("podcastId");
+                    reviews.add(new Review(reviewId, podcastId));
+                }
+
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender, usernameChanges, reviews);
                 return newUser;
             }
         } catch (Exception e) {
@@ -164,8 +194,17 @@ public class UserMongo {
                 String favouriteGenre = user.getString("favouriteGenre");
                 Date dateOfBirth = user.getDate("dateOfBirth");
                 String gender = user.getString("gender");
+                int usernameChanges = user.getInteger("usernameChanges");
 
-                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender);
+                // extract the reviews
+                List<Review> reviews = new ArrayList<>();
+                for (Document review : user.getList("reviews", Document.class)) {
+                    String reviewId = review.getString("reviewId");
+                    String podcastId = review.getString("podcastId");
+                    reviews.add(new Review(reviewId, podcastId));
+                }
+
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender, usernameChanges, reviews);
                 return newUser;
             }
         } catch (Exception e) {
@@ -196,8 +235,17 @@ public class UserMongo {
                 String favouriteGenre = user.getString("favouriteGenre");
                 Date dateOfBirth = user.getDate("dateOfBirth");
                 String gender = user.getString("gender");
+                int usernameChanges = user.getInteger("usernameChanges");
 
-                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender);
+                // extract the reviews
+                List<Review> reviews = new ArrayList<>();
+                for (Document review : user.getList("reviews", Document.class)) {
+                    String reviewId = review.getString("reviewId");
+                    String podcastId = review.getString("podcastId");
+                    reviews.add(new Review(reviewId, podcastId));
+                }
+
+                User newUser = new User(id, username, password, name, surname, email, country, picturePath, favouriteGenre, dateOfBirth, gender, usernameChanges, reviews);
                 users.add(newUser);
             }
 
@@ -226,8 +274,33 @@ public class UserMongo {
                     set("favouriteGenre", user.getFavouriteGenre()),
                     set("dateOfBirth", user.getDateOfBirth()),
                     set("age", user.getAge()),
-                    set("gender", user.getGender())
+                    set("gender", user.getGender()),
+                    set("usernameChanges", user.getUsernameChanges())
             );
+
+            UpdateResult result = manager.getCollection("user").updateOne(filter, update);
+            return result.getModifiedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean updateReviewsOfUser(User user) {
+        MongoManager manager = MongoManager.getInstance();
+
+        // create the array of reviews
+        List<Document> reviews = new ArrayList<>();
+        for (Review review : user.getReviews()) {
+            Document newReview = new Document()
+                    .append("reviewId", new ObjectId(review.getId()))
+                    .append("podcastId", new ObjectId(review.getPodcastId()));
+            reviews.add(newReview);
+        }
+
+        try {
+            Bson filter = eq("_id", new ObjectId(user.getId()));
+            Bson update = set("reviews", reviews);
 
             UpdateResult result = manager.getCollection("user").updateOne(filter, update);
             return result.getModifiedCount() == 1;

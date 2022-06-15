@@ -298,27 +298,6 @@ public class LoginController {
         }
     }
 
-    Object simActorService(String actorname, String password, String actorType){
-
-        if(actorType.equals("User")){
-            User user = new User("af679", actorname, password, "userTestName", "userTestSurname", "userTest@example.com", "Italy", "/img/account_50px.png", "Horror", new Date(), "Male");
-            return user;
-        }
-        else if(actorType.equals("Author")){
-            Author author = new Author("1234",actorname, password, "authorTest@example.com", "/img/authorAnonymousPicture.png");
-            return author;
-        }
-        else if(actorType.equals("Admin")){
-            Admin admin = new Admin("sacr23", actorname, password, "adminTest@example.com");
-            return admin;
-        }
-        else{
-            Logger.error("Uncorrected actorType");
-            return null;
-        }
-
-    }
-
     @FXML
     void testAddAdminClick(MouseEvent event) throws IOException {
 

@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class User {
     private String id;
@@ -19,6 +21,8 @@ public class User {
     private String favouriteGenre;
     private Date dateOfBirth;
     private String gender;
+    private int usernameChanges;
+    private List<Review> reviews;
 
     public User() {
     }
@@ -28,7 +32,7 @@ public class User {
         this.picturePath = picturePath;
     }
 
-    public User(String id, String username, String password, String name, String surname, String email, String country, String picturePath, String favouriteGenre, Date dateOfBirth, String gender) {
+    public User(String id, String username, String password, String name, String surname, String email, String country, String picturePath, String favouriteGenre, Date dateOfBirth, String gender, int usernameChanges, List<Review> reviews) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -40,6 +44,8 @@ public class User {
         this.favouriteGenre = favouriteGenre;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
+        this.usernameChanges = usernameChanges;
+        this.reviews = reviews;
     }
 
     public void copy(User user) {
@@ -54,6 +60,8 @@ public class User {
         this.favouriteGenre = user.favouriteGenre;
         this.dateOfBirth = user.dateOfBirth;
         this.gender = user.gender;
+        this.usernameChanges = user.usernameChanges;
+        this.reviews = new ArrayList<>(user.reviews);
     }
 
     public String getId() {
@@ -149,6 +157,31 @@ public class User {
         this.gender = gender;
     }
 
+    public int getUsernameChanges() {
+        return usernameChanges;
+    }
+
+    public void setUsernameChanges(int usernameChanges) {
+        this.usernameChanges = usernameChanges;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public void addReview(Review review) {
+        if (!this.reviews.contains(review))
+            this.reviews.add(review);
+    }
+
+    public void removeReview(Review review) {
+        this.reviews.remove(review);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -163,6 +196,8 @@ public class User {
                 ", favouriteGenre='" + favouriteGenre + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", gender='" + gender + '\'' +
+                ", usernameChanges=" + usernameChanges +
+                ", reviews=" + reviews +
                 '}';
     }
 }

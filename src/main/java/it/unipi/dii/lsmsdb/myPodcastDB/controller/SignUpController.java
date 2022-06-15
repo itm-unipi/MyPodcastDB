@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class SignUpController {
@@ -176,7 +177,7 @@ public class SignUpController {
                 return;
             }
 
-            User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender);
+            User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender, 0, new ArrayList<>());
             Logger.info(user.toString());
 
             int res = service.addUserSignUp(user);
