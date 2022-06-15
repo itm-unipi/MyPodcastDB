@@ -512,7 +512,7 @@ public class UserNeo4j {
             String query = "MATCH (u1:User {username: $username })-[:FOLLOWS]->(:Author)<-[:FOLLOWS]-(u2:User) " +
                     "WHERE NOT EXISTS " +
                     "{ MATCH (u1)-[:FOLLOWS_USER]->(u2) } " +
-                    "RETURN u2 " +
+                    "RETURN DISTINCT u2 " +
                     "LIMIT $limit";
             List<Record> result = manager.read(query, parameters("username", username, "limit", limit));
 
@@ -542,7 +542,7 @@ public class UserNeo4j {
         try {
             String query =  "MATCH (u1:User {username: $username})-[:LIKES]->(:Podcast)<-[:LIKES]-(u2) " +
                             "WHERE NOT EXISTS { (u1)-[:FOLLOWS_USER]->(u2) } " +
-                            "RETURN u2 " +
+                            "RETURN DISTINCT u2 " +
                             "LIMIT $limit";
             Value params = parameters("username", username, "limit", limit);
             result = manager.read(query, params);

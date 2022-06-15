@@ -507,7 +507,7 @@ public class PodcastNeo4j {
                 "WHERE NOT EXISTS { match (source)-[:LIKES]->(p) }" + "\n" +
                 "and NOT EXISTS { match (source)-[:WATCH_LATER]->(p) }" + "\n" +
                 "WITH p.name as name, p.podcastId as id, p.artworkUrl600 as artwork, count(l) as likes" + "\n" +
-                "RETURN name, id, artwork, likes" + "\n" +
+                "RETURN DISTINCT name, id, artwork, likes" + "\n" +
                 "ORDER BY likes desc" + "\n" +
                 "SKIP $skip" + "\n" +
                 "LIMIT $limit" ;
@@ -546,7 +546,8 @@ public class PodcastNeo4j {
             String query =  "MATCH (u:User {username: $username})-[:LIKES]->(liked:Podcast) " +
                             "MATCH (liked)-[:BELONGS_TO]->(:Category)<-[:BELONGS_TO]-(p:Podcast) " +
                             "WHERE NOT EXISTS {MATCH (u)-[:LIKES]->(p)} " +
-                            "RETURN p.name as name, p.podcastId as pid, p.artworkUrl600 as artwork " +
+                            "WITH p.name as name, p.podcastId as pid, p.artworkUrl600 as artwork " +
+                            "RETURN DISTINCT name, pid, artwork " +
                             "SKIP $skip " +
                             "LIMIT $limit";
             Value params = parameters("username", username, "limit", limit, "skip", skip);
@@ -576,7 +577,8 @@ public class PodcastNeo4j {
         String query = "MATCH (s:User{username: $username})-[w:WATCH_LATER]->(p1:Podcast)-[c1:CREATED_BY]->(a:Author)," + "\n" +
                 "(a)<-[c2:CREATED_BY]-(p2:Podcast)" + "\n" +
                 "WHERE NOT EXISTS { match (s)-[:WATCH_LATER]->(p2) }" + "\n" +
-                "RETURN DISTINCT p2.name as name, p2.podcastId as id, p2.artworkUrl600 as artwork" + "\n" +
+                "WITH p2.name as name, p2.podcastId as id, p2.artworkUrl600 as artwork" + "\n" +
+                "RETURN DISTINCT name, id, artwork" + "\n" +
                 "SKIP $skip" + "\n" +
                 "LIMIT $limit";
 
