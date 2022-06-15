@@ -19,9 +19,9 @@
                <children>
                   <VBox fx:id="boxAuthorImage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickAuthor" prefHeight="130.0" prefWidth="130.0" style="-fx-background-color: white; -fx-background-radius: 100; -fx-border-radius: 100; -fx-border-color: #eaeaea;">
                      <children>
-                        <ImageView fx:id="authorPicture" fitHeight="50.0" fitWidth="83.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="authorPicture" fitHeight="65.0" fitWidth="83.0" mouseTransparent="true" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@img/authorAnonymousPicture.png" />
+                              <Image url="@img/authors/author3.png" />
                            </image>
                            <VBox.margin>
                               <Insets />

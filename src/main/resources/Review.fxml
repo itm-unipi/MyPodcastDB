@@ -26,25 +26,22 @@
                         <ImageView fx:id="star3" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="star4" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
                         <ImageView fx:id="star5" fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="deleteReview" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDeleteReview" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Delete" textFill="#464646">
+                        <Button fx:id="deleteReview" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDeleteReview" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" textFill="#464646">
                            <font>
                               <Font name="Corbel Light" size="16.0" />
                            </font>
                            <graphic>
-                              <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                              <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@img/delete.png" />
+                                    <Image url="@img/deleteActor.png" />
                                  </image>
                               </ImageView>
                            </graphic>
-                           <padding>
-                              <Insets bottom="6.0" right="-26.0" top="6.0" />
-                           </padding>
                            <cursor>
                               <Cursor fx:constant="HAND" />
                            </cursor>
                            <HBox.margin>
-                              <Insets left="637.0" />
+                              <Insets left="720.0" />
                            </HBox.margin>
                         </Button>
                      </children>

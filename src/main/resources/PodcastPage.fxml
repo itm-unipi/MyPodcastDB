@@ -251,7 +251,7 @@
                                           <Image url="@img/star.png" />
                                        </image>
                                     </ImageView>
-                                    <ProgressBar fx:id="fiveStars" prefHeight="10.0" prefWidth="220.0" progress="0.0" style="-fx-accent: black; -fx-padding: 0;">
+                                    <ProgressBar fx:id="fiveStars" prefHeight="10.0" prefWidth="220.0" progress="0.0">
                                        <opaqueInsets>
                                           <Insets />
                                        </opaqueInsets>
@@ -369,9 +369,9 @@
                                     </ProgressBar>
                                  </children>
                               </HBox>
-                              <Label fx:id="showReviews" onMouseClicked="#clickOnReviews" onMouseEntered="#mouseOnReview" onMouseExited="#mouseOutReview" text="See all reviews" textFill="BLUE">
+                              <Label fx:id="showReviews" onMouseClicked="#clickOnReviews" onMouseEntered="#mouseOnReview" onMouseExited="#mouseOutReview" text="See all reviews" textFill="CORNFLOWERBLUE">
                                  <font>
-                                    <Font name="Corbel Light" size="21.0" />
+                                    <Font name="Corbel" size="21.0" />
                                  </font>
                                  <VBox.margin>
                                     <Insets top="10.0" />
@@ -386,12 +386,12 @@
                            <children>
                               <HBox>
                                  <VBox.margin>
-                                    <Insets top="5.0" />
+                                    <Insets top="7.0" />
                                  </VBox.margin>
                                  <children>
                                     <Label fx:id="title" text="Title">
                                        <font>
-                                          <Font name="Corbel Bold" size="25.0" />
+                                          <Font name="Corbel Bold" size="27.0" />
                                        </font>
                                        <tooltip>
                                           <Tooltip fx:id="titleTooltip" />
@@ -403,9 +403,9 @@
                                  <children>
                                     <VBox maxHeight="100.0" prefHeight="100.0" prefWidth="410.0">
                                        <children>
-                                          <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
+                                          <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="CORNFLOWERBLUE">
                                              <font>
-                                                <Font name="Dubai Light" size="25.0" />
+                                                <Font name="Dubai Regular" size="22.0" />
                                              </font>
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
@@ -419,7 +419,7 @@
                                           </Label>
                                           <Label fx:id="country" scaleY="1.06" text="Country">
                                              <font>
-                                                <Font name="Corbel Light" size="19.0" />
+                                                <Font name="Corbel Light" size="18.0" />
                                              </font>
                                              <VBox.margin>
                                                 <Insets bottom="5.0" top="6.0" />
@@ -459,41 +459,44 @@
                                           </HBox>
                                           <HBox>
                                              <children>
-                                                <Button fx:id="updatePodcast" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdatePodcast" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="#464646">
+                                                <Button fx:id="updatePodcast" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdatePodcast" prefHeight="34.0" prefWidth="98.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Update" textFill="#464646">
                                                    <font>
                                                       <Font name="Corbel Light" size="16.0" />
                                                    </font>
                                                    <graphic>
-                                                      <ImageView fitHeight="20.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-41.0" translateY="1.0">
+                                                      <ImageView fitHeight="20.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-38.0">
                                                          <image>
                                                             <Image url="@img/settings.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
-                                                   <padding>
-                                                      <Insets bottom="6.0" right="-26.0" top="6.0" />
-                                                   </padding>
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
+                                                   <padding>
+                                                      <Insets left="24.0" />
+                                                   </padding>
+                                                   <HBox.margin>
+                                                      <Insets right="7.0" />
+                                                   </HBox.margin>
                                                 </Button>
-                                                <Button fx:id="deletePodcast" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDeletePodcast" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Delete" textFill="#464646">
+                                                <Button fx:id="deletePodcast" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" graphicTextGap="0.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDeletePodcast" prefHeight="34.0" prefWidth="94.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="Delete" textFill="#464646">
                                                    <font>
                                                       <Font name="Corbel Light" size="16.0" />
                                                    </font>
                                                    <graphic>
-                                                      <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                                      <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-33.0" translateY="1.0">
                                                          <image>
                                                             <Image url="@img/delete.png" />
                                                          </image>
                                                       </ImageView>
                                                    </graphic>
-                                                   <padding>
-                                                      <Insets bottom="6.0" right="-26.0" top="6.0" />
-                                                   </padding>
                                                    <cursor>
                                                       <Cursor fx:constant="HAND" />
                                                    </cursor>
+                                                   <padding>
+                                                      <Insets left="13.0" />
+                                                   </padding>
                                                 </Button>
                                              </children>
                                           </HBox>
@@ -501,6 +504,9 @@
                                              <font>
                                                 <Font name="Corbel Light" size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" top="5.0" />
+                                             </VBox.margin>
                                           </Label>
                                           <VBox fx:id="addEpisodeWrapper" alignment="TOP_RIGHT">
                                              <children>
@@ -540,7 +546,7 @@
                                     <Insets top="20.0" />
                                  </padding>
                               </Label>
-                              <ScrollPane fx:id="scroll" hbarPolicy="NEVER" prefHeight="451.0" prefWidth="600.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
+                              <ScrollPane fx:id="scroll" hbarPolicy="NEVER" prefHeight="435.0" prefWidth="600.0" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
                                  <content>
                                     <GridPane fx:id="episodesGrid" style="-fx-background-color: transparent;">
                                        <columnConstraints>

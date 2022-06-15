@@ -31,7 +31,7 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label fx:id="title" prefWidth="334.0" text="Title">
+                        <Label fx:id="title" prefHeight="42.0" prefWidth="495.0" text="Title">
                            <font>
                               <Font name="Dubai Regular" size="22.0" />
                            </font>
@@ -41,32 +41,32 @@
                         </Label>
                         <HBox fx:id="buttonWrapper" alignment="CENTER_LEFT">
                            <children>
-                              <Button fx:id="updateEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" prefWidth="142.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="      Update Episode" textFill="#464646">
+                              <Button fx:id="updateEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnUpdate" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" textFill="#464646">
                                  <font>
                                     <Font name="Corbel Light" size="16.0" />
                                  </font>
                                  <graphic>
-                                    <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                    <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/settings.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>
-                                 <padding>
-                                    <Insets bottom="6.0" right="-4.0" top="6.0" />
-                                 </padding>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
+                                 <HBox.margin>
+                                    <Insets right="5.0" />
+                                 </HBox.margin>
                               </Button>
-                              <Button fx:id="deleteEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDelete" prefWidth="134.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" text="      Delete Episode" textFill="#464646">
+                              <Button fx:id="deleteEpisode" alignment="CENTER" contentDisplay="CENTER" focusTraversable="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#clickOnDelete" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-insets: 0; -fx-background-radius: 10; -fx-border-radius: 10;" textFill="#464646">
                                  <font>
                                     <Font name="Corbel Light" size="16.0" />
                                  </font>
                                  <graphic>
-                                    <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-54.0">
+                                    <ImageView fitHeight="18.0" fitWidth="56.0" pickOnBounds="true" preserveRatio="true" translateX="-2.0">
                                        <image>
-                                          <Image url="@img/delete.png" />
+                                          <Image url="@img/deleteActor.png" />
                                        </image>
                                     </ImageView>
                                  </graphic>

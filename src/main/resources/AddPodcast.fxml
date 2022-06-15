@@ -30,7 +30,7 @@
                <children>
                   <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/new.png" />
+                        <Image url="@img/addPodcast.png" />
                      </image>
                      <HBox.margin>
                         <Insets left="-2.0" right="3.0" top="1.0" />

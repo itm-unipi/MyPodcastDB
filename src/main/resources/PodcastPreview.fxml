@@ -43,9 +43,9 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </VBox>
-            <HBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" translateX="-78.0" translateY="-89.0" visible="false">
+            <HBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" translateX="-77.0" translateY="-89.0" visible="false">
                <children>
-                  <ImageView fx:id="watchlistStatus" fitHeight="28.0" fitWidth="28.0" onMouseClicked="#onClickBtnWatchlist" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="watchlistStatus" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#onClickBtnWatchlist" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@img/addWatchlist.png" />
                      </image>
@@ -75,7 +75,7 @@
                   <Insets left="6.0" right="7.0" top="1.0" />
                </padding>
             </HBox>
-            <HBox fx:id="watchlistAddedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-32.0" translateY="-88.0">
+            <HBox fx:id="watchlistAddedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-31.0" translateY="-89.0">
                <children>
                   <Label text="Added">
                      <font>
@@ -87,7 +87,7 @@
                   <Insets bottom="3.0" left="7.0" right="7.0" top="1.0" />
                </padding>
             </HBox>
-            <HBox fx:id="watchlistRemovedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-23.0" translateY="-88.0">
+            <HBox fx:id="watchlistRemovedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-22.0" translateY="-89.0">
                <children>
                   <Label fx:id="messageText1" text="Removed">
                      <font>

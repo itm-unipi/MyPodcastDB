@@ -236,4 +236,17 @@ public class Podcast {
                 ", preloadedReviews=" + preloadedReviews +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Podcast podcast = (Podcast) o;
+        return Objects.equals(id, podcast.id) && Objects.equals(name, podcast.name) && Objects.equals(authorName, podcast.authorName) && Objects.equals(artworkUrl600, podcast.artworkUrl600) && Objects.equals(contentAdvisoryRating, podcast.contentAdvisoryRating) && Objects.equals(country, podcast.country) && Objects.equals(primaryCategory, podcast.primaryCategory) && Objects.equals(categories, podcast.categories) && Objects.equals(releaseDate, podcast.releaseDate) && Objects.equals(episodes, podcast.episodes) && Objects.equals(reviews, podcast.reviews) && Objects.equals(preloadedReviews, podcast.preloadedReviews);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, authorName, artworkUrl600, contentAdvisoryRating, country, primaryCategory, categories, releaseDate, episodes, reviews, preloadedReviews);
+    }
 }

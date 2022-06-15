@@ -1,15 +1,19 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -47,32 +51,36 @@ public class PodcastUpdateController {
 
     @FXML
     private GridPane secondaryCategory;
+    private BorderPane mainPage;
+    private PodcastPageService service;
+    private PodcastPageController podcastPageController;
 
     @FXML
     void clickOnCancel(MouseEvent event) {
-        Logger.info("Cancel");
         closeStage(event);
     }
 
     @FXML
-    void clickOnUpdate(MouseEvent event) {
+    void clickOnUpdate(MouseEvent event) throws IOException {
+        Podcast updatedPodcast = new Podcast(this.podcast);
+
         // update the local podcast
         if (!this.name.getText().equals(this.podcast.getName()) && !this.name.getText().equals(""))
-            this.podcast.setName(this.name.getText());
+            updatedPodcast.setName(this.name.getText());
         if (!this.country.getValue().equals(this.podcast.getCountry()) && !this.country.getValue().equals(""))
-            this.podcast.setCountry(this.country.getValue());
+            updatedPodcast.setCountry(this.country.getValue());
         if (!this.contentAdvisory.getText().equals(this.podcast.getContentAdvisoryRating()) && !this.contentAdvisory.getText().equals(""))
-            this.podcast.setContentAdvisoryRating(this.contentAdvisory.getText());
+            updatedPodcast.setContentAdvisoryRating(this.contentAdvisory.getText());
         if (!this.primaryCategory.getValue().equals(this.podcast.getPrimaryCategory()) && !this.primaryCategory.getValue().equals(""))
-            this.podcast.setPrimaryCategory(this.primaryCategory.getValue());
+            updatedPodcast.setPrimaryCategory(this.primaryCategory.getValue());
         if (!this.artworkUrl.getText().equals(this.podcast.getArtworkUrl600()) && !this.artworkUrl.getText().equals(""))
-            this.podcast.setArtworkUrl600(this.artworkUrl.getText());
+            updatedPodcast.setArtworkUrl600(this.artworkUrl.getText());
         if (this.releaseDate.getValue() != null) {
             LocalDate localDate = this.releaseDate.getValue();
             Instant instant = Instant.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             Date releaseDate = Date.from(instant);
             if (this.podcast.getReleaseDate() != releaseDate)
-                this.podcast.setReleaseDate(releaseDate);
+                updatedPodcast.setReleaseDate(releaseDate);
         }
 
         // secondary category update
@@ -83,9 +91,27 @@ public class PodcastUpdateController {
                 checkedCategories.add(((CheckBox) child).getText());
         }
         if (!this.podcast.getCategories().equals(checkedCategories))
-            this.podcast.setCategories(checkedCategories);
+            updatedPodcast.setCategories(checkedCategories);
 
-        Logger.info(this.podcast.toString());
+        // check if modified
+        if (!this.podcast.equals(updatedPodcast)) {
+            // update podcast on persistence
+            int result = this.service.updatePodcast(this.podcast, updatedPodcast);
+
+            // if update is succesfull update the page
+            if (result == 0) {
+                this.podcast.copy(updatedPodcast);
+
+                // update page
+                this.podcastPageController.updatePodcastPage();
+            }
+
+            // error in update
+            else if (result != 0) {
+                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update episode");
+            }
+        }
+
         closeStage(event);
     }
 
@@ -109,9 +135,12 @@ public class PodcastUpdateController {
         this.update.setStyle("-fx-border-color: transparent; -fx-background-color: #4CAF50; -fx-background-radius: 8; -fx-text-fill: white; -fx-border-radius: 8; -fx-cursor: default;");
     }
 
-    public void setData(Podcast podcast) throws Exception {
+    public void setData(Podcast podcast, BorderPane mainPage, PodcastPageService service, PodcastPageController podcastPageController) throws Exception {
         // initialize the local podcast
         this.podcast = podcast;
+        this.mainPage = mainPage;
+        this.service = service;
+        this.podcastPageController = podcastPageController;
 
         // load countries list
         for (String country: JsonDecode.getCountries()) {

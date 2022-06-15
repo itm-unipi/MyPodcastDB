@@ -56,7 +56,7 @@ public class AuthorPreviewController {
 
     @FXML
     void onAuthor(MouseEvent event) {
-        boxAuthorImage.setStyle("-fx-background-color:  #e7e7e7; -fx-background-radius: 100; -fx-border-color: #c9c9c9; -fx-border-radius: 100;");
+        boxAuthorImage.setStyle("-fx-background-color:  #f0f0f0; -fx-background-radius: 100; -fx-border-color: #e3e3e3; -fx-border-radius: 100;");
 
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
             boxFollowAuthor.setVisible(true);

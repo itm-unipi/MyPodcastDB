@@ -21,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -225,6 +226,7 @@ public class PodcastPageController {
             }
         }
 
+
         this.mainPage.setEffect(null);
     }
 
@@ -281,9 +283,9 @@ public class PodcastPageController {
             // update the image
             Image likeIcon;
             if (this.liked)
-                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+                likeIcon = ImageCache.getImageFromLocalPath("/img/liked.png");
             else
-                likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+                likeIcon = ImageCache.getImageFromLocalPath("/img/unliked.png");
             this.like.setImage(likeIcon);
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
@@ -316,7 +318,7 @@ public class PodcastPageController {
         dialog.initOwner(this.mainPage.getScene().getWindow());
         dialog.setDialogPane(podcastUpdateDialogPane);
         dialog.setTitle("Update Podcast");
-        updateController.setData(newPodcast);
+        updateController.setData(newPodcast, this.mainPage, this.service, this);
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
@@ -324,25 +326,6 @@ public class PodcastPageController {
         stage.initStyle(StageStyle.UNDECORATED);
 
         dialog.showAndWait();
-
-        // check if modified
-        if (!this.podcast.equals(newPodcast)) {
-            // update podcast on persistence
-            int result = this.service.updatePodcast(this.podcast, newPodcast);
-
-            // if update is succesfull update the page
-            if (result == 0) {
-                this.podcast = newPodcast;
-
-                // update page
-                this.updatePodcastPage();
-            }
-
-            // error in update
-            else if (result != 0) {
-                DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to update episode");
-            }
-        }
 
         this.mainPage.setEffect(null);
     }
@@ -386,9 +369,9 @@ public class PodcastPageController {
             // update the image
             Image watchlaterIcon;
             if (this.watchLatered)
-                watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
+                watchlaterIcon = ImageCache.getImageFromLocalPath("/img/removeWatchlist.png");
             else
-                watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
+                watchlaterIcon = ImageCache.getImageFromLocalPath("/img/addWatchlist.png");
             this.watchlater.setImage(watchlaterIcon);
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
@@ -413,13 +396,7 @@ public class PodcastPageController {
 
     @FXML
     void mouseOnLike(MouseEvent event) {
-        // update the image
-        Image likeIcon;
-        if (!this.liked)
-            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
-        else
-            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
-        this.like.setImage(likeIcon);
+        // TODO: ombra
     }
 
     @FXML
@@ -429,47 +406,29 @@ public class PodcastPageController {
 
     @FXML
     void mouseOnWatchlater(MouseEvent event) {
-        // update the image
-        Image watchlaterIcon;
-        if (!this.watchLatered)
-            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
-        else
-            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
-        this.watchlater.setImage(watchlaterIcon);
+        // TODO: ombra
     }
 
     /******************************* Mouse out Event ********************************/
 
     @FXML
     void mouseOutAuthor(MouseEvent event) {
-        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
+        this.author.setTextFill(Paint.valueOf("CornflowerBlue"));
     }
 
     @FXML
     void mouseOutLike(MouseEvent event) {
-        // update the image
-        Image likeIcon;
-        if (this.liked)
-            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
-        else
-            likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
-        this.like.setImage(likeIcon);
+        // TODO: ombra
     }
 
     @FXML
     void mouseOutReview(MouseEvent event) {
-        this.showReviews.setTextFill(Color.color(0.0, 0.0, 1.0));
+        this.showReviews.setTextFill(Paint.valueOf("CornflowerBlue"));
     }
 
     @FXML
     void mouseOutWatchlater(MouseEvent event) {
-        // update the image
-        Image watchlaterIcon;
-        if (this.watchLatered)
-            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
-        else
-            watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
-        this.watchlater.setImage(watchlaterIcon);
+        // TODO: ombra
     }
 
     /***************************** Initialize e Utility *****************************/
@@ -539,17 +498,17 @@ public class PodcastPageController {
                 // like image
                 Image likeIcon;
                 if (this.liked)
-                    likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_52px.png");
+                    likeIcon = ImageCache.getImageFromLocalPath("/img/liked.png");
                 else
-                    likeIcon = ImageCache.getImageFromLocalPath("/img/Favorite_50px.png");
+                    likeIcon = ImageCache.getImageFromLocalPath("/img/unliked.png");
                 this.like.setImage(likeIcon);
 
                 // watch later
                 Image watchlaterIcon;
                 if (this.watchLatered)
-                    watchlaterIcon = ImageCache.getImageFromLocalPath("/img/unpin.png");
+                    watchlaterIcon = ImageCache.getImageFromLocalPath("/img/removeWatchlist.png");
                 else
-                    watchlaterIcon = ImageCache.getImageFromLocalPath("/img/pin.png");
+                    watchlaterIcon = ImageCache.getImageFromLocalPath("/img/addWatchlist.png");
                 this.watchlater.setImage(watchlaterIcon);
 
                 // profile picture

@@ -48,9 +48,9 @@
             <center>
                 <VBox maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1040.0" BorderPane.alignment="CENTER">
                     <children>
-                  <HBox prefHeight="120.0" prefWidth="1016.0">
+                  <HBox alignment="CENTER_LEFT" prefWidth="1016.0">
                      <children>
-                        <Label fx:id="signUpLabelUser" alignment="CENTER" prefHeight="44.0" prefWidth="51.0" text="User" textFill="#636366">
+                        <Label fx:id="signUpLabelUser" maxWidth="-Infinity" prefHeight="44.0" prefWidth="36.0" text="User" textFill="#636366">
                            <font>
                               <Font name="Corbel Bold" size="18.0" />
                            </font>
@@ -63,7 +63,7 @@
                               <Image url="@img/switch_off_80px.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="signUpLabelAuthor" alignment="CENTER" prefHeight="48.0" prefWidth="68.0" text="Author" textFill="#636366">
+                        <Label fx:id="signUpLabelAuthor" maxWidth="-Infinity" prefHeight="48.0" prefWidth="68.0" text="Author" textFill="#636366">
                            <font>
                               <Font name="Corbel" size="18.0" />
                            </font>
@@ -71,7 +71,7 @@
                               <Insets left="10.0" />
                            </HBox.margin>
                         </Label>
-                        <Pane prefHeight="120.0" prefWidth="812.0" />
+                        <Pane prefWidth="835.0" />
                         <ImageView fitHeight="30.0" fitWidth="30.0" onMouseClicked="#signUpBackButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
                               <Image url="@img/Close_40px.png" />
@@ -82,7 +82,7 @@
                         </ImageView>
                      </children>
                      <VBox.margin>
-                        <Insets top="40.0" />
+                        <Insets bottom="40.0" top="40.0" />
                      </VBox.margin>
                   </HBox>
                   <HBox prefWidth="920.0">
@@ -146,7 +146,7 @@
                                              </font></PasswordField>
                                        </children>
                                     </Pane>
-                                    <Label prefHeight="50.0" prefWidth="140.0" text="Repeat Passeword" textFill="#636366">
+                                    <Label prefHeight="50.0" prefWidth="140.0" text="Repeat Password" textFill="#636366">
                                        <font>
                                           <Font name="Corbel light" size="15.0" />
                                        </font>
@@ -257,7 +257,7 @@
                            <children>
                               <Label alignment="CENTER" prefHeight="17.0" prefWidth="256.0" text="Choose your account picture" textFill="#636366">
                                  <VBox.margin>
-                                    <Insets bottom="20.0" top="20.0" />
+                                    <Insets bottom="20.0" top="58.0" />
                                  </VBox.margin>
                                  <font>
                                     <Font name="Corbel Light" size="18.0" />
@@ -288,14 +288,17 @@
                                     </ImageView>
                                  </children>
                               </HBox>
-                              <Pane prefHeight="76.0" prefWidth="230.0">
+                              <Pane prefWidth="212.0">
                                  <children>
-                                    <Button fx:id="signUpSignUpButton" layoutX="55.0" layoutY="20.0" mnemonicParsing="false" onMouseClicked="#signUpSignUpButtonClick" onMouseEntered="#signUpSignUpButtonIn" onMouseExited="#signUpSignUpButtonOut" prefHeight="36.0" prefWidth="100.0" style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #4CAF50; -fx-border-color: transparent; -fx-cursor: hand;" text="Sign Up" textFill="WHITE">
+                                    <Button fx:id="signUpSignUpButton" layoutX="55.0" mnemonicParsing="false" onMouseClicked="#signUpSignUpButtonClick" onMouseEntered="#signUpSignUpButtonIn" onMouseExited="#signUpSignUpButtonOut" prefHeight="36.0" prefWidth="100.0" style="-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #4CAF50; -fx-border-color: transparent; -fx-cursor: hand;" text="Sign Up" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel" size="18.0" />
                                        </font>
                                     </Button>
-                                 </children></Pane>
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets top="17.0" />
+                                 </VBox.margin></Pane>
                            </children>
                            <padding>
                               <Insets left="70.0" />
