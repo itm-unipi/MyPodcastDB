@@ -3,11 +3,55 @@
     <xs:element name="xmlConfig">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="mongoDBConfig">
+                <xs:element name="mongoDBConfigType">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="local"/>
+                            <xs:enumeration value="cluster"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+
+                <xs:element name="mongoDBLocalConfig">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="mongoDBIp" type="xs:string"/>
                             <xs:element name="mongoDBPort" type="xs:string"/>
+                            <xs:element name="mongoDBName" type="xs:string"/>
+                            <xs:element name="mongoDBUser" type="xs:string"/>
+                            <xs:element name="mongoDBPassword" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="mongoDBClusterConfig">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="mongoDBIp1" type="xs:string"/>
+                            <xs:element name="mongoDBPort1" type="xs:string"/>
+                            <xs:element name="mongoDBIp2" type="xs:string"/>
+                            <xs:element name="mongoDBPort2" type="xs:string"/>
+                            <xs:element name="mongoDBIp3" type="xs:string"/>
+                            <xs:element name="mongoDBPort3" type="xs:string"/>
+                            <xs:element name="writeConcern">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:integer">
+                                        <xs:minInclusive value="1"/>
+                                        <xs:maxExclusive value="3"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
+                            <xs:element name="readPreferences">
+                                <xs:simpleType>
+                                    <xs:restriction base="xs:string">
+                                        <xs:enumeration value="nearest"/>
+                                        <xs:enumeration value="primary"/>
+                                        <xs:enumeration value="primaryPreferred"/>
+                                        <xs:enumeration value="secondary"/>
+                                        <xs:enumeration value="secondaryPreferred"/>
+                                    </xs:restriction>
+                                </xs:simpleType>
+                            </xs:element>
                             <xs:element name="mongoDBName" type="xs:string"/>
                             <xs:element name="mongoDBUser" type="xs:string"/>
                             <xs:element name="mongoDBPassword" type="xs:string"/>

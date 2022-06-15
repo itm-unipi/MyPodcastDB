@@ -74,16 +74,31 @@ public class ConfigManager {
     }
 
     public static String getMongoDBConnectorString() {
-        String stringConnector = "mongodb://" +
-                config.getMongoDBConfig().getMongoDBUser() + ":" +
-                config.getMongoDBConfig().getMongoDBPassword() + "@" +
-                config.getMongoDBConfig().getMongoDBIp() + ":" +
-                config.getMongoDBConfig().getMongoDBPort() ;
-        return stringConnector;
+        if (config.getMongoDBConfigType().equals("local")) {
+            String stringConnector = "mongodb://" +
+                    config.getMongoDBLocalConfig().getMongoDBUser() + ":" +
+                    config.getMongoDBLocalConfig().getMongoDBPassword() + "@" +
+                    config.getMongoDBLocalConfig().getMongoDBIp() + ":" +
+                    config.getMongoDBLocalConfig().getMongoDBPort();
+            return stringConnector;
+        } else {
+            String stringConnector = "mongodb://" +
+                    config.getMongoDBClusterConfig().getMongoDBUser() + ":" +
+                    config.getMongoDBClusterConfig().getMongoDBPassword() + "@" +
+                    config.getMongoDBClusterConfig().getMongoDBIp1() + ":" +
+                    config.getMongoDBClusterConfig().getMongoDBPort1() + "," +
+                    config.getMongoDBClusterConfig().getMongoDBIp2() + ":" +
+                    config.getMongoDBClusterConfig().getMongoDBPort2() + "," +
+                    config.getMongoDBClusterConfig().getMongoDBIp3() + ":" +
+                    config.getMongoDBClusterConfig().getMongoDBPort3() + "/?retryWrites=true&w=" +
+                    config.getMongoDBClusterConfig().getWriteConcern() + "&readPreference=" +
+                    config.getMongoDBClusterConfig().getReadPreferences() + "&wtimeout=5000";
+            return stringConnector;
+        }
     }
 
     public static String getMongoDBName() {
-        return config.getMongoDBConfig().getMongoDBName();
+        return config.getMongoDBLocalConfig().getMongoDBName();
     }
 
     public static String getNeo4JConnectorString() {

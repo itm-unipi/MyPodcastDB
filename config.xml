@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmlConfig>
-    <mongoDBConfig>
+    <mongoDBConfigType>local</mongoDBConfigType>
+    <mongoDBLocalConfig>
         <mongoDBIp>localhost</mongoDBIp>
         <mongoDBPort>27017</mongoDBPort>
         <mongoDBName>myPodcastDB</mongoDBName>
         <mongoDBUser>admin</mongoDBUser>
         <mongoDBPassword>password</mongoDBPassword>
-    </mongoDBConfig>
+    </mongoDBLocalConfig>
+    <mongoDBClusterConfig>
+        <mongoDBIp1>localhost</mongoDBIp1>
+        <mongoDBPort1>27017</mongoDBPort1>
+        <mongoDBIp2>localhost</mongoDBIp2>
+        <mongoDBPort2>27017</mongoDBPort2>
+        <mongoDBIp3>localhost</mongoDBIp3>
+        <mongoDBPort3>27017</mongoDBPort3>
+        <writeConcern>1</writeConcern>
+        <readPreferences>nearest</readPreferences>
+        <mongoDBName>myPodcastDB</mongoDBName>
+        <mongoDBUser>admin</mongoDBUser>
+        <mongoDBPassword>password</mongoDBPassword>
+    </mongoDBClusterConfig>
     <neo4JConfig>
         <neo4JIp>localhost</neo4JIp>
         <neo4JPort>7687</neo4JPort>
