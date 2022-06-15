@@ -331,7 +331,9 @@ public class HomePageService {
         Neo4jManager.getInstance().openConnection();
 
         // TODO: da rimuovere
-        FollowedAuthorCache.addAuthorList(this.authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()));
+        List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
+        if (followed != null)
+            FollowedAuthorCache.addAuthorList(followed);
 
         // Loading Top Rated Podcasts
         List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
