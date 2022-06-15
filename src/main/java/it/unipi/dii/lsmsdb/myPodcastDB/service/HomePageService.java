@@ -41,7 +41,7 @@ public class HomePageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        /********************************************/
+        /********************************************
         // TODO: da rimuovere
         List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByUser(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         if (followed != null)
@@ -52,7 +52,7 @@ public class HomePageService {
         List<User> followedUsers = this.userNeo4jManager.showFollowedUsers(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         if (followedUsers != null)
             FollowedUserCache.addUserList(followedUsers);
-        /********************************************/
+        ********************************************/
 
         // Loading top rated in user's country
         List<Triplet<Podcast, String, Float>> resultsTopCountry = new ArrayList<>();
@@ -331,9 +331,9 @@ public class HomePageService {
         Neo4jManager.getInstance().openConnection();
 
         // TODO: da rimuovere
-        List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
-        if (followed != null)
-            FollowedAuthorCache.addAuthorList(followed);
+        // List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
+        // if (followed != null)
+        //     FollowedAuthorCache.addAuthorList(followed);
 
         // Loading Top Rated Podcasts
         List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
