@@ -17,6 +17,16 @@ public class Review {
     public Review() {
     }
 
+    public Review(String id, int rating) {
+        this.id = id;
+        this.rating = rating;
+    }
+
+    public Review(String id, String podcastId) {
+        this.id = id;
+        this.podcastId = podcastId;
+    }
+
     public Review(String id, String podcastId, String authorUsername, String title, String content, int rating, Date createdAt) {
         this.id = id;
         this.podcastId = podcastId;

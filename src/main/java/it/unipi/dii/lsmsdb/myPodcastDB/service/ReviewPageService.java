@@ -69,22 +69,38 @@ public class ReviewPageService {
         }
 
         // get the list of Review ID
-        List<Map.Entry<String, Integer>> listOfReviews = podcast.getReviews();
+        List<Review> listOfReviews = podcast.getReviews();
 
         // sort them
         if (attributeToOrder.equals("rating")) {
             if (ascending) {
-                listOfReviews.sort(new Comparator<Map.Entry<String, Integer>>() {
+                listOfReviews.sort(new Comparator<Review>() {
                     @Override
-                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                        return o1.getValue().compareTo(o2.getValue());
+                    public int compare(Review o1, Review o2) {
+                        Integer r1 = o1.getRating();
+                        Integer r2 = o2.getRating();
+
+                        if (r1 < r2)
+                            return -1;
+                        else if (r1 == r2)
+                            return 0;
+                        else
+                            return 1;
                     }
                 });
             } else {
-                listOfReviews.sort(new Comparator<Map.Entry<String, Integer>>() {
+                listOfReviews.sort(new Comparator<Review>() {
                     @Override
-                    public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
-                        return o2.getValue().compareTo(o1.getValue());
+                    public int compare(Review o1, Review o2) {
+                        Integer r1 = o1.getRating();
+                        Integer r2 = o2.getRating();
+
+                        if (r2 < r1)
+                            return -1;
+                        else if (r1 == r2)
+                            return 0;
+                        else
+                            return 1;
                     }
                 });
             }
@@ -96,7 +112,7 @@ public class ReviewPageService {
         List<Review> requestedReviews = new ArrayList<>();
         for (int i = skip; i < skip + limit && i < listOfReviews.size(); i++) {
             // get the id of next review
-            String id = listOfReviews.get(i).getKey();
+            String id = listOfReviews.get(i).getId();
 
             // if is user and this is the id of review he written don't ask again it to MongoDB
             if (MyPodcastDB.getInstance().getSessionType().equals("User") && id.equals(own.getId())) {
@@ -186,7 +202,7 @@ public class ReviewPageService {
             // if the podcast has more than 9 other reviews load another one as preloaded
             int totalReviews = podcast.getReviews().size();
             if (totalReviews > 9) {
-                Review otherReview = this.reviewMongo.findReviewById(podcast.getReviews().get(totalReviews - 10).getKey());
+                Review otherReview = this.reviewMongo.findReviewById(podcast.getReviews().get(totalReviews - 10).getId());
                 if (otherReview != null)
                     podcast.addInHeadPreloadedReview(otherReview);
                 else

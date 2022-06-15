@@ -16,7 +16,7 @@ public class Podcast {
     private List<String> categories;
     private Date releaseDate;
     private List<Episode> episodes;
-    private List<ReducedReview> reviews;
+    private List<Review> reviews;
     private List<Review> preloadedReviews;
 
     static final private int numberOfPreloadedReviews = 10;     // TODO: metterlo nel config manager
@@ -159,29 +159,9 @@ public class Podcast {
         this.episodes = episodes;
     }
 
-    protected List<ReducedReview> getReducedReviews() {
-        return reviews;
-    }
+    public List<Review> getReviews() { return reviews; }
 
-    public List<Entry<String, Integer>> getReviews() {
-
-        List<Entry<String, Integer>> reducedReviews = new ArrayList<>();
-        for(ReducedReview review : reviews){
-            Entry<String, Integer> newReview = new AbstractMap.SimpleEntry<>(review.getId(), review.getRating()) ;
-            reducedReviews.add(newReview);
-        }
-        return reducedReviews;
-    }
-
-    public void setReviews(List<Entry<String, Integer>> newReviews) {
-
-        List<ReducedReview> reviews = new ArrayList<>();
-        for(Entry<String, Integer> entry : newReviews){
-            ReducedReview newReview = new ReducedReview(entry.getKey(), entry.getValue());
-            reviews.add(newReview);
-        }
-        this.reviews = reviews;
-    }
+    public void setReviews(List<Review> newReviews) { this.reviews = newReviews; }
 
     public void addEpisode(String name, String description, Date releaseDate, int timeMillis) {
         Episode episode = new Episode(name, description, releaseDate, timeMillis);
@@ -197,19 +177,19 @@ public class Podcast {
     }
 
     public void addReview(String id, int rating) {
-        ReducedReview review = new ReducedReview(id, rating);
+        Review review = new Review(id, rating);
         this.reviews.add(review);
     }
 
     public void deleteReview(Review review) {
-        ReducedReview toRemove = new ReducedReview(review.getId(), review.getRating());
+        Review toRemove = new Review(review.getId(), review.getRating());
         this.reviews.remove(toRemove);
     }
 
     public float getRating() {
         float average = 0.0f;
 
-        for (ReducedReview review : this.reviews)
+        for (Review review : this.reviews)
             average += review.getRating();
 
         return average / this.reviews.size();
@@ -257,7 +237,7 @@ public class Podcast {
                 '}';
     }
 }
-
+/*
 class ReducedReview {
     private String id;
     private int rating;
@@ -306,4 +286,4 @@ class ReducedReview {
     public int hashCode() {
         return Objects.hash(id, rating);
     }
-}
+}*/

@@ -2,6 +2,7 @@ package it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.ConfigManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.javatuples.Pair;
@@ -244,11 +245,11 @@ public class PodcastMongoTest {
     void addReviewToPodcastTest(){
         String podcastName = "testPodcastAfterUpdate";
         Podcast podcast = this.podcastMongo.findPodcastsByName(podcastName,1).get(0);
-        Entry<String, Integer> newReview = new AbstractMap.SimpleEntry<>("100000000000000001021405", 5) ;
-        boolean result = this.podcastMongo.addReviewToPodcast(podcast.getId(), newReview.getKey(), newReview.getValue());
+        Review newReview = new Review("100000000000000001021405", 5) ;
+        boolean result = this.podcastMongo.addReviewToPodcast(podcast.getId(), newReview.getId(), newReview.getRating());
         Podcast podcastUpdated = this.podcastMongo.findPodcastsByName(podcastName,1).get(0);
 
-        List<Entry<String, Integer>> reviews = podcastUpdated.getReviews();
+        List<Review> reviews = podcastUpdated.getReviews();
         if(!result || !reviews.contains(newReview))
             System.err.println("[-] addReviewToPodcastTest");
         else

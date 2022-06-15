@@ -631,8 +631,8 @@ public class ReviewPageController {
 
             // calculate the progress bar for ratings
             int[] numReview = new int[5];
-            for (Map.Entry<String, Integer> review : this.podcast.getReviews()) {
-                switch (review.getValue()) {
+            for (Review review : this.podcast.getReviews()) {
+                switch (review.getRating()) {
                     case 1:
                         numReview[0]++;
                         break;

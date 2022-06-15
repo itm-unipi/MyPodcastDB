@@ -1,10 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
-import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.PodcastPageService;
 import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
@@ -653,8 +650,8 @@ public class PodcastPageController {
 
         // calculate the progress bar for ratings
         int[] numReview = new int[5];
-        for (Entry<String, Integer> review : this.podcast.getReviews()) {
-            switch (review.getValue()) {
+        for (Review review : this.podcast.getReviews()) {
+            switch (review.getRating()) {
                 case 1:
                     numReview[0]++;
                     break;

@@ -57,10 +57,10 @@ public class PodcastMongo {
             episodes.add(newEpisode);
         }
 
-        for (Entry<String, Integer> review : podcast.getReviews()) {
+        for (Review review : podcast.getReviews()) {
             Document newReview = new Document()
-                    .append("reviewId", new ObjectId(review.getKey()))
-                    .append("rating", review.getValue());
+                    .append("reviewId", new ObjectId(review.getId()))
+                    .append("rating", review.getRating());
             reviews.add(newReview);
         }
 
@@ -526,10 +526,10 @@ public class PodcastMongo {
 
         // preloaded the new list of reduced reviews
         List<Document> reviews = new ArrayList<>();
-        for (Entry<String, Integer> review : podcast.getReviews()) {
+        for (Review review : podcast.getReviews()) {
             Document newReview = new Document()
-                    .append("reviewId", new ObjectId(review.getKey()))
-                    .append("rating", review.getValue());
+                    .append("reviewId", new ObjectId(review.getId()))
+                    .append("rating", review.getRating());
             reviews.add(newReview);
         }
 
