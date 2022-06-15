@@ -181,7 +181,7 @@ public class AdminDashboardController {
 
     private Admin admin;
     private AdminDashboardService service;
-    private int limit;
+    private final int limit = 39000;
 
     /**************************** Click and Enter Events ****************************/
 
@@ -772,7 +772,6 @@ public class AdminDashboardController {
         this.admin = admin;
         this.service = new AdminDashboardService();
         this.title.setText("Welcome " + this.admin.getName());
-        this.limit = 10;
         this.nameTextField.setText(this.admin.getName());
         this.emailTextField.setText(this.admin.getEmail());
 

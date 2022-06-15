@@ -748,13 +748,14 @@ public class PodcastMongo {
                     computed("name", "$podcastName"),
                     computed("artwork", "$artworkUrl600"),
                     computed("meanRating", computed("$avg", "$reviews.rating")),
-                    computed("numberOfReviews", computed("$sum", "$reviews.rating"))
+                    computed("numberOfReviews", computed("$size", "$reviews"))
             ));
+            Bson match = match(gt("numberOfReviews", 50));
             Bson sort = sort(Sorts.descending("meanRating", "numberOfReviews"));
             Bson lim = limit(limit);
 
             List<Pair<Podcast, Float>> results = new ArrayList<>();
-            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, lim))) {
+            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, match, sort, lim))) {
                 String id = result.getObjectId("_id").toString();
                 String name = result.getString("name");
                 String artwork = result.getString("artwork");
@@ -783,8 +784,9 @@ public class PodcastMongo {
                     computed("artwork", "$artworkUrl600"),
                     include("country"),
                     computed("meanRating", computed("$avg", "$reviews.rating")),
-                    computed("numberOfReviews", computed("$sum", "$reviews.rating")))
+                    computed("numberOfReviews", computed("$size", "$reviews")))
             );
+            Bson match = match(gt("numberOfReviews", 50));
             Bson sort = sort(Sorts.descending("meanRating", "numberOfReviews"));
             Bson group = group("$country",
                     Accumulators.first("podcastId", "$_id"),
@@ -795,7 +797,7 @@ public class PodcastMongo {
             Bson lim = limit(limit);
 
             List<Triplet<Podcast, String, Float>> results = new ArrayList<>();
-            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, sort, group, lim))) {
+            for (Document result : manager.getCollection("podcast").aggregate(Arrays.asList(project, match, sort, group, lim))) {
                 String id = result.getObjectId("podcastId").toString();
                 String name = result.getString("podcastName");
                 String artwork = result.getString("artwork");
