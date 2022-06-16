@@ -236,6 +236,21 @@ public class ReviewMongo {
         }
     }
 
+    public boolean updateReviewAuthorUsername(String reviewId, String authorUsername) {
+        MongoManager manger = MongoManager.getInstance();
+
+        try {
+            Bson filter = eq("_id", new ObjectId(reviewId));
+            Bson update = set("authorUsername", authorUsername);
+
+            UpdateResult result = manger.getCollection("review").updateOne(filter, update);
+            return result.getMatchedCount() == 1;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public int updateReviewsByAuthorUsername(String oldUsername, String newUsername) {
         MongoManager manger = MongoManager.getInstance();
 

@@ -62,7 +62,7 @@ public class UserMongoTest {
         Date age = new Date();
         String gender = "Male";
 
-        User newUser = new User("", username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender);
+        User newUser = new User("", username, password, name, surname, email, country, picturePath, favouriteGenre, age, gender, 0 ,new ArrayList<>());
         this.userMongo.addUser(newUser);
 
         User createdUser = this.userMongo.findUserById(newUser.getId());

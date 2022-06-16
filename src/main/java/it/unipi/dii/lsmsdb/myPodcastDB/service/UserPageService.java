@@ -7,8 +7,10 @@ import it.unipi.dii.lsmsdb.myPodcastDB.cache.LikedPodcastCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.cache.WatchlistCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Author;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.UserMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.AuthorNeo4j;
@@ -24,6 +26,7 @@ public class UserPageService {
 
     //---------------- GIANLUCA ---------------------
     private UserMongo userMongoManager;
+    private PodcastMongo podcastMongoManager;
     private UserNeo4j userNeo4jManager;
     private PodcastNeo4j podcastNeo4jManager;
     private AuthorNeo4j authorNeo4jManager;
@@ -31,6 +34,7 @@ public class UserPageService {
 
     public UserPageService(){
         userMongoManager = new UserMongo();
+        podcastMongoManager = new PodcastMongo();
         userNeo4jManager = new UserNeo4j();
         podcastNeo4jManager = new PodcastNeo4j();
         authorNeo4jManager = new AuthorNeo4j();
@@ -123,69 +127,15 @@ public class UserPageService {
                 if (users != null)
                     followedUsers.addAll(users);
             }
-            /*if(visitorType.equals("User") && !ownerMode){
 
-
-                //load podcasts in the visitor's watchlist
-                if(WatchlistCache.getAllPodcastsInWatchlist().isEmpty()) {
-                    podcasts = podcastNeo4jManager.showPodcastsInWatchlist(visitor);
-                    if (podcasts != null)
-                        WatchlistCache.addPodcastList(podcasts);
-                }
-
-                //load followed authors by the visitors
-                if(FollowedAuthorCache.getAllFollowedAuthors().isEmpty()) {
-                    authors = authorNeo4jManager.showFollowedAuthorsByUser(visitor);
-                    if (authors != null)
-                        FollowedAuthorCache.addAuthorList(authors);
-                }
-
-                //load followed users by the visitors
-                if(FollowedUserCache.getAllFollowedUsers().isEmpty()) {
-                    users = userNeo4jManager.showFollowedUsers(visitor);
-                    if (users != null)
-                        FollowedUserCache.addUserList(users);
-                }
-
-                res = 0;
-            }
-            else if(visitorType.equals("Author")){
-
-                //load followed authors by visitor
-                if(FollowedUserCache.getAllFollowedUsers().isEmpty()) {
-                    List<Author> list = authorNeo4jManager.showFollowedAuthorsByAuthor(visitor);
-                    if (list != null)
-                        FollowedAuthorCache.addAuthorList(list);
-                }
-                res = 0;
-
-            }
-            else*/
-                res = 0;
+            res = 0;
         }
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
-    /*
-    public int getMoreWatchlaterPodcasts(String pageOwner, List<Podcast> wPodcast, int limit){
-        int res;
-        Neo4jManager.getInstance().openConnection();
 
-        int skip = wPodcast.size();
-        List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner, limit, skip);
-        if(podcasts != null){
-            wPodcast.addAll(podcasts);
-            res = 0;
-        }
-        else
-            res = 1;
-
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
-    */
     public int getMoreLikedPodcasts(String pageOwner, List<Podcast> lPodcast, int limit){
         int res;
         Neo4jManager.getInstance().openConnection();
@@ -203,43 +153,9 @@ public class UserPageService {
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
-    /*
-    public int getMoreFollowedAuthors(String pageOwner, List<Author> followedAuthors, int limit){
-        int res;
-        Neo4jManager.getInstance().openConnection();
 
-        int skip = followedAuthors.size();
-        List<Author> authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner, limit, skip);
-        if(authors != null) {
-            followedAuthors.addAll(authors);
-            res = 0;
-        }
-        else
-            res = 1;
-
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
-
-    public int getMoreFollowedUsers(String pageOwner, List<User> followedUsers, int limit){
-        int res;
-        Neo4jManager.getInstance().openConnection();
-
-        int skip = followedUsers.size();
-        List<User> users = userNeo4jManager.showFollowedUsers(pageOwner, limit, skip);
-        if(users != null){
-            followedUsers.addAll(users);
-            res = 0;
-        }
-        else
-            res = 1;
-
-        Neo4jManager.getInstance().closeConnection();
-        return res;
-    }
-    */
     public int updateUserPageOwner(User oldUser, User newUser) {
-        int res;
+        int res = -1;
 
         //check if there is something to update
         if (oldUser.getUsername().equals(newUser.getUsername()) &&
@@ -272,25 +188,48 @@ public class UserPageService {
             userMongoManager.updateUser(oldUser);
             res = 5;
         }
-        //update reviews' authorUsername written by the user
-        //TODO farlo con un clco for per reviewid sfruttando le review embedded nello user
-        else if (!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1){
-            userMongoManager.updateUser(oldUser);
-            userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
-            res = 6;
+        else if(!oldUser.getUsername().equals(newUser.getUsername())){
+            //policy used:
+            // 1)   if a review updating failed, continue to update the other reviews (the same review embedded a podcast is not updated to),
+            //      but at the end it's executed the rollback to replace the User,
+            //      so it's possible try again to update the user and update the review not updated before
+            //2)    if a review updating in a podcast failed, restore the original review in the collection review and continue to
+            //      update the other reviews, at the end it's executed the rollback to replace the User
+            //      so, it's possible try again to update the user and update the review not updated before
+            for(Review review : newUser.getReviews()){
+                String reviewId = review.getId();
+                String podcastId = review.getPodcastId();
+                if(!reviewMongoManager.updateReviewAuthorUsername(reviewId, newUser.getUsername())){
+                    res = 6;
+                    continue;
+                }
+                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
+                if(podcast == null)
+                    reviewMongoManager.updateReviewAuthorUsername(reviewId, oldUser.getUsername());
+                else {
+                    for (Review rev : podcast.getPreloadedReviews())
+                        if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
+                            rev.setAuthorUsername(newUser.getUsername());
+                            if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
+                                reviewMongoManager.updateReviewAuthorUsername(reviewId, oldUser.getUsername());
+                                res = 6;
+                            }
+                            break;
+                        }
+                }
+            }
+            if(res == 6) {
+                userMongoManager.updateUser(oldUser);
+                userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+            }
+            else
+                res = 0;
         }
-        //update review embedded in podcast
-        //TODO farlo sfruttando il podcastId nelle review embedded nello user
-        else if(!oldUser.getUsername().equals(newUser.getUsername()) && false){
-            userMongoManager.updateUser(oldUser);
-            userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
-            reviewMongoManager.updateReviewsByAuthorUsername(newUser.getUsername(), oldUser.getUsername());
-            res = 7;
-        }
-        else {
-            MyPodcastDB.getInstance().setSession(newUser, "User");
+        else
             res = 0;
-        }
+
+        if(res == 0)
+            MyPodcastDB.getInstance().setSession(newUser, "User");
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
@@ -316,7 +255,7 @@ public class UserPageService {
     }
 
     public int deleteUserPageOwner(User user){
-        int res;
+        int res = -1;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
@@ -329,23 +268,44 @@ public class UserPageService {
             res =  2;
         }
         //update author username in reviews written by the removed user
-        //TODO farlo con un clco for per reviewid sfruttando le review embedded nello user
-        else if(reviewMongoManager.updateReviewsByAuthorUsername(user.getUsername(), "Removed account") == -1){
-            userMongoManager.addUser(user);
-            userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
-            res = 3;
-        }
-        //update authore username in reviews embedded in podcast
-        //TODO farlo sfruttando il podcastId nelle review embedded nello user
-        else if(false){
-            userMongoManager.addUser(user);
-            userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
-            reviewMongoManager.updateReviewsByAuthorUsername("Removed account", user.getUsername());
-            res = 4;
+        else {
 
+            //policy used:
+            // 1)   if a review updating failed, continue to update the other reviews (the same review embedded a podcast is not updated to),
+            //      but at the end it's executed the rollback to replace the User,
+            //      so it's possible try again to remove the user and update the review not updated before
+            //2)    if a review updating in a podcast failed, restore the original review in the collection review and continue to
+            //      update the other reviews, at the end it's executed the rollback to replace the User
+            //      so, it's possible try again to remove the user and update the review not updated before
+            for(Review review : user.getReviews()){
+                String reviewId = review.getId();
+                String podcastId = review.getPodcastId();
+                if(!reviewMongoManager.updateReviewAuthorUsername(reviewId, "Removed account")){
+                    res = 3;
+                    continue;
+                }
+                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
+                if(podcast == null)
+                    reviewMongoManager.updateReviewAuthorUsername(reviewId, user.getUsername());
+                else {
+                    for (Review rev : podcast.getPreloadedReviews())
+                        if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
+                            rev.setAuthorUsername("Removed account");
+                            if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
+                                reviewMongoManager.updateReviewAuthorUsername(reviewId, user.getUsername());
+                                res = 3;
+                            }
+                            break;
+                        }
+                }
+            }
+            if(res == 3) {
+                userMongoManager.addUser(user);
+                userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
+            }
+            else
+                res = 0;
         }
-        else
-            res = 0;
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;

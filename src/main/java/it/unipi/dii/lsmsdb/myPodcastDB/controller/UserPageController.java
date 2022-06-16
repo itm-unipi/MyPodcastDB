@@ -741,11 +741,7 @@ public class UserPageController {
                 break;
             case 6 :
                 logMsg = "Updating reviews' author username failed";
-                dialogMsg = "Updating failed";
-                break;
-            case 7 :
-                logMsg = "Updating reviews' embedded in podcast failed";
-                dialogMsg = "Updating failed";
+                dialogMsg = "Updating failed, please try again";
                 break;
 
         }
@@ -817,19 +813,19 @@ public class UserPageController {
                     break;
                 case 3:
                     logMsg = "Updating reviews' author username failed";
-                    dialogMsg = "Operation failed";
-                    break;
-                case 4:
-                    logMsg = "Updating reviews' embedded in podcast failed";
-                    dialogMsg = "Updating failed";
+                    dialogMsg = "Operation failed, please try again";
                     break;
             }
             if(res > 0){
                 Logger.error(logMsg);
                 DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             }
-            else
-                StageManager.showPage(ViewNavigator.LOGIN.getPage());
+            else {
+                if(MyPodcastDB.getInstance().getSessionType().equals("User"))
+                    StageManager.showPage(ViewNavigator.LOGIN.getPage());
+                else //if is admin
+                    StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
+            }
         }
 
     }
