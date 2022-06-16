@@ -4,6 +4,7 @@ import it.unipi.dii.lsmsdb.myPodcastDB.model.Admin;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.AdminDashboardService;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -46,6 +47,10 @@ public class AddAdminController {
         return adminRpPwdTextFiled.getText();
     }
 
+    @FXML
+    void exit(MouseEvent event) {
+        closeStage(event);
+    }
 
     @FXML
     void confirmButtonClick(MouseEvent event){

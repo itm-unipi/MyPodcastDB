@@ -20,6 +20,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.javatuples.Pair;
 import org.javatuples.Triplet;
 
@@ -202,7 +203,7 @@ public class AdminDashboardController {
         dialog.initOwner(this.mainPage.getScene().getWindow());
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
-        stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/browse_podcasts_64px.png"));
+        stage.initStyle(StageStyle.UNDECORATED);
         dialog.showAndWait();
         this.mainPage.setEffect(null);
     }
