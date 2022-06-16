@@ -125,9 +125,9 @@ public class SignUpController {
         signUpCoutryComboBox.setVisibleRowCount(5);
         signUpFavGenreComboBox.setVisibleRowCount(5);
 
-        signUpGenderChoiceBox.setValue("Unknown");
-        signUpCoutryComboBox.setValue("Unknown");
-        signUpFavGenreComboBox.setValue("Unknown");
+        signUpGenderChoiceBox.setValue("");
+        signUpCoutryComboBox.setValue("");
+        signUpFavGenreComboBox.setValue("");
         signUpAgeDatePicker.setValue(LocalDate.now());
         signUpImage.setImage(ImageCache.getInstance().getImageFromLocalPath("/img/users/user0.png"));
     }
@@ -149,19 +149,28 @@ public class SignUpController {
             LocalDate birthDate = signUpAgeDatePicker.getValue();
             String picturePath = "/img/users/user" + (Integer)imageNumber + ".png";
 
-            Date dateOfBirth = Date.from(Instant.from(birthDate.atStartOfDay(ZoneId.systemDefault())));
-
-            if (username.isEmpty() || password.isEmpty() || email.isEmpty() || repPassword.isEmpty()) {
-                Logger.error("Invalid values");
-                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Invalid values");
+            if (    username.isEmpty() ||
+                    password.isEmpty() ||
+                    email.isEmpty() ||
+                    repPassword.isEmpty() ||
+                    name.isEmpty() ||
+                    surname.isEmpty() ||
+                    birthDate == null ||
+                    country.isEmpty() ||
+                    favGenre.isEmpty() ||
+                    gender.isEmpty()
+                ) {
+                Logger.error("No input can be empty");
+                DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "No input can be empty");
                 return;
             }
-            else if(username.indexOf('@') != -1){
+
+            if(username.indexOf('@') != -1){
                 Logger.error("Username not valid [@]");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Username not valid [@]");
                 return;
             }
-            else if(email.indexOf('@') == -1){
+            if(email.indexOf('@') == -1){
                 Logger.error("Email not valid");
                 DialogManager.getInstance().createErrorAlert(signUpAnchorPane, "Email not valid");
                 return;
@@ -177,6 +186,7 @@ public class SignUpController {
                 return;
             }
 
+            Date dateOfBirth = Date.from(Instant.from(birthDate.atStartOfDay(ZoneId.systemDefault())));
             User user = new User("", username, password, name, surname, email, country, picturePath, favGenre, dateOfBirth, gender, 0, new ArrayList<>());
             Logger.info(user.toString());
 

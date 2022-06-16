@@ -201,6 +201,7 @@ public class UserPageController {
     private String imagePath;
 
     private int maxUserImages = 30;
+    private int maxUsernameChanges = 1;
 
     private List<Podcast> wPodcasts;
     private List<Podcast> lPodcasts;
@@ -697,20 +698,45 @@ public class UserPageController {
         Logger.info("Confirm button clicked");
         User newUser = getDataFromTextFields();
 
-        if(newUser.getUsername().isEmpty() || newUser.getEmail().isEmpty() || (Integer)newUser.getAge() < 0 || newUser.getPassword().isEmpty()){
-            Logger.error("Invalid inputs typed");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid inputs");
+        if(     newUser.getUsername().isEmpty() ||
+                newUser.getEmail().isEmpty()  ||
+                newUser.getPassword().isEmpty() ||
+                newUser.getName().isEmpty() ||
+                newUser.getSurname().isEmpty() ||
+                newUser.getDateOfBirth() == null ||
+                newUser.getGender().isEmpty() ||
+                newUser.getCountry().isEmpty() ||
+                newUser.getFavouriteGenre().isEmpty()
+        ){
+            Logger.error("No input can be empty");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "No input can be empty");
             return;
         }
         else if(newUser.getUsername().indexOf('@') != -1){
-            Logger.error("Username not valid [@]");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Username not valid [@]");
+            Logger.error("Username not valid [not type @]");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Username not valid [not type @]");
             return;
         }
         if(newUser.getEmail().indexOf('@') == -1){
             Logger.error("Invalid email");
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid email");
             return;
+        }
+
+        if(!newUser.getUsername().equals(pageOwner.getUsername())) {
+            if(pageOwner.getUsernameChanges() < maxUsernameChanges) {
+                String msg = "you can only change your username "+ (maxUsernameChanges - pageOwner.getUsernameChanges()) + " more " + (pageOwner.getUsernameChanges() > 1 ? "times" : "time") + ", you really want to continue ?";
+                boolean res = DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, msg);
+                if(!res)
+                    return;
+                else
+                    newUser.setUsernameChanges(pageOwner.getUsernameChanges() + 1);
+            }
+            else{
+                Logger.error("Is not possible to change again the username");
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Is not possible to change again the username");
+                return;
+            }
         }
         Logger.info(newUser.toString());
         int res = service.updateUserPageOwner(pageOwner, newUser);
@@ -1165,13 +1191,17 @@ public class UserPageController {
         newUser.setUsername(userPageUsernameTextField.getText());
         newUser.setName(userPageNameTextField.getText());
         newUser.setSurname(userPageSurnameTextField.getText());
-        newUser.setDateOfBirth(Date.from(Instant.from(userPageDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()))));
         newUser.setCountry(userPageCountryComboBox.getValue().toString());
         newUser.setEmail(userPageEmailTextField.getText());
         newUser.setGender(userPageGenderComboBox.getValue().toString());
         newUser.setFavouriteGenre(userPageFavGenreComboBox.getValue().toString());
         newUser.setPicturePath(imagePath);
         newUser.setPassword(userPagePasswordTextField.getText());
+        if(userPageDatePicker.getValue() == null)
+            newUser.setDateOfBirth(null);
+        else
+            newUser.setDateOfBirth(Date.from(Instant.from(userPageDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()))));
+
         return newUser;
     }
 
