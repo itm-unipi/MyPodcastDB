@@ -25,69 +25,71 @@
     <children>
         <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <top>
-                <VBox maxWidth="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="1060.0" BorderPane.alignment="CENTER">
+                <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="80.0" prefWidth="1060.0" BorderPane.alignment="CENTER">
                     <children>
-                        <HBox maxHeight="-Infinity" minHeight="-Infinity" prefHeight="80.0" prefWidth="1040.0">
+                        <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="1040.0">
                             <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@img/browse_podcasts_64px.png" />
                            </image>
                            <HBox.margin>
-                              <Insets top="15.0" />
+                              <Insets top="4.0" />
                            </HBox.margin>
                         </ImageView>
-                                <Label prefHeight="80.0" prefWidth="286.0" style="-fx-font-weight: bold;" text="MyPodcastDB">
+                                <Label prefWidth="701.0" style="-fx-font-weight: bold;" text="MyPodcastDB">
                                     <font>
                                         <Font name="Corbel Light" size="24.0" />
                                     </font>
+                           <HBox.margin>
+                              <Insets left="3.0" />
+                           </HBox.margin>
                                 </Label>
-                                <Pane prefHeight="80.0" prefWidth="400.0" />
-                        <Pane prefHeight="80.0" prefWidth="39.0">
+                        <ImageView fx:id="logoutButton" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#logoutButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@img/Logout_24px.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets right="2.0" top="3.0" />
+                           </HBox.margin>
+                        </ImageView>
+                                  <ImageView fx:id="homeButton" fitHeight="28.0" fitWidth="28.0" onMouseClicked="#homeButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                      <image>
+                                          <Image url="@img/home.png" />
+                                      </image>
+                           <HBox.margin>
+                              <Insets right="2.0" />
+                           </HBox.margin>
+                                  </ImageView>
+                        <ImageView fx:id="actorPageButton" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#actorPageButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                           <image>
+                              <Image url="@img/male_user_50px.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets right="3.0" />
+                           </HBox.margin>
+                        </ImageView>
+                        <HBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="31.0" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
                            <children>
-                              <ImageView fx:id="logoutButton" fitHeight="30.0" fitWidth="30.0" layoutX="-1.0" layoutY="20.0" onMouseClicked="#logoutButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                 <image>
-                                    <Image url="@img/Logout_24px.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </Pane>
-                                <Pane prefHeight="80.0" prefWidth="37.0">
-                                    <children>
-                                        <ImageView fx:id="homeButton" fitHeight="30.0" fitWidth="30.0" layoutX="-1.0" layoutY="20.0" onMouseClicked="#homeButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                            <image>
-                                                <Image url="@img/home_32px.png" />
-                                            </image>
-                                        </ImageView>
-                                    </children>
-                                </Pane>
-                        <Pane prefHeight="80.0" prefWidth="36.0">
-                           <children>
-                              <ImageView fx:id="actorPageButton" fitHeight="30.0" fitWidth="30.0" layoutX="-1.0" layoutY="20.0" onMouseClicked="#actorPageButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                 <image>
-                                    <Image url="@img/male_user_50px.png" />
-                                 </image>
-                              </ImageView>
-                           </children>
-                        </Pane>
-                        <HBox maxHeight="30.0" prefHeight="30.0" prefWidth="230.0" style="-fx-background-color: white; -fx-background-radius: 40;">
-                           <children>
-                                        <TextField fx:id="searchTextField" onKeyPressed="#onKeyPressedInSearchBar" prefHeight="30.0" prefWidth="180.0" promptText="Search..." style="-fx-background-color: transparent;">
+                                        <TextField fx:id="searchTextField" onKeyPressed="#onKeyPressedInSearchBar" prefHeight="29.0" prefWidth="180.0" promptText="Search..." style="-fx-background-color: transparent;">
                                  <font>
                                     <Font name="Corbel Light" size="16.0" />
                                  </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
                               </TextField>
                                         <ImageView fx:id="searchButton" fitHeight="23.0" fitWidth="23.0" onMouseClicked="#searchButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                             <image>
                                                 <Image url="@img/search.png" />
                                             </image>
                                  <HBox.margin>
-                                    <Insets left="15.0" top="5.0" />
+                                    <Insets left="5.0" />
                                  </HBox.margin>
                                         </ImageView>
                            </children>
                            <HBox.margin>
-                              <Insets top="25.0" />
+                              <Insets />
                            </HBox.margin>
                         </HBox>
                             </children>
@@ -95,7 +97,7 @@
                         <Insets />
                      </VBox.margin>
                         </HBox>
-                        <Separator maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1.0" prefWidth="1060.0">
+                        <Separator maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1.0" prefWidth="1040.0">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Separator>
@@ -287,7 +289,7 @@
                                     </VBox>
                                  </children>
                                  <HBox.margin>
-                                    <Insets right="20.0" />
+                                    <Insets right="10.0" />
                                  </HBox.margin>
                               </Pane>
                               <Pane prefHeight="262.0" prefWidth="366.0">
@@ -307,7 +309,7 @@
                                           <Image url="@img/ok_40px.png" />
                                        </image>
                                     </ImageView>
-                                    <Button fx:id="userPageDeleteButton" layoutX="150.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#deleteButtonClick" onMouseEntered="#deleteButtonIn" onMouseExited="#deleteButtonOut" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #f4511e; -fx-cursor: hand;" text="Delete Account" textFill="WHITE">
+                                    <Button fx:id="userPageDeleteButton" layoutX="148.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#deleteButtonClick" onMouseEntered="#deleteButtonIn" onMouseExited="#deleteButtonOut" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #f4511e; -fx-cursor: hand;" text="Delete Account" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel" size="20.0" />
                                        </font>

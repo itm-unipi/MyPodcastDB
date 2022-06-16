@@ -20,13 +20,13 @@
    <children>
       <BorderPane prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <VBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="1040.0" BorderPane.alignment="CENTER">
+            <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="1040.0" BorderPane.alignment="CENTER">
                <children>
-                  <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="80.0" prefWidth="1080.0">
+                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="77.0" prefWidth="1040.0">
                      <children>
-                        <ImageView fitHeight="50.0" fitWidth="50.0" onMouseClicked="#testAddAdminClick" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="40.0" fitWidth="40.0" onMouseClicked="#testAddAdminClick" pickOnBounds="true" preserveRatio="true">
                            <HBox.margin>
-                              <Insets top="15.0" />
+                              <Insets top="4.0" />
                            </HBox.margin>
                            <image>
                               <Image url="@img/browse_podcasts_64px.png" />
@@ -36,6 +36,9 @@
                            <font>
                               <Font name="Corbel Light" size="24.0" />
                            </font>
+                           <HBox.margin>
+                              <Insets left="3.0" />
+                           </HBox.margin>
                         </Label>
                      </children>
                   </HBox>
