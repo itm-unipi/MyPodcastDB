@@ -121,8 +121,8 @@ public class UserMongo {
                 // extract the reviews
                 List<Review> reviews = new ArrayList<>();
                 for (Document review : user.getList("reviews", Document.class)) {
-                    String reviewId = review.getString("reviewId");
-                    String podcastId = review.getString("podcastId");
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    String podcastId = review.getObjectId("podcastId").toString();
                     reviews.add(new Review(reviewId, podcastId));
                 }
 
@@ -160,8 +160,8 @@ public class UserMongo {
                 // extract the reviews
                 List<Review> reviews = new ArrayList<>();
                 for (Document review : user.getList("reviews", Document.class)) {
-                    String reviewId = review.getString("reviewId");
-                    String podcastId = review.getString("podcastId");
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    String podcastId = review.getObjectId("podcastId").toString();
                     reviews.add(new Review(reviewId, podcastId));
                 }
 
@@ -199,8 +199,8 @@ public class UserMongo {
                 // extract the reviews
                 List<Review> reviews = new ArrayList<>();
                 for (Document review : user.getList("reviews", Document.class)) {
-                    String reviewId = review.getString("reviewId");
-                    String podcastId = review.getString("podcastId");
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    String podcastId = review.getObjectId("podcastId").toString();
                     reviews.add(new Review(reviewId, podcastId));
                 }
 
@@ -240,8 +240,8 @@ public class UserMongo {
                 // extract the reviews
                 List<Review> reviews = new ArrayList<>();
                 for (Document review : user.getList("reviews", Document.class)) {
-                    String reviewId = review.getString("reviewId");
-                    String podcastId = review.getString("podcastId");
+                    String reviewId = review.getObjectId("reviewId").toString();
+                    String podcastId = review.getObjectId("podcastId").toString();
                     reviews.add(new Review(reviewId, podcastId));
                 }
 
