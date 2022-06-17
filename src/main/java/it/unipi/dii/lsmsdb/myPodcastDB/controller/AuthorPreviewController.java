@@ -25,6 +25,8 @@ import java.io.IOException;
 public class AuthorPreviewController {
     private Author author;
 
+    private int typeLabel;
+
     private final String actorType;
 
     private boolean isFollowing;
@@ -56,8 +58,6 @@ public class AuthorPreviewController {
 
     @FXML
     void onAuthor(MouseEvent event) {
-        boxAuthorImage.setStyle("-fx-background-color:  #f0f0f0; -fx-background-radius: 100; -fx-border-color: #e3e3e3; -fx-border-radius: 100;");
-
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
             boxFollowAuthor.setVisible(true);
             boxFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color:  #f7f7f7");
@@ -70,8 +70,6 @@ public class AuthorPreviewController {
 
     @FXML
     void outAuthor(MouseEvent event) {
-        boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
-
         if ((this.actorType.equals("Author") && !((Author) MyPodcastDB.getInstance().getSessionActor()).getName().equals(this.author.getName())) || this.actorType.equals("User")) {
             boxFollowAuthor.setVisible(false);
             FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.4), boxFollowAuthor);
@@ -82,13 +80,25 @@ public class AuthorPreviewController {
     }
 
     @FXML
+    void onAuthorBox(MouseEvent event) {
+        boxAuthorImage.setStyle("-fx-background-color:  #f0f0f0; -fx-background-radius: 100; -fx-border-color: #e3e3e3; -fx-border-radius: 100;");
+    }
+
+    @FXML
+    void outAuthorBox(MouseEvent event) {
+        boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
+    }
+
+    @FXML
     void onHoverFollow(MouseEvent event) {
         boxFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color:  #eaeaea");
+        boxAuthorImage.setStyle("-fx-background-color:  #f0f0f0; -fx-background-radius: 100; -fx-border-color: #e3e3e3; -fx-border-radius: 100;");
     }
 
     @FXML
     void onExitedFollow(MouseEvent event) {
         boxFollowAuthor.setStyle("-fx-background-color: white; -fx-background-radius: 20; -fx-border-radius: 20; -fx-border-color:  #f7f7f7");
+        boxAuthorImage.setStyle("-fx-background-color: white; -fx-background-radius: 100; -fx-border-color: #eaeaea; -fx-border-radius: 100;");
     }
 
     @FXML
@@ -117,7 +127,6 @@ public class AuthorPreviewController {
     void fromAuthorProfile() {
         AuthorProfileService authorProfileService = new AuthorProfileService();
         if (this.actorType.equals("Author")) {
-
             if (!this.isFollowing) {
                 this.isFollowing = authorProfileService.followAuthorAsAuthor(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
@@ -126,7 +135,6 @@ public class AuthorPreviewController {
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
             }
         } else if (this.actorType.equals("User")) {
-
             if (!this.isFollowing) {
                 this.isFollowing = authorProfileService.followAuthorAsUser(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
@@ -142,7 +150,6 @@ public class AuthorPreviewController {
     void fromHomepage() {
         HomePageService homePageService = new HomePageService();
         if (this.actorType.equals("Author")) {
-
             if (!this.isFollowing) {
                 this.isFollowing = homePageService.followAuthorAsAuthor(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
@@ -151,7 +158,6 @@ public class AuthorPreviewController {
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
             }
         } else if (this.actorType.equals("User")) {
-
             if (!this.isFollowing) {
                 this.isFollowing = homePageService.followAuthorAsUser(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
@@ -187,7 +193,8 @@ public class AuthorPreviewController {
             this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
         }
 
-        if (typeLabel == 1) {
+        this.typeLabel = typeLabel;
+        if (this.typeLabel == 1) {
             this.boxCounterFollowers.setVisible(true);
             this.boxCounterFollowers.setStyle("-fx-pref-height: 20;");
             this.counterFollowersLabel.setText(valueLabel);

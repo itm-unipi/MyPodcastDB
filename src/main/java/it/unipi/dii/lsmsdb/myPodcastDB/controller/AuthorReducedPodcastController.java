@@ -145,7 +145,8 @@ public class AuthorReducedPodcastController {
 
     @FXML
     void onMouseHoverDeletePodcast(MouseEvent event) {
-        this.boxDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #d3d3d3; -fx-border-radius: 25");
+        Logger.info("we");
+        this.boxDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25");
     }
 
     @FXML
@@ -155,7 +156,7 @@ public class AuthorReducedPodcastController {
 
     @FXML
     void onMouseHoverWatchlist(MouseEvent event) {
-        this.boxWatchlist.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #d3d3d3; -fx-border-radius: 25");
+        this.boxWatchlist.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25");
     }
 
     @FXML

@@ -78,12 +78,21 @@ public class PodcastPreviewController {
 
         if (this.actorType.equals("User")) {
             this.boxWatchlist.setVisible(true);
+
+            // To avoid inconsistency between the different grids this control is needed
+            if (WatchlistCache.getPodcast(this.podcastPreview.getId()) != null) {
+                this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
+                this.inWatchlist = true;
+            } else {
+                this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
+                this.inWatchlist = false;
+            }
+
             FadeTransition fadeButton = new FadeTransition(Duration.seconds(0.4), this.boxWatchlist);
             fadeButton.setFromValue(0);
             fadeButton.setToValue(1.0);
             fadeButton.play();
         }
-
     }
 
     @FXML
@@ -112,7 +121,7 @@ public class PodcastPreviewController {
 
             watchlistAddedMessage.setVisible(false);
             watchlistRemovedMessage.setVisible(true);
-            FadeTransition boxMessage = new FadeTransition(Duration.seconds(1.5), watchlistRemovedMessage);
+            FadeTransition boxMessage = new FadeTransition(Duration.seconds(2), watchlistRemovedMessage);
             boxMessage.setFromValue(1.0);
             boxMessage.setToValue(0);
             boxMessage.play();
@@ -125,7 +134,7 @@ public class PodcastPreviewController {
 
             watchlistAddedMessage.setVisible(true);
             watchlistRemovedMessage.setVisible(false);
-            FadeTransition boxMessage = new FadeTransition(Duration.seconds(1.5), watchlistAddedMessage);
+            FadeTransition boxMessage = new FadeTransition(Duration.seconds(2), watchlistAddedMessage);
             boxMessage.setFromValue(1.0);
             boxMessage.setToValue(0);
             boxMessage.play();

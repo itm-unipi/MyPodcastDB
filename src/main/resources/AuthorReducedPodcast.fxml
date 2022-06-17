@@ -30,7 +30,7 @@
                   </ImageView>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="800.0">
+            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="790.0">
                <children>
                   <HBox alignment="CENTER_LEFT">
                      <children>
@@ -64,14 +64,14 @@
                <children>
                   <VBox alignment="CENTER">
                      <children>
-                        <VBox fx:id="boxDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="31.0" prefWidth="31.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                        <VBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverWatchlist" onMouseExited="#onMouseExitedWatchlist" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" onMouseClicked="#deletePodcast" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="watchlistStatus" fitHeight="26.0" fitWidth="26.0" onMouseClicked="#onClickWatchlist" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@img/deleteActor.png" />
+                                    <Image url="@img/addWatchlist.png" />
                                  </image>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
@@ -89,14 +89,14 @@
                   </VBox>
                   <VBox alignment="CENTER">
                      <children>
-                        <VBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverWatchlist" onMouseExited="#onMouseExitedWatchlist" prefHeight="31.0" prefWidth="31.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                        <VBox fx:id="boxDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <ImageView fx:id="watchlistStatus" fitHeight="20.0" fitWidth="20.0" onMouseClicked="#onClickWatchlist" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fitHeight="26.0" fitWidth="26.0" onMouseClicked="#deletePodcast" pickOnBounds="true" preserveRatio="true">
                                  <image>
-                                    <Image url="@img/addWatchlist.png" />
+                                    <Image url="@img/deleteActor.png" />
                                  </image>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />

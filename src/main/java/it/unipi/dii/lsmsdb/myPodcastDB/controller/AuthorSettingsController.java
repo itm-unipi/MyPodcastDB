@@ -160,10 +160,18 @@ public class AuthorSettingsController {
         if (authorName.getText().equals("")) {
             authorName.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
             emptyFields = true;
+        } else if (authorName.getText().indexOf('@') > 0) {
+            authorName.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info", "Your name can't contain '@' character!");
+            emptyFields = true;
         }
 
         if (authorEmail.getText().equals("")) {
             authorEmail.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            emptyFields = true;
+        } else if (authorEmail.getText().indexOf('@') == -1) {
+            authorEmail.setStyle("-fx-border-radius: 4; -fx-border-color: #ff7676");
+            DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info", "Invalid email!");
             emptyFields = true;
         }
 
@@ -184,8 +192,6 @@ public class AuthorSettingsController {
             else
                 password = authorNewPassword.getText();
 
-            // TODO: bug in tempAuthor -> imagePreview.getImage().getURL()
-            // "/img/authors/author" + this.counterImage + ".png" (this.counter is always 0 when the setData is called there will be always a change in the picutre path)
             // if the default img has not index 0
             Author tempAuthor = new Author(author.getId(), authorName.getText(), password, authorEmail.getText(), "/img/authors/author" + this.counterImage + ".png");
 
@@ -209,7 +215,7 @@ public class AuthorSettingsController {
                         this.author.setPassword(password);
                         this.author.setPicturePath(tempAuthor.getPicturePath());
 
-                        Logger.info("Author updated (and commited): " + this.author);
+                        Logger.success("Author updated (and commited): " + this.author);
 
                         // Updating GUI
                         authorNameProfile.setText(this.author.getName());
@@ -217,6 +223,7 @@ public class AuthorSettingsController {
                         // Updating the stage object identifier to avoid unexpected errors
                         StageManager.setObjectIdentifier(authorName.getText());
                         DialogManager.getInstance().createInformationAlert(dialogPane, "Update Personal Info", "Personal info updated successfully!");
+                        authorPassword.setText("");
                     } else if (updateResult == -1) {
                         // Resetting field that caused the error
                         authorName.setText(oldAuthor.getName());
