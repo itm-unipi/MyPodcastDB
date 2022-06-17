@@ -115,22 +115,22 @@
                         <Pane minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="920.0" />
                         <HBox minHeight="-Infinity" prefHeight="305.0" prefWidth="1176.0" style="-fx-background-color: transparent;">
                            <children>
-                              <HBox prefHeight="262.0" prefWidth="260.0">
+                              <HBox alignment="CENTER" prefHeight="305.0" prefWidth="250.0">
                                  <children>
                                     <ImageView fx:id="imageButtonLeft" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#imageLeftButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                        <image>
                                           <Image url="@img/back_32px.png" />
                                        </image>
                                        <HBox.margin>
-                                          <Insets right="5.0" top="50.0" />
+                                          <Insets bottom="22.0" right="5.0" />
                                        </HBox.margin>
                                     </ImageView>
-                                    <ImageView fx:id="userPageImage" fitHeight="152.0" fitWidth="168.0" pickOnBounds="true" preserveRatio="true">
+                                    <ImageView fx:id="userPageImage" fitHeight="140.0" fitWidth="120.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
                                           <Image url="@img/users/user0.png" />
                                        </image>
                                        <HBox.margin>
-                                          <Insets />
+                                          <Insets bottom="22.0" />
                                        </HBox.margin>
                                     </ImageView>
                                     <ImageView fx:id="imageButtonRight" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#imageRightButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
@@ -138,7 +138,7 @@
                                           <Image url="@img/forward_32px.png" />
                                        </image>
                                        <HBox.margin>
-                                          <Insets left="5.0" top="50.0" />
+                                          <Insets bottom="22.0" left="5.0" />
                                        </HBox.margin>
                                     </ImageView>
                                  </children>
@@ -166,7 +166,7 @@
                                     <Pane prefHeight="30.0" prefWidth="200.0">
                                        <children>
                                           <ComboBox fx:id="userPageCountryComboBox" layoutX="-2.0" layoutY="-1.0" prefHeight="30.0" prefWidth="182.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
-                                          <Label fx:id="userPageCountryLabel" layoutY="-1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Altamura" textFill="#434343">
+                                          <Label fx:id="userPageCountryLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Altamura" textFill="#434343">
                                              <font>
                                                 <Font name="Corbel Light" size="14.0" />
                                              </font>
@@ -181,7 +181,7 @@
                                     <Pane prefHeight="30.0" prefWidth="200.0">
                                        <children>
                                           <ComboBox fx:id="userPageFavGenreComboBox" layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
-                                          <Label fx:id="userPageFavGenreLabel" layoutX="1.0" layoutY="1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Horror" textFill="#434343">
+                                          <Label fx:id="userPageFavGenreLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Horror" textFill="#434343">
                                              <font>
                                                 <Font name="Corbel Light" size="14.0" />
                                              </font>
@@ -196,7 +196,7 @@
                                     <Pane prefHeight="30.0" prefWidth="200.0">
                                        <children>
                                           <ComboBox fx:id="userPageGenderComboBox" layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
-                                          <Label fx:id="userPageGenderLabel" layoutX="1.0" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="famale" textFill="#434343">
+                                          <Label fx:id="userPageGenderLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="famale" textFill="#434343">
                                              <font>
                                                 <Font name="Corbel Light" size="14.0" />
                                              </font>
@@ -221,103 +221,120 @@
                                     <Insets right="50.0" />
                                  </HBox.margin>
                               </VBox>
-                              <Pane fx:id="userPagePrivateArea" prefHeight="200.0" prefWidth="208.0">
+                              <VBox fx:id="userPagePrivateArea" prefWidth="210.0">
                                  <children>
-                                    <VBox prefWidth="210.0">
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Name" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userPageNameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="Biagio">
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Corbel Light" size="15.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Surname" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                    </Label>
+                                    <TextField fx:id="userPageSurnameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="243.0" style="-fx-background-color: transparent;" text="Papiri">
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Corbel Light" size="15.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="225.0" text="Email" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <TextField fx:id="userPageEmailTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="biagiopapiti@example.it">
+                                       <padding>
+                                          <Insets left="-1.0" />
+                                       </padding>
+                                       <font>
+                                          <Font name="Corbel Light" size="15.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Age" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                    </Label>
+                                    <Pane prefHeight="38.0" prefWidth="210.0">
                                        <children>
-                                          <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Name" textFill="#434343">
+                                          <DatePicker fx:id="userPageDatePicker" layoutY="1.0" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
+                                          <Label fx:id="userPageAgeLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="120.0" text="21" textFill="#434343">
                                              <font>
-                                                <Font name="Corbel Bold" size="18.0" />
+                                                <Font name="Dubai Light" size="14.0" />
                                              </font>
                                           </Label>
-                                          <TextField fx:id="userPageNameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="Biagio">
-                                             <padding>
-                                                <Insets left="-1.0" />
-                                             </padding>
-                                             <font>
-                                                <Font name="Corbel Light" size="15.0" />
-                                             </font>
-                                          </TextField>
-                                          <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Surname" textFill="#434343">
-                                             <font>
-                                                <Font name="Corbel Bold" size="18.0" />
-                                             </font>
-                                             <VBox.margin>
-                                                <Insets />
-                                             </VBox.margin>
-                                             <padding>
-                                                <Insets left="-1.0" />
-                                             </padding>
-                                          </Label>
-                                          <TextField fx:id="userPageSurnameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="243.0" style="-fx-background-color: transparent;" text="Papiri">
-                                             <padding>
-                                                <Insets left="-1.0" />
-                                             </padding>
-                                             <font>
-                                                <Font name="Corbel Light" size="15.0" />
-                                             </font>
-                                          </TextField>
-                                          <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="225.0" text="Email" textFill="#434343">
-                                             <font>
-                                                <Font name="Corbel Bold" size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <TextField fx:id="userPageEmailTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="biagiopapiti@example.it">
-                                             <padding>
-                                                <Insets left="-1.0" />
-                                             </padding>
-                                             <font>
-                                                <Font name="Corbel Light" size="15.0" />
-                                             </font>
-                                          </TextField>
-                                          <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Age" textFill="#434343">
-                                             <font>
-                                                <Font name="Corbel Bold" size="18.0" />
-                                             </font>
-                                          </Label>
-                                          <Pane prefHeight="38.0" prefWidth="210.0">
-                                             <children>
-                                                <DatePicker fx:id="userPageDatePicker" layoutY="1.0" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: white; -fx-background-radius: 10;" />
-                                                <Label fx:id="userPageAgeLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="120.0" text="21" textFill="#434343">
-                                                   <font>
-                                                      <Font name="Dubai Light" size="14.0" />
-                                                   </font>
-                                                </Label>
-                                             </children>
-                                          </Pane>
                                        </children>
-                                    </VBox>
+                                    </Pane>
+                                    <HBox alignment="BOTTOM_LEFT" prefHeight="56.0" prefWidth="210.0">
+                                       <children>
+                                          <ImageView fx:id="userPageConfirmButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#confirmButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@img/ok_40px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets bottom="3.0" right="43.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ImageView fx:id="userPageCrossButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#crossButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@img/Close_40px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets bottom="3.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
                                  </children>
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin>
-                              </Pane>
-                              <Pane prefHeight="262.0" prefWidth="366.0">
+                              </VBox>
+                              <Pane prefHeight="305.0" prefWidth="439.0">
                                  <children>
-                                    <ImageView fx:id="userPageSettingsButton" fitHeight="40.0" fitWidth="40.0" layoutX="84.0" layoutY="2.0" onMouseClicked="#settingsButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                       <image>
-                                          <Image url="@img/settings_64px.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="userPageCrossButton" fitHeight="30.0" fitWidth="30.0" layoutX="69.0" layoutY="187.0" onMouseClicked="#crossButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                       <image>
-                                          <Image url="@img/Close_40px.png" />
-                                       </image>
-                                    </ImageView>
-                                    <ImageView fx:id="userPageConfirmButton" fitHeight="30.0" fitWidth="30.0" layoutX="8.0" layoutY="187.0" onMouseClicked="#confirmButtonClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                       <image>
-                                          <Image url="@img/ok_40px.png" />
-                                       </image>
-                                    </ImageView>
-                                    <Button fx:id="userPageDeleteButton" layoutX="148.0" layoutY="3.0" mnemonicParsing="false" onMouseClicked="#deleteButtonClick" onMouseEntered="#deleteButtonIn" onMouseExited="#deleteButtonOut" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #f4511e; -fx-cursor: hand;" text="Delete Account" textFill="WHITE">
+                                    <Button fx:id="userPageDeleteButton" layoutX="186.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#deleteButtonClick" onMouseEntered="#deleteButtonIn" onMouseExited="#deleteButtonOut" prefHeight="45.0" prefWidth="135.0" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #f4511e; -fx-cursor: hand;" text="Remove " textFill="WHITE">
+                                       <font>
+                                          <Font name="Corbel" size="20.0" />
+                                       </font>
+                                       <graphic>
+                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" translateX="-3.0">
+                                             <image>
+                                                <Image url="@img/deleteUser1.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
+                                    </Button>
+                                    <Button fx:id="userPageFollowButton" layoutX="91.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" onMouseEntered="#followButtonIn" onMouseExited="#followButtonOut" style="-fx-background-color: #db55e7; -fx-border-color: transparent; -fx-border-radius: 10; -fx-background-radius: 10; -fx-cursor: hand;" text="Follow" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel" size="20.0" />
                                        </font>
                                     </Button>
-                                    <Button fx:id="userPageFollowButton" layoutX="-3.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#followButtonClick" onMouseEntered="#followButtonIn" onMouseExited="#followButtonOut" style="-fx-background-color: #db55e7; -fx-border-color: transparent; -fx-border-radius: 10; -fx-background-radius: 10; -fx-cursor: hand;" text="Follow" textFill="WHITE">
+                                    <Button fx:id="userPageSettingsButton" layoutX="186.0" layoutY="59.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onMouseClicked="#settingsButtonClick" onMouseEntered="#settingsIn" onMouseExited="#settingsOut" prefHeight="45.0" prefWidth="135.0" style="-fx-background-radius: 10; -fx-border-radius: 10; -fx-background-color: #008CBA; -fx-cursor: hand;" text="Settings" textFill="WHITE">
                                        <font>
                                           <Font name="Corbel" size="20.0" />
                                        </font>
+                                       <graphic>
+                                          <ImageView fitHeight="25.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" translateX="-3.0">
+                                             <image>
+                                                <Image url="@img/settingsUser1.png" />
+                                             </image>
+                                          </ImageView>
+                                       </graphic>
                                     </Button>
                                  </children>
                                  <HBox.margin>

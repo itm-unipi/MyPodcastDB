@@ -136,7 +136,7 @@ public class UserPageController {
     private Pane userPagePrivateArea;
 
     @FXML
-    private ImageView userPageSettingsButton;
+    private Button userPageSettingsButton;
 
     @FXML
     private Button userPageDeleteButton;
@@ -674,6 +674,32 @@ public class UserPageController {
     }
 
     @FXML
+    private void settingsIn(MouseEvent event){
+        ((ImageView)userPageSettingsButton.getGraphic()).setImage(ImageCache.getImageFromLocalPath("/img/settingsUser2.png"));
+        userPageSettingsButton.setStyle(
+                "-fx-background-color:  white;" +
+                        "-fx-border-color:   #008CBA;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: black;"
+        );
+    }
+
+    @FXML
+    private void settingsOut(MouseEvent event){
+        ((ImageView)userPageSettingsButton.getGraphic()).setImage(ImageCache.getImageFromLocalPath("/img/settingsUser1.png"));
+        userPageSettingsButton.setStyle(
+                "-fx-background-color:   #008CBA;" +
+                        "-fx-border-color:  transparent;" +
+                        "-fx-border-radius: 10;" +
+                        "-fx-background-radius: 10;" +
+                        "-fx-cursor: hand;" +
+                        "-fx-text-fill: white;"
+        );
+    }
+
+    @FXML
     void crossButtonClick(MouseEvent event) {
         Logger.info("Cross button clicked");
         enableTextFields(false);
@@ -858,6 +884,7 @@ public class UserPageController {
 
     @FXML
     private void deleteButtonIn(MouseEvent event){
+        ((ImageView)userPageDeleteButton.getGraphic()).setImage(ImageCache.getImageFromLocalPath("/img/deleteUser2.png"));
         userPageDeleteButton.setStyle(
                 "-fx-background-color:  white;" +
                         "-fx-border-color:  #f4511e;" +
@@ -870,6 +897,7 @@ public class UserPageController {
 
     @FXML
     private void deleteButtonOut(MouseEvent event){
+        ((ImageView)userPageDeleteButton.getGraphic()).setImage(ImageCache.getImageFromLocalPath("/img/deleteUser1.png"));
         userPageDeleteButton.setStyle(
                 "-fx-background-color:  #f4511e;" +
                         "-fx-border-color:  transparent;" +
@@ -936,7 +964,7 @@ public class UserPageController {
         userPageCountryComboBox.setVisibleRowCount(5);
         userPageFavGenreComboBox.setVisibleRowCount(5);
         pageOwner.setUsername(pageUsername);
-        //this.simulateServiceLayer(pageUsername, wPodcasts, lPodcasts, authors, users);
+
         int res = service.loadUserPageProfile(
                 actorType,
                 sessionActorName,
@@ -1101,62 +1129,10 @@ public class UserPageController {
     }
 
 
-    void simulateServiceLayer(String usernamePage, List<Podcast> wPodcasts, List<Podcast> lPodcasts, List<Author> authors, List<User> users){
-
-        // service simulation
-        pageOwner.setUsername(usernamePage);
-        pageOwner.setDateOfBirth(new Date());
-        pageOwner.setGender("male");
-        pageOwner.setPicturePath("File:src/main/resources/img/user_100px.png");
-        pageOwner.setFavouriteGenre("Music History");
-        pageOwner.setCountry("Spain");
-        pageOwner.setEmail("paologiacomini@example.com");
-        pageOwner.setName("Paolo");
-        pageOwner.setSurname("Giacomini");
-        pageOwner.setPicturePath("/img/users/user5.png");
-        isFollowed = false;
-
-        Podcast p1 = new Podcast("54eb342567c94dacfb2a3e50", "Scaling Global", "https://is5-ssl.mzstatic.com/image/thumb/Podcasts126/v4/ab/41/b7/ab41b798-1a5c-39b6-b1b9-c7b6d29f2075/mza_4840098199360295509.jpg/600x600bb.jpg");
-        Podcast p2 = new Podcast("9852b276565c4f5eb9cdd999", "Speedway Soccer", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts116/v4/be/c4/51/bec45143-957a-c8ba-9af6-120578fd34f8/mza_14722049121013741560.jpg/600x600bb.jpg");
-        Podcast p3 = new Podcast("ab3320eef1052aad807747ec", "Talking Disney Podcast", "https://is3-ssl.mzstatic.com/image/thumb/Podcasts114/v4/3b/30/9c/3b309c73-aec5-ac96-60b9-34eba0218218/mza_7561584782270172307.jpg/600x600bb.jpg");
-
-        Author a1 = new Author("ahy2bs89ha5c4f5eb9cddaaa", "Michael Colosi", "File:src/main/resources/img/user_male_96px.png" );
-        Author a2 = new Author("ufsdfrt445efsge5srfsdffa", "Preface Podcast", "File:src/main/resources/img/User Female Skin Type 6_160px.png" );
-        Author a3 = new Author("6sffgty6wefy742eerwetttt", "Apple Inc.", "File:src/main/resources/img/user_male_skin_type_3_80px.png" );
-
-        User u1 = new User("Paolo Lupini", "File:src/main/resources/img/account_50px.png");
-        User u2 = new User("Chiara Proietti", "File:src/main/resources/img/clever_woman_50px.png");
-        User u3 = new User("Claudio Giuseppe", "File:src/main/resources/img/business_man_with_beard_50px.png");
-
-
-        for(int i = 0; i < 5; i++){
-            wPodcasts.add(p1);
-            wPodcasts.add(p2);
-            wPodcasts.add(p3);
-            lPodcasts.add(p1);
-            lPodcasts.add(p2);
-            lPodcasts.add(p3);
-            authors.add(a1);
-            authors.add(a2);
-            authors.add(a3);
-            users.add(u1);
-            users.add(u2);
-            users.add(u3);
-        }
-
-        //test empty lists
-        //wPodcasts.clear();
-        //lPodcasts.clear();
-        //authors.clear();
-        //users.clear();
-
-
-    }
-
     void enableTextFields(boolean value){
         int padding;
         if(value)
-            padding = 1;
+            padding = 4;
         else
             padding = 0;
         userPageUsernameTextField.setEditable(value);
@@ -1166,11 +1142,9 @@ public class UserPageController {
         userPagePasswordTextField.setEditable(value);
         userPageUsernameTextField.setPadding(new Insets(0,0,0,padding));
         userPageNameTextField.setPadding(new Insets(0,0,0,padding));
-        userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageSurnameTextField.setPadding(new Insets(0,0,0,padding));
-        userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
         userPageEmailTextField.setPadding(new Insets(0,0,0,padding));
-        userPageGenderComboBox.setPadding(new Insets(0,0,0,padding));
+        userPagePasswordTextField.setPadding(new Insets(0,0,0,padding));
         userPageCountryComboBox.setVisible(value);
         userPageGenderComboBox.setVisible(value);
         userPageFavGenreComboBox.setVisible(value);
@@ -1179,7 +1153,6 @@ public class UserPageController {
         userPageGenderLabel.setVisible(!value);
         userPageFavGenreLabel.setVisible(!value);
         userPageAgeLabel.setVisible(!value);
-        userPagePasswordTextField.setPadding(new Insets(0,0,0,padding));
 
 
     }
@@ -1342,15 +1315,10 @@ public class UserPageController {
     }
 
     public void getWpodcasts(){
-        /*int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
-        if(res == 1){*/
-            Logger.info("No podcasts to show");
-            numberOfWpodcastsToAdd = 0;
-        /*}
-        else if(res == 0)
-            Logger.success("New Podcasts loaded");
-        else
-            Logger.error("Unknown error");*/
+
+        Logger.info("No podcasts to show");
+        numberOfWpodcastsToAdd = 0;
+
     }
 
 
@@ -1365,24 +1333,16 @@ public class UserPageController {
     }
 
     public void getAuthors(){
-        /*int res = service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
-        if(res == 1){*/
-            Logger.info("No authors to show");
-            numberOfAuthorsToAdd = 0;
-        /*}
-        else if(res == 0)
-            Logger.success("New authors loaded");*/
+
+        Logger.info("No authors to show");
+        numberOfAuthorsToAdd = 0;
 
     }
 
     public void getUsers(){
-        /*int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
-        if(res == 1){*/
-            Logger.info("No users to show");
-            numberOfUsersToAdd = 0;
-        /*}
-        else if(res == 0)
-            Logger.success("New users loaded");*/
+
+        Logger.info("No users to show");
+        numberOfUsersToAdd = 0;
 
     }
 
