@@ -50,7 +50,7 @@
                      <children>
                         <VBox fx:id="authorNameWrapper">
                            <children>
-                              <Label fx:id="authorName" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Author Name" textFill="BLUE">
+                              <Label fx:id="authorName" onMouseClicked="#clickOnReviewAuthor" onMouseEntered="#mouseOnReviewAuthor" onMouseExited="#mouseOutReviewAuthor" text="Author Name" textFill="CORNFLOWERBLUE">
                                  <font>
                                     <Font name="Dubai Regular" size="18.0" />
                                  </font>

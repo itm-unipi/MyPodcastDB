@@ -21,6 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -112,7 +113,7 @@ public class ReviewController {
     @FXML
     void mouseOutReviewAuthor(MouseEvent event) {
         this.authorName.setCursor(Cursor.DEFAULT);
-        this.authorName.setTextFill(Color.color(0.0, 0.0, 1.0));
+        this.authorName.setTextFill(Paint.valueOf("CornflowerBlue"));
     }
 
     public void setData(Review review, BorderPane mainPage, ReviewPageService service, ReviewPageController controller) {
@@ -157,6 +158,7 @@ public class ReviewController {
             // unregistared can't go to user page
             if (sessionType.equals("Unregistered")) {
                 this.authorName.setDisable(true);
+                this.authorName.setTextFill(Paint.valueOf("Black"));
             }
         }
 

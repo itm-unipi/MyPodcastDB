@@ -21,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 import java.io.IOException;
 import java.util.*;
@@ -480,7 +481,7 @@ public class ReviewPageController {
     @FXML
     void mouseOutAuthor(MouseEvent event) {
         this.author.setCursor(Cursor.DEFAULT);
-        this.author.setTextFill(Color.color(0.0, 0.0, 1.0));
+        this.author.setTextFill(Paint.valueOf("CornflowerBlue"));
     }
 
     @FXML
@@ -516,7 +517,7 @@ public class ReviewPageController {
     @FXML
     void mouseOutShow(MouseEvent event) {
         this.showMore.setCursor(Cursor.DEFAULT);
-        this.showMore.setTextFill(Color.color(0.0, 0.0, 1.0));
+        this.showMore.setTextFill(Paint.valueOf("CornflowerBlue"));
     }
 
     @FXML

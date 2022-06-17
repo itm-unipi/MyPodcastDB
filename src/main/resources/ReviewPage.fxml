@@ -130,21 +130,30 @@
                                        <children>
                                           <Label fx:id="title" onMouseClicked="#clickOnTitle" onMouseEntered="#mouseOnTitle" onMouseExited="#mouseOutTitle" text="Title">
                                              <font>
-                                                <Font name="Corbel Bold" size="30.0" />
+                                                <Font name="Corbel Bold" size="27.0" />
                                              </font>
                                              <tooltip>
                                                 <Tooltip fx:id="titleTooltip" />
                                              </tooltip>
                                           </Label>
-                                          <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="BLUE">
+                                          <Label fx:id="author" onMouseClicked="#clickOnAuthor" onMouseEntered="#mouseOnAuthor" onMouseExited="#mouseOutAuthor" text="Author" textFill="CORNFLOWERBLUE">
                                              <font>
-                                                <Font name="Corbel Light" size="25.0" />
+                                                <Font name="Dubai Regular" size="22.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets top="3.0" />
+                                             </VBox.margin>
+                                             <padding>
+                                                <Insets bottom="-7.0" top="-6.0" />
+                                             </padding>
                                           </Label>
-                                          <Label fx:id="category" prefHeight="22.0" prefWidth="146.0" text="Category">
+                                          <Label fx:id="category" text="Category">
                                              <font>
                                                 <Font name="Corbel Light" size="18.0" />
                                              </font>
+                                             <VBox.margin>
+                                                <Insets bottom="5.0" top="6.0" />
+                                             </VBox.margin>
                                           </Label>
                                        </children>
                                        <HBox.margin>
@@ -397,12 +406,12 @@
                                           <Insets top="10.0" />
                                        </VBox.margin>
                                        <children>
-                                          <Label fx:id="showMore" onMouseClicked="#clickOnShow" onMouseEntered="#mouseOnShow" onMouseExited="#mouseOutShow" text="Show more reviews" textFill="BLUE">
+                                          <Label fx:id="showMore" onMouseClicked="#clickOnShow" onMouseEntered="#mouseOnShow" onMouseExited="#mouseOutShow" text="Show more reviews" textFill="CORNFLOWERBLUE">
                                              <cursor>
                                                 <Cursor fx:constant="HAND" />
                                              </cursor>
                                              <font>
-                                                <Font name="Corbel Light" size="18.0" />
+                                                <Font name="Dubai Regular" size="18.0" />
                                              </font>
                                           </Label>
                                        </children>
