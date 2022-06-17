@@ -44,7 +44,7 @@
                         </Label>
                         <HBox alignment="CENTER_RIGHT" prefHeight="78.0" prefWidth="920.0">
                            <children>
-                              <ImageView fx:id="logout" fitHeight="28.0" fitWidth="30.0" layoutX="439.0" layoutY="35.0" onMouseClicked="#clickOnLogout" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="logout" fitHeight="25.0" fitWidth="25.0" layoutX="439.0" layoutY="35.0" onMouseClicked="#clickOnLogout" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/Logout_24px.png" />
                                  </image>
@@ -52,26 +52,26 @@
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                                  <HBox.margin>
-                                    <Insets right="7.0" />
+                                    <Insets right="2.0" top="2.0" />
                                  </HBox.margin>
                               </ImageView>
-                              <ImageView fx:id="home" fitHeight="28.0" fitWidth="30.0" onMouseClicked="#clickOnHome" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="home" fitHeight="28.0" fitWidth="28.0" onMouseClicked="#clickOnHome" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/home.png" />
                                  </image>
                                  <HBox.margin>
-                                    <Insets right="7.0" />
+                                    <Insets />
                                  </HBox.margin>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
                                  </cursor>
                               </ImageView>
-                              <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="30.0" onMouseClicked="#clickOnUser" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="actorPicture" fitHeight="25.0" fitWidth="25.0" onMouseClicked="#clickOnUser" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/userPicture.png" />
                                  </image>
                                  <HBox.margin>
-                                    <Insets right="3.0" />
+                                    <Insets left="2.0" />
                                  </HBox.margin>
                                  <cursor>
                                     <Cursor fx:constant="HAND" />
