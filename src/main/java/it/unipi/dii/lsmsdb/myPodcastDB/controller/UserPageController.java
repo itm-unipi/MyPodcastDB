@@ -795,6 +795,10 @@ public class UserPageController {
                 logMsg = "Updating reviews' author username failed";
                 dialogMsg = "Updating failed, please try again";
                 break;
+            case 7:
+                logMsg = "Updating reviews' author username failed in podcast";
+                dialogMsg = "Updating failed, please try again";
+                break;
 
         }
         if(res > 1 || res == -1){
@@ -865,6 +869,10 @@ public class UserPageController {
                     break;
                 case 3:
                     logMsg = "Updating reviews' author username failed";
+                    dialogMsg = "Operation failed, please try again";
+                    break;
+                case 4:
+                    logMsg = "Updating reviews' author username failed in podcast";
                     dialogMsg = "Operation failed, please try again";
                     break;
             }

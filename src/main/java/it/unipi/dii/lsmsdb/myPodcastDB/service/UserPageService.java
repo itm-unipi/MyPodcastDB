@@ -188,43 +188,55 @@ public class UserPageService {
             userMongoManager.updateUser(oldUser);
             res = 5;
         }
+        //update authorName of reviews made by the user in collection reviews
+        else if(!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1){
+            res = 6;
+            userMongoManager.updateUser(oldUser);
+            userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+        }
+        //update authorName of reviews made by the user embedded in podcast
         else if(!oldUser.getUsername().equals(newUser.getUsername())){
-            //policy used:
-            // 1)   if a review updating failed, continue to update the other reviews (the same review embedded a podcast is not updated to),
-            //      but at the end it's executed the rollback to replace the User,
-            //      so it's possible try again to update the user and update the review not updated before
-            //2)    if a review updating in a podcast failed, restore the original review in the collection review and continue to
-            //      update the other reviews, at the end it's executed the rollback to replace the User
-            //      so, it's possible try again to update the user and update the review not updated before
-            for(Review review : newUser.getReviews()){
-                String reviewId = review.getId();
+
+            List<Review> reviews = newUser.getReviews();
+            boolean rollback = false;
+            int size = reviews.size();
+            for(int i = 0; i < size; i++){
+                Review review = reviews.get(i);
                 String podcastId = review.getPodcastId();
-                if(!reviewMongoManager.updateReviewAuthorUsername(reviewId, newUser.getUsername())){
-                    res = 6;
+                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
+                if(podcast == null) {
+                    res = 7;
+                    rollback = true;
+                    size = i;
+                    i = -1;
                     continue;
                 }
-                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
-                if(podcast == null)
-                    reviewMongoManager.updateReviewAuthorUsername(reviewId, oldUser.getUsername());
-                else {
-                    for (Review rev : podcast.getPreloadedReviews())
-                        if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
+
+                for (Review rev : podcast.getPreloadedReviews())
+                    if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
+                        if(!rollback)
                             rev.setAuthorUsername(newUser.getUsername());
-                            if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
-                                reviewMongoManager.updateReviewAuthorUsername(reviewId, oldUser.getUsername());
-                                res = 6;
-                            }
-                            break;
+                        else
+                            rev.setAuthorUsername(oldUser.getUsername());
+                        if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
+                            res = 7;
+                            rollback = true;
+                            size = i;
+                            i = -1;
                         }
-                }
+                        break;
+                    }
+
             }
-            if(res == 6) {
+            if(res == 7) {
                 userMongoManager.updateUser(oldUser);
                 userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+                reviewMongoManager.updateReviewsByAuthorUsername(newUser.getUsername(), oldUser.getUsername());
             }
             else
                 res = 0;
         }
+
         else
             res = 0;
 
@@ -267,39 +279,39 @@ public class UserPageService {
             userMongoManager.addUser(user);
             res =  2;
         }
-        //update author username in reviews written by the removed user
-        else {
+        //update authorName of reviews made by the user in collection reviews
+        else if(reviewMongoManager.updateReviewsByAuthorUsername(user.getUsername(), "Removed account") == -1){
+            res = 3;
+            userMongoManager.addUser(user);
+            userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
+        }
+        //update authorName of reviews made by the user embedded in podcast
+        else{
 
-            //policy used:
-            // 1)   if a review updating failed, continue to update the other reviews (the same review embedded a podcast is not updated to),
-            //      but at the end it's executed the rollback to replace the User,
-            //      so it's possible try again to remove the user and update the review not updated before
-            //2)    if a review updating in a podcast failed, restore the original review in the collection review and continue to
-            //      update the other reviews, at the end it's executed the rollback to replace the User
-            //      so, it's possible try again to remove the user and update the review not updated before
+            //adopted policy:
+            //if an update of review embedded in a podcast fail, restore the corresponding review in collection review
+            //and normally continue with others reviews. At the end restore the user so that it's possible to try again
+            //to remove it and so update the review that has failed before
             for(Review review : user.getReviews()){
-                String reviewId = review.getId();
                 String podcastId = review.getPodcastId();
-                if(!reviewMongoManager.updateReviewAuthorUsername(reviewId, "Removed account")){
-                    res = 3;
+                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
+                if(podcast == null) {
+                    res = 4;
                     continue;
                 }
-                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
-                if(podcast == null)
-                    reviewMongoManager.updateReviewAuthorUsername(reviewId, user.getUsername());
-                else {
-                    for (Review rev : podcast.getPreloadedReviews())
-                        if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
-                            rev.setAuthorUsername("Removed account");
-                            if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
-                                reviewMongoManager.updateReviewAuthorUsername(reviewId, user.getUsername());
-                                res = 3;
-                            }
-                            break;
+
+                for (Review rev : podcast.getPreloadedReviews())
+                    if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
+                        rev.setAuthorUsername("Removed account");
+                        if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
+                            res = 4;
+                            reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
                         }
-                }
+                        break;
+                    }
+
             }
-            if(res == 3) {
+            if(res == 4) {
                 userMongoManager.addUser(user);
                 userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
             }
