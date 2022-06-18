@@ -154,16 +154,16 @@ public class UserPageController {
     private Label userPageUsersLabel;
 
     @FXML
-    private VBox userPageWatchlistAreaVBox;
+    private HBox userPageWatchlistArea;
 
     @FXML
-    private VBox userPageLikedAreaVBox;
+    private HBox userPageLikedArea;
 
     @FXML
-    private VBox userPageAuthorsAreaVBox;
+    private HBox userPageAuthorsArea;
 
     @FXML
-    private VBox userPageUsersAreaVBox;
+    private HBox userPageUsersArea;
 
     @FXML
     private AnchorPane userPageAnchorPane;
@@ -1073,9 +1073,9 @@ public class UserPageController {
                 loadWatchlaterPodcast(false);
         }
         else{
-            userPageWatchlistLabel.setText("Watchlist is empty");
-            userPageWatchlistAreaVBox.setVisible(false);
-            userPageWatchlistAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageWatchlistLabel.setText("The watchlist is empty");
+            userPageWatchlistArea.setVisible(false);
+            userPageWatchlistArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         // fill the liked grid
@@ -1085,9 +1085,9 @@ public class UserPageController {
                 loadLikedPodcast(false);
         }
         else{
-            userPageLikedLabel.setText("There are no liked podcasts");
-            userPageLikedAreaVBox.setVisible(false);
-            userPageLikedAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageLikedLabel.setText("The liked podcasts list is empty");
+            userPageLikedArea.setVisible(false);
+            userPageLikedArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         //fill the authors grid
@@ -1097,9 +1097,9 @@ public class UserPageController {
                loadAuthor(false);
         }
         else{
-            userPageAuthorsLabel.setText("There are no followed authors");
-            userPageAuthorsAreaVBox.setVisible(false);
-            userPageAuthorsAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageAuthorsLabel.setText("The followed authors list is empty");
+            userPageAuthorsArea.setVisible(false);
+            userPageAuthorsArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         //fill the users grid
@@ -1109,9 +1109,9 @@ public class UserPageController {
                 loadUser(false);
         }
         else{
-            userPageUsersLabel.setText("There are no followed users");
-            userPageUsersAreaVBox.setVisible(false);
-            userPageUsersAreaVBox.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
+            userPageUsersLabel.setText("The followed users list is empty");
+            userPageUsersArea.setVisible(false);
+            userPageUsersArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
         userPageWatchlistScrollPane.setHvalue(0.0);

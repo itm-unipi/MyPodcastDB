@@ -113,7 +113,7 @@ public class PodcastPreviewInUserPageController {
             res = service.updateWatchlist(actorName, podcastPreview, false);
             if(res == 0){
                 Logger.success("Removed watch later relation successfully");
-                watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
+                watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
                 watchStatus = false;
             }
             else if(res == 4)
@@ -132,7 +132,7 @@ public class PodcastPreviewInUserPageController {
             res = service.updateWatchlist(actorName, podcastPreview, true);
             if(res == 0) {
                 Logger.success("Added watch later relation successfully");
-                watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
+                watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
                 watchStatus = true;
             }
             else if(res == 1)
@@ -153,21 +153,6 @@ public class PodcastPreviewInUserPageController {
 
     }
 
-    @FXML
-    void watchIn(MouseEvent event){
-        if(watchStatus)
-            watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
-        else
-            watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
-    }
-
-    @FXML
-    void watchOut(MouseEvent event){
-        if(!watchStatus)
-            watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64px.png"));
-        else
-            watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
-    }
 
     @FXML
     void trashClick(MouseEvent event){
@@ -335,7 +320,7 @@ public class PodcastPreviewInUserPageController {
         trashButtonArea.setVisible(false);
         this.actorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         if(ifInWatchlist) {
-            watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/star_64fillpx.png"));
+            watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
             watchStatus = true;
         }
         if(ifInWatchlist)

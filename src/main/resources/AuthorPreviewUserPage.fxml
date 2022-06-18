@@ -24,25 +24,25 @@
                               <Image url="@img/authors/author2.png" />
                            </image>
                         </ImageView>
+                        <Pane fx:id="trashButtonArea" layoutX="66.0" layoutY="-1.0" prefHeight="22.0" prefWidth="22.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                           <children>
+                              <ImageView fx:id="trashButton" fitHeight="20.0" fitWidth="20.0" layoutX="1.0" layoutY="1.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                 <image>
+                                    <Image url="@img/delete_elem1.png" />
+                                 </image>
+                                 <viewport>
+                                    <Rectangle2D />
+                                 </viewport>
+                              </ImageView>
+                           </children>
+                        </Pane>
                      </children>
                   </Pane>
-                  <Pane fx:id="trashButtonArea" layoutX="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                  <Pane fx:id="followButtonArea" layoutX="65.0" layoutY="-5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: white; -fx-background-radius: 25;">
                      <children>
-                        <ImageView fx:id="trashButton" fitHeight="20.0" fitWidth="20.0" layoutX="5.0" layoutY="5.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                        <ImageView fx:id="followButton" fitHeight="20.0" fitWidth="20.0" layoutX="3.0" layoutY="2.0" onMouseClicked="#followClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
-                              <Image url="@img/delete_elem1.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                     </children>
-                  </Pane>
-                  <Pane fx:id="followButtonArea" layoutX="70.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: white; -fx-background-radius: 25;">
-                     <children>
-                        <ImageView fx:id="followButton" fitHeight="25.0" fitWidth="25.0" layoutX="-2.0" layoutY="-2.0" onMouseClicked="#followClick" onMouseEntered="#followIn" onMouseExited="#followOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                           <image>
-                              <Image url="@img/following_30px.png" />
+                              <Image url="@img/follow.png" />
                            </image>
                         </ImageView>
                      </children>

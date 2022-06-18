@@ -345,7 +345,7 @@
                         </HBox>
                         <VBox prefWidth="1176.0">
                            <children>
-                              <VBox fx:id="userPageWatchlistAreaVBox">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageWatchlistLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Watchlist" textFill="#434343">
                                        <font>
@@ -355,7 +355,7 @@
                                           <Insets bottom="10.0" left="50.0" />
                                        </VBox.margin>
                                     </Label>
-                                    <HBox minWidth="-Infinity">
+                                    <HBox fx:id="userPageWatchlistArea" minWidth="-Infinity">
                                        <children>
                                           <ImageView fx:id="userPageWatchlistLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -392,7 +392,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox fx:id="userPageLikedAreaVBox">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageLikedLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts" textFill="#434343">
                                        <font>
@@ -405,7 +405,7 @@
                                           <Insets bottom="10.0" />
                                        </padding>
                                     </Label>
-                                    <HBox prefHeight="230.0" prefWidth="200.0">
+                                    <HBox fx:id="userPageLikedArea" prefHeight="230.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="userPageLikedLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -439,7 +439,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox fx:id="userPageAuthorsAreaVBox">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageAuthorsLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Authors" textFill="#434343">
                                        <font>
@@ -452,7 +452,7 @@
                                           <Insets bottom="10.0" />
                                        </padding>
                                     </Label>
-                                    <HBox prefHeight="130.0" prefWidth="200.0">
+                                    <HBox fx:id="userPageAuthorsArea" prefHeight="130.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="userPageAuthorsLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollAuthorsButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
@@ -489,7 +489,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <VBox fx:id="userPageUsersAreaVBox">
+                              <VBox>
                                  <children>
                                     <Label fx:id="userPageUsersLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Followed Users" textFill="#434343">
                                        <font>
@@ -502,7 +502,7 @@
                                           <Insets bottom="10.0" />
                                        </padding>
                                     </Label>
-                                    <HBox prefHeight="130.0" prefWidth="200.0">
+                                    <HBox fx:id="userPageUsersArea" prefHeight="130.0" prefWidth="200.0">
                                        <children>
                                           <ImageView fx:id="userPageUsersLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollUsersButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>

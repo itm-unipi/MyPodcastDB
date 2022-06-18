@@ -108,21 +108,6 @@ public class ActorPreviewController {
         }
     }
 
-    @FXML
-    void followIn(MouseEvent event){
-        if(followStatus)
-            followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-        else
-            followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
-    }
-
-    @FXML
-    void followOut(MouseEvent event){
-        if(!followStatus)
-            followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
-        else
-            followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
-    }
 
     @FXML
     void  followClick(MouseEvent event){
@@ -136,7 +121,7 @@ public class ActorPreviewController {
                 res = service.updateFollowedUser(visitorName, userPreview, false);
                 if (res == 0) {
                     Logger.success("Removed follow user relation successfully");
-                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
+                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
                     followStatus = false;
                 }
                 else if(res == 3)
@@ -154,7 +139,7 @@ public class ActorPreviewController {
                 res = service.updateFollowedUser(visitorName, userPreview, true);
                 if (res == 0) {
                     Logger.success("Added follow user relation successfully");
-                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
+                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
                     followStatus = true;
                 }
                 else if(res == 1)
@@ -174,7 +159,7 @@ public class ActorPreviewController {
                 res = service.updateFollowedAuthor(visitorName, visitorType, authorPreview, false);
                 if (res == 0) {
                     Logger.info("Removed author follows author relation successfully");
-                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/following_30px.png"));
+                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
                     followStatus = false;
                 }
                 else if(res == 3)
@@ -197,7 +182,7 @@ public class ActorPreviewController {
                 res = service.updateFollowedAuthor(visitorName, visitorType, authorPreview, true);
                 if (res == 0) {
                     Logger.success("Added author follows author relation successfully");
-                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
+                    followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
                     followStatus = true;
                 }
                 else if(res == 1)
@@ -382,7 +367,7 @@ public class ActorPreviewController {
         trashButtonArea.setVisible(false);
         if(isFollowed){
             followButtonArea.setVisible(true);
-            followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
+            followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             followStatus = true;
         }
         else
@@ -422,7 +407,7 @@ public class ActorPreviewController {
         trashButtonArea.setVisible(false);
         if(isFollowed){
             followButtonArea.setVisible(true);
-            followButton.setImage(ImageCache.getImageFromLocalPath("/img/Favorite_64px.png"));
+            followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             followStatus = true;
         }
         else
