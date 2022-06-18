@@ -45,6 +45,9 @@ public class ActorPreviewController {
     @FXML
     private ImageView trashButton;
 
+    @FXML
+    private Label toolTip;
+
 
     private Author authorPreview = new Author();
     private User userPreview = new User();
@@ -63,15 +66,15 @@ public class ActorPreviewController {
         if(!visitorMode) {
             trashButtonArea.setVisible(true);
             trashButtonArea.setOpacity(0.0);
-            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), trashButtonArea);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), trashButtonArea);
             fadeAuthorImage.setFromValue(0.0);
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
         }
-        else if(!followStatus && (visitorType.equals("User") || visitorType.equals(actorType))) {
+        else if(visitorType.equals("User") || visitorType.equals(actorType)) {
             followButtonArea.setVisible(true);
             followButtonArea.setOpacity(0.0);
-            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), followButtonArea);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), followButtonArea);
             fadeAuthorImage.setFromValue(0.0);
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
@@ -84,7 +87,7 @@ public class ActorPreviewController {
         actorContainer.setStyle("-fx-background-color: transparent");
         if(!visitorMode)
             trashButtonArea.setVisible(false);
-        else if(!followStatus  && (visitorType.equals("User") || visitorType.equals(actorType)))
+        else if(visitorType.equals("User") || visitorType.equals(actorType))
             followButtonArea.setVisible(false);
     }
 
@@ -123,6 +126,7 @@ public class ActorPreviewController {
                     Logger.success("Removed follow user relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
                     followStatus = false;
+                    toolTip.setText("Unfollowed");
                 }
                 else if(res == 3)
                     Logger.error("Follow user relation already not exists");
@@ -141,6 +145,7 @@ public class ActorPreviewController {
                     Logger.success("Added follow user relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
                     followStatus = true;
+                    toolTip.setText("Followed");
                 }
                 else if(res == 1)
                     Logger.error("Follow user relation already exists");
@@ -161,6 +166,7 @@ public class ActorPreviewController {
                     Logger.info("Removed author follows author relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
                     followStatus = false;
+                    toolTip.setText("Unfollowed");
                 }
                 else if(res == 3)
                     Logger.error("User Follows author relation already not exists");
@@ -184,6 +190,7 @@ public class ActorPreviewController {
                     Logger.success("Added author follows author relation successfully");
                     followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
                     followStatus = true;
+                    toolTip.setText("Followed");
                 }
                 else if(res == 1)
                     Logger.error("User Follows author relation already exists");
@@ -202,6 +209,14 @@ public class ActorPreviewController {
                     DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
                 }
             }
+
+        }
+        if(res == 0){
+            toolTip.setOpacity(0.0);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(1.8), toolTip);
+            fadeAuthorImage.setFromValue(1.0);
+            fadeAuthorImage.setToValue(0.0);
+            fadeAuthorImage.play();
         }
     }
 
@@ -348,6 +363,7 @@ public class ActorPreviewController {
 
         followButtonArea.setVisible(false);
         trashButtonArea.setVisible(false);
+        toolTip.setOpacity(0.0);
 
     }
     public void setData(AnchorPane mainPage, Author author, boolean isFollowed) {
@@ -365,6 +381,7 @@ public class ActorPreviewController {
         this.actorName.setText(author.getName());
 
         trashButtonArea.setVisible(false);
+        toolTip.setOpacity(0.0);
         if(isFollowed){
             followButtonArea.setVisible(true);
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
@@ -390,6 +407,7 @@ public class ActorPreviewController {
 
         followButtonArea.setVisible(false);
         trashButtonArea.setVisible(false);
+        toolTip.setOpacity(0.0);
     }
 
     public void setData(AnchorPane mainPage, User user, boolean isFollowed) {
@@ -405,13 +423,13 @@ public class ActorPreviewController {
         this.actorName.setText(user.getUsername());
 
         trashButtonArea.setVisible(false);
+        followButtonArea.setVisible(false);
+        toolTip.setOpacity(0.0);
         if(isFollowed){
-            followButtonArea.setVisible(true);
+
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             followStatus = true;
         }
-        else
-            followButtonArea.setVisible(false);
 
     }
 

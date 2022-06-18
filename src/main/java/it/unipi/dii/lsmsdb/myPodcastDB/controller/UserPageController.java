@@ -614,15 +614,15 @@ public class UserPageController {
                 break;
             case 2:
                 logMsg = "Adding following relation failed";
-                dialogMsg = "Operation failed";
+                dialogMsg = "Something went wrong";
                 break;
             case 3:
                 logMsg = "Follow relation already not exists";
-                dialogMsg = "Operation failed";
+                dialogMsg = "Something went wrong";
                 break;
             case 4:
                 logMsg = "Removing following relation failed";
-                dialogMsg = "Operation failed";
+                dialogMsg = "Something went wrong";
                 break;
         }
 
@@ -785,23 +785,23 @@ public class UserPageController {
                 break;
             case 4 :
                 logMsg = "Mongo operation failed";
-                dialogMsg = "Updating failed";
+                dialogMsg = "Something went wrong";
                 break;
             case 5 :
                 logMsg = "Neo4j operation failed";
-                dialogMsg = "Updating failed";
+                dialogMsg = "Something went wrong";
                 break;
             case 6 :
                 logMsg = "Updating reviews' author username failed";
-                dialogMsg = "Updating failed, please try again";
+                dialogMsg = "Something went wrong";
                 break;
             case 7:
                 logMsg = "Updating reviews' author username failed in podcast";
-                dialogMsg = "Updating failed, please try again";
+                dialogMsg = "Something went wrong";
                 break;
 
         }
-        if(res > 1 || res == -1){
+        if(res > 1){
             Logger.error(logMsg);
             DialogManager.getInstance().createErrorAlert(userPageAnchorPane, dialogMsg);
             return;
@@ -851,7 +851,14 @@ public class UserPageController {
     void deleteButtonClick(MouseEvent event) throws  IOException{
         Logger.info("Delete button clicked");
 
-        if(DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, "Really Delete your account?")) {
+        String msg = "";
+        if(MyPodcastDB.getInstance().getSessionType().equals("User"))
+            msg = "Really Delete your account?";
+        else if(MyPodcastDB.getInstance().getSessionType().equals("Admin"))
+            msg = "Really Delete the " +pageOwner.getUsername() + "'s account?";
+        else
+            return;
+        if(DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, msg)) {
             int res = service.deleteUserPageOwner(pageOwner);
             String logMsg = "";
             String dialogMsg = "";
@@ -861,19 +868,19 @@ public class UserPageController {
                     break;
                 case 1:
                     logMsg = "Delete operation failed on mongo";
-                    dialogMsg = "Operation failed";
+                    dialogMsg = "Something went wrong";
                     break;
                 case 2:
                     logMsg = "Delete operation failed on neo4j";
-                    dialogMsg = "Operation failed";
+                    dialogMsg = "Something went wrong";
                     break;
                 case 3:
                     logMsg = "Updating reviews' author username failed";
-                    dialogMsg = "Operation failed, please try again";
+                    dialogMsg = "Something went wrong";
                     break;
                 case 4:
                     logMsg = "Updating reviews' author username failed in podcast";
-                    dialogMsg = "Operation failed, please try again";
+                    dialogMsg = "Something went wrong";
                     break;
             }
             if(res > 0){

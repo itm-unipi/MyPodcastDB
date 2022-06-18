@@ -212,11 +212,11 @@ public class SignUpController {
                     break;
                 case 4:
                     logMsg = "Operation failed on mongo";
-                    dialogMsg = "Operation failed";
+                    dialogMsg = "Something went wrong";
                     break;
                 case 5:
                     logMsg = "Operation failed on neo4j";
-                    dialogMsg = "Operation failed";
+                    dialogMsg = "Something went wrong";
                     break;
             }
 
@@ -280,11 +280,11 @@ public class SignUpController {
                     break;
                 case 4:
                     logMsg = "Operation failed on mongo";
-                    dialogMsg = "Operation failed";
+                    dialogMsg = "Something went wrong";
                     break;
                 case 5:
                     logMsg = "Operation failed on neo4j";
-                    dialogMsg = "Operation failed";
+                    dialogMsg = "Something went wrong";
                     break;
             }
 

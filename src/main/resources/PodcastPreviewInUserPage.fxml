@@ -14,15 +14,15 @@
 
 <AnchorPane fx:id="podcastAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="230.0" prefWidth="185.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.PodcastPreviewInUserPageController">
    <children>
-      <VBox fx:id="podcastContainer" onMouseClicked="#onClick" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" prefHeight="230.0" prefWidth="185.0" style="-fx-background-radius: 20;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="podcastContainer" onMouseClicked="#onClick" onMouseEntered="#podcastIn" onMouseExited="#podcastOut" prefHeight="230.0" prefWidth="185.0" style="-fx-background-radius: 20; -fx-cursor: hand;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="176.0" prefWidth="165.0">
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="176.0" prefWidth="165.0" style="-fx-cursor: hand;">
                <children>
                   <ImageView fx:id="podcastImage" fitHeight="185.0" fitWidth="166.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
                         <Image url="@img/loading.jpg" />
                      </image></ImageView>
-                  <HBox fx:id="buttonArea" layoutY="5.0" style="-fx-background-color: transparent;">
+                  <HBox fx:id="buttonArea" layoutY="5.0" style="-fx-background-color: transparent; -fx-cursor: hand;">
                      <children>
                         <ImageView fx:id="watchlistButton" fitHeight="30.0" fitWidth="30.0" onMouseClicked="#watchClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
@@ -31,7 +31,7 @@
                         </ImageView>
                      </children>
                   </HBox>
-                  <Pane fx:id="trashButtonArea" layoutX="136.0" layoutY="3.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                  <Pane fx:id="trashButtonArea" layoutX="136.0" layoutY="3.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-cursor: hand;">
                      <children>
                         <ImageView fx:id="trashButton" fitHeight="26.0" fitWidth="26.0" layoutX="1.0" layoutY="1.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
@@ -43,9 +43,17 @@
                         </ImageView>
                      </children>
                   </Pane>
+                  <Label fx:id="toolTip" layoutX="34.0" layoutY="7.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-border-radius: 10; -fx-border-color: #eaeaea; -fx-cursor: hand;" text="Removed">
+                     <font>
+                        <Font name="Corbel" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="4.0" left="7.0" right="7.0" top="4.0" />
+                     </padding>
+                  </Label>
                </children>
             </Pane>
-            <Label fx:id="PodcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" text="Label" textFill="#434343">
+            <Label fx:id="PodcastName" minHeight="35.0" prefHeight="35.0" prefWidth="187.0" scaleY="1.06" style="-fx-cursor: hand;" text="Label" textFill="#434343">
                <font>
                   <Font name="Corbel Bold" size="15.0" />
                </font>

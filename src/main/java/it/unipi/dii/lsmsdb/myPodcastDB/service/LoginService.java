@@ -42,6 +42,8 @@ public class LoginService {
 
     public int getUserLogin(User user){
 
+        Logger.info("Starting gerUserLogin service ...");
+
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -92,6 +94,9 @@ public class LoginService {
     }
 
     public int getAuthorLogin(Author author){
+
+        Logger.info("Starting getAuthorLogin service ...");
+
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -129,6 +134,8 @@ public class LoginService {
     }
 
     public int getAdminLogin(Admin admin){
+
+        Logger.info("Starting getAdminLogin service ...");
 
         int res;
         MongoManager.getInstance().openConnection();

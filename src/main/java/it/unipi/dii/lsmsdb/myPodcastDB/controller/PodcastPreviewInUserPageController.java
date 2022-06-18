@@ -45,6 +45,8 @@ public class PodcastPreviewInUserPageController {
     @FXML
     private Pane trashButtonArea;
 
+    @FXML
+    private Label toolTip;
 
     private Podcast podcastPreview;
     private String actorName = "";
@@ -76,15 +78,15 @@ public class PodcastPreviewInUserPageController {
         if(!visitorMode) {
             trashButtonArea.setVisible(true);
             trashButtonArea.setOpacity(0.0);
-            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), trashButtonArea);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), trashButtonArea);
             fadeAuthorImage.setFromValue(0.0);
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
         }
-        else if(!watchStatus && actorType.equals("User")) {
+        else if(actorType.equals("User")) {
             buttonArea.setVisible(true);
             buttonArea.setOpacity(0.0);
-            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.2), buttonArea);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), buttonArea);
             fadeAuthorImage.setFromValue(0.0);
             fadeAuthorImage.setToValue(1.0);
             fadeAuthorImage.play();
@@ -98,7 +100,7 @@ public class PodcastPreviewInUserPageController {
             return;
         if(!visitorMode)
             trashButtonArea.setVisible(false);
-        else if(!watchStatus && actorType.equals("User"))
+        else if(actorType.equals("User"))
             buttonArea.setVisible(false);
     }
 
@@ -115,6 +117,7 @@ public class PodcastPreviewInUserPageController {
                 Logger.success("Removed watch later relation successfully");
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
                 watchStatus = false;
+                toolTip.setText("Removed");
             }
             else if(res == 4)
                 Logger.error("Watch later relation already not exists");
@@ -134,6 +137,7 @@ public class PodcastPreviewInUserPageController {
                 Logger.success("Added watch later relation successfully");
                 watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
                 watchStatus = true;
+                toolTip.setText("Added");
             }
             else if(res == 1)
                 Logger.error("Watch later relation already exists");
@@ -150,6 +154,15 @@ public class PodcastPreviewInUserPageController {
                 DialogManager.getInstance().createErrorAlert(mainPage, "Something went wrong");
             }
         }
+
+        if(res == 0){
+            toolTip.setOpacity(0.0);
+            FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(1.8), toolTip);
+            fadeAuthorImage.setFromValue(1.0);
+            fadeAuthorImage.setToValue(0.0);
+            fadeAuthorImage.play();
+        }
+
 
     }
 
@@ -299,6 +312,7 @@ public class PodcastPreviewInUserPageController {
 
        buttonArea.setVisible(false);
        trashButtonArea.setVisible(false);
+       toolTip.setOpacity(0.0);
 
     }
 
@@ -318,14 +332,12 @@ public class PodcastPreviewInUserPageController {
 
         buttonArea.setVisible(false);
         trashButtonArea.setVisible(false);
+        toolTip.setOpacity(0.0);
         this.actorName = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
         if(ifInWatchlist) {
             watchlistButton.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
             watchStatus = true;
         }
-        if(ifInWatchlist)
-            buttonArea.setVisible(true);
-
     }
 
 

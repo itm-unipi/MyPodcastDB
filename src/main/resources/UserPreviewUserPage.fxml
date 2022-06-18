@@ -7,6 +7,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -15,13 +16,13 @@
    <children>
       <VBox fx:id="actorContainer" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClick" onMouseEntered="#actorIn" onMouseExited="#actorOut" prefHeight="130.0" prefWidth="105.0" style="-fx-cursor: hand;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0">
+            <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="90.0" prefWidth="90.0" style="-fx-cursor: hand;">
                <children>
                   <ImageView fx:id="actorImage" fitHeight="90.0" fitWidth="90.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                      <image>
                         <Image url="@img/users/user2.png" />
                      </image></ImageView>
-                  <Pane fx:id="trashButtonArea" layoutX="66.0" layoutY="2.0" prefHeight="22.0" prefWidth="22.0" style="-fx-background-color: white; -fx-background-radius: 25;">
+                  <Pane fx:id="trashButtonArea" layoutX="66.0" layoutY="2.0" prefHeight="22.0" prefWidth="22.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-cursor: hand;">
                      <children>
                         <ImageView fx:id="trashButton" fitHeight="20.0" fitWidth="20.0" layoutX="1.0" layoutY="1.0" onMouseClicked="#trashClick" onMouseEntered="#trashIn" onMouseExited="#trashOut" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
@@ -33,7 +34,7 @@
                         </ImageView>
                      </children>
                   </Pane>
-                  <Pane fx:id="followButtonArea" layoutX="65.0" layoutY="-5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: white; -fx-background-radius: 20;">
+                  <Pane fx:id="followButtonArea" layoutX="65.0" layoutY="-5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="25.0" style="-fx-background-color: white; -fx-background-radius: 20; -fx-cursor: hand;">
                      <children>
                         <ImageView fx:id="followButton" fitHeight="20.0" fitWidth="20.0" layoutX="4.0" layoutY="3.0" onMouseClicked="#followClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                            <image>
@@ -42,9 +43,21 @@
                         </ImageView>
                      </children>
                   </Pane>
+                  <HBox alignment="CENTER" layoutX="-10.0" layoutY="32.0" maxWidth="-Infinity" prefWidth="105.0" style="-fx-cursor: hand;">
+                     <children>
+                        <Label fx:id="toolTip" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-border-radius: 8; -fx-background-radius: 8; fx-cursor: hand;" text="Unfollowed">
+                           <font>
+                              <Font name="Corbel" size="12.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="3.0" left="6.0" right="6.0" top="3.0" />
+                           </padding>
+                        </Label>
+                     </children>
+                  </HBox>
                </children>
             </Pane>
-            <Label fx:id="actorName" alignment="CENTER" prefHeight="35.0" prefWidth="204.0" text="Label" textFill="#434343">
+            <Label fx:id="actorName" alignment="CENTER" prefHeight="35.0" prefWidth="204.0" style="-fx-cursor: hand;" text="Label" textFill="#434343">
                <font>
                   <Font name="Corbel Bold" size="15.0" />
                </font>

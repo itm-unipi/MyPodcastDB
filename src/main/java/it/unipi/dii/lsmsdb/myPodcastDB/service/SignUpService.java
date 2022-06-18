@@ -34,6 +34,8 @@ public class SignUpService {
 
     public int addUserSignUp(User user){
 
+        Logger.info("Starting addUserSignUp service ...");
+
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -65,6 +67,8 @@ public class SignUpService {
     }
 
     public int addAuthorSignUp(Author author){
+
+        Logger.info("Starting addAuthorSignUp service ...");
 
         int res;
         MongoManager.getInstance().openConnection();

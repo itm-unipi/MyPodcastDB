@@ -54,6 +54,8 @@ public class UserPageService {
             int podcastRowSize
             ){
 
+        Logger.info("Starting loadUserPageProfile service ...");
+
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -137,6 +139,8 @@ public class UserPageService {
     }
 
     public int getMoreLikedPodcasts(String pageOwner, List<Podcast> lPodcast, int limit){
+
+        Logger.info("Starting getMoreLikedPodcasts service ...");
         int res;
         Neo4jManager.getInstance().openConnection();
 
@@ -155,6 +159,8 @@ public class UserPageService {
     }
 
     public int updateUserPageOwner(User oldUser, User newUser) {
+
+        Logger.info("Starting updateUserPageOwner service ...");
         int res = -1;
 
         //check if there is something to update
@@ -204,13 +210,15 @@ public class UserPageService {
                 Review review = reviews.get(i);
                 String podcastId = review.getPodcastId();
                 Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
-                if(podcast == null) {
+                if(!rollback && podcast == null) {
                     res = 7;
                     rollback = true;
                     size = i;
                     i = -1;
                     continue;
                 }
+                else if(podcast == null)
+                    continue;
 
                 for (Review rev : podcast.getPreloadedReviews())
                     if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
@@ -218,7 +226,7 @@ public class UserPageService {
                             rev.setAuthorUsername(newUser.getUsername());
                         else
                             rev.setAuthorUsername(oldUser.getUsername());
-                        if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
+                        if (!rollback && !podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
                             res = 7;
                             rollback = true;
                             size = i;
@@ -249,6 +257,8 @@ public class UserPageService {
     }
 
     public int checkFollowUser(/*String user1,*/ User user2){
+
+        Logger.info("Starting checkFollowUser service ...");
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -267,6 +277,9 @@ public class UserPageService {
     }
 
     public int deleteUserPageOwner(User user){
+
+        Logger.info("Starting deleteUserPageOwner service ...");
+
         int res = -1;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -288,30 +301,42 @@ public class UserPageService {
         //update authorName of reviews made by the user embedded in podcast
         else{
 
-            //adopted policy:
-            //if an update of review embedded in a podcast fail, restore the corresponding review in collection review
-            //and normally continue with others reviews. At the end restore the user so that it's possible to try again
-            //to remove it and so update the review that has failed before
-            for(Review review : user.getReviews()){
+            List<Review> reviews = user.getReviews();
+            boolean rollback = false;
+            int size = reviews.size();
+            for(int i = 0; i < size; i++){
+                Review review = reviews.get(i);
                 String podcastId = review.getPodcastId();
                 Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
-                if(podcast == null) {
+                if(!rollback && podcast == null) {
                     res = 4;
+                    rollback = true;
+                    size = i;
+                    i = -1;
                     continue;
                 }
+                else if(podcast == null)
+                    continue;
 
                 for (Review rev : podcast.getPreloadedReviews())
                     if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
-                        rev.setAuthorUsername("Removed account");
-                        if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
+                        if(!rollback)
+                            rev.setAuthorUsername("Removed account");
+                        else
+                            rev.setAuthorUsername(user.getUsername());
+                        if (!rollback && !podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
                             res = 4;
-                            reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
+                            rollback = true;
+                            size = i;
+                            i = -1;
                         }
                         break;
                     }
 
             }
             if(res == 4) {
+                for(Review review : user.getReviews())
+                    reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
                 userMongoManager.addUser(user);
                 userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
             }
@@ -324,6 +349,10 @@ public class UserPageService {
     }
 
     public int updateFollowUser(String user1, User user2, boolean toAdd){
+
+        Logger.info("Starting updateFollowUser service ...");
+
+
         int res;
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -357,6 +386,8 @@ public class UserPageService {
     }
 
     public int updateWatchlist(String username, Podcast podcast, boolean toAdd){
+
+        Logger.info("Starting updateWatchlist service ...");
 
         int res;
         Neo4jManager.getInstance().openConnection();
@@ -394,6 +425,8 @@ public class UserPageService {
 
     public int updateLiked(String username, Podcast podcast, boolean toAdd){
 
+        Logger.info("Starting updateLiked service ...");
+
         int res;
         Neo4jManager.getInstance().openConnection();
 
@@ -427,6 +460,8 @@ public class UserPageService {
 
     public int updateFollowedUser(String visitor, User user, boolean toAdd){
 
+        Logger.info("Starting updateFollowedUser service ...");
+
         int res;
         Neo4jManager.getInstance().openConnection();
 
@@ -459,6 +494,8 @@ public class UserPageService {
     }
 
     public int updateFollowedAuthor(String visitorName, String visitorType, Author author, boolean toAdd){
+
+        Logger.info("Starting updateFollowedAuthor service ...");
 
         int res = -1;
         Neo4jManager.getInstance().openConnection();
