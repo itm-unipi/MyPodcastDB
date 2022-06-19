@@ -984,8 +984,8 @@ public class UserPageController {
                 actorType,
                 sessionActorName,
                 pageOwner, wPodcasts, lPodcasts, authors, users,
-                newRequestPodcast,
-                podcastRowSize
+                newRequestPodcast, newRequestActor,
+                podcastRowSize, actorRowSize
                 );
 
         if(res == 1){
@@ -1329,13 +1329,24 @@ public class UserPageController {
 
     }
 
+
     public void getWpodcasts(){
 
-        Logger.info("No podcasts to show");
-        numberOfWpodcastsToAdd = 0;
-
+        if(MyPodcastDB.getInstance().getSessionType().equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(pageOwner.getUsername())){
+            Logger.info("No podcasts to show");
+            numberOfWpodcastsToAdd = 0;
+            return;
+        }
+        int res = service.getMoreWatchlaterPodcasts(pageOwner.getUsername(), wPodcasts, newRequestPodcast);
+        if(res == 1){
+            Logger.info("No podcasts to show");
+            numberOfWpodcastsToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New Podcasts loaded");
+        else
+            Logger.error("Unknown error");
     }
-
 
     public void getLpodcasts(){
         int res = service.getMoreLikedPodcasts(pageOwner.getUsername(), lPodcasts, newRequestPodcast);
@@ -1348,16 +1359,34 @@ public class UserPageController {
     }
 
     public void getAuthors(){
-
-        Logger.info("No authors to show");
-        numberOfAuthorsToAdd = 0;
+        if(MyPodcastDB.getInstance().getSessionType().equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(pageOwner.getUsername())){
+            Logger.info("No authors to show");
+            numberOfAuthorsToAdd = 0;
+            return;
+        }
+        int res= service.getMoreFollowedAuthors(pageOwner.getUsername(), authors, newRequestActor);
+        if(res == 1){
+            Logger.info("No authors to show");
+            numberOfAuthorsToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New authors loaded");
 
     }
 
     public void getUsers(){
-
-        Logger.info("No users to show");
-        numberOfUsersToAdd = 0;
+        if(MyPodcastDB.getInstance().getSessionType().equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(pageOwner.getUsername())){
+            Logger.info("No users to show");
+            numberOfUsersToAdd = 0;
+            return;
+        }
+        int res = service.getMoreFollowedUsers(pageOwner.getUsername(), users, newRequestActor);
+        if(res == 1){
+            Logger.info("No users to show");
+            numberOfUsersToAdd = 0;
+        }
+        else if(res == 0)
+            Logger.success("New users loaded");
 
     }
 

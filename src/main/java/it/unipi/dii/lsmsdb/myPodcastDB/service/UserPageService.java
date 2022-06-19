@@ -51,7 +51,9 @@ public class UserPageService {
             List<Author> followedAuthors,
             List<User> followedUsers,
             int limitPodcast,
-            int podcastRowSize
+            int limitActor,
+            int podcastRowSize,
+            int actorRowSize
             ){
 
         Logger.info("Starting loadUserPageProfile service ...");
@@ -89,7 +91,7 @@ public class UserPageService {
                 wPodcasts.addAll(WatchlistCache.getAllPodcastsInWatchlist());
             }
             else {
-                podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner.getUsername());
+                podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner.getUsername(), limitPodcast, 0);
                 if (podcasts != null)
                     wPodcasts.addAll(podcasts);
             }
@@ -114,7 +116,7 @@ public class UserPageService {
                 followedAuthors.addAll(FollowedAuthorCache.getAllFollowedAuthors());
             }
             else {
-                authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner.getUsername());
+                authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner.getUsername(), limitActor, 0);
                 if (authors != null)
                     followedAuthors.addAll(authors);
             }
@@ -125,7 +127,7 @@ public class UserPageService {
                 followedUsers.addAll(FollowedUserCache.getAllFollowedUsers());
             }
             else {
-                users = userNeo4jManager.showFollowedUsers(pageOwner.getUsername());
+                users = userNeo4jManager.showFollowedUsers(pageOwner.getUsername(), limitActor, 0);
                 if (users != null)
                     followedUsers.addAll(users);
             }
@@ -134,6 +136,25 @@ public class UserPageService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreWatchlaterPodcasts(String pageOwner, List<Podcast> wPodcast, int limit){
+
+        Logger.info("Starting getMoreWatchlaterPodcasts service ...");
+        int res;
+        Neo4jManager.getInstance().openConnection();
+
+        int skip = wPodcast.size();
+        List<Podcast> podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner, limit, skip);
+        if(podcasts != null){
+            wPodcast.addAll(podcasts);
+            res = 0;
+        }
+        else
+            res = 1;
+
         Neo4jManager.getInstance().closeConnection();
         return res;
     }
@@ -149,6 +170,44 @@ public class UserPageService {
         if(podcasts != null){
             lPodcast.addAll(podcasts);
             LikedPodcastCache.addPodcastList(podcasts);
+            res = 0;
+        }
+        else
+            res = 1;
+
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreFollowedAuthors(String pageOwner, List<Author> followedAuthors, int limit){
+
+        Logger.info("Starting getMoreFollowedAuthors service ...");
+        int res;
+        Neo4jManager.getInstance().openConnection();
+
+        int skip = followedAuthors.size();
+        List<Author> authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner, limit, skip);
+        if(authors != null) {
+            followedAuthors.addAll(authors);
+            res = 0;
+        }
+        else
+            res = 1;
+
+        Neo4jManager.getInstance().closeConnection();
+        return res;
+    }
+
+    public int getMoreFollowedUsers(String pageOwner, List<User> followedUsers, int limit){
+
+        Logger.info("Starting getMoreFollowedUsers service ...");
+        int res;
+        Neo4jManager.getInstance().openConnection();
+
+        int skip = followedUsers.size();
+        List<User> users = userNeo4jManager.showFollowedUsers(pageOwner, limit, skip);
+        if(users != null){
+            followedUsers.addAll(users);
             res = 0;
         }
         else

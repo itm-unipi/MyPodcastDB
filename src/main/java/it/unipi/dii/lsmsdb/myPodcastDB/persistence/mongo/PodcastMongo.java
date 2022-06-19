@@ -709,19 +709,24 @@ public class PodcastMongo {
 
     // ------------------------------- AGGREGATION QUERY -------------------------------- //
 
-    public List<Pair<String, Integer>> showCountriesWithHighestNumberOfPodcasts(int lim) {
-        MongoManager manager = MongoManager.getInstance();
-
-        /*db.podcasts.aggregate([
+    /*db.podcasts.aggregate([
             { $group: { _id: { country: "$country" }, totalPodcasts: { $sum: 1 } } },
             { $sort: { totalPodcasts: -1 } },
             { $limit : 1 },
             { $project: { _id: 0, country: "$_id.country", totalPodcasts: "$totalPodcasts" } }
         ])*/
 
+    public List<Pair<String, Integer>> showCountriesWithHighestNumberOfPodcasts(int lim) {
+        MongoManager manager = MongoManager.getInstance();
+
         try {
             Bson group = group("$country", sum("totalPodcasts", 1));
-            Bson projectionsFields = fields(excludeId(), computed("country", "$_id"), computed("totalPodcasts", "$sum"), include("totalPodcasts"));
+            Bson projectionsFields = fields(
+                    excludeId(),
+                    computed("country", "$_id"),
+                    computed("totalPodcasts", "$sum"),
+                    include("totalPodcasts")
+            );
             Bson projection = project(projectionsFields);
             Bson sort = sort(descending("totalPodcasts"));
             Bson limit = limit(lim);
@@ -851,7 +856,7 @@ public class PodcastMongo {
         }
     }
 
-    public List<Entry<String, Float>> showAuthorWithHighestAverageRating(int limit) {
+    public List<Entry<String, Float>> showAuthorsWithHighestAverageRating(int limit) {
         MongoManager manager = MongoManager.getInstance();
 
         try {

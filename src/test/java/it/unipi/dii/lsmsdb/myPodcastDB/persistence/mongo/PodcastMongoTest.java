@@ -391,7 +391,7 @@ public class PodcastMongoTest {
 
     void showAuthorWithHighestAverageRatingTest(){
 
-        List<Entry<String, Float>> authors = this.podcastMongo.showAuthorWithHighestAverageRating(10);
+        List<Entry<String, Float>> authors = this.podcastMongo.showAuthorsWithHighestAverageRating(10);
         if(authors == null || authors.isEmpty())
             System.err.println("[-] showAuthorWithHighestAverageRating");
         else {
