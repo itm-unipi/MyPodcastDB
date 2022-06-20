@@ -346,20 +346,13 @@ public class UserPageService {
         //delete user on mongo
         if(!userMongoManager.deleteUserByUsername(user.getUsername()))
             res = 1;
-        //delete user on neo4j
-        else if(!userNeo4jManager.deleteUser(user.getUsername())){
-            userMongoManager.addUser(user);
-            res =  2;
-        }
         //update authorName of reviews made by the user in collection reviews
         else if(reviewMongoManager.updateReviewsByAuthorUsername(user.getUsername(), "Removed account") == -1){
             res = 3;
             userMongoManager.addUser(user);
-            userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
         }
-        //update authorName of reviews made by the user embedded in podcast
         else{
-
+            //update authorName of reviews made by the user embedded in podcast
             List<Review> reviews = user.getReviews();
             boolean rollback = false;
             int size = reviews.size();
@@ -397,7 +390,13 @@ public class UserPageService {
                 for(Review review : user.getReviews())
                     reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
                 userMongoManager.addUser(user);
-                userNeo4jManager.addUser(user.getUsername(), user.getPicturePath());
+            }
+            //delete user on neo4j
+            else if(!userNeo4jManager.deleteUser(user.getUsername())){
+                for(Review review : user.getReviews())
+                    reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
+                userMongoManager.addUser(user);
+                res =  2;
             }
             else
                 res = 0;
