@@ -175,6 +175,9 @@ public class PodcastUpdateController {
         this.name.setText(podcast.getName());
         this.contentAdvisory.setText(podcast.getContentAdvisoryRating());
         this.artworkUrl.setText(podcast.getArtworkUrl600());
+
+        // setup date picker
+        this.releaseDate.setValue(Instant.ofEpochMilli(this.podcast.getReleaseDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
     }
 
     public void initialize() {

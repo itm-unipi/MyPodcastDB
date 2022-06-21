@@ -132,11 +132,12 @@ public class EpisodeEditController {
             this.update.setText("Add");
         }
 
-        // else setup the text field
+        // else setup the text fields and date picker
         else {
             this.title.setText(episode.getName());
             this.description.setText(episode.getDescription());
             this.duration.setText("" + this.episode.getTimeMillis());
+            this.releaseDate.setValue(Instant.ofEpochMilli(this.episode.getReleaseDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
         }
     }
 
