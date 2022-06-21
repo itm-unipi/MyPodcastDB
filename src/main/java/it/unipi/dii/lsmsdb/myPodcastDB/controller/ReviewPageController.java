@@ -38,10 +38,10 @@ public class ReviewPageController {
     private Label category;
 
     @FXML
-    private ProgressBar fiveStars;
+    private HBox fiveStars;
 
     @FXML
-    private ProgressBar fourStars;
+    private HBox fourStars;
 
     @FXML
     private VBox gridWrapper;
@@ -62,7 +62,7 @@ public class ReviewPageController {
     private Label numReviews;
 
     @FXML
-    private ProgressBar oneStar;
+    private HBox oneStar;
 
     @FXML
     private ComboBox<String> orderBy;
@@ -123,7 +123,7 @@ public class ReviewPageController {
     private TextField textTitle;
 
     @FXML
-    private ProgressBar threeStars;
+    private HBox threeStars;
 
     @FXML
     private Label title;
@@ -132,7 +132,7 @@ public class ReviewPageController {
     private Tooltip titleTooltip;
 
     @FXML
-    private ProgressBar twoStars;
+    private HBox twoStars;
 
     @FXML
     private ImageView userPicture;
@@ -651,11 +651,13 @@ public class ReviewPageController {
                         break;
                 }
             }
-            this.oneStar.setProgress((float) numReview[0] / this.podcast.getReviews().size());
-            this.twoStars.setProgress((float) numReview[1] / this.podcast.getReviews().size());
-            this.threeStars.setProgress((float) numReview[2] / this.podcast.getReviews().size());
-            this.fourStars.setProgress((float) numReview[3] / this.podcast.getReviews().size());
-            this.fiveStars.setProgress((float) numReview[4] / this.podcast.getReviews().size());
+            if (this.podcast.getReviews().size() != 0) {
+                this.oneStar.setPrefWidth(((float) numReview[0] / this.podcast.getReviews().size()) * 172);
+                this.twoStars.setPrefWidth(((float) numReview[1] / this.podcast.getReviews().size()) * 172);
+                this.threeStars.setPrefWidth(((float) numReview[2] / this.podcast.getReviews().size()) * 172);
+                this.fourStars.setPrefWidth(((float) numReview[3] / this.podcast.getReviews().size()) * 172);
+                this.fiveStars.setPrefWidth(((float) numReview[4] / this.podcast.getReviews().size()) * 172);
+            }
 
             // insert reviews in grid
             this.reloadReviewList();

@@ -4,7 +4,6 @@
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
@@ -260,14 +259,18 @@
                                           <Image url="@img/star.png" />
                                        </image>
                                     </ImageView>
-                                    <ProgressBar fx:id="fiveStars" prefHeight="10.0" prefWidth="220.0" progress="0.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-color: white; -fx-background-radius: 5;">
+                                       <children>
+                                          <HBox fx:id="fiveStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                             <HBox.margin>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </HBox.margin>
+                                          </HBox>
+                                       </children>
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
-                                    </ProgressBar>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="391.0" prefWidth="200.0">
@@ -293,14 +296,18 @@
                                           <Image url="@img/star.png" />
                                        </image>
                                     </ImageView>
-                                    <ProgressBar fx:id="fourStars" prefHeight="10.0" prefWidth="220.0" progress="0.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
+                                       <children>
+                                          <HBox fx:id="fourStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                             <HBox.margin>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </HBox.margin>
+                                          </HBox>
+                                       </children>
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
-                                    </ProgressBar>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="433.0" prefWidth="200.0">
@@ -322,14 +329,18 @@
                                           <Image url="@img/star.png" />
                                        </image>
                                     </ImageView>
-                                    <ProgressBar fx:id="threeStars" prefHeight="10.0" prefWidth="220.0" progress="0.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
+                                       <children>
+                                          <HBox fx:id="threeStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                             <HBox.margin>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </HBox.margin>
+                                          </HBox>
+                                       </children>
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
-                                    </ProgressBar>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="448.0" prefWidth="200.0">
@@ -347,14 +358,18 @@
                                           <Image url="@img/star.png" />
                                        </image>
                                     </ImageView>
-                                    <ProgressBar fx:id="twoStars" prefHeight="10.0" prefWidth="220.0" progress="0.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
+                                       <children>
+                                          <HBox fx:id="twoStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                             <HBox.margin>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </HBox.margin>
+                                          </HBox>
+                                       </children>
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
-                                    </ProgressBar>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="463.0" prefWidth="200.0">
@@ -368,14 +383,18 @@
                                           <Image url="@img/star.png" />
                                        </image>
                                     </ImageView>
-                                    <ProgressBar fx:id="oneStar" prefHeight="10.0" prefWidth="220.0" progress="0.0">
-                                       <opaqueInsets>
-                                          <Insets />
-                                       </opaqueInsets>
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
+                                       <children>
+                                          <HBox fx:id="oneStar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                             <HBox.margin>
+                                                <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                             </HBox.margin>
+                                          </HBox>
+                                       </children>
                                        <HBox.margin>
                                           <Insets left="5.0" />
                                        </HBox.margin>
-                                    </ProgressBar>
+                                    </HBox>
                                  </children>
                               </HBox>
                               <Label fx:id="showReviews" onMouseClicked="#clickOnReviews" onMouseEntered="#mouseOnReview" onMouseExited="#mouseOutReview" text="See all reviews" textFill="CORNFLOWERBLUE">
