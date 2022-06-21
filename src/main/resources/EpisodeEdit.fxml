@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,18 +17,24 @@
 
 <DialogPane maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="443.0" style="-fx-border-color: #a6a6a6;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.unipi.dii.lsmsdb.myPodcastDB.controller.EpisodeEditController">
    <content>
-      <AnchorPane maxHeight="-Infinity">
+      <AnchorPane maxHeight="-Infinity" prefWidth="427.0">
          <children>
             <BorderPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <center>
-                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="407.0" BorderPane.alignment="CENTER">
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="399.0" BorderPane.alignment="CENTER">
                      <children>
                         <HBox>
                            <VBox.margin>
                               <Insets bottom="6.0" />
                            </VBox.margin>
                            <children>
-                              <ImageView fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="icon" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@img/addPodcast.png" />
+                                 </image>
+                                 <HBox.margin>
+                                    <Insets left="-2.0" right="3.0" top="1.0" />
+                                 </HBox.margin></ImageView>
                               <Label fx:id="headerLabel" text="Update your episode" textFill="#5e5e5e">
                                  <font>
                                     <Font name="Corbel" size="22.0" />

@@ -1,5 +1,6 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -9,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -33,6 +35,9 @@ public class EpisodeEditController {
 
     @FXML
     private Label headerLabel;
+
+    @FXML
+    private ImageView icon;
 
     @FXML
     private DatePicker releaseDate;
@@ -132,11 +137,12 @@ public class EpisodeEditController {
             this.update.setText("Add");
         }
 
-        // else setup the text fields and date picker
+        // else setup the text fields, icon and date picker
         else {
             this.title.setText(episode.getName());
             this.description.setText(episode.getDescription());
             this.duration.setText("" + this.episode.getTimeMillis());
+            this.icon.setImage(ImageCache.getImageFromLocalPath("/img/updatePodcast.png"));
             this.releaseDate.setValue(Instant.ofEpochMilli(this.episode.getReleaseDate().getTime()).atZone(ZoneId.systemDefault()).toLocalDate());
         }
     }
