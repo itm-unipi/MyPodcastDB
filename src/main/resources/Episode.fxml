@@ -31,7 +31,7 @@
                   </Label>
                   <HBox alignment="CENTER_LEFT">
                      <children>
-                        <Label fx:id="title" prefHeight="42.0" prefWidth="495.0" text="Title">
+                        <Label fx:id="title" prefHeight="42.0" prefWidth="490.0" text="Title">
                            <font>
                               <Font name="Dubai Regular" size="22.0" />
                            </font>
@@ -78,6 +78,9 @@
                                  </cursor>
                               </Button>
                            </children>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
                         </HBox>
                      </children>
                   </HBox>

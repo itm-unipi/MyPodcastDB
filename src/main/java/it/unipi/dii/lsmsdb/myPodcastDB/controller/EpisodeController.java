@@ -174,12 +174,12 @@ public class EpisodeController {
             this.updateEpisode.setVisible(false);
             this.deleteEpisode.setVisible(false);
             this.buttonWrapper.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0;");
-            this.title.setStyle("-fx-min-width: 548; -fx-pref-width: 584; -fx-max-width: 584;");
+            this.title.setStyle("-fx-min-width: 575; -fx-pref-width: 575; -fx-max-width: 575;");
         } else if (sessionType.equals("Admin")) {
             this.updateEpisode.setVisible(false);
             this.updateEpisode.setStyle("-fx-min-width: 0; -fx-pref-width: 0; -fx-max-width: 0;");
-            this.buttonWrapper.setStyle("-fx-min-width: 135; -fx-pref-width: 135; -fx-max-width: 135;");
-            this.title.setStyle("-fx-min-width: 445; -fx-pref-width: 445; -fx-max-width: 445;");
+            this.buttonWrapper.setStyle("-fx-min-width: 40; -fx-pref-width: 40; -fx-max-width: 40;");
+            this.title.setStyle("-fx-min-width: 530; -fx-pref-width: 530; -fx-max-width: 530;");
         }
     }
 }
