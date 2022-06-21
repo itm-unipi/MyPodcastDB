@@ -318,15 +318,14 @@ public class ReviewPageController {
                 this.gridWrapper.setMaxHeight(Region.USE_COMPUTED_SIZE);
             }
 
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(getClass().getClassLoader().getResource("Review.fxml"));
+            // add the reviews to the loaded in memory and update the grid
+            this.loadedReviews.add(this.ownReview);
+            if (this.loadedReviews.size() > 9)
+                this.loadedReviews.remove(this.loadedReviews.size() - 1);
+            this.reloadReviewList();
 
-            // create new review element
-            AnchorPane newReview = fxmlLoader.load();
-            ReviewController controller = fxmlLoader.getController();
-            controller.setData(this.ownReview, this.mainPage, this.service, this);
-
-            this.reviewGrid.add(newReview, this.column, this.row++);
+            // move to the start of scroll
+            this.scroll.setVvalue(0.0);
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Failed to add new review");
         }
@@ -805,13 +804,10 @@ public class ReviewPageController {
     public void removeReviewFromLocalList(Review review) throws IOException {
         // update local copy of podcast
         this.podcast.deleteReview(review);
+        this.podcast.deletePreloadedReview(review);
         int ratingIntermediate = (int)(this.podcast.getRating() * 10);
         this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
         this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
-
-        // update review list in page
-        this.loadedReviews.remove(review);
-        this.reloadReviewList();
 
         // if is a User re-enable the form
         if (MyPodcastDB.getInstance().getSessionType().equals("User"))
@@ -823,6 +819,15 @@ public class ReviewPageController {
         if (MyPodcastDB.getInstance().getSessionType().equals("User"))
             this.ownReview.setAuthorUsername(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
         this.ownReview.setRating(0);
+
+        // update review list in page
+        for (Review r : this.loadedReviews) {
+            if (r.getId().equals(review.getId())) {
+                this.loadedReviews.remove(r);
+                break;
+            }
+        }
+        this.reloadReviewList();
     }
 
     private int getLoaded() {

@@ -216,7 +216,13 @@ public class Podcast {
     }
 
     public void deletePreloadedReview(Review review) {
-        this.preloadedReviews.remove(review);
+        // the remove can fail if the review parameter has podcastId != null
+        for (Review r : this.preloadedReviews) {
+            if (r.getId().equals(review.getId())) {
+                this.preloadedReviews.remove(r);
+                break;
+            }
+        }
     }
 
     @Override
