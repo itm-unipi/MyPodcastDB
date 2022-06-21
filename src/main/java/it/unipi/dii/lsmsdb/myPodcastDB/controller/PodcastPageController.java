@@ -310,15 +310,12 @@ public class PodcastPageController {
         DialogPane podcastUpdateDialogPane = fxmlLoader.load();
         PodcastUpdateController updateController = fxmlLoader.getController();
 
-        // create a copy of podcast
-        Podcast newPodcast = new Podcast(this.podcast);
-
         // pass podcast's data to dialog pane
         Dialog<ButtonType> dialog = new Dialog<>();
         dialog.initOwner(this.mainPage.getScene().getWindow());
         dialog.setDialogPane(podcastUpdateDialogPane);
         dialog.setTitle("Update Podcast");
-        updateController.setData(newPodcast, this.mainPage, this.service, this);
+        updateController.setData(this.podcast, this.mainPage, this.service, this);
 
         Stage stage = (Stage)dialog.getDialogPane().getScene().getWindow();
         stage.getIcons().add(ImageCache.getImageFromLocalPath("/img/logo.png"));
@@ -553,25 +550,25 @@ public class PodcastPageController {
     }
 
     public void updatePodcastPage() throws IOException {
-        this.title.setText(podcast.getName());
-        this.titleTooltip.setText(podcast.getName());
-        this.author.setText(podcast.getAuthorName());
-        this.country.setText(podcast.getCountry());
-        this.content.setText("Content: " + podcast.getContentAdvisoryRating());
-        Image image = ImageCache.getImageFromURL(podcast.getArtworkUrl600());
+        this.title.setText(this.podcast.getName());
+        this.titleTooltip.setText(this.podcast.getName());
+        this.author.setText(this.podcast.getAuthorName());
+        this.country.setText(this.podcast.getCountry());
+        this.content.setText("Content: " + this.podcast.getContentAdvisoryRating());
+        Image image = ImageCache.getImageFromURL(this.podcast.getArtworkUrl600());
         this.podcastImage.setImage(image);
-        this.category.setText(podcast.getPrimaryCategory());
-        List<String> secondaryCategories = podcast.getCategories();
-        if (secondaryCategories.contains(podcast.getPrimaryCategory()))
+        this.category.setText(this.podcast.getPrimaryCategory());
+        List<String> secondaryCategories = this.podcast.getCategories();
+        if (secondaryCategories.contains(this.podcast.getPrimaryCategory()))
             secondaryCategories.remove(podcast.getPrimaryCategory());
         if (secondaryCategories.isEmpty())
             secondaryCategories.add("None");
         this.secondaryCategory.setText(String.join(", ", secondaryCategories));
         this.secondaryCatTooltip.setText(String.join(", ", secondaryCategories));
-        this.numEpisodes.setText(podcast.getEpisodes().size() + " episodes");
-        int ratingIntermediate = (int)(podcast.getRating() * 10);
+        this.numEpisodes.setText(this.podcast.getEpisodes().size() + " episodes");
+        int ratingIntermediate = (int)(this.podcast.getRating() * 10);
         this.rating.setText("" + (ratingIntermediate / 10) + "," + (ratingIntermediate % 10));
-        this.numReviews.setText(" out of 5.0 • " + podcast.getReviews().size() + " reviews");
+        this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
 
         // order episodes by release date
         Collections.sort(this.podcast.getEpisodes(), new Comparator<Episode>() {
