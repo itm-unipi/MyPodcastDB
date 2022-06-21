@@ -174,12 +174,20 @@ public class User {
     }
 
     public void addReview(Review review) {
-        if (!this.reviews.contains(review))
-            this.reviews.add(review);
+        for (Review r : this.reviews)
+            if (r.getId().equals(review.getId()))
+                return;
+
+        this.reviews.add(review);
     }
 
     public void removeReview(Review review) {
-        this.reviews.remove(review);
+        for (Review r : this.reviews) {
+            if (r.getId().equals(review.getId())) {
+                this.reviews.remove(r);
+                break;
+            }
+        }
     }
 
     @Override

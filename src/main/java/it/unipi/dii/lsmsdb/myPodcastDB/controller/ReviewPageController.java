@@ -551,7 +551,7 @@ public class ReviewPageController {
         this.selectedAscending = false;
 
         // actor recognition and info loading from service
-        Boolean result = true;
+        boolean result = true;
         String sessionType = MyPodcastDB.getInstance().getSessionType();
         if (!sessionType.equals("User")) {
             // only the user can write review
@@ -579,25 +579,33 @@ public class ReviewPageController {
             this.ownReview.setRating(0);
 
             // check if user wrote a review
-            String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-            result = this.service.loadReviewPageForUser(this.podcast, username, this.ownReview);
+            List<Review> ownReviews = ((User)MyPodcastDB.getInstance().getSessionActor()).getReviews();
+            for (Review review : ownReviews) {
+                if (review.getPodcastId().equals(this.podcast.getId())) {
+                    // update the mongodb id of the review
+                    this.ownReview.setId(review.getId());
+                    break;
+                }
+            }
 
-            // profile picture
-            User user = (User)MyPodcastDB.getInstance().getSessionActor();
-            Image picture = ImageCache.getImageFromLocalPath(user.getPicturePath());
-            userPicture.setImage(picture);
-
-            // if user has already writter a review, disable form
-            if (this.ownReview != null && this.ownReview.getTitle() != null) {
+            // if user has already writter a review load it from Mongo and disable form
+            if (this.ownReview.getId() != null) {
+                Logger.info("User has already written a review");
+                result = service.loadReviewOfUser(this.ownReview);
                 this.disableForm();
 
                 // put own review as first
                 if (this.loadedReviews.contains(this.ownReview))
                     this.loadedReviews.remove(this.ownReview);
                 else if (this.loadedReviews.size() > 9)
-                    this.loadedReviews.remove(10);
+                    this.loadedReviews.remove(9);
                 this.loadedReviews.add(0, this.ownReview);
             }
+
+            // profile picture
+            User user = (User)MyPodcastDB.getInstance().getSessionActor();
+            Image picture = ImageCache.getImageFromLocalPath(user.getPicturePath());
+            userPicture.setImage(picture);
         }
 
         // check service result

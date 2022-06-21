@@ -3,9 +3,11 @@ package it.unipi.dii.lsmsdb.myPodcastDB.service;
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.UserMongo;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 
@@ -15,44 +17,25 @@ public class ReviewPageService {
 
     private PodcastMongo podcastMongo;
     private ReviewMongo reviewMongo;
+    private UserMongo userMongo;
 
     public ReviewPageService() {
         this.podcastMongo = new PodcastMongo();
         this.reviewMongo  = new ReviewMongo();
+        this.userMongo = new UserMongo();
     }
 
-    public Boolean loadReviewPageForUser(Podcast podcast, String username, Review ownReview) {
+    public Boolean loadReviewOfUser(Review ownReview) {
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
         // load own review if exists
-        Review own = this.reviewMongo.findSpecificReviewByAuthorName(podcast.getId(), username);
+        Review own = this.reviewMongo.findReviewById(ownReview.getId());
         if (own != null) {
             ownReview.copy(own);
         } else {
-            ownReview.setTitle(null);
-        }
-
-        MongoManager.getInstance().closeConnection();
-        return result;
-    }
-
-    public Boolean loadReviewPageForNotUser(Podcast podcast, List<Review> reviews, int limit, String attributeToOrder, Boolean ascending) {
-        MongoManager.getInstance().openConnection();
-        Boolean result = true;
-
-        // search the podcast
-        Podcast foundPodcast = this.podcastMongo.findPodcastById(podcast.getId());
-        if (foundPodcast == null) {
-            Logger.error("Podcast requested not found");
             result = false;
-        } else {
-            podcast.copy(foundPodcast);
         }
-
-        // load the podcast's reviews
-        Logger.info(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending).toString());
-        reviews.addAll(this.reviewMongo.findReviewsByPodcastId(podcast.getId(), 0, limit, attributeToOrder, ascending));
 
         MongoManager.getInstance().closeConnection();
         return result;
@@ -151,30 +134,45 @@ public class ReviewPageService {
             Logger.error("Failed to add review to MongoDB");
             result = -1;
         } else {
-            // create a copy of podcast and update it
-            Podcast podcast = new Podcast();
-            podcast.copy((Podcast)StageManager.getObjectIdentifier());
+            // create the updated user and update it
+            User user = new User();
+            user.copy((User)MyPodcastDB.getInstance().getSessionActor());
 
-            // add to reduced reviews and to preloaded reviews
-            podcast.addReview(review.getId(), review.getRating());
-            podcast.addPreloadedReview(review);
-
-            // update the podcast on mongo
-            boolean addEmb = this.podcastMongo.updateReviewsOfPodcast(podcast);
+            // add to embedded review and update it
+            user.addReview(review);
+            boolean addRev = this.userMongo.updateReviewsOfUser(user);
 
             // check the result
-            if (!addEmb) {
-                Logger.error("Failed to update review in podcast");
+            if (!addRev) {
+                Logger.error("Failed to update review in user");
                 result = -2;
 
-                // rollback
-                this.reviewMongo.deleteReviewById(review.getId());
+                // TODO: rollback
             } else {
-                StageManager.setObjectIdentifier(podcast);
-                Logger.success("Review successfully added");
+                // create a copy of podcast and update it
+                Podcast podcast = new Podcast();
+                podcast.copy((Podcast) StageManager.getObjectIdentifier());
+
+                // add to reduced reviews and to preloaded reviews
+                podcast.addReview(review.getId(), review.getRating());
+                podcast.addPreloadedReview(review);
+
+                // update the podcast on mongo
+                boolean addEmb = this.podcastMongo.updateReviewsOfPodcast(podcast);
+
+                // check the result
+                if (!addEmb) {
+                    Logger.error("Failed to update review in podcast");
+                    result = -3;
+
+                    // rollback
+                    this.reviewMongo.deleteReviewById(review.getId());
+                } else {
+                    StageManager.setObjectIdentifier(podcast);
+                    Logger.success("Review successfully added");
+                }
             }
         }
-
         MongoManager.getInstance().closeConnection();
         return result;
     }
@@ -191,43 +189,56 @@ public class ReviewPageService {
             Logger.error("Failed to remove review from MongoDB");
             result = -1;
         } else {
-            // create a copy of podcast and update it
-            Podcast podcast = new Podcast();
-            podcast.copy((Podcast)StageManager.getObjectIdentifier());
+            // create the updated user and update it
+            User user = new User();
+            user.copy((User)MyPodcastDB.getInstance().getSessionActor());
 
-            // remove from reduced reviews and from preloaded review
-            podcast.deleteReview(review);
-            podcast.deletePreloadedReview(review);
+            // add to embedded review and update it
+            user.removeReview(review);
+            boolean resEmb = this.userMongo.updateReviewsOfUser(user);
 
-            // if the podcast has more than 9 other reviews load another one as preloaded
-            int totalReviews = podcast.getReviews().size();
-            if (totalReviews > 9) {
-                Review otherReview = this.reviewMongo.findReviewById(podcast.getReviews().get(totalReviews - 10).getId());
-                if (otherReview != null)
-                    podcast.addInHeadPreloadedReview(otherReview);
-                else
-                    result = -2;
-            }
-
-            // update the podcast
-            boolean resPre = false;
-            if (result != -2)
-                resPre = this.podcastMongo.updateReviewsOfPodcast(podcast);
-
-            // check te result
-            if (result == -2) {
-                Logger.error("Failed to find review to update podcast");
-            } else if (!resPre) {
-                Logger.error("Failed to update review in podcast");
-                result = -3;
+            if (!resEmb) {
+                Logger.error("Failed to remove review embedded in user");
+                result = -2;
             } else {
-                StageManager.setObjectIdentifier(podcast);
-                Logger.success("Review successfully deleted");
+                // create a copy of podcast and update it
+                Podcast podcast = new Podcast();
+                podcast.copy((Podcast) StageManager.getObjectIdentifier());
+
+                // remove from reduced reviews and from preloaded review
+                podcast.deleteReview(review);
+                podcast.deletePreloadedReview(review);
+
+                // if the podcast has more than 9 other reviews load another one as preloaded
+                int totalReviews = podcast.getReviews().size();
+                if (totalReviews > 9) {
+                    Review otherReview = this.reviewMongo.findReviewById(podcast.getReviews().get(totalReviews - 10).getId());
+                    if (otherReview != null)
+                        podcast.addInHeadPreloadedReview(otherReview);
+                    else
+                        result = -3;
+                }
+
+                // update the podcast
+                boolean resPre = false;
+                if (result != -3)
+                    resPre = this.podcastMongo.updateReviewsOfPodcast(podcast);
+
+                // check te result
+                if (result == -3) {
+                    Logger.error("Failed to find review to update podcast");
+                } else if (!resPre) {
+                    Logger.error("Failed to update review in podcast");
+                    result = -4;
+                } else {
+                    StageManager.setObjectIdentifier(podcast);
+                    Logger.success("Review successfully deleted");
+                }
             }
         }
 
-        // check if is required to rollback the operation
-        if (result == -2 || result == -3)
+        // check if is required to rollback the operation TODO: modifica
+        if (result == -2 || result == -3 || result == -4)
             this.reviewMongo.addReview(review);
 
         MongoManager.getInstance().closeConnection();
