@@ -11,7 +11,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.StageManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -51,6 +50,12 @@ public class AuthorPreviewController {
 
     @FXML
     private Label counterFollowersLabel;
+
+    @FXML
+    private VBox followedLabel;
+
+    @FXML
+    private VBox unfollowedLabel;
 
     public AuthorPreviewController() {
         this.actorType = MyPodcastDB.getInstance().getSessionType();;
@@ -130,17 +135,22 @@ public class AuthorPreviewController {
             if (!this.isFollowing) {
                 this.isFollowing = authorProfileService.followAuthorAsAuthor(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+                showFollowedLabel();
             } else {
                 this.isFollowing = !authorProfileService.unfollowAuthorAsAuthor(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
+                followedLabel.setVisible(true);
+                showUnfollowedLabel();
             }
         } else if (this.actorType.equals("User")) {
             if (!this.isFollowing) {
                 this.isFollowing = authorProfileService.followAuthorAsUser(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+                showFollowedLabel();
             } else {
                 this.isFollowing = !authorProfileService.unfollowAuthorAsUser(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
+                showUnfollowedLabel();
             }
         } else {
             Logger.error("Operation not allowed!");
@@ -153,21 +163,43 @@ public class AuthorPreviewController {
             if (!this.isFollowing) {
                 this.isFollowing = homePageService.followAuthorAsAuthor(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+                showFollowedLabel();
             } else {
                 this.isFollowing = !homePageService.unfollowAuthorAsAuthor(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
+                showUnfollowedLabel();
             }
         } else if (this.actorType.equals("User")) {
             if (!this.isFollowing) {
                 this.isFollowing = homePageService.followAuthorAsUser(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
+                showFollowedLabel();
             } else {
                 this.isFollowing = !homePageService.unfollowAuthorAsUser(this.author);
                 this.followStatus.setImage(ImageCache.getImageFromLocalPath("/img/follow.png"));
+                showUnfollowedLabel();
             }
         } else {
             Logger.error("Operation not allowed!");
         }
+    }
+
+    void showFollowedLabel() {
+        this.followedLabel.setVisible(true);
+        this.unfollowedLabel.setVisible(false);
+        FadeTransition fadeButton = new FadeTransition(Duration.seconds(2), this.followedLabel);
+        fadeButton.setFromValue(1);
+        fadeButton.setToValue(0);
+        fadeButton.play();
+    }
+
+    void showUnfollowedLabel() {
+        this.followedLabel.setVisible(false);
+        this.unfollowedLabel.setVisible(true);
+        FadeTransition fadeButton = new FadeTransition(Duration.seconds(2), this.unfollowedLabel);
+        fadeButton.setFromValue(1);
+        fadeButton.setToValue(0);
+        fadeButton.play();
     }
 
     void updateFollowersCounter(boolean increment) {

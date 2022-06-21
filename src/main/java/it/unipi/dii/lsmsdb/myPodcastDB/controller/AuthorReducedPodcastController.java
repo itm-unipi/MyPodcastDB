@@ -54,7 +54,19 @@ public class AuthorReducedPodcastController {
     private VBox boxWatchlist;
 
     @FXML
+    private VBox btnWatchlist;
+
+    @FXML
+    private VBox btnDeletePodcast;
+
+    @FXML
     private ImageView watchlistStatus;
+
+    @FXML
+    private VBox addedToWatchlistLabel;
+
+    @FXML
+    private VBox removedFromWatchlistLabel;
 
     /****** Reduced Podcast Events *******/
     @FXML
@@ -103,6 +115,7 @@ public class AuthorReducedPodcastController {
         // Only the author of the podcast or admins can delete it
         if ((actorType.equals("Author") && StageManager.getObjectIdentifier().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getName()))) {
             boxDeletePodcast.setVisible(true);
+            boxWatchlist.setVisible(false);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), boxDeletePodcast);
             fadeAuthorImage.setFromValue(0);
             fadeAuthorImage.setToValue(1.0);
@@ -111,6 +124,7 @@ public class AuthorReducedPodcastController {
 
         if (MyPodcastDB.getInstance().getSessionType().equals("User")) {
             boxWatchlist.setVisible(true);
+            boxDeletePodcast.setVisible(false);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), boxWatchlist);
             fadeAuthorImage.setFromValue(0);
             fadeAuthorImage.setToValue(1.0);
@@ -129,11 +143,9 @@ public class AuthorReducedPodcastController {
             fadeAuthorImage.setFromValue(1.0);
             fadeAuthorImage.setToValue(0);
             fadeAuthorImage.play();
-            boxDeletePodcast.setVisible(false);
         }
 
         if (MyPodcastDB.getInstance().getSessionType().equals("User")) {
-            boxWatchlist.setVisible(false);
             FadeTransition fadeAuthorImage = new FadeTransition(Duration.seconds(0.3), boxWatchlist);
             fadeAuthorImage.setFromValue(1.0);
             fadeAuthorImage.setToValue(0);
@@ -145,23 +157,22 @@ public class AuthorReducedPodcastController {
 
     @FXML
     void onMouseHoverDeletePodcast(MouseEvent event) {
-        Logger.info("we");
-        this.boxDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25");
+        this.btnDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25");
     }
 
     @FXML
     void onMouseExitedDeletePodcast(MouseEvent event) {
-        this.boxDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25");
+        this.btnDeletePodcast.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25");
     }
 
     @FXML
     void onMouseHoverWatchlist(MouseEvent event) {
-        this.boxWatchlist.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25");
+        this.btnWatchlist.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #e0e0e0; -fx-border-radius: 25");
     }
 
     @FXML
     void onMouseExitedWatchlist(MouseEvent event) {
-        this.boxWatchlist.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25");
+        this.btnWatchlist.setStyle("-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25");
     }
 
     @FXML
@@ -183,11 +194,13 @@ public class AuthorReducedPodcastController {
             Logger.info("Removing from watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
             this.inWatchlist = !authorProfileService.removePodcastFromWatchlist(podcast);
+            showRemovedLabel();
         } else {
             // TODO: aggiungere alert se watchlist è troppo grande
             Logger.info("Adding in watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
             this.inWatchlist = authorProfileService.addPodcastInWatchlist(podcast);
+            showAddedLabel();
         }
     }
 
@@ -197,12 +210,32 @@ public class AuthorReducedPodcastController {
             Logger.info("Removing from watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
             this.inWatchlist = !searchService.removePodcastFromWatchlist(podcast);
+            showRemovedLabel();
         } else {
             // TODO: aggiungere alert se watchlist è troppo grande
             Logger.info("Adding in watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
             this.inWatchlist = searchService.addPodcastInWatchlist(podcast);
+            showAddedLabel();
         }
+    }
+
+    void showAddedLabel() {
+        this.addedToWatchlistLabel.setVisible(true);
+        this.removedFromWatchlistLabel.setVisible(false);
+        FadeTransition fadeButton = new FadeTransition(Duration.seconds(1.5), this.addedToWatchlistLabel);
+        fadeButton.setFromValue(1);
+        fadeButton.setToValue(0);
+        fadeButton.play();
+    }
+
+    void showRemovedLabel() {
+        this.addedToWatchlistLabel.setVisible(false);
+        this.removedFromWatchlistLabel.setVisible(true);
+        FadeTransition fadeButton = new FadeTransition(Duration.seconds(1.5), this.removedFromWatchlistLabel);
+        fadeButton.setFromValue(1);
+        fadeButton.setToValue(0);
+        fadeButton.play();
     }
 
     /*************************************/

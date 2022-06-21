@@ -37,7 +37,6 @@ public class SearchService {
     public void searchAsUser(String searchText, List<Podcast> podcastsMatch, List<Author> authorsMatch, List<User> usersMatch, int limit, Triplet<Boolean, Boolean, Boolean> filters) {
         Logger.info("Searching as Registered User");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         // Searching for podcasts
         if (filters.getValue0()) {
@@ -60,7 +59,6 @@ public class SearchService {
                 usersMatch.addAll(users);
         }
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
     }
 

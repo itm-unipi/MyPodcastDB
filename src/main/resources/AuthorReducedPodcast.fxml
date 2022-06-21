@@ -30,46 +30,74 @@
                   </ImageView>
                </children>
             </VBox>
-            <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="790.0">
+            <StackPane>
                <children>
-                  <HBox alignment="CENTER_LEFT">
+                  <VBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="84.0" prefWidth="790.0">
                      <children>
-                        <Label fx:id="podcastName" onMouseClicked="#onClickReducedPodcast" text="&lt;podcast_name&gt;">
+                        <HBox alignment="CENTER_LEFT">
+                           <children>
+                              <Label fx:id="podcastName" onMouseClicked="#onClickReducedPodcast" text="&lt;podcast_name&gt;">
+                                 <font>
+                                    <Font name="Corbel Light" size="20.0" />
+                                 </font>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                                 <cursor>
+                                    <Cursor fx:constant="HAND" />
+                                 </cursor>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="&lt;category&gt;">
                            <font>
-                              <Font name="Corbel Light" size="20.0" />
+                              <Font name="Corbel Light" size="14.0" />
                            </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
                         </Label>
                      </children>
-                  </HBox>
-                  <Label fx:id="podcastCategory" prefHeight="18.0" prefWidth="415.0" text="&lt;category&gt;">
-                     <font>
-                        <Font name="Corbel Light" size="14.0" />
-                     </font>
-                  </Label>
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="addedToWatchlistLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-radius: 8; -fx-border-radius: 8;" translateX="370.0" visible="false">
+                     <children>
+                        <Label text="Added">
+                           <font>
+                              <Font name="Corbel" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="removedFromWatchlistLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: white; -fx-border-color: #eaeaea; -fx-background-radius: 8; -fx-border-radius: 8;" translateX="360.0" visible="false">
+                     <children>
+                        <Label text="Removed">
+                           <font>
+                              <Font name="Corbel" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </VBox>
                </children>
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </VBox>
+            </StackPane>
             <StackPane>
                <HBox.margin>
                   <Insets left="6.0" right="1.0" />
                </HBox.margin>
                <children>
-                  <VBox alignment="CENTER">
+                  <VBox fx:id="boxWatchlist" alignment="CENTER" visible="false">
                      <children>
-                        <VBox fx:id="boxWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverWatchlist" onMouseExited="#onMouseExitedWatchlist" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                        <VBox fx:id="btnWatchlist" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseClicked="#onClickWatchlist" onMouseEntered="#onMouseHoverWatchlist" onMouseExited="#onMouseExitedWatchlist" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>
                            <children>
-                              <ImageView fx:id="watchlistStatus" fitHeight="26.0" fitWidth="26.0" onMouseClicked="#onClickWatchlist" pickOnBounds="true" preserveRatio="true">
+                              <ImageView fx:id="watchlistStatus" fitHeight="26.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
                                     <Image url="@img/addWatchlist.png" />
                                  </image>
@@ -87,9 +115,9 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <VBox alignment="CENTER">
+                  <VBox fx:id="boxDeletePodcast" alignment="CENTER" visible="false">
                      <children>
-                        <VBox fx:id="boxDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;" visible="false">
+                        <VBox fx:id="btnDeletePodcast" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onMouseEntered="#onMouseHoverDeletePodcast" onMouseExited="#onMouseExitedDeletePodcast" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: white; -fx-background-radius: 25; -fx-border-color: #eaeaea; -fx-border-radius: 25;">
                            <VBox.margin>
                               <Insets />
                            </VBox.margin>

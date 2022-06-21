@@ -47,6 +47,33 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </VBox>
+                  <VBox fx:id="unfollowedLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #eaeaea; -fx-border-radius: 8;" visible="false">
+                     <children>
+                        <Label text="Unfollowed">
+                           <font>
+                              <Font name="Corbel" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                     <padding>
+                        <Insets bottom="4.0" left="6.0" right="6.0" top="4.0" />
+                     </padding>
+                  </VBox>
+                  <VBox fx:id="followedLabel" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: white; -fx-background-radius: 8; -fx-border-color: #eaeaea; -fx-border-radius: 8;" visible="false">
+                     <children>
+                        <Label text="Followed">
+                           <font>
+                              <Font name="Corbel" size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets bottom="4.0" left="6.0" right="6.0" top="4.0" />
+                     </padding>
+                  </VBox>
                </children>
             </StackPane>
             <Label fx:id="nameAuthorFollowed" alignment="CENTER" onMouseClicked="#onClickAuthorName" text="&lt;author_name&gt;">

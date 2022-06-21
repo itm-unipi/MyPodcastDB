@@ -87,7 +87,7 @@
                   <Insets bottom="3.0" left="7.0" right="7.0" top="1.0" />
                </padding>
             </HBox>
-            <HBox fx:id="watchlistRemovedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-22.0" translateY="-89.0">
+            <HBox fx:id="watchlistRemovedMessage" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" opacity="0.0" style="-fx-background-color: white; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #eaeaea;" translateX="-21.0" translateY="-89.0">
                <children>
                   <Label fx:id="messageText1" text="Removed">
                      <font>
