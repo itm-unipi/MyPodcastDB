@@ -380,15 +380,14 @@ public class ActorPreviewController {
         this.actorImage.setImage(ImageCache.getImageFromLocalPath(author.getPicturePath()));
         this.actorName.setText(author.getName());
 
-        trashButtonArea.setVisible(false);
         toolTip.setOpacity(0.0);
+        trashButtonArea.setVisible(false);
+        followButtonArea.setVisible(false);
         if(isFollowed){
-            followButtonArea.setVisible(true);
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             followStatus = true;
         }
-        else
-            followButtonArea.setVisible(false);
+
     }
     public void setData(AnchorPane mainPage, User user) {
         this.actorType = "User";
@@ -426,7 +425,6 @@ public class ActorPreviewController {
         followButtonArea.setVisible(false);
         toolTip.setOpacity(0.0);
         if(isFollowed){
-
             followButton.setImage(ImageCache.getImageFromLocalPath("/img/unfollow.png"));
             followStatus = true;
         }

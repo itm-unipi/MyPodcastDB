@@ -24,7 +24,6 @@ import java.util.List;
 
 public class UserPageService {
 
-    //---------------- GIANLUCA ---------------------
     private UserMongo userMongoManager;
     private PodcastMongo podcastMongoManager;
     private UserNeo4j userNeo4jManager;
@@ -51,15 +50,12 @@ public class UserPageService {
             List<Author> followedAuthors,
             List<User> followedUsers,
             int limitPodcast,
-            int limitActor,
-            int podcastRowSize
+            int limitActor
             ){
 
         Logger.info("Starting loadUserPageProfile service ...");
 
         int res;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
         boolean ownerMode = false;
 
         //load user info from mongo (if it's the owner, the info are already in session)
@@ -68,7 +64,8 @@ public class UserPageService {
             pageOwner.copy(user);
             ownerMode = true;
         }
-        else{
+        else{ //only this operation uses mongo
+            MongoManager.getInstance().openConnection();
             User user = userMongoManager.findUserByUsername(pageOwner.getUsername());
             if (user != null)
                 pageOwner.copy(user);
@@ -76,6 +73,7 @@ public class UserPageService {
                 pageOwner = null;
 
             ownerMode = false;
+            MongoManager.getInstance().closeConnection();
         }
         if(pageOwner == null)
             res = 1;
@@ -84,30 +82,35 @@ public class UserPageService {
             List<Author> authors;
             List<User> users;
 
-            //load podcasts in watchlist from neo4j
-            if(ownerMode) {
-                Logger.info("watchlist loaded from cache");
-                wPodcasts.addAll(WatchlistCache.getAllPodcastsInWatchlist());
-            }
-            else {
-                podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner.getUsername(), limitPodcast, 0);
-                if (podcasts != null)
-                    wPodcasts.addAll(podcasts);
-            }
-
-            //load liked podcasts from neo4j
-            if(ownerMode && LikedPodcastCache.getAllLikedPodcasts().size() >= podcastRowSize) {
+            //load liked podcasts from neo4j (if it's in ownerMode this is the only operation that uses a database)
+            if(ownerMode && LikedPodcastCache.getAllLikedPodcasts().size() >= limitPodcast) {
                 Logger.info("Liked podcast loaded from cache");
                 lPodcasts.addAll(LikedPodcastCache.getAllLikedPodcasts());
             }
             else {
+                Neo4jManager.getInstance().openConnection();
                 podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner.getUsername(), limitPodcast, 0);
                 if (podcasts != null) {
                     lPodcasts.addAll(podcasts);
                     if(ownerMode)
                         LikedPodcastCache.addPodcastList(podcasts);
                 }
+                if(ownerMode)
+                    Neo4jManager.getInstance().closeConnection();
             }
+
+            //load podcasts in watchlist from neo4j
+            if(ownerMode) {
+                Logger.info("watchlist loaded from cache");
+                wPodcasts.addAll(WatchlistCache.getAllPodcastsInWatchlist());
+            }
+            else {
+                //neo4j connection already opened
+                podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner.getUsername(), limitPodcast, 0);
+                if (podcasts != null)
+                    wPodcasts.addAll(podcasts);
+            }
+
 
             //load followed authors from neo4j
             if(ownerMode) {
@@ -115,6 +118,7 @@ public class UserPageService {
                 followedAuthors.addAll(FollowedAuthorCache.getAllFollowedAuthors());
             }
             else {
+                //neo4j connection already opened
                 authors = authorNeo4jManager.showFollowedAuthorsByUser(pageOwner.getUsername(), limitActor, 0);
                 if (authors != null)
                     followedAuthors.addAll(authors);
@@ -126,6 +130,7 @@ public class UserPageService {
                 followedUsers.addAll(FollowedUserCache.getAllFollowedUsers());
             }
             else {
+                //neo4j connection already opened
                 users = userNeo4jManager.showFollowedUsers(pageOwner.getUsername(), limitActor, 0);
                 if (users != null)
                     followedUsers.addAll(users);
@@ -134,8 +139,8 @@ public class UserPageService {
             res = 0;
         }
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
+        if(!ownerMode) //if is in ownerMode the connection is already closed
+            Neo4jManager.getInstance().closeConnection();
         return res;
     }
 
@@ -263,40 +268,10 @@ public class UserPageService {
         //update authorName of reviews made by the user embedded in podcast
         else if(!oldUser.getUsername().equals(newUser.getUsername())){
 
-            List<Review> reviews = newUser.getReviews();
-            boolean rollback = false;
-            int size = reviews.size();
-            for(int i = 0; i < size; i++){
-                Review review = reviews.get(i);
-                String podcastId = review.getPodcastId();
-                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
-                if(!rollback && podcast == null) {
-                    res = 7;
-                    rollback = true;
-                    size = i;
-                    i = -1;
-                    continue;
-                }
-                else if(podcast == null)
-                    continue;
-
-                for (Review rev : podcast.getPreloadedReviews())
-                    if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
-                        if(!rollback)
-                            rev.setAuthorUsername(newUser.getUsername());
-                        else
-                            rev.setAuthorUsername(oldUser.getUsername());
-                        if (!rollback && !podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
-                            res = 7;
-                            rollback = true;
-                            size = i;
-                            i = -1;
-                        }
-                        break;
-                    }
-
-            }
-            if(res == 7) {
+            int updated = updatePreloadedReviews(newUser.getUsername(), newUser.getReviews(), newUser.getReviews().size());
+            if(updated != 0) {
+                res = 7;
+                updatePreloadedReviews(oldUser.getUsername(), oldUser.getReviews(), updated);
                 userMongoManager.updateUser(oldUser);
                 if (!oldUser.getUsername().equals(newUser.getUsername()) || !oldUser.getPicturePath().equals(newUser.getPicturePath()))
                     userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
@@ -305,7 +280,6 @@ public class UserPageService {
             else
                 res = 0;
         }
-
         else
             res = 0;
 
@@ -334,47 +308,17 @@ public class UserPageService {
             userMongoManager.addUser(user);
         }
         else{
-            //update authorName of reviews made by the user embedded in podcast
-            List<Review> reviews = user.getReviews();
-            boolean rollback = false;
-            int size = reviews.size();
-            for(int i = 0; i < size; i++){
-                Review review = reviews.get(i);
-                String podcastId = review.getPodcastId();
-                Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
-                if(!rollback && podcast == null) {
-                    res = 4;
-                    rollback = true;
-                    size = i;
-                    i = -1;
-                    continue;
-                }
-                else if(podcast == null)
-                    continue;
 
-                for (Review rev : podcast.getPreloadedReviews())
-                    if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
-                        if(!rollback)
-                            rev.setAuthorUsername("Removed account");
-                        else
-                            rev.setAuthorUsername(user.getUsername());
-                        if (!rollback && !podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast)) {
-                            res = 4;
-                            rollback = true;
-                            size = i;
-                            i = -1;
-                        }
-                        break;
-                    }
-
-            }
-            if(res == 4) {
+            int updated = updatePreloadedReviews("Removed account", user.getReviews(), user.getReviews().size());
+            if(updated != 0) {
+                res = 4;
+                updatePreloadedReviews(user.getUsername(), user.getReviews(), updated);
                 for(Review review : user.getReviews())
                     reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
                 userMongoManager.addUser(user);
             }
-            //delete user on neo4j TODO: manca il recupero delle review embedded nel podcast
             else if(!userNeo4jManager.deleteUser(user.getUsername())){
+                updatePreloadedReviews(user.getUsername(), user.getReviews(), user.getReviews().size());
                 for(Review review : user.getReviews())
                     reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
                 userMongoManager.addUser(user);
@@ -382,7 +326,9 @@ public class UserPageService {
             }
             else
                 res = 0;
+
         }
+
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;
@@ -592,6 +538,29 @@ public class UserPageService {
         }
         Neo4jManager.getInstance().closeConnection();
         return res;
+    }
+
+
+    int updatePreloadedReviews(String username, List<Review> reviews, int size){
+
+        for(int i = 0; i < size; i++) {
+            Review review = reviews.get(i);
+            String podcastId = review.getPodcastId();
+            Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
+            if (podcast == null)
+                return i;
+
+            for (Review rev : podcast.getPreloadedReviews())
+                if (rev.getId().equals(review.getId())) { //only one review of a user can be in a podcast
+
+                    rev.setAuthorUsername(username);
+
+                    if (!podcastMongoManager.updatePreloadedReviewsOfPodcast(podcast))
+                        return i;
+                    break;
+                }
+        }
+        return 0;
     }
 
 }

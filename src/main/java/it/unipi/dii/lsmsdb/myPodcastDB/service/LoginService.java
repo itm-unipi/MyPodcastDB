@@ -22,7 +22,6 @@ import java.util.List;
 
 public class LoginService {
 
-    //---------------- GIANLUCA ---------------------
     private UserMongo userMongoManager;
     private AuthorMongo authorMongoManager;
     private AdminMongo adminMongoManager;

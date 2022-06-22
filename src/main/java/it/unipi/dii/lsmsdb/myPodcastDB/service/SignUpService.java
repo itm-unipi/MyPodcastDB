@@ -18,7 +18,6 @@ import java.util.List;
 
 public class SignUpService {
 
-    //---------------- GIANLUCA ---------------------
     private UserMongo userMongoManager;
     private UserNeo4j userNeo4jManager;
     private AuthorMongo authorMongoManager;

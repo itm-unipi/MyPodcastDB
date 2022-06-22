@@ -984,8 +984,8 @@ public class UserPageController {
                 actorType,
                 sessionActorName,
                 pageOwner, wPodcasts, lPodcasts, authors, users,
-                newRequestPodcast, newRequestActor,
-                podcastRowSize);
+                newRequestPodcast, newRequestActor
+                );
 
         if(res == 1){
             Logger.error("User not exists");
