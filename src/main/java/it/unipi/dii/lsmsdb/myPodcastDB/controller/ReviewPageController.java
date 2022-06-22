@@ -323,6 +323,7 @@ public class ReviewPageController {
             if (this.loadedReviews.size() > 9)
                 this.loadedReviews.remove(this.loadedReviews.size() - 1);
             this.reloadReviewList();
+            this.reloadProgressBars();
 
             // move to the start of scroll
             this.scroll.setVvalue(0.0);
@@ -638,40 +639,7 @@ public class ReviewPageController {
             this.numReviews.setText(" out of 5.0 • " + this.podcast.getReviews().size() + " reviews");
 
             // calculate the progress bar for ratings
-            int[] numReview = new int[5];
-            for (Review review : this.podcast.getReviews()) {
-                switch (review.getRating()) {
-                    case 1:
-                        numReview[0]++;
-                        break;
-                    case 2:
-                        numReview[1]++;
-                        break;
-                    case 3:
-                        numReview[2]++;
-                        break;
-                    case 4:
-                        numReview[3]++;
-                        break;
-                    case 5:
-                        numReview[4]++;
-                        break;
-                }
-            }
-            if (this.podcast.getReviews().size() != 0) {
-                this.oneStar.setPrefWidth(((float) numReview[0] / this.podcast.getReviews().size()) * 172);
-                this.twoStars.setPrefWidth(((float) numReview[1] / this.podcast.getReviews().size()) * 172);
-                this.threeStars.setPrefWidth(((float) numReview[2] / this.podcast.getReviews().size()) * 172);
-                this.fourStars.setPrefWidth(((float) numReview[3] / this.podcast.getReviews().size()) * 172);
-                this.fiveStars.setPrefWidth(((float) numReview[4] / this.podcast.getReviews().size()) * 172);
-            } else {
-                this.oneStar.setPrefWidth(0);
-                this.twoStars.setPrefWidth(0);
-                this.threeStars.setPrefWidth(0);
-                this.fourStars.setPrefWidth(0);
-                this.fiveStars.setPrefWidth(0);
-            }
-
+            this.reloadProgressBars();
             // insert reviews in grid
             this.reloadReviewList();
 
@@ -828,6 +796,45 @@ public class ReviewPageController {
             }
         }
         this.reloadReviewList();
+
+        // reload the progress bar
+        this.reloadProgressBars();
+    }
+
+    private void reloadProgressBars() {
+        int[] numReview = new int[5];
+        for (Review review : this.podcast.getReviews()) {
+            switch (review.getRating()) {
+                case 1:
+                    numReview[0]++;
+                    break;
+                case 2:
+                    numReview[1]++;
+                    break;
+                case 3:
+                    numReview[2]++;
+                    break;
+                case 4:
+                    numReview[3]++;
+                    break;
+                case 5:
+                    numReview[4]++;
+                    break;
+            }
+        }
+        if (this.podcast.getReviews().size() != 0) {
+            this.oneStar.setPrefWidth(((float) numReview[0] / this.podcast.getReviews().size()) * 172);
+            this.twoStars.setPrefWidth(((float) numReview[1] / this.podcast.getReviews().size()) * 172);
+            this.threeStars.setPrefWidth(((float) numReview[2] / this.podcast.getReviews().size()) * 172);
+            this.fourStars.setPrefWidth(((float) numReview[3] / this.podcast.getReviews().size()) * 172);
+            this.fiveStars.setPrefWidth(((float) numReview[4] / this.podcast.getReviews().size()) * 172);
+        } else {
+            this.oneStar.setPrefWidth(0);
+            this.twoStars.setPrefWidth(0);
+            this.threeStars.setPrefWidth(0);
+            this.fourStars.setPrefWidth(0);
+            this.fiveStars.setPrefWidth(0);
+        }
     }
 
     private int getLoaded() {
