@@ -86,6 +86,7 @@ public class HomePageService {
 
         Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
+        Logger.info("Homepage loaded");
     }
 
     public void loadHomepageAsUnregistered(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
@@ -106,6 +107,7 @@ public class HomePageService {
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Homepage loaded");
     }
 
     public boolean loadMoreSuggested(List<Podcast> basedOnFollowedUsers, int limit, int skip) {
@@ -122,6 +124,7 @@ public class HomePageService {
         Logger.info("No more podcasts: " + noMorePodcasts);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More suggested podcasts based on followed users loaded");
         return noMorePodcasts;
     }
 
@@ -138,6 +141,7 @@ public class HomePageService {
         Logger.info("No more podcasts: " + noMorePodcastsTopGenres);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More top genres podcasts loaded");
         return noMorePodcastsTopGenres;
     }
 
@@ -154,6 +158,7 @@ public class HomePageService {
         }
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More podcasts based on podcasts in watchlist loaded");
         return noMorePodcasts;
     }
 
@@ -170,6 +175,7 @@ public class HomePageService {
         Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More suggested authors loaded");
         return noMoreAuthors;
     }
 
@@ -268,6 +274,7 @@ public class HomePageService {
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Homepage loaded");
     }
 
     /***** AUTHOR HOMEPAGE ******/
@@ -288,6 +295,7 @@ public class HomePageService {
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Homepage loaded");
     }
 
     public boolean followAuthorAsAuthor(Author author) {

@@ -62,6 +62,7 @@ public class AuthorProfileService {
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("Author profile loaded");
         return loadResult;
     }
 
@@ -90,11 +91,12 @@ public class AuthorProfileService {
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("Author profile loaded");
         return loadResult;
     }
 
     public boolean loadFollowedAuthorsAsUser(Author author, List<Author> followedAuthorsByAuthor, int limit, int skip) {
-        Logger.info("Retrieving followed authors");
+        Logger.info("Retrieving more followed authors");
         Neo4jManager.getInstance().openConnection();
 
         // Getting the authors followed by the author visited
@@ -106,11 +108,12 @@ public class AuthorProfileService {
         Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More followed authors retrieved");
         return noMoreAuthors;
     }
 
     public boolean loadFollowedAuthorsAsUnregistered(Author author, List<Author> followedAuthorsByAuthor, int limit, int skip) {
-        Logger.info("Retrieving followed authors");
+        Logger.info("Retrieving more followed authors");
         Neo4jManager.getInstance().openConnection();
 
         List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
@@ -121,6 +124,7 @@ public class AuthorProfileService {
         Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More followed authors retrieved");
         return noMoreAuthors;
     }
 
@@ -222,6 +226,7 @@ public class AuthorProfileService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Author profile loaded");
         return loadResult;
     }
 
@@ -250,6 +255,7 @@ public class AuthorProfileService {
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("Author profile loaded");
         return loadResult;
     }
 
@@ -266,6 +272,7 @@ public class AuthorProfileService {
         Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More followed authors retrieved");
         return noMoreAuthors;
     }
 
@@ -349,11 +356,12 @@ public class AuthorProfileService {
             }
         }
 
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+
         if (updateResult == 0)
             Logger.success("(" + newAuthor.getName() + ") Author updated successfully!");
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
         return updateResult;
     }
 
@@ -395,11 +403,12 @@ public class AuthorProfileService {
             }
         }
 
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+
         if (deleteResult == 0)
             Logger.success("(" + author.getName() + ") Author deleted successfully!");
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
         return deleteResult;
     }
 
@@ -454,11 +463,12 @@ public class AuthorProfileService {
             }
         }
 
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+
         if (addResult == 0)
             Logger.success("(" + podcast.getName() + ", " + podcast.getId() + ") Podcast added successfully!");
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
         return addResult;
     }
 
@@ -500,11 +510,12 @@ public class AuthorProfileService {
             }
         }
 
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance().closeConnection();
+
         if (deleteResult == 0)
             Logger.success(podcastId + " deleted successfully!");
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
         return deleteResult;
     }
 
@@ -534,6 +545,7 @@ public class AuthorProfileService {
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("Author profile loaded");
         return loadResult;
     }
 
@@ -549,6 +561,7 @@ public class AuthorProfileService {
         Logger.info("No more authors: " + noMoreAuthors);
 
         Neo4jManager.getInstance().closeConnection();
+        Logger.info("More followed authors retrieved");
         return noMoreAuthors;
     }
 
@@ -591,11 +604,12 @@ public class AuthorProfileService {
             }
         }
 
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance(). closeConnection();
+
         if (deleteResult == 0)
             Logger.info("(" + authorToDelete.getName() + ") Author deleted successfully!");
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance(). closeConnection();
         return deleteResult;
     }
 

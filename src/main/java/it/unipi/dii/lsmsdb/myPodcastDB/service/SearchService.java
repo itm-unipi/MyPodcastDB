@@ -60,6 +60,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Search finished");
     }
 
     public void searchAsUnregisteredUser(String searchText, List<Podcast> podcastsMatch, List<Author> authorsMatch, int limit, Triplet<Boolean, Boolean, Boolean> filters) {
@@ -81,6 +82,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Search finished");
     }
 
     public boolean loadMorePodcastsAsUser(String searchText, List<Podcast> podcastsMatch, int limit, int skip) {
@@ -96,6 +98,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More podcasts loaded");
         return noMorePodcasts;
     }
 
@@ -112,6 +115,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More podcasts loaded");
         return noMorePodcasts;
     }
 
@@ -128,6 +132,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More users loaded");
         return noMoreAuthors;
     }
 
@@ -144,6 +149,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More authors loaded");
         return noMoreAuthors;
     }
 
@@ -160,6 +166,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More users loaded");
         return noMoreUsers;
     }
 
@@ -300,6 +307,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Search finished");
     }
 
     public boolean loadMorePodcastsAsAdmin(String searchText, List<Podcast> podcastsMatch, int limit, int skip) {
@@ -315,6 +323,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More podcasts loaded");
         return noMorePodcasts;
     }
 
@@ -331,6 +340,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More users loaded");
         return noMoreUsers;
     }
 
@@ -347,6 +357,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More authors loaded");
         return noMoreAuthors;
     }
 
@@ -370,6 +381,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("Search finished");
     }
 
     public boolean loadMorePodcastsAsAuthor(String searchText, List<Podcast> podcastsMatch, int limit, int skip) {
@@ -385,6 +397,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More podcasts loaded");
         return noMorePodcasts;
     }
 
@@ -401,6 +414,7 @@ public class SearchService {
         }
 
         MongoManager.getInstance().closeConnection();
+        Logger.info("More authors loaded");
         return noMoreAuthors;
     }
 
