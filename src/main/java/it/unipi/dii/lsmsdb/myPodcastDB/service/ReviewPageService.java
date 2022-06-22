@@ -146,12 +146,7 @@ public class ReviewPageService {
             if (!addRev) {
                 Logger.error("Failed to update review in user");
                 result = -2;
-
-                // TODO: rollback anche di session
             } else {
-                // update session actor
-                ((User)MyPodcastDB.getInstance().getSessionActor()).copy(user);
-
                 // create a copy of podcast and update it
                 Podcast podcast = new Podcast();
                 podcast.copy((Podcast) StageManager.getObjectIdentifier());
@@ -167,15 +162,20 @@ public class ReviewPageService {
                 if (!addEmb) {
                     Logger.error("Failed to update review in podcast");
                     result = -3;
-
-                    // rollback
-                    this.reviewMongo.deleteReviewById(review.getId());
                 } else {
-                    StageManager.setObjectIdentifier(podcast);
                     Logger.success("Review successfully added");
+
+                    // update session actor and object identifier
+                    ((User)MyPodcastDB.getInstance().getSessionActor()).copy(user);
+                    StageManager.setObjectIdentifier(podcast);
                 }
             }
         }
+
+        // rollback if process failed
+        if (result != 0)
+            rollbackAddNewReview(result, review);
+
         MongoManager.getInstance().closeConnection();
         return result;
     }
@@ -204,9 +204,6 @@ public class ReviewPageService {
                 Logger.error("Failed to remove review embedded in user");
                 result = -2;
             } else {
-                // update session actor
-                ((User)MyPodcastDB.getInstance().getSessionActor()).copy(user);
-
                 // create a copy of podcast and update it
                 Podcast podcast = new Podcast();
                 podcast.copy((Podcast) StageManager.getObjectIdentifier());
@@ -237,17 +234,50 @@ public class ReviewPageService {
                     Logger.error("Failed to update review in podcast");
                     result = -4;
                 } else {
-                    StageManager.setObjectIdentifier(podcast);
                     Logger.success("Review successfully deleted");
+
+                    // update session actor and object identifier
+                    ((User)MyPodcastDB.getInstance().getSessionActor()).copy(user);
+                    StageManager.setObjectIdentifier(podcast);
                 }
             }
         }
 
-        // check if is required to rollback the operation TODO: modifica e sistema session actor
-        if (result == -2 || result == -3 || result == -4)
-            this.reviewMongo.addReview(review);
+        // rollback if process failed
+        if (result != 0)
+            rollbackDeleteReview(result, review);
 
         MongoManager.getInstance().closeConnection();
         return result;
+    }
+
+    private void rollbackAddNewReview(int result, Review review) {
+        // failed to update review in podcast
+        if (result == -3) {
+            // rollback the user
+            User user = (User)MyPodcastDB.getInstance().getSessionActor();
+            this.userMongo.updateReviewsOfUser(user);
+        }
+
+        // failed to update review in user
+        if (result <= -2) {
+            // delete the review
+            this.reviewMongo.deleteReviewById(review.getId());
+        }
+    }
+
+    private void rollbackDeleteReview(int result, Review review) {
+        // failed to update the podcast
+        if (result == -3) {
+            // rollback the user
+            User user = (User)MyPodcastDB.getInstance().getSessionActor();
+            this.userMongo.updateReviewsOfUser(user);
+        }
+
+        // failed to remove review embedded in user
+        if (result <= -2) {
+            // recreate the review
+            this.reviewMongo.addReview(review);
+        }
     }
 }
