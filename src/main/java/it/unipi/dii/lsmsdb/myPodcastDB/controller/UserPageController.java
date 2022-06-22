@@ -985,8 +985,7 @@ public class UserPageController {
                 sessionActorName,
                 pageOwner, wPodcasts, lPodcasts, authors, users,
                 newRequestPodcast, newRequestActor,
-                podcastRowSize, actorRowSize
-                );
+                podcastRowSize);
 
         if(res == 1){
             Logger.error("User not exists");
@@ -1027,13 +1026,12 @@ public class UserPageController {
         }
         else if (actorType.equals("User")){
             Logger.info("User visitor mode");
-            res = service.checkFollowUser(/*sessionActorName,*/ pageOwner);
 
-            if(res == 0) {
+            if(FollowedUserCache.getUser(pageOwner.getUsername()) != null) {
                 userPageFollowButton.setText("Unfollow");
                 isFollowed = true;
             }
-            else if(res == 1) {
+            else {
                 userPageFollowButton.setText("Follow");
                 isFollowed = false;
             }

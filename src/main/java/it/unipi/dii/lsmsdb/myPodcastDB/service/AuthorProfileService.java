@@ -331,7 +331,7 @@ public class AuthorProfileService {
         if (updateResult == 0) {
             if (!authorMongoManager.updateAuthor(newAuthor)) {
                 Logger.error("Error during the update of the author on Mongo");
-                updateResult = -4; // -3
+                updateResult = -4;
             } else if (!authorNeo4jManager.updateAuthor(oldAuthor.getName(), newAuthor.getName(), newAuthor.getPicturePath())) {
                 Logger.error("Error during the update of the author on Neo4J");
                 updateResult = -5;
@@ -341,17 +341,6 @@ public class AuthorProfileService {
                 if (!podcastMongoManager.updateAllPodcasts(oldAuthor.getName(), newAuthor.getName())) {
                     updateResult = -6;
                     updateAuthorRollback(updateResult, oldAuthor, newAuthor);
-                }
-
-                if (updateResult == 0) {
-                    // Updating information of the author object (java)
-                    List<Podcast> podcasts = new ArrayList<>();
-                    for (Podcast podcast : oldAuthor.getOwnPodcasts()) {
-                        podcast.setAuthorName(newAuthor.getName());
-                        podcasts.add(podcast);
-                    }
-
-                    newAuthor.setOwnPodcasts(podcasts);
                 }
             }
         }
@@ -396,7 +385,8 @@ public class AuthorProfileService {
 
                 if (deletedReviews < 0) {
                     deleteResult = -5;
-                    Logger.info("Erorr during the review's delete");
+                    Logger.info("Error during the review's delete");
+                    // TODO: qua manca la rollback
                 } else {
                     Logger.info("Deleted " + deletedReviews + " reviews associated to " + author.getName() + "'s podcasts");
                 }
@@ -598,6 +588,7 @@ public class AuthorProfileService {
                 if (deletedReviews < 0) {
                     deleteResult = -5;
                     Logger.info("Error during the review's delete");
+                    // TODO: qua manca la rollback
                 } else {
                     Logger.success("Deleted " + deletedReviews + " reviews associated to " + authorToDelete.getName() + "'s podcasts");
                 }
@@ -667,6 +658,7 @@ public class AuthorProfileService {
             }
         }
 
+        // TODO: qua vanno rollbackati i podcast su mongo, non su neo4j
         if (result <= -5) {
             Logger.info("Rollback due to the failure of the reviews' delete on Mongo");
             authorMongoManager.addAuthor(author);

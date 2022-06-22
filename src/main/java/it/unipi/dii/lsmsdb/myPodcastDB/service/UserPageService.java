@@ -52,8 +52,7 @@ public class UserPageService {
             List<User> followedUsers,
             int limitPodcast,
             int limitActor,
-            int podcastRowSize,
-            int actorRowSize
+            int podcastRowSize
             ){
 
         Logger.info("Starting loadUserPageProfile service ...");
@@ -249,7 +248,7 @@ public class UserPageService {
         else if (!userMongoManager.updateUser(newUser))
             res = 4;
         //update user on neo4j
-        else if (!oldUser.getUsername().equals(newUser.getUsername()) && !userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())) {
+        else if ((!oldUser.getUsername().equals(newUser.getUsername()) || !oldUser.getPicturePath().equals(newUser.getPicturePath())) && !userNeo4jManager.updateUser(oldUser.getUsername(), newUser.getUsername(), newUser.getPicturePath())) {
             userMongoManager.updateUser(oldUser);
             res = 5;
         }
@@ -257,7 +256,9 @@ public class UserPageService {
         else if(!oldUser.getUsername().equals(newUser.getUsername()) && reviewMongoManager.updateReviewsByAuthorUsername(oldUser.getUsername(), newUser.getUsername()) == -1){
             res = 6;
             userMongoManager.updateUser(oldUser);
-            userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+
+            if (!oldUser.getUsername().equals(newUser.getUsername()) || !oldUser.getPicturePath().equals(newUser.getPicturePath()))
+                userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
         }
         //update authorName of reviews made by the user embedded in podcast
         else if(!oldUser.getUsername().equals(newUser.getUsername())){
@@ -297,7 +298,8 @@ public class UserPageService {
             }
             if(res == 7) {
                 userMongoManager.updateUser(oldUser);
-                userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
+                if (!oldUser.getUsername().equals(newUser.getUsername()) || !oldUser.getPicturePath().equals(newUser.getPicturePath()))
+                    userNeo4jManager.updateUser(newUser.getUsername(), oldUser.getUsername(), oldUser.getPicturePath());
                 reviewMongoManager.updateReviewsByAuthorUsername(newUser.getUsername(), oldUser.getUsername());
             }
             else
@@ -313,26 +315,6 @@ public class UserPageService {
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return res;
-    }
-
-    public int checkFollowUser(/*String user1,*/ User user2){
-
-        Logger.info("Starting checkFollowUser service ...");
-        int res;
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        //check if user1 follows user2
-        //if(!userNeo4jManager.findUserFollowsUser(user1, user2))
-        if(FollowedUserCache.getUser(user2.getUsername()) == null)
-            res = 1;
-        else
-            res = 0;
-
-        Neo4jManager.getInstance().closeConnection();
-        MongoManager.getInstance().closeConnection();
-        return res;
-
     }
 
     public int deleteUserPageOwner(User user){
@@ -391,7 +373,7 @@ public class UserPageService {
                     reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
                 userMongoManager.addUser(user);
             }
-            //delete user on neo4j
+            //delete user on neo4j TODO: manca il recupero delle review embedded nel podcast
             else if(!userNeo4jManager.deleteUser(user.getUsername())){
                 for(Review review : user.getReviews())
                     reviewMongoManager.updateReviewByAuthorUsername(review.getId(), user.getUsername());
@@ -412,7 +394,6 @@ public class UserPageService {
 
 
         int res;
-        MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
         if(toAdd) {
@@ -439,7 +420,6 @@ public class UserPageService {
         }
 
         Neo4jManager.getInstance().closeConnection();
-        MongoManager.getInstance().closeConnection();
         return res;
     }
 

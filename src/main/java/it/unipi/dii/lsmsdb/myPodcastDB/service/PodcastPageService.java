@@ -180,25 +180,25 @@ public class PodcastPageService {
         List<String> removedCategories = new ArrayList<>();
 
         // check if is needed to update reduced podcast
-        Boolean updateReduced = false;
+        boolean updateReduced = false;
         if (!oldPodcast.getName().equals(newPodcast.getName()) || !oldPodcast.getReleaseDate().equals(newPodcast.getReleaseDate()) || !oldPodcast.getPrimaryCategory().equals(newPodcast.getPrimaryCategory()) || !oldPodcast.getArtworkUrl600().equals(newPodcast.getArtworkUrl600())) {
             updateReduced = true;
         }
 
         // check if is needed to update Neo4J (update name/artwork/categories)
-        Boolean updateNeo = false;
+        boolean updateNeo = false;
         if (!oldPodcast.getName().equals(newPodcast.getName()) || !oldPodcast.getArtworkUrl600().equals(newPodcast.getArtworkUrl600())) {
             updateNeo = true;
         }
 
         // check if is needed to update relations in Neo4J (categories)
-        Boolean updateRelNeo = false;
+        boolean updateRelNeo = false;
         if (!oldPodcast.getPrimaryCategory().equals(newPodcast.getPrimaryCategory()) || !oldPodcast.getCategories().equals(newPodcast.getCategories())) {
             updateRelNeo = true;
         }
 
         // update podcast on mongo
-        Boolean res = this.podcastMongo.updatePodcast(newPodcast);
+        boolean res = this.podcastMongo.updatePodcast(newPodcast);
         if (!res) {
             // reset the podcast object to the old status (for interface update)
             Logger.error("Podcast not updated on MongoDB");
@@ -207,7 +207,7 @@ public class PodcastPageService {
         } else {
             // update reduced podcast if needed
             if (updateReduced) {
-                Boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(newPodcast.getAuthorName(), newPodcast);
+                boolean resUpRed = this.authorMongo.updatePodcastOfAuthor(newPodcast.getAuthorName(), newPodcast);
                 if (!resUpRed) {
                     Logger.error("Reduced podcast not updated");
                     result = -2;
@@ -302,7 +302,7 @@ public class PodcastPageService {
         int result = 0;
 
         // delete podcast entity in mongo
-        Boolean resDelPod = this.podcastMongo.deletePodcastById(podcast.getId());
+        boolean resDelPod = this.podcastMongo.deletePodcastById(podcast.getId());
         if (!resDelPod) {
             Logger.error("Podcast not deleted");
             result = -1;
@@ -310,13 +310,13 @@ public class PodcastPageService {
 
         // remove reduced podcast from author
         else {
-            Boolean resDelRedPod = this.authorMongo.deletePodcastOfAuthor(podcast.getAuthorName(), podcast.getId());
+            boolean resDelRedPod = this.authorMongo.deletePodcastOfAuthor(podcast.getAuthorName(), podcast.getId());
             if (!resDelRedPod) {
                 Logger.error("Reduced podcast not deleted from author");
                 result = -2;
             } else {
                 // remove podcast entity from neo4j
-                Boolean resDelNeo = this.podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
+                boolean resDelNeo = this.podcastNeo4j.deletePodcastByPodcastId(podcast.getId());
                 if (!resDelNeo) {
                     Logger.error("Podcast not deleted from Neo4J");
                     result = -3;

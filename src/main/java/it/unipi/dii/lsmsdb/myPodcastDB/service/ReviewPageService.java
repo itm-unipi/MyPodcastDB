@@ -207,6 +207,7 @@ public class ReviewPageService {
             Logger.error("Failed to remove review from MongoDB");
             result = -1;
         } else {
+            // TODO: vedere casi Admin che elimina e caso di removed account
             // create the updated user and update it
             User user = new User();
             user.copy((User)MyPodcastDB.getInstance().getSessionActor());

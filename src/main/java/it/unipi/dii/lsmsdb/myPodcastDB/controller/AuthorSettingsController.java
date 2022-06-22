@@ -192,7 +192,6 @@ public class AuthorSettingsController {
             else
                 password = authorNewPassword.getText();
 
-            // if the default img has not index 0
             Author tempAuthor = new Author(author.getId(), authorName.getText(), password, authorEmail.getText(), "/img/authors/author" + this.counterImage + ".png");
 
             Logger.info("SESSION AUTHOR: " + oldAuthor);
@@ -214,6 +213,7 @@ public class AuthorSettingsController {
                         this.author.setEmail(authorEmail.getText());
                         this.author.setPassword(password);
                         this.author.setPicturePath(tempAuthor.getPicturePath());
+                        MyPodcastDB.getInstance().setSession(this.author, "Author");
 
                         Logger.success("Author updated (and commited): " + this.author);
 
