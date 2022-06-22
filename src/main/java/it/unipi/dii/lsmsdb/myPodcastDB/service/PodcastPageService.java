@@ -35,6 +35,8 @@ public class PodcastPageService {
     }
 
     public Boolean loadPodcastPageForUsers(Podcast podcast, Boolean[] status) {
+        Logger.info("Load Podcast Page Service for User");
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         Boolean result = true;
@@ -73,6 +75,8 @@ public class PodcastPageService {
             if (status[0] == null || status[1] == null) {
                 Logger.error("Like and watchlater info not found");
                 result = false;
+            } else {
+                Logger.success("Load Podcast Page Service for User ended");
             }
         }
 
@@ -82,6 +86,8 @@ public class PodcastPageService {
     }
 
     public Boolean loadPodcastPageForNotUser(Podcast podcast) {
+        Logger.info("Load Podcast Page Service for not User");
+
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
@@ -91,6 +97,7 @@ public class PodcastPageService {
             Logger.error("Podcast requested not found");
             result = false;
         } else {
+            Logger.success("Load Podcast Page Service for not User ended");
             podcast.copy(foundPodcast);
         }
 
@@ -99,6 +106,8 @@ public class PodcastPageService {
     }
 
     public Boolean setWatchLater(Podcast podcast, Boolean newStatus) {
+        Logger.info("Set Watchlater Service");
+
         Neo4jManager.getInstance().openConnection();
 
         // find if it has to add or delete the relation
@@ -129,6 +138,8 @@ public class PodcastPageService {
     }
 
     public Boolean setLike(Podcast podcast, Boolean newStatus) {
+        Logger.info("Set Like Service");
+
         Neo4jManager.getInstance().openConnection();
 
         // find if it has to add or delete the relation
@@ -159,6 +170,8 @@ public class PodcastPageService {
     }
 
     public int updatePodcast(Podcast oldPodcast, Podcast newPodcast) {
+        Logger.info("Update Podcast Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -282,6 +295,8 @@ public class PodcastPageService {
     }
 
     public int deletePodcast(Podcast podcast) {
+        Logger.info("Delete Podcast Service");
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
@@ -328,6 +343,8 @@ public class PodcastPageService {
     }
 
     public int addEpisode(Podcast podcast, Episode episode) {
+        Logger.info("Add Episode Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -365,6 +382,8 @@ public class PodcastPageService {
     }
 
     public int deleteEpisode(Podcast podcast, Episode episode) {
+        Logger.info("Delete Episode Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 

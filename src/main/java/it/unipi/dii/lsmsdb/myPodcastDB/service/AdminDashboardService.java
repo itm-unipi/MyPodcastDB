@@ -100,6 +100,8 @@ public class AdminDashboardService {
     }
 
     public List<String> loadAdminPage(List<Pair<String, Float>> averageAgeOfUsersPerFavouriteCategory, List<Pair<Podcast, Integer>> podcastsWithHighestNumberOfReviews, List<Pair<String, Integer>> countryWithHighestNumberOfPodcasts, Triplet<List<String>, List<String>, List<String>> topFavouriteCategoriesPerGender, List<Pair<String, Integer>> mostNumerousCategories, List<Pair<String, Integer>> mostAppreciatedCategory) {
+        Logger.info("Load Admin Page Service");
+
         MongoManager.getInstance().openConnection();
         List<String> updateTimes = new ArrayList<>();
 
@@ -134,10 +136,14 @@ public class AdminDashboardService {
         updateTimes.addAll(Arrays.stream(toAddTimes).toList());
 
         MongoManager.getInstance().closeConnection();
+        Logger.success("Load Admin Page Service ended");
+
         return updateTimes;
     }
 
     public int updateAverageAgeOfUsersPerFavouriteCategory(Date updateTime, int limit) {
+        Logger.info("Update Average Age of Users per Favourite Category Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -166,6 +172,8 @@ public class AdminDashboardService {
     }
 
     public int updatePodcastsWithHighestNumberOfReviews(Date updateTime, int limit) {
+        Logger.info("Update Podcasts with Highest Number of Reviews Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -194,6 +202,8 @@ public class AdminDashboardService {
     }
 
     public int updateCountryWithHighestNumberOfPodcasts(Date updateTime, int limit) {
+        Logger.info("Update Country with Highest Number of Podcasts Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -222,6 +232,8 @@ public class AdminDashboardService {
     }
 
     public int updateFavouriteCategoryForGender(Date updateTime, int limit) {
+        Logger.info("Update Favourite Category for Gender Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -252,6 +264,8 @@ public class AdminDashboardService {
     }
 
     public int updateMostNumerousCategory(Date updateTime, int limit) {
+        Logger.info("Update Most Numerous Category Service");
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
@@ -282,6 +296,8 @@ public class AdminDashboardService {
     }
 
     public int updateMostAppreciatedCategory(Date updateTime, int limit) {
+        Logger.info("Update Most Appreciated Category Service");
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
@@ -312,6 +328,8 @@ public class AdminDashboardService {
     }
 
     public int updatePodcastsWithHighestAverageRating(Date updateTime, int limit) {
+        Logger.info("Update Podcasts with Highest Average Rating Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -340,6 +358,8 @@ public class AdminDashboardService {
     }
 
     public int updatePodcastWithHighestAverageRatingPerCountry(Date updateTime, int limit) {
+        Logger.info("Update Podcast with Highest Average Rating per Country Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -368,6 +388,8 @@ public class AdminDashboardService {
     }
 
     public int updateMostFollowedAuthor(Date updateTime, int limit) {
+        Logger.info("Update Most Followed Author Service");
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
@@ -398,6 +420,8 @@ public class AdminDashboardService {
     }
 
     public int updateMostLikedPodcast(Date updateTime, int limit) {
+        Logger.info("Update Most Liked Podcast Service");
+
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int result = 0;
@@ -428,6 +452,8 @@ public class AdminDashboardService {
     }
 
     public boolean getUpdatedStatistic(int statisticId, Object statistic) {
+        Logger.info("Get Updated Statistic Service");
+
         MongoManager.getInstance().openConnection();
 
         String result = null;
@@ -447,7 +473,6 @@ public class AdminDashboardService {
                 result = this.queryMongo.getCountryWithHighestNumberOfPodcasts((List<Pair<String, Integer>>)statistic);
                 break;
 
-
             // Favourite Category For Gender
             case 3:
                 result = this.queryMongo.getFavouriteCategoryForGender(((Triplet<List<String>, List<String>, List<String>>)statistic).getValue0(), ((Triplet<List<String>, List<String>, List<String>>)statistic).getValue1(), ((Triplet<List<String>, List<String>, List<String>>)statistic).getValue2());
@@ -465,6 +490,11 @@ public class AdminDashboardService {
         }
 
         Neo4jManager.getInstance().closeConnection();
+
+        if (result != null)
+            Logger.success("Successfully got the Updated Statistic");
+        else
+            Logger.error("Failed to get the Updated Statistic");
 
         return result != null;
     }

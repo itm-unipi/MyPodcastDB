@@ -26,6 +26,8 @@ public class ReviewPageService {
     }
 
     public Boolean loadReviewOfUser(Review ownReview) {
+        Logger.info("Load Review of User Service");
+
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
@@ -33,8 +35,10 @@ public class ReviewPageService {
         Review own = this.reviewMongo.findReviewById(ownReview.getId());
         if (own != null) {
             ownReview.copy(own);
+            Logger.error("Successfully Loaded Review of User");
         } else {
             result = false;
+            Logger.error("Failed to Load Review of User");
         }
 
         MongoManager.getInstance().closeConnection();
@@ -42,6 +46,8 @@ public class ReviewPageService {
     }
 
     public boolean loadOtherReview(Podcast podcast, Review own, List<Review> reviews, int skip, int limit, String attributeToOrder, Boolean ascending) {
+        Logger.info("Load Reviews service");
+
         MongoManager.getInstance().openConnection();
         Boolean result = true;
 
@@ -118,11 +124,18 @@ public class ReviewPageService {
             reviews.addAll(requestedReviews);
         }
 
+        if (result)
+            Logger.success("Successfully Loaded the reviews");
+        else
+            Logger.error("Failed to Load Reviews");
+
         MongoManager.getInstance().closeConnection();
         return result;
     }
 
     public int addNewReview(Review review) {
+        Logger.info("Add Review Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
@@ -181,6 +194,8 @@ public class ReviewPageService {
     }
 
     public int deleteReview(Review review) {
+        Logger.info("Delete Review Service");
+
         MongoManager.getInstance().openConnection();
         int result = 0;
 
