@@ -15,6 +15,9 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PodcastPageService {
 
     private PodcastMongo podcastMongo;
@@ -158,17 +161,27 @@ public class PodcastPageService {
     public int updatePodcast(Podcast oldPodcast, Podcast newPodcast) {
         MongoManager.getInstance().openConnection();
         int result = 0;
-        Boolean updateReduced = false;
+
+        // list for an eventual rollback of relations on Neo4J
+        List<String> addedCategories = new ArrayList<>();
+        List<String> removedCategories = new ArrayList<>();
 
         // check if is needed to update reduced podcast
+        Boolean updateReduced = false;
         if (!oldPodcast.getName().equals(newPodcast.getName()) || !oldPodcast.getReleaseDate().equals(newPodcast.getReleaseDate()) || !oldPodcast.getPrimaryCategory().equals(newPodcast.getPrimaryCategory()) || !oldPodcast.getArtworkUrl600().equals(newPodcast.getArtworkUrl600())) {
             updateReduced = true;
         }
 
-        // check if is needed to update Neo4J
+        // check if is needed to update Neo4J (update name/artwork/categories)
         Boolean updateNeo = false;
         if (!oldPodcast.getName().equals(newPodcast.getName()) || !oldPodcast.getArtworkUrl600().equals(newPodcast.getArtworkUrl600())) {
             updateNeo = true;
+        }
+
+        // check if is needed to update relations in Neo4J (categories)
+        Boolean updateRelNeo = false;
+        if (!oldPodcast.getPrimaryCategory().equals(newPodcast.getPrimaryCategory()) || !oldPodcast.getCategories().equals(newPodcast.getCategories())) {
+            updateRelNeo = true;
         }
 
         // update podcast on mongo
@@ -189,15 +202,66 @@ public class PodcastPageService {
             }
 
             // update Neo4J if needed
-            if (result == 0 && updateNeo) {
+            if (result == 0 && (updateNeo || updateRelNeo)) {
                 Neo4jManager.getInstance().openConnection();
-                Boolean resUpNeo = this.podcastNeo4j.updatePodcast(newPodcast);
+
+                // update podcast in Neo4J if needed
+                boolean resUpNeo = true;
+                if (updateNeo)
+                    resUpNeo = this.podcastNeo4j.updatePodcast(newPodcast);
+
                 if (!resUpNeo) {
                     Logger.error("Podcast not updated on Neo4J");
                     result = -3;
-                } else {
-                    Neo4jManager.getInstance().closeConnection();
                 }
+
+                // update relations in neo if needed
+                if (result == 0 && updateRelNeo) {
+                    // get the list of relation to add/remove
+                    List<String> catToAdd = new ArrayList<>();
+                    List<String> catToRem = new ArrayList<>();
+                    getDifferencesBetweenCategories(oldPodcast, newPodcast, catToAdd, catToRem);
+
+                    // add new categories
+                    for (String category : catToAdd) {
+                        boolean resAddRel = this.podcastNeo4j.addPodcastBelongsToCategory(newPodcast, category);
+
+                        // check result
+                        if (resAddRel) {
+                            addedCategories.add(category);
+                        } else {
+                            result = -4;
+                            break;
+                        }
+                    }
+
+                    // remove old relations
+                    if (result != 0) {
+                        Logger.error("Failed to add a category on Neo4J");
+                    } else {
+                        // remove old categories
+                        for (String category : catToRem) {
+                            boolean resRemRel = this.podcastNeo4j.deletePodcastBelongsToCategory(newPodcast.getId(), category);
+
+                            // check result
+                            if (resRemRel) {
+                                removedCategories.add(category);
+                            } else {
+                                result = -5;
+                                break;
+                            }
+                        }
+
+                        // check the result
+                        if (result != 0) {
+                            Logger.error("Failed to remove a category on Neo4J");
+                        }
+                    }
+                }
+
+                // if there are no error close the connection
+                if (result == 0)
+                    Neo4jManager.getInstance().closeConnection();
             }
 
             if (result == 0)
@@ -206,8 +270,11 @@ public class PodcastPageService {
 
         // rollback if process failed
         if (result != 0) {
-            rollbackUpdatePodcast(result, oldPodcast, updateReduced);
-            Neo4jManager.getInstance().closeConnection();
+            rollbackUpdatePodcast(result, oldPodcast, updateReduced, addedCategories, removedCategories);
+
+            // close Neo4J connection if needed
+            if (updateNeo || updateRelNeo)
+                Neo4jManager.getInstance().closeConnection();
         }
 
         MongoManager.getInstance().closeConnection();
@@ -323,14 +390,59 @@ public class PodcastPageService {
         return result;
     }
 
-    private void rollbackUpdatePodcast(int result, Podcast oldPodcast, boolean updateReduced) {
-        // failed to update reduced podcast
-        if (result == -3 && updateReduced) {
+    // utility that find the differences between the old and the new categories after the podcast update
+    private void getDifferencesBetweenCategories(Podcast oldPodcast, Podcast newPodcast, List<String> catToAdd, List<String> catToRem) {
+        // old list of category
+        List<String> oldCategories = new ArrayList<>(oldPodcast.getCategories());
+        if (!oldCategories.contains(oldPodcast.getPrimaryCategory()))
+            oldCategories.add(oldPodcast.getPrimaryCategory());
+
+        // old list of category
+        List<String> newCategory = new ArrayList<>(newPodcast.getCategories());
+        if (!newCategory.contains(newPodcast.getPrimaryCategory()))
+            newCategory.add(newPodcast.getPrimaryCategory());
+
+        // find the categories to add
+        for (String category : newCategory)
+            if (!oldCategories.contains(category))
+                catToAdd.add(category);
+
+        // find the categories to remove
+        for (String category : oldCategories)
+            if (!newCategory.contains(category))
+                catToRem.add(category);
+
+        Logger.info("Categories that have to be added : " + catToAdd);
+        Logger.info("Categories that have to be removed : " + catToRem);
+    }
+
+    private void rollbackUpdatePodcast(int result, Podcast oldPodcast, boolean updateReduced, List<String> addedCategories, List<String> removedCategories) {
+        // failed to remove a category
+        if (result == -5) {
+            // rollback all the removed categories before fail
+            for (String category : removedCategories)
+                this.podcastNeo4j.addPodcastBelongsToCategory(oldPodcast, category);
+        }
+
+        // failed to add a category
+        if (result <= -4) {
+            // rollback the podcast in Neo4J
+            this.podcastNeo4j.updatePodcast(oldPodcast);
+
+            // rollback all the added categories before fail
+            for (String category : addedCategories)
+                this.podcastNeo4j.deletePodcastBelongsToCategory(oldPodcast.getId(), category);
+        }
+
+        // failed to update podcast on Neo4J
+        if (result <= -3 && updateReduced) {
+            // rollback the reduced podcast in author
             this.authorMongo.updatePodcastOfAuthor(oldPodcast.getAuthorName(), oldPodcast);
         }
 
-        // failed to update podcast on mongo
+        // failed to update reduced podcast in author
         if (result <= -2) {
+            // rollback the podcast
             this.podcastMongo.updatePodcast(oldPodcast);
         }
     }
@@ -338,10 +450,10 @@ public class PodcastPageService {
     private void rollbackDeletePodcast(int result, Podcast podcast) {
         // failed to remove review of podcast
         if (result == -4) {
-            // recreate the neo4j entity
+            // rollback the neo4j entity
             this.podcastNeo4j.addPodcast(podcast);
 
-            // recreate all recoverable relationship
+            // rollback all recoverable relationship
             this.podcastNeo4j.addPodcastCreatedByAuthor(podcast);
             this.podcastNeo4j.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory());
             for (String cat : podcast.getCategories())
@@ -350,11 +462,13 @@ public class PodcastPageService {
 
         // failed to remove podcast entity from neo4j
         if (result <= -3) {
+            // rollback the podcast embedded in author
             this.authorMongo.addPodcastToAuthor(podcast.getAuthorName(), podcast);
         }
 
         // failed to remove reduced podcast from author
         if (result <= -2) {
+            // rollback the podcast
             this.podcastMongo.addPodcast(podcast);
         }
     }
