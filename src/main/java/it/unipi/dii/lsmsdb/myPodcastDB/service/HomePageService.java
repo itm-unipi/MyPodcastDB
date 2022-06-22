@@ -21,14 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageService {
-    private final AuthorMongo authorMongoManager;
     private final QueryMongo queryMongoManager;
     private final AuthorNeo4j authorNeo4jManager;
     private final UserNeo4j userNeo4jManager;
     private final PodcastNeo4j podcastNeo4jManager;
 
     public HomePageService() {
-        this.authorMongoManager = new AuthorMongo();
         this.queryMongoManager = new QueryMongo();
         this.authorNeo4jManager = new AuthorNeo4j();
         this.userNeo4jManager = new UserNeo4j();
@@ -41,25 +39,14 @@ public class HomePageService {
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        /********************************************
-        // TODO: da rimuovere
-        List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByUser(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
-        if (followed != null)
-            FollowedAuthorCache.addAuthorList(followed);
-        List<Podcast> pods = this.podcastNeo4jManager.showPodcastsInWatchlist(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
-        if (pods != null)
-            WatchlistCache.addPodcastList(pods);
-        List<User> followedUsers = this.userNeo4jManager.showFollowedUsers(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername());
-        if (followedUsers != null)
-            FollowedUserCache.addUserList(followedUsers);
-        ********************************************/
-
-        // Loading top rated in user's country
+        // Loading Top Rated in user's country
         List<Triplet<Podcast, String, Float>> resultsTopCountry = new ArrayList<>();
         this.queryMongoManager.getPodcastWithHighestAverageRatingPerCountry(resultsTopCountry);
-        for (Triplet<Podcast, String, Float> entry: resultsTopCountry)
-            if (entry.getValue1().equals(((User)MyPodcastDB.getInstance().getSessionActor()).getCountry()))
+        for (Triplet<Podcast, String, Float> entry: resultsTopCountry) {
+            if (entry.getValue1().equals(((User) MyPodcastDB.getInstance().getSessionActor()).getCountry())) {
                 topRated.add(new Triplet<>(entry.getValue0(), entry.getValue2(), true));
+            }
+        }
 
         // Loading Top Rated Podcasts
         List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
@@ -104,7 +91,6 @@ public class HomePageService {
     public void loadHomepageAsUnregistered(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
         Logger.info("Loading Homepage as Unregistered");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         // Loading Top Rated Podcasts
         List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
@@ -119,7 +105,6 @@ public class HomePageService {
         // Load Most Followed Author
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
     }
 
@@ -268,7 +253,6 @@ public class HomePageService {
     public void loadHomepageAsAdmin(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
         Logger.info("Loading Homepage as Admin");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         // Loading Top Rated Podcasts
         List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
@@ -283,7 +267,26 @@ public class HomePageService {
         // Load Most Followed Author
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
-        Neo4jManager.getInstance().closeConnection();
+        MongoManager.getInstance().closeConnection();
+    }
+
+    /***** AUTHOR HOMEPAGE ******/
+    public void loadHomepageAsAuthor(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
+        Logger.info("Loading homepage as author");
+        MongoManager.getInstance().openConnection();
+
+        // Loading Top Rated Podcasts
+        List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
+        this.queryMongoManager.getPodcastsWithHighestAverageRating(resultsTopRated);
+        for (Pair<Podcast, Float> entry: resultsTopRated)
+            topRated.add(new Triplet<>(entry.getValue0(), entry.getValue1(), false));
+
+        // Loading Most Liked Podcasts
+        this.queryMongoManager.getMostLikedPodcast(mostLikedPodcasts);
+
+        // Load Most Followed Author
+        this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
+
         MongoManager.getInstance().closeConnection();
     }
 
@@ -323,31 +326,5 @@ public class HomePageService {
 
         Neo4jManager.getInstance().closeConnection();
         return result;
-    }
-
-    /***** AUTHOR HOMEPAGE ******/
-    public void loadHomepageAsAuthor(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        // TODO: da rimuovere
-        // List<Author> followed = this.authorNeo4jManager.showFollowedAuthorsByAuthor(((Author)MyPodcastDB.getInstance().getSessionActor()).getName());
-        // if (followed != null)
-        //     FollowedAuthorCache.addAuthorList(followed);
-
-        // Loading Top Rated Podcasts
-        List<Pair<Podcast, Float>> resultsTopRated = new ArrayList<>();
-        this.queryMongoManager.getPodcastsWithHighestAverageRating(resultsTopRated);
-        for (Pair<Podcast, Float> entry: resultsTopRated)
-            topRated.add(new Triplet<>(entry.getValue0(), entry.getValue1(), false));
-
-        // Loading Most Liked Podcasts
-        this.queryMongoManager.getMostLikedPodcast(mostLikedPodcasts);
-
-        // Load Most Followed Author
-        this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
-
-        Neo4jManager.getInstance().closeConnection();
-        MongoManager.getInstance().closeConnection();
     }
 }

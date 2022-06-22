@@ -63,7 +63,7 @@ public class SearchService {
     }
 
     public void searchAsUnregisteredUser(String searchText, List<Podcast> podcastsMatch, List<Author> authorsMatch, int limit, Triplet<Boolean, Boolean, Boolean> filters) {
-        Logger.info("Searching as Unregistered");
+        Logger.info("Searching as Unregistered User");
         MongoManager.getInstance().openConnection();
 
         // Searching for podcasts
@@ -118,7 +118,6 @@ public class SearchService {
     public boolean loadMoreAuthorsAsUser(String searchText, List<Author> authorsMatch, int limit, int skip) {
         Logger.info("Loading more users as registered user");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         boolean noMoreAuthors = false;
 
@@ -128,7 +127,6 @@ public class SearchService {
             noMoreAuthors = authors.size() < limit;
         }
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
         return noMoreAuthors;
     }
@@ -152,7 +150,6 @@ public class SearchService {
     public boolean loadMoreUsersAsUser(String searchText, List<User> usersMatch, int limit, int skip) {
         Logger.info("Loading more users as registered user");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         boolean noMoreUsers = false;
 
@@ -162,7 +159,6 @@ public class SearchService {
             noMoreUsers = users.size() < limit;
         }
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
         return noMoreUsers;
     }
@@ -325,7 +321,6 @@ public class SearchService {
     public boolean loadMoreUsersAsAdmin(String searchText, List<User> usersMatch, int limit, int skip) {
         Logger.info("Loading more users as admin");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         boolean noMoreUsers = false;
 
@@ -335,7 +330,6 @@ public class SearchService {
             noMoreUsers = users.size() < limit;
         }
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
         return noMoreUsers;
     }
@@ -360,7 +354,6 @@ public class SearchService {
     public void searchAsAuthor(String searchText, List<Podcast> podcastsMatch, List<Author> authorsMatch, List<User> usersMatch, int limit, Triplet<Boolean, Boolean, Boolean> filters) {
         Logger.info("Searching as Author");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         // Searching for podcasts
         if (filters.getValue0()) {
@@ -376,7 +369,6 @@ public class SearchService {
                 authorsMatch.addAll(authors);
         }
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
     }
 
@@ -399,7 +391,6 @@ public class SearchService {
     public boolean loadMoreAuthorsAsAuthor(String searchText, List<Author> authorsMatch, int limit, int skip) {
         Logger.info("Loading more authors as author");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
 
         boolean noMoreAuthors = false;
 
@@ -409,7 +400,6 @@ public class SearchService {
             noMoreAuthors = authors.size() < limit;
         }
 
-        Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
         return noMoreAuthors;
     }

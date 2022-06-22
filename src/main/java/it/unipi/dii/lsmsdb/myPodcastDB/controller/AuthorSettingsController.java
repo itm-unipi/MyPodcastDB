@@ -232,7 +232,12 @@ public class AuthorSettingsController {
                         // Resetting field that caused the error
                         authorEmail.setText(oldAuthor.getEmail());
                         DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Email Error", "This email is already associated to an account!");
-                    } else if (updateResult <= -3) {
+                    } else if (updateResult == -3) {
+                        // Resetting field that caused the error
+                        authorName.setText(oldAuthor.getName());
+                        authorEmail.setText(oldAuthor.getEmail());
+                        DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Error", "Name and email already associated to an account!");
+                    } else if (updateResult <= -4) {
                         DialogManager.getInstance().createErrorAlert(dialogPane, "Update Personal Info - Error", "Something went wrong! Please try again.");
                     }
 

@@ -38,6 +38,7 @@ public class AuthorProfileService {
 
     /******* User Service ********/
     public boolean loadAuthorProfileAsUser(Author author, List<Author> followedAuthorsByAuthor, int limit) {
+        Logger.info("Load author profile as user");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         boolean loadResult;
@@ -65,6 +66,7 @@ public class AuthorProfileService {
     }
 
     public boolean loadAuthorProfileAsUnregistered(Author author, List<Author> followedAuthorsByAuthor, int limit) {
+        Logger.info("Load author profile as unregistered user");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         boolean loadResult;
@@ -124,7 +126,7 @@ public class AuthorProfileService {
 
     public boolean followAuthorAsUser(Author author) {
         Neo4jManager.getInstance().openConnection();
-        boolean result = userNeo4jManager.addUserFollowAuthor(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
+        boolean result = userNeo4jManager.addUserFollowAuthor(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), author.getName());
 
         if (result) {
             Logger.success("(User) You started following " + author.getName());
@@ -160,7 +162,7 @@ public class AuthorProfileService {
 
     public boolean addPodcastInWatchlist(Podcast podcast) {
         Neo4jManager.getInstance().openConnection();
-        boolean result = userNeo4jManager.addUserWatchLaterPodcast(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
+        boolean result = userNeo4jManager.addUserWatchLaterPodcast(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
 
         if (result) {
             Logger.success("Podcast added into the watchlist: " + podcast);
@@ -179,7 +181,7 @@ public class AuthorProfileService {
 
     public boolean removePodcastFromWatchlist(Podcast podcast) {
         Neo4jManager.getInstance().openConnection();
-        boolean result = userNeo4jManager.deleteUserWatchLaterPodcast(((User)MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
+        boolean result = userNeo4jManager.deleteUserWatchLaterPodcast(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
 
         if (result) {
             Logger.success("Podcast removed from the watchlist: " + podcast);
@@ -198,9 +200,8 @@ public class AuthorProfileService {
 
     /****** Author Service ********/
     public boolean loadAuthorProfileAsPageOwner(Author author, List<Author> followedAuthorsByAuthor, int limit) {
-        Logger.success("Retrieving followed authors");
+        Logger.success("Load author profile as page owner");
         MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
         boolean loadResult;
 
         // Getting the author object from Mongo
@@ -221,11 +222,11 @@ public class AuthorProfileService {
         }
 
         MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
         return loadResult;
     }
 
     public boolean loadAuthorProfileAsAuthor(Author author, List<Author> followedAuthorsByAuthor, int limit) {
+        Logger.info("Load author profile as author");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         boolean loadResult;
@@ -253,6 +254,7 @@ public class AuthorProfileService {
     }
 
     public boolean loadFollowedAuthorsAsAuthor(Author author, List<Author> followedAuthorsByAuthor, int limit, int skip) {
+        Logger.info("Retrieving more followed authors");
         Neo4jManager.getInstance().openConnection();
 
         // Getting the authors followed by the author visited
@@ -316,63 +318,47 @@ public class AuthorProfileService {
 
         if (!oldAuthor.getEmail().equals(newAuthor.getEmail()) && authorMongoManager.findAuthorByEmail(newAuthor.getEmail()) != null) {
             Logger.error("Email already associated to an account!");
-            updateResult = -2;
+            updateResult = updateResult - 2;
         }
 
         if (updateResult == 0) {
             if (!authorMongoManager.updateAuthor(newAuthor)) {
-               Logger.error("Error during the update of the author on mongo");
-               updateResult = -3;
-            } else {
-                if (!authorNeo4jManager.updateAuthor(oldAuthor.getName(), newAuthor.getName(), newAuthor.getPicturePath())) {
-                    Logger.error("Error during the update of the author on neo4j");
-                    updateResult = -4;
+                Logger.error("Error during the update of the author on Mongo");
+                updateResult = -4; // -3
+            } else if (!authorNeo4jManager.updateAuthor(oldAuthor.getName(), newAuthor.getName(), newAuthor.getPicturePath())) {
+                Logger.error("Error during the update of the author on Neo4J");
+                updateResult = -5;
+                updateAuthorRollback(updateResult, oldAuthor, newAuthor);
+            } else if (!oldAuthor.getName().equals(newAuthor.getName())) {
+                // if author name changed it is necessary to update all the podcasts of that author (if there are any)
+                if (!podcastMongoManager.updateAllPodcasts(oldAuthor.getName(), newAuthor.getName())) {
+                    updateResult = -6;
                     updateAuthorRollback(updateResult, oldAuthor, newAuthor);
-                } else {
-                    // if author name changed it is necessary to update all the podcasts of that author (if there are any)
-                    if (!oldAuthor.getName().equals(newAuthor.getName())) {
-                        List<Podcast> podcasts = new ArrayList<>();
-                        for (Podcast podcast : oldAuthor.getOwnPodcasts()) {
-                            podcast.setAuthorName(newAuthor.getName());
-                            podcasts.add(podcast);
-                        }
+                }
 
-                        newAuthor.setOwnPodcasts(podcasts);
-                        if (!podcastMongoManager.updateAllPodcasts(oldAuthor.getName(), newAuthor.getName())) {
-                            updateResult = -5;
-                            updateAuthorRollback(updateResult, oldAuthor, newAuthor);
-                        }
-
-                        if (updateResult == 0) {
-                            newAuthor.setOwnPodcasts(podcasts);
-                            Logger.success("Update author success");
-                        }
-                    } else {
-                        Logger.success("Update author success");
+                if (updateResult == 0) {
+                    // Updating information of the author object (java)
+                    List<Podcast> podcasts = new ArrayList<>();
+                    for (Podcast podcast : oldAuthor.getOwnPodcasts()) {
+                        podcast.setAuthorName(newAuthor.getName());
+                        podcasts.add(podcast);
                     }
+
+                    newAuthor.setOwnPodcasts(podcasts);
                 }
             }
         }
+
+        if (updateResult == 0)
+            Logger.success("(" + newAuthor.getName() + ") Author updated successfully!");
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return updateResult;
     }
 
-    void updateAuthorRollback(int result, Author oldAuthor, Author newAuthor) {
-        if (result <= -4) {
-            Logger.info("Rollback - Undo operation because Neo4J failed");
-            authorMongoManager.updateAuthor(oldAuthor);
-        }
-
-        if (result <= -5) {
-            Logger.info("Rollback - Undo operation because podcast update on mongo failed");
-            authorMongoManager.updateAuthor(oldAuthor);
-            authorNeo4jManager.updateAuthor(newAuthor.getName(), oldAuthor.getName(), oldAuthor.getPicturePath());
-        }
-    }
-
     public int deleteAccountAsAuthor(Author author) {
+        Logger.info("Deleting account as author");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         int deleteResult = 0;
@@ -380,51 +366,41 @@ public class AuthorProfileService {
         if (!authorMongoManager.deleteAuthorByName(author.getName())) {
             Logger.error(author.getName() + " deleted failed! (Mongo)");
             deleteResult = -1;
+        } else if (!authorNeo4jManager.deleteAuthor(author.getName())) {
+            Logger.error(author.getName() + " deleted failed! (Neo4J)");
+            deleteResult = -2;
+            deleteAuthorRollback(deleteResult, author);
+        } else if (!podcastNeo4jManager.deletePodcastsOfAuthor(author.getName())) {
+            // Delete podcasts on Neo4J. All the relationships will be deleted as well (detach mode).
+            Logger.error("Error deleting podcasts of author on Neo4J");
+            deleteResult = -3;
+            deleteAuthorRollback(deleteResult, author);
         } else {
-            if (!authorNeo4jManager.deleteAuthor(author.getName())) {
-                Logger.error(author.getName() + " deleted failed! (Neo4J)");
-                deleteResult = -2;
+            // Delete podcasts of the author on Mongo
+            int deletedPodcast = podcastMongoManager.deletePodcastsByAuthorName(author.getName());
+            Logger.info("Deleted " + deletedPodcast + " podcasts!");
+
+            if (deletedPodcast < 0) {
+                deleteResult = -4;
                 deleteAuthorRollback(deleteResult, author);
             } else {
-                // Delete podcasts on neo4j (all the relationships as well (detach mode))
-                if (!podcastNeo4jManager.deletePodcastsOfAuthor(author.getName())) {
-                    Logger.error("Error deleting podcast on Neo4J");
-                    deleteResult = -3;
-                    deleteAuthorRollback(deleteResult, author);
-                } else {
-                    // Delete podcasts of the author on mongo if the previous delete on Neo4J was completed successfully
-                    int deletedPodcast = podcastMongoManager.deletePodcastsByAuthorName(author.getName());
-                    Logger.info("Deleted " + deletedPodcast + " podcasts!");
+                int deletedReviews = reviewMongoManager.deleteReviewsByAuthorUsername(author.getName());
 
-                    if (deletedPodcast < 0) {
-                        deleteResult = -3;
-                        deleteAuthorRollback(deleteResult, author);
-                    }
+                if (deletedReviews < 0) {
+                    deleteResult = -5;
+                    Logger.info("Erorr during the review's delete");
+                } else {
+                    Logger.info("Deleted " + deletedReviews + " reviews associated to " + author.getName() + "'s podcasts");
                 }
             }
         }
 
+        if (deleteResult == 0)
+            Logger.success("(" + author.getName() + ") Author deleted successfully!");
+
         MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance(). closeConnection();
+        Neo4jManager.getInstance().closeConnection();
         return deleteResult;
-    }
-
-    void deleteAuthorRollback(int result, Author author) {
-        if (result <= -2) {
-            Logger.info("Rollback - adding the author on mongo because neo4j author delete failed");
-            authorMongoManager.addAuthor(author);
-        }
-
-        if (result <= -3) {
-            Logger.info("Rollback mongo and neo4j because delete of podcasts failed");
-
-            authorMongoManager.addAuthor(author);
-
-            authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath());
-            for (Podcast podcast: author.getOwnPodcasts()) {
-                podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
-            }
-        }
     }
 
     public int addPodcastAsAuthor(Podcast podcast, List<Podcast> reducedPodcast) {
@@ -435,7 +411,7 @@ public class AuthorProfileService {
 
         // To avoid the creation a podcast with the same name
         boolean duplicate = false;
-        for (Podcast pod: reducedPodcast) {
+        for (Podcast pod : reducedPodcast) {
             if (pod.getName().equals(podcast.getName())) {
                 duplicate = true;
                 break;
@@ -445,151 +421,96 @@ public class AuthorProfileService {
         if (duplicate) {
             Logger.info("A podcast with the same name already exists.");
             addResult = -2;
+        } else if (!podcastMongoManager.addPodcast(podcast)) {
+            // Adding a new podcast on Mongo
+            addResult = -1;
+        } else if (!authorMongoManager.addPodcastToAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast)) {
+            // Adding embedded podcast on Mongo
+            addResult = -2;
+            addPodcastRollback(addResult, podcast);
+        } else if (!podcastNeo4jManager.addPodcast(podcast)) {
+            // Adding the new podcast on Neo4J
+            addResult = -3;
+            addPodcastRollback(addResult, podcast);
+        } else if (!podcastNeo4jManager.addPodcastCreatedByAuthor(podcast)) {
+            // Adding "created by" relationship
+            addResult = -4;
+            addPodcastRollback(addResult, podcast);
+        } else if (!podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory())) {
+            // Adding "belongs to" primary category relationship
+            addResult = -5;
+            addPodcastRollback(addResult, podcast);
         } else {
-            // Adding podcast to mongo
-            if (!podcastMongoManager.addPodcast(podcast))
-                addResult = -1;
-            else {
-                // Adding reduced podcast
-                if (!authorMongoManager.addPodcastToAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast)) {
-                    addResult = -2;
-                    addPodcastRollback(addResult, podcast);
-                } else {
-                    // Adding podcast to Neo4j
-                    if (!podcastNeo4jManager.addPodcast(podcast)) {
-                        addResult = -3;
+            // Adding secondary categories
+            for (String category : podcast.getCategories()) {
+                // To avoid duplicated relationship
+                if (!category.equals(podcast.getPrimaryCategory())) {
+                    if (!podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category)) {
+                        addResult = -6;
                         addPodcastRollback(addResult, podcast);
-                    } else {
-                        // Adding created by "author" -> "podcast"
-                        if (!podcastNeo4jManager.addPodcastCreatedByAuthor(podcast)) {
-                            addResult = -4;
-                            addPodcastRollback(addResult, podcast);
-                        } else {
-                            // Adding belongs to "podcast" -> "category"
-                            if (!podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory())) {
-                                addResult = -5;
-                                addPodcastRollback(addResult, podcast);
-                            } else {
-                                // Adding secondary categories
-                                for (String category : podcast.getCategories()) {
-                                    // To avoid duplicated relationship
-                                    if (!category.equals(podcast.getPrimaryCategory())) {
-                                        if (!podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category)) {
-                                            addResult = -5;
-                                            addPodcastRollback(addResult, podcast);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        break;
                     }
                 }
             }
         }
+
+        if (addResult == 0)
+            Logger.success("(" + podcast.getName() + ", " + podcast.getId() + ") Podcast added successfully!");
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return addResult;
     }
 
-    void addPodcastRollback(int result, Podcast podcast) {
-        if (result <= -2) {
-            Logger.info("Rollback - Deleting podcast on mongo because add reduced podcast failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
-            podcastMongoManager.deletePodcastById(podcast.getId());
-        }
-
-        if (result <= -3) {
-            Logger.info("Rollback - Deleting podcast and reduced podcast on mongo because neo4j failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
-            podcastMongoManager.deletePodcastById(podcast.getId());
-            podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
-        }
-
-        if (result <= -4) {
-            Logger.info("Rollback - Podcast created by author failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
-            podcastMongoManager.deletePodcastById(podcast.getId());
-            // Delete podcast uses DETACH keyword so every relationship will be removed as well
-            podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
-        }
-
-        if (result <= -5) {
-            Logger.info("Rollback - Podcast belongs to category failed");
-            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
-            podcastMongoManager.deletePodcastById(podcast.getId());
-            podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
-        }
-    }
-
     public int deletePodcastAsAuthor(String podcastId) {
+        Logger.info("Delete podcast as author");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
         int deleteResult = 0;
+        // Retrieving the entire podcast to perform an eventual rollback
         Podcast podcast = podcastMongoManager.findPodcastById(podcastId);
 
         if (podcast == null) {
             Logger.error("Podcast not found!");
             deleteResult = -1;
-        } else {
+        } else if (!podcastMongoManager.deletePodcastById(podcastId)) {
             // Delete podcast from mongo
-            if (!podcastMongoManager.deletePodcastById(podcastId)) {
-                Logger.error(podcastId + " deleted failed! (Mongo)");
-                deleteResult = -2;
-            } else {
-                // Update author embedded podcasts removing the podcast
-                if (!authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcastId)) {
-                    Logger.error("Error during the update of the embedded podcasts");
-                    deleteResult = -3;
-                    deletePodcastRollback(deleteResult, podcast);
-                } else {
-                    // Delete podcast from Neo4J
-                    if (!podcastNeo4jManager.deletePodcastByPodcastId(podcastId)) {
-                        Logger.error(podcastId + " deleted failed! (Neo4J)");
-                        deleteResult = -4;
-                        deletePodcastRollback(deleteResult, podcast);
-                    } else {
-                        // Delete reviews associated to that podcast
-                        int deletedReviews = reviewMongoManager.deleteReviewsByPodcastId(podcastId);
-                        if (deletedReviews < 0) {
-                            Logger.error("Error during the delete of reviews");
-                            deleteResult = -5;
-                            deletePodcastRollback(deleteResult, podcast);
-                        } else {
-                            Logger.info("Deleted " + deletedReviews + " reviews associated to podcastId " + podcastId);
-                            Logger.success(podcastId + " deleted successfully!");
-                        }
-                    }
-                }
+            Logger.error(podcastId + " deleted failed! (Mongo)");
+            deleteResult = -2;
+        } else if (!authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcastId)) {
+            // Update author embedded podcasts removing the podcast
+            Logger.error("Error during the update of the embedded podcasts");
+            deleteResult = -3;
+            deletePodcastRollback(deleteResult, podcast);
+        } else if (!podcastNeo4jManager.deletePodcastByPodcastId(podcastId)) {
+            // Delete podcast from Neo4J (with all its relationships)
+            Logger.error(podcastId + " deleted failed! (Neo4J)");
+            deleteResult = -4;
+            deletePodcastRollback(deleteResult, podcast);
+        } else {
+            // Delete reviews associated to that podcast
+            int deletedReviews = reviewMongoManager.deleteReviewsByPodcastId(podcastId);
+            Logger.info("Deleted " + deletedReviews + " reviews associated to podcastId " + podcastId);
+
+            if (deletedReviews < 0) {
+                Logger.error("Error during the delete of reviews");
+                deleteResult = -5;
+                deletePodcastRollback(deleteResult, podcast);
             }
         }
+
+        if (deleteResult == 0)
+            Logger.success(podcastId + " deleted successfully!");
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
         return deleteResult;
     }
 
-    void deletePodcastRollback(int result, Podcast podcast) {
-        if (result <= -3) {
-            Logger.info("Rollback - adding the podcast on mongo because embedded podcast failed");
-            podcastMongoManager.addPodcast(podcast);
-        }
-
-        if (result <= -4) {
-            Logger.info("Rollback mongo because delete on Neo4j failed");
-            authorMongoManager.addPodcastToAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast);
-        }
-
-        if (result <= -5) {
-            Logger.info("Rollback - adding the podcast on both databases because delete of reviews failed");
-            podcastNeo4jManager.addPodcast(podcast);
-        }
-    }
-
     /****** Admin Service ******/
     public boolean loadAuthorProfileAsAdmin(Author author, List<Author> followedAuthorsByAuthor, int limit) {
+        Logger.info("Load author profile as admin");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
         boolean loadResult;
@@ -617,7 +538,7 @@ public class AuthorProfileService {
     }
 
     public boolean loadFollowedAuthorsAsAdmin(Author author, List<Author> followedAuthorsByAuthor, int limit, int skip) {
-        Logger.info("Retrieving followed authors");
+        Logger.info("Retrieving more followed authors");
         Neo4jManager.getInstance().openConnection();
 
         List<Author> followedAuthors = authorNeo4jManager.showFollowedAuthorsByAuthor(author.getName(), limit, skip);
@@ -632,93 +553,171 @@ public class AuthorProfileService {
     }
 
     public int deleteAuthorAsAdmin(Author authorToDelete) {
+        Logger.info("Deleting author account as admin");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
 
-        // TODO: rollback
         int deleteResult = 0;
 
-        // Check if author exists
-        if (authorMongoManager.findAuthorByName(authorToDelete.getName()) == null) {
+        if (!authorMongoManager.deleteAuthorByName(authorToDelete.getName())) {
+            Logger.error(authorToDelete.getName() + " deleted failed! (Mongo)");
             deleteResult = -1;
-            Logger.error("Author don't found!");
+        } else if (!authorNeo4jManager.deleteAuthor(authorToDelete.getName())) {
+            Logger.error(authorToDelete.getName() + " deleted failed! (Neo4J)");
+            deleteResult = -2;
+            deleteAuthorRollback(deleteResult, authorToDelete);
+        } else if (!podcastNeo4jManager.deletePodcastsOfAuthor(authorToDelete.getName())) {
+            // Delete podcasts on Neo4J. All the relationships will be deleted as well (detach mode).
+            Logger.error("Error deleting podcasts of author on Neo4J");
+            deleteResult = -3;
+            deleteAuthorRollback(deleteResult, authorToDelete);
         } else {
-            // Delete podcasts of the author on mongo
+            // Delete podcasts of the author on Mongo
             int deletedPodcast = podcastMongoManager.deletePodcastsByAuthorName(authorToDelete.getName());
-            Logger.success("Deleted " + deletedPodcast + " podcasts!");
+            Logger.info("Deleted " + deletedPodcast + " podcasts!");
 
-            if(deletedPodcast < 0) {
-                deleteResult = -2;
-                Logger.error("Podcasts don't deleted");
+            if (deletedPodcast < 0) {
+                deleteResult = -4;
+                deleteAuthorRollback(deleteResult, authorToDelete);
             } else {
-                // Deleting author on both databases
-                if (!(authorMongoManager.deleteAuthorByName(authorToDelete.getName())
-                        && authorNeo4jManager.deleteAuthor(authorToDelete.getName())))  {
-                    Logger.error(authorToDelete.getName() + " deleted failed!");
-                    deleteResult = -3;
-                } else {
-                    Logger.success(authorToDelete.getName() + " deleted successfully!");
-
-                    // Delete podcasts on neo4j
-                    for (Podcast podcast : authorToDelete.getOwnPodcasts()) {
-                        // Delete podcasts removes all the relationships as well (detach mode)
-                        if (!podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId())) {
-                            Logger.error("Error deleting podcast neo4j");
-                            deleteResult = -4;
-                            break;
-                        } else {
-                            Logger.success("Deleted " + reviewMongoManager.deleteReviewsByPodcastId(podcast.getId()) + " reviews associated to " + podcast.getName() + " (" + podcast.getId() + ") ");
-                        }
-                    }
-                }
-            }
-        }
-
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
-
-        return deleteResult;
-    }
-
-    public int deletePodcastAsAdmin(String authorName, String podcastId) {
-        MongoManager.getInstance().openConnection();
-        Neo4jManager.getInstance().openConnection();
-
-        int deleteResult = 0;
-
-        if (podcastMongoManager.findPodcastById(podcastId) == null) {
-            Logger.error("Podcast don't found!");
-            deleteResult = -1;
-
-        } else {
-            // Delete podcast entity from both databases
-            if (!(podcastMongoManager.deletePodcastById(podcastId) && podcastNeo4jManager.deletePodcastByPodcastId(podcastId))) {
-                Logger.error(podcastId + " deleted failed!");
-                deleteResult = -2;
-
-            } else {
-                // Delete reviews associated to that podcast
-                int deletedReviews = reviewMongoManager.deleteReviewsByPodcastId(podcastId);
-                Logger.info("Deleted " + deletedReviews + " reviews associated to podcastId " + podcastId);
+                int deletedReviews = reviewMongoManager.deleteReviewsByAuthorUsername(authorToDelete.getName());
 
                 if (deletedReviews < 0) {
-                    Logger.error("Error during the delete of reviews");
-                    deleteResult = -3 ;
-
+                    deleteResult = -5;
+                    Logger.info("Error during the review's delete");
                 } else {
-                    // Update author embedded podcasts
-                    if (!authorMongoManager.deletePodcastOfAuthor(authorName, podcastId)) {
-                        Logger.error("Error during the update of the embedded podcasts");
-                        deleteResult = -4;
-                    }
+                    Logger.success("Deleted " + deletedReviews + " reviews associated to " + authorToDelete.getName() + "'s podcasts");
                 }
             }
         }
 
-        MongoManager.getInstance().closeConnection();
-        Neo4jManager.getInstance().closeConnection();
+        if (deleteResult == 0)
+            Logger.info("(" + authorToDelete.getName() + ") Author deleted successfully!");
 
+        MongoManager.getInstance().closeConnection();
+        Neo4jManager.getInstance(). closeConnection();
         return deleteResult;
     }
 
+    /********* Rollback Functions *********/
+    void updateAuthorRollback(int result, Author oldAuthor, Author newAuthor) {
+        if (result <= -5) {
+            Logger.info("Rollback due to the failure on Neo4J");
+            authorMongoManager.updateAuthor(oldAuthor);
+        }
+
+        if (result <= -6) {
+            Logger.info("Rollback due to the failure of the update podcast on Mongo");
+            authorNeo4jManager.updateAuthor(newAuthor.getName(), oldAuthor.getName(), oldAuthor.getPicturePath());
+        }
+    }
+
+    void deleteAuthorRollback(int result, Author author) {
+        if (result <= -2) {
+            Logger.info("Rollback due to the failure of the delete author on Neo4J");
+            authorMongoManager.addAuthor(author);
+        }
+
+        if (result <= -3) {
+            Logger.info("Rollback due to the failure of the podcasts' delete on Neo4J");
+            authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath());
+
+            // Restoring "created by" relationships because they were deleted when the author was deleted on Neo4J
+            if (result == -3) {
+                for (Podcast podcast : author.getOwnPodcasts()) {
+                    // Own podcasts list doesn't have the author name as parameter and it is necessary to restore the relationship on Neo4J.
+                    podcast.setAuthorName(author.getName());
+                    podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
+                }
+            }
+        }
+
+        if (result <= -4) {
+            Logger.info("Rollback due to the failure of the podcasts' delete on Mongo");
+
+            for (Podcast podcast : author.getOwnPodcasts()) {
+                // Retrieving the entire podcast from Mongo in order to restore all the "created by" and "belongs to" relationships on Neo4J
+                podcastMongoManager.findPodcastById(podcast.getId());
+
+                // Restoring the podcast on neo4J
+                podcastNeo4jManager.addPodcast(podcast);
+
+                // Restoring the "created by" relationship
+                podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
+
+                // Restoring all the "belongs to" relationships
+                podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory());
+                for (String category : podcast.getCategories()) {
+                    podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category);
+                }
+            }
+        }
+
+        if (result <= -5) {
+            Logger.info("Rollback due to the failure of the reviews' delete on Mongo");
+            authorMongoManager.addAuthor(author);
+            authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath());
+
+            for (Podcast podcast : author.getOwnPodcasts()) {
+                // Retrieving the entire podcast from Mongo in order to restore all the "created by" and "belongs to" relationships on Neo4J
+                podcastMongoManager.findPodcastById(podcast.getId());
+
+                // Restoring the podcast on neo4J
+                podcastNeo4jManager.addPodcast(podcast);
+
+                // Restoring the "created by" relationship
+                podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
+
+                // Restoring all the "belongs to" relationships
+                podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory());
+                for (String category : podcast.getCategories()) {
+                    podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category);
+                }
+            }
+        }
+    }
+
+    void addPodcastRollback(int result, Podcast podcast) {
+        if (result <= -2) {
+            Logger.info("Rollback due to the failure of the embedded podcast's add on Mongo");
+            podcastMongoManager.deletePodcastById(podcast.getId());
+        }
+
+        if (result <= -3) {
+            Logger.info("Rollback due to the failure of the podcast's add on Neo4J");
+            authorMongoManager.deletePodcastOfAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getName(), podcast.getId());
+        }
+
+        if (result <= -4) {
+            Logger.info("Rollback due to the failure of the \"created by\" author or \"belongs to\" category on Neo4J");
+            podcastNeo4jManager.deletePodcastByPodcastId(podcast.getId());
+        }
+    }
+
+    void deletePodcastRollback(int result, Podcast podcast) {
+        if (result <= -3) {
+            Logger.info("Rollback due to the failure of the embedded podcast's deleted on Mongo");
+            podcastMongoManager.addPodcast(podcast);
+        }
+
+        if (result <= -4) {
+            Logger.info("Rollback due to the failure of the podcast's delete on Neo4J");
+            authorMongoManager.addPodcastToAuthor(((Author) MyPodcastDB.getInstance().getSessionActor()).getId(), podcast);
+        }
+
+        if (result <= -5) {
+            Logger.info("Rollback due to the failure of the reviews' delete on Mongo");
+            // Adding podcast on Neo4J
+            podcastNeo4jManager.addPodcast(podcast);
+
+            // Restoring the "created by" relationship
+            podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
+
+            // Restoring all the "belongs to" relationships
+            podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory());
+            for (String category : podcast.getCategories()) {
+                podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category);
+            }
+        }
+    }
 }
