@@ -261,7 +261,7 @@
                                     </ImageView>
                                     <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-color: white; -fx-background-radius: 5;">
                                        <children>
-                                          <HBox fx:id="fiveStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                          <HBox fx:id="fiveStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #db55e7;">
                                              <HBox.margin>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </HBox.margin>
@@ -298,7 +298,7 @@
                                     </ImageView>
                                     <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
                                        <children>
-                                          <HBox fx:id="fourStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                          <HBox fx:id="fourStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #db55e7;">
                                              <HBox.margin>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </HBox.margin>
@@ -331,7 +331,7 @@
                                     </ImageView>
                                     <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
                                        <children>
-                                          <HBox fx:id="threeStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                          <HBox fx:id="threeStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #db55e7;">
                                              <HBox.margin>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </HBox.margin>
@@ -360,7 +360,7 @@
                                     </ImageView>
                                     <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
                                        <children>
-                                          <HBox fx:id="twoStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                          <HBox fx:id="twoStars" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #db55e7;">
                                              <HBox.margin>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </HBox.margin>
@@ -385,7 +385,7 @@
                                     </ImageView>
                                     <HBox maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="10.0" prefWidth="220.0" style="-fx-background-radius: 5; -fx-background-color: white;">
                                        <children>
-                                          <HBox fx:id="oneStar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #4B0082;">
+                                          <HBox fx:id="oneStar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="6.0" prefWidth="0.0" style="-fx-background-radius: 5; -fx-background-color: #db55e7;">
                                              <HBox.margin>
                                                 <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                                              </HBox.margin>
