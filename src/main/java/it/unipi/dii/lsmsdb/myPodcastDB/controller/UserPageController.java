@@ -1,12 +1,9 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.controller;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.MyPodcastDB;
-import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedAuthorCache;
-import it.unipi.dii.lsmsdb.myPodcastDB.cache.FollowedUserCache;
-import it.unipi.dii.lsmsdb.myPodcastDB.cache.WatchlistCache;
+import it.unipi.dii.lsmsdb.myPodcastDB.cache.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.service.UserPageService;
-import it.unipi.dii.lsmsdb.myPodcastDB.cache.ImageCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.JsonDecode;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import it.unipi.dii.lsmsdb.myPodcastDB.view.DialogManager;
@@ -191,6 +188,12 @@ public class UserPageController {
 
     @FXML
     private  PasswordField userPagePasswordTextField;
+
+    @FXML
+    private VBox userPageLikedPodcastVbox;
+
+    @FXML
+    private Button userPageShowLikedButton;
 
     private User pageOwner;
 
@@ -657,6 +660,55 @@ public class UserPageController {
     }
 
     @FXML
+    void showLikedPodcastClick() throws IOException {
+        userPageShowLikedButton.setVisible(false);
+        userPageShowLikedButton.setMaxHeight(0);
+        userPageShowLikedButton.setMinHeight(0);
+        userPageShowLikedButton.setPrefHeight(0);
+        userPageLikedPodcastVbox.setVisible(true);
+
+        boolean ownerMode =MyPodcastDB.getInstance().getSessionType().equals("User") &&
+                            ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(pageOwner.getUsername());
+
+        if(ownerMode && LikedPodcastCache.getAllLikedPodcasts().size() >= newRequestPodcast) {
+            Logger.info("Liked podcast loaded from cache");
+            lPodcasts.addAll(LikedPodcastCache.getAllLikedPodcasts());
+        }
+        else
+            getLpodcasts();
+        if(!lPodcasts.isEmpty()){
+            userPageLikedArea.setStyle("-fx-pref-height: 230");
+            loadLikedPodcast(true);
+            for(int i = 1; i < lPodcasts.size() && i <= podcastRowSize; i++)
+                loadLikedPodcast(false);
+        }
+        else{
+            userPageLikedLabel.setText("The liked podcasts list is empty");
+            userPageLikedArea.setVisible(false);
+        }
+    }
+
+    @FXML
+    void showLikedIn(){
+        userPageShowLikedButton.setStyle(
+                "-fx-background-color: white;" +
+                        " -fx-text-fill: black;" +
+                        " -fx-background-radius: 10;" +
+                        " -fx-cursor: hand;"
+        );
+    }
+
+    @FXML
+    void showLikedOut(){
+        userPageShowLikedButton.setStyle(
+                "-fx-background-color: grey;" +
+                        " -fx-text-fill: white;" +
+                        " -fx-background-radius: 10;" +
+                        " -fx-cursor: hand;"
+        );
+    }
+
+    @FXML
     void settingsButtonClick(MouseEvent event) {
         Logger.info("Settings button clicked");
         enableTextFields(true);
@@ -983,7 +1035,7 @@ public class UserPageController {
         int res = service.loadUserPageProfile(
                 actorType,
                 sessionActorName,
-                pageOwner, wPodcasts, lPodcasts, authors, users,
+                pageOwner, wPodcasts, authors, users,
                 newRequestPodcast, newRequestActor
                 );
 
@@ -1083,18 +1135,6 @@ public class UserPageController {
             userPageWatchlistArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
         }
 
-        // fill the liked grid
-        if(!lPodcasts.isEmpty()){
-            loadLikedPodcast(true);
-            for(int i = 1; i < lPodcasts.size() && i <= podcastRowSize; i++)
-                loadLikedPodcast(false);
-        }
-        else{
-            userPageLikedLabel.setText("The liked podcasts list is empty");
-            userPageLikedArea.setVisible(false);
-            userPageLikedArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
-        }
-
         //fill the authors grid
         if(!authors.isEmpty()) {
             loadAuthor(true);
@@ -1139,6 +1179,9 @@ public class UserPageController {
         userPageGenderComboBox.setVisible(false);
         userPageFavGenreComboBox.setVisible(false);
         userPageDatePicker.setVisible(false);
+        userPageLikedPodcastVbox.setVisible(false);
+        userPageShowLikedButton.setVisible(true);
+        userPageLikedArea.setStyle("-fx-min-height: 0; -fx-pref-height: 0");
     }
 
 

@@ -301,7 +301,7 @@ public class PodcastPreviewInUserPageController {
         else
             this.visitorMode = true;
 
-        Image image = ImageCache.getImageFromLocalPath("/img/logo.png");
+        Image image = ImageCache.getImageFromLocalPath("/img/loading.jpg");
         this.podcastImage.setImage(image);
         this.PodcastName.setText(podcast.getName());
 

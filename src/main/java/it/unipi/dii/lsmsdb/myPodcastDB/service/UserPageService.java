@@ -46,7 +46,6 @@ public class UserPageService {
             String visitor,
             User pageOwner,
             List<Podcast> wPodcasts,
-            List<Podcast> lPodcasts,
             List<Author> followedAuthors,
             List<User> followedUsers,
             int limitPodcast,
@@ -82,30 +81,13 @@ public class UserPageService {
             List<Author> authors;
             List<User> users;
 
-            //load liked podcasts from neo4j (if it's in ownerMode this is the only operation that uses a database)
-            if(ownerMode && LikedPodcastCache.getAllLikedPodcasts().size() >= limitPodcast) {
-                Logger.info("Liked podcast loaded from cache");
-                lPodcasts.addAll(LikedPodcastCache.getAllLikedPodcasts());
-            }
-            else {
-                Neo4jManager.getInstance().openConnection();
-                podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner.getUsername(), limitPodcast, 0);
-                if (podcasts != null) {
-                    lPodcasts.addAll(podcasts);
-                    if(ownerMode)
-                        LikedPodcastCache.addPodcastList(podcasts);
-                }
-                if(ownerMode)
-                    Neo4jManager.getInstance().closeConnection();
-            }
-
             //load podcasts in watchlist from neo4j
             if(ownerMode) {
                 Logger.info("watchlist loaded from cache");
                 wPodcasts.addAll(WatchlistCache.getAllPodcastsInWatchlist());
             }
             else {
-                //neo4j connection already opened
+                Neo4jManager.getInstance().openConnection();
                 podcasts = podcastNeo4jManager.showPodcastsInWatchlist(pageOwner.getUsername(), limitPodcast, 0);
                 if (podcasts != null)
                     wPodcasts.addAll(podcasts);

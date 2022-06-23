@@ -343,7 +343,7 @@
                               </Pane>
                            </children>
                         </HBox>
-                        <VBox prefWidth="1176.0">
+                        <VBox alignment="CENTER" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1080.0">
                            <children>
                               <VBox>
                                  <children>
@@ -381,53 +381,6 @@
                                              </HBox.margin>
                                           </ScrollPane>
                                           <ImageView fx:id="userPageWatchlistRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollWatchlistButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                             <image>
-                                                <Image url="@img/forward_32px.png" />
-                                             </image>
-                                             <HBox.margin>
-                                                <Insets left="20.0" top="100.0" />
-                                             </HBox.margin>
-                                          </ImageView>
-                                       </children>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <VBox>
-                                 <children>
-                                    <Label fx:id="userPageLikedLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts" textFill="#434343">
-                                       <font>
-                                          <Font name="Corbel Bold" size="18.0" />
-                                       </font>
-                                       <VBox.margin>
-                                          <Insets left="50.0" top="10.0" />
-                                       </VBox.margin>
-                                       <padding>
-                                          <Insets bottom="10.0" />
-                                       </padding>
-                                    </Label>
-                                    <HBox fx:id="userPageLikedArea" prefHeight="230.0" prefWidth="200.0">
-                                       <children>
-                                          <ImageView fx:id="userPageLikedLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
-                                             <image>
-                                                <Image url="@img/back_32px.png" />
-                                             </image>
-                                             <HBox.margin>
-                                                <Insets right="20.0" top="100.0" />
-                                             </HBox.margin>
-                                          </ImageView>
-                                          <ScrollPane fx:id="userPageLikedScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="980.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
-                                             <content>
-                                                <GridPane fx:id="userPageLikedGrid" hgap="11.0" minHeight="-Infinity" onScroll="#onLikedScroll" prefHeight="240.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
-                                                   <rowConstraints>
-                                                      <RowConstraints minHeight="-Infinity" prefHeight="230.0" vgrow="SOMETIMES" />
-                                                   </rowConstraints>
-                                                   <columnConstraints>
-                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="185.0" />
-                                                   </columnConstraints>
-                                                </GridPane>
-                                             </content>
-                                          </ScrollPane>
-                                          <ImageView fx:id="userPageLikedRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
                                              <image>
                                                 <Image url="@img/forward_32px.png" />
                                              </image>
@@ -533,6 +486,61 @@
                                              </image>
                                              <HBox.margin>
                                                 <Insets left="20.0" top="50.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Button fx:id="userPageShowLikedButton" mnemonicParsing="false" onMouseClicked="#showLikedPodcastClick" onMouseEntered="#showLikedIn" onMouseExited="#showLikedOut" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 8;" text="Show Liked Podcast" textFill="WHITE">
+                                 <font>
+                                    <Font name="Corbel" size="16.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets top="15.0" />
+                                 </VBox.margin>
+                              </Button>
+                              <VBox fx:id="userPageLikedPodcastVbox">
+                                 <children>
+                                    <Label fx:id="userPageLikedLabel" minHeight="-Infinity" prefHeight="40.0" prefWidth="918.0" text="Liked Podcasts" textFill="#434343">
+                                       <font>
+                                          <Font name="Corbel Bold" size="18.0" />
+                                       </font>
+                                       <VBox.margin>
+                                          <Insets left="50.0" top="10.0" />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="10.0" />
+                                       </padding>
+                                    </Label>
+                                    <HBox fx:id="userPageLikedArea" prefHeight="230.0" prefWidth="200.0">
+                                       <children>
+                                          <ImageView fx:id="userPageLikedLeftButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonLeftClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@img/back_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets right="20.0" top="100.0" />
+                                             </HBox.margin>
+                                          </ImageView>
+                                          <ScrollPane fx:id="userPageLikedScrollPane" fitToHeight="true" hbarPolicy="NEVER" minHeight="-Infinity" prefWidth="980.0" style="-fx-background-color: transparent; -fx-border-color: transparent;" vbarPolicy="NEVER">
+                                             <content>
+                                                <GridPane fx:id="userPageLikedGrid" hgap="11.0" minHeight="-Infinity" onScroll="#onLikedScroll" prefHeight="240.0" style="-fx-background-color: transparent; -fx-border-color: transparent;">
+                                                   <rowConstraints>
+                                                      <RowConstraints minHeight="-Infinity" prefHeight="230.0" vgrow="SOMETIMES" />
+                                                   </rowConstraints>
+                                                   <columnConstraints>
+                                                      <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="185.0" />
+                                                   </columnConstraints>
+                                                </GridPane>
+                                             </content>
+                                          </ScrollPane>
+                                          <ImageView fx:id="userPageLikedRightButton" fitHeight="30.0" fitWidth="28.0" onMouseClicked="#scrollLikedButtonRightClick" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: hand;">
+                                             <image>
+                                                <Image url="@img/forward_32px.png" />
+                                             </image>
+                                             <HBox.margin>
+                                                <Insets left="20.0" top="100.0" />
                                              </HBox.margin>
                                           </ImageView>
                                        </children>

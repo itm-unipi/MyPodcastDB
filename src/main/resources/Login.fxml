@@ -99,7 +99,7 @@
                <children>
                   <VBox layoutX="122.0" prefHeight="200.0" prefWidth="208.0">
                      <children>
-                        <Label fx:id="loginUnUserButton" alignment="CENTER" onMouseClicked="#unUserButtonClick" onMouseEntered="#unUserButtonIn" onMouseExited="#unUserButtonOut" prefHeight="30.0" prefWidth="174.0" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 10;" text="Continue as anonymous" textFill="WHITE">
+                        <Label fx:id="loginUnUserButton" alignment="CENTER" onMouseClicked="#unUserButtonClick" onMouseEntered="#unUserButtonIn" onMouseExited="#unUserButtonOut" prefHeight="30.0" prefWidth="174.0" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 8;" text="Continue as anonymous" textFill="WHITE">
                            <font>
                               <Font name="Corbel" size="14.0" />
                            </font>
