@@ -584,6 +584,7 @@ public class ReviewPageController {
                 if (review.getPodcastId().equals(this.podcast.getId())) {
                     // update the mongodb id of the review
                     this.ownReview.setId(review.getId());
+                    Logger.info("id:" + review.getId());
                     break;
                 }
             }

@@ -85,7 +85,11 @@ public class ReviewController {
         boolean confirm = DialogManager.getInstance().createConfirmationAlert(this.mainPage, "Do you really want to delete this review?");
         if (confirm) {
             // delete review
-            int result = this.service.deleteReview(this.review);
+            int result;
+            if (MyPodcastDB.getInstance().getSessionType().equals("User"))
+                result = this.service.deleteReviewAsUser(this.review);
+            else
+                result = this.service.deleteReviewAsAdmin(this.review);
 
             // check the status and update the page
             if (result == 0) {

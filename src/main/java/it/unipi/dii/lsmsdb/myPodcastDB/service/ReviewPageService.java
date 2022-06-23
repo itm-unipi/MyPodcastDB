@@ -193,8 +193,8 @@ public class ReviewPageService {
         return result;
     }
 
-    public int deleteReview(Review review) {
-        Logger.info("Delete Review Service");
+    public int deleteReviewAsUser(Review review) {
+        Logger.info("Delete Review as User Service");
 
         MongoManager.getInstance().openConnection();
         int result = 0;
@@ -207,12 +207,11 @@ public class ReviewPageService {
             Logger.error("Failed to remove review from MongoDB");
             result = -1;
         } else {
-            // TODO: vedere casi Admin che elimina e caso di removed account
             // create the updated user and update it
             User user = new User();
             user.copy((User)MyPodcastDB.getInstance().getSessionActor());
 
-            // add to embedded review and update it
+            // remove from embedded review and update it
             user.removeReview(review);
             boolean resEmb = this.userMongo.updateReviewsOfUser(user);
 
@@ -254,6 +253,7 @@ public class ReviewPageService {
 
                     // update session actor and object identifier
                     ((User)MyPodcastDB.getInstance().getSessionActor()).copy(user);
+                    Logger.info("" + (User)MyPodcastDB.getInstance().getSessionActor());
                     StageManager.setObjectIdentifier(podcast);
                 }
             }
@@ -261,7 +261,87 @@ public class ReviewPageService {
 
         // rollback if process failed
         if (result != 0)
-            rollbackDeleteReview(result, review);
+            rollbackDeleteReview(result, review, null);
+
+        MongoManager.getInstance().closeConnection();
+        return result;
+    }
+
+    public int deleteReviewAsAdmin(Review review) {
+        Logger.info("Delete Review as Admin Service");
+
+        MongoManager.getInstance().openConnection();
+        int result = 0;
+        User user = null;                                   // user for an eventual rollback
+
+        // remove from MongoDB
+        boolean resRem = this.reviewMongo.deleteReviewById(review.getId());
+
+        // check the result
+        if (!resRem) {
+            Logger.error("Failed to remove review from MongoDB");
+            result = -1;
+        } else {
+            // get the user to update if isn't removed account
+            boolean resEmb = true;
+            if (!review.getAuthorUsername().equals("Removed account")) {
+                user = this.userMongo.findUserByUsername(review.getAuthorUsername());
+
+                // remove from embedded review and update it
+                if (user != null) {
+                    user.removeReview(review);
+                    resEmb = this.userMongo.updateReviewsOfUser(user);
+                } else {
+                    resEmb = false;
+                }
+            }
+
+            // check the result
+            if (!resEmb) {
+                Logger.error("Failed to remove review embedded in user");
+                result = -2;
+            } else {
+                // create a copy of podcast and update it
+                Podcast podcast = new Podcast();
+                podcast.copy((Podcast) StageManager.getObjectIdentifier());
+
+                // remove from reduced reviews and from preloaded review
+                podcast.deleteReview(review);
+                podcast.deletePreloadedReview(review);
+
+                // if the podcast has more than 9 other reviews load another one as preloaded
+                int totalReviews = podcast.getReviews().size();
+                if (totalReviews > 9) {
+                    Review otherReview = this.reviewMongo.findReviewById(podcast.getReviews().get(totalReviews - 10).getId());
+                    if (otherReview != null)
+                        podcast.addInHeadPreloadedReview(otherReview);
+                    else
+                        result = -3;
+                }
+
+                // update the podcast
+                boolean resPre = false;
+                if (result != -3)
+                    resPre = this.podcastMongo.updateReviewsOfPodcast(podcast);
+
+                // check te result
+                if (result == -3) {
+                    Logger.error("Failed to find review to update podcast");
+                } else if (!resPre) {
+                    Logger.error("Failed to update review in podcast");
+                    result = -4;
+                } else {
+                    Logger.success("Review successfully deleted");
+
+                    // update object identifier
+                    StageManager.setObjectIdentifier(podcast);
+                }
+            }
+        }
+
+        // rollback if process failed
+        if (result != 0)
+            rollbackDeleteReview(result, review, user);
 
         MongoManager.getInstance().closeConnection();
         return result;
@@ -282,12 +362,19 @@ public class ReviewPageService {
         }
     }
 
-    private void rollbackDeleteReview(int result, Review review) {
+    private void rollbackDeleteReview(int result, Review review, User user) {
         // failed to update the podcast
         if (result == -3) {
             // rollback the user
-            User user = (User)MyPodcastDB.getInstance().getSessionActor();
-            this.userMongo.updateReviewsOfUser(user);
+            if (MyPodcastDB.getInstance().getSessionType().equals("User")) {
+                // if user rollback to the user saved in session
+                User oldUser = (User) MyPodcastDB.getInstance().getSessionActor();
+                this.userMongo.updateReviewsOfUser(oldUser);
+            } else {
+                // if admin add the review and update
+                user.addReview(review);
+                this.userMongo.updateReviewsOfUser(user);
+            }
         }
 
         // failed to remove review embedded in user
