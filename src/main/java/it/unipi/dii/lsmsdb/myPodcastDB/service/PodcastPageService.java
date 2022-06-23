@@ -5,15 +5,14 @@ import it.unipi.dii.lsmsdb.myPodcastDB.cache.LikedPodcastCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.cache.WatchlistCache;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Episode;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.model.Review;
 import it.unipi.dii.lsmsdb.myPodcastDB.model.User;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.AuthorMongo;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.MongoManager;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.PodcastMongo;
-import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.ReviewMongo;
+import it.unipi.dii.lsmsdb.myPodcastDB.persistence.mongo.*;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.Neo4jManager;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
+import org.javatuples.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +20,7 @@ import java.util.List;
 public class PodcastPageService {
 
     private PodcastMongo podcastMongo;
+    private UserMongo userMongo;
     private ReviewMongo reviewMongo;
     private AuthorMongo authorMongo;
     private PodcastNeo4j podcastNeo4j;
@@ -28,6 +28,7 @@ public class PodcastPageService {
 
     public PodcastPageService() {
         this.podcastMongo = new PodcastMongo();
+        this.userMongo = new UserMongo();
         this.reviewMongo  = new ReviewMongo();
         this.authorMongo  = new AuthorMongo();
         this.podcastNeo4j = new PodcastNeo4j();
@@ -301,6 +302,9 @@ public class PodcastPageService {
         Neo4jManager.getInstance().openConnection();
         int result = 0;
 
+        // history for eventual rollback of removed reviews embedded in users
+        List<Pair<String, String>> removedReviewsEmbedded = new ArrayList<>();              // <username, reviewId>
+
         // delete podcast entity in mongo
         boolean resDelPod = this.podcastMongo.deletePodcastById(podcast.getId());
         if (!resDelPod) {
@@ -321,13 +325,43 @@ public class PodcastPageService {
                     Logger.error("Podcast not deleted from Neo4J");
                     result = -3;
                 } else {
-                    // remove review of podcast
-                    int resDelRew = this.reviewMongo.deleteReviewsByPodcastId(podcast.getId());
-                    if (resDelRew == -1) {
-                        Logger.error("Reviews of podcast not deleted");
+                    boolean resDelRevUser = true;
+
+                    // remove embedded review in user of that podcast
+                    for (Review review : podcast.getReviews()) {
+                        // get the total review
+                        Review toDeleteReview = this.reviewMongo.findReviewById(review.getId());
+
+                        // get the user
+                        User userToUpdate = null;
+                        if (toDeleteReview != null) {
+                            userToUpdate = this.userMongo.findUserByUsername(toDeleteReview.getAuthorUsername());
+                            userToUpdate.removeReview(review);
+                        }
+
+                        // check the result
+                        if (toDeleteReview != null && userToUpdate != null && this.userMongo.updateReviewsOfUser(userToUpdate)) {
+                            // update the history of removed review for eventual rollback
+                            removedReviewsEmbedded.add(new Pair<>(userToUpdate.getUsername(), review.getId()));
+                        } else {
+                            resDelRevUser = false;
+                            break;
+                        }
+                    }
+
+                    // check the result
+                    if (!resDelRevUser) {
+                        Logger.error("Failed to delete the Reviews embedded in Users");
                         result = -4;
                     } else {
-                        Logger.success("Podcast deleted");
+                        // remove review of podcast
+                        int resDelRew = this.reviewMongo.deleteReviewsByPodcastId(podcast.getId());
+                        if (resDelRew == -1) {
+                            Logger.error("Reviews of podcast not deleted");
+                            result = -5;
+                        } else {
+                            Logger.success("Podcast deleted");
+                        }
                     }
                 }
             }
@@ -335,7 +369,7 @@ public class PodcastPageService {
 
         // rollback if process failed
         if (result != 0)
-            rollbackDeletePodcast(result, podcast);
+            rollbackDeletePodcast(result, podcast, removedReviewsEmbedded);
 
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
@@ -466,9 +500,16 @@ public class PodcastPageService {
         }
     }
 
-    private void rollbackDeletePodcast(int result, Podcast podcast) {
-        // failed to remove review of podcast
-        if (result == -4) {
+    private void rollbackDeletePodcast(int result, Podcast podcast, List<Pair<String, String>> removedReviewsEmbedded) {
+        // failed to remove review embedded in users
+        if (result <= -4) {
+            // rollback all reviews embedded in user already deleted
+            for (Pair<String, String> review : removedReviewsEmbedded) {
+                User userToUpdate = this.userMongo.findUserByUsername(review.getValue0());
+                userToUpdate.addReview(new Review(review.getValue1(), podcast.getId()));
+                this.userMongo.updateReviewsOfUser(userToUpdate);
+            }
+
             // rollback the neo4j entity
             this.podcastNeo4j.addPodcast(podcast);
 

@@ -626,11 +626,11 @@ public class PodcastPageController {
             }
         }
         if (this.podcast.getReviews().size() != 0) {
-            this.oneStar.setPrefWidth(((float) numReview[0] / this.podcast.getReviews().size()) * 220);
-            this.twoStars.setPrefWidth(((float) numReview[1] / this.podcast.getReviews().size()) * 220);
-            this.threeStars.setPrefWidth(((float) numReview[2] / this.podcast.getReviews().size()) * 220);
-            this.fourStars.setPrefWidth(((float) numReview[3] / this.podcast.getReviews().size()) * 220);
-            this.fiveStars.setPrefWidth(((float) numReview[4] / this.podcast.getReviews().size()) * 220);
+            this.oneStar.setPrefWidth(((float) numReview[0] / this.podcast.getReviews().size()) * 216);
+            this.twoStars.setPrefWidth(((float) numReview[1] / this.podcast.getReviews().size()) * 216);
+            this.threeStars.setPrefWidth(((float) numReview[2] / this.podcast.getReviews().size()) * 216);
+            this.fourStars.setPrefWidth(((float) numReview[3] / this.podcast.getReviews().size()) * 216);
+            this.fiveStars.setPrefWidth(((float) numReview[4] / this.podcast.getReviews().size()) * 216);
         } else {
             this.oneStar.setPrefWidth(0);
             this.twoStars.setPrefWidth(0);
