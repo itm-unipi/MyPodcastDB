@@ -39,7 +39,13 @@ public class ImageCache {
         }
 
         // load new image
-        Image image = isLocal ? new Image(application.getClass().getResourceAsStream(url)) : new Image(url);
+        Image image = null;
+        try {
+            image = isLocal ? new Image(application.getClass().getResourceAsStream(url)) : new Image(url);
+        } catch (Exception e) {
+            return null;
+        }
+
         this.lruImages.addFirst(url);
         this.htImages.put(url, image);
 
@@ -62,6 +68,8 @@ public class ImageCache {
         else
             getInstance().updateLRUStatus(url);
 
+        if (image == null)
+            image = new Image(application.getClass().getResourceAsStream("/img/notFoundImage.png"));
         return image;
     }
 
