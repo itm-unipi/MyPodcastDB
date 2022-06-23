@@ -359,8 +359,8 @@ public class PodcastPageController {
 
     @FXML
     void clickOnWatchlater(MouseEvent event) {
-        Boolean result = this.service.setWatchLater(this.podcast, !this.watchLatered);
-        if (result) {
+        int result = this.service.setWatchLater(this.podcast, !this.watchLatered);
+        if (result == 0) {
             this.watchLatered = !this.watchLatered;
 
             // update the image
@@ -370,6 +370,8 @@ public class PodcastPageController {
             else
                 watchlaterIcon = ImageCache.getImageFromLocalPath("/img/addWatchlist.png");
             this.watchlater.setImage(watchlaterIcon);
+        } else if (result == -1) {
+            DialogManager.getInstance().createErrorAlert(this.mainPage, "Watchlist has reached its maximum capacity, please remove some podcasts");
         } else {
             DialogManager.getInstance().createErrorAlert(this.mainPage, "Something goes wrong");
         }

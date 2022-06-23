@@ -106,14 +106,26 @@ public class PodcastPageService {
         return result;
     }
 
-    public Boolean setWatchLater(Podcast podcast, Boolean newStatus) {
+    public int setWatchLater(Podcast podcast, boolean newStatus) {
         Logger.info("Set Watchlater Service");
 
+        // update cache
+        boolean result = true;
+        if (newStatus)
+            result = WatchlistCache.addPodcast(podcast);
+        else
+            WatchlistCache.removePodcast(podcast.getId());
+
+        // cache full error
+        if (!result) {
+            Logger.error("Watchlater Cache full");
+            return -1;
+        }
+
+        // update neo4j
         Neo4jManager.getInstance().openConnection();
 
-        // find if it has to add or delete the relation
         String username = ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername();
-        Boolean result;
         if (newStatus)
             result = this.userNeo4j.addUserWatchLaterPodcast(username, podcast.getId());
         else
@@ -121,24 +133,25 @@ public class PodcastPageService {
 
         // check the result of operation
         if (result) {
-            if (newStatus) {
-                // update cache
-                WatchlistCache.addPodcast(podcast);
+            if (newStatus)
                 Logger.success("Added to watchlater");
-            } else {
-                // update cache
-                WatchlistCache.removePodcast(podcast.getId());
+            else
                 Logger.success("Removed from watchlater");
-            }
         } else {
-            Logger.error("Watchlater status not modified");
+            Logger.error("Failed to update Watchlater status");
+
+            // restore the cache
+            if (newStatus)
+                WatchlistCache.removePodcast(podcast.getId());
+            else
+                WatchlistCache.addPodcast(podcast);
         }
 
         Neo4jManager.getInstance().closeConnection();
-        return result;
+        return result ? 0 : -2;
     }
 
-    public Boolean setLike(Podcast podcast, Boolean newStatus) {
+    public boolean setLike(Podcast podcast, boolean newStatus) {
         Logger.info("Set Like Service");
 
         Neo4jManager.getInstance().openConnection();
