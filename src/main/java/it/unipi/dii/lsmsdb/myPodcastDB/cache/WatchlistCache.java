@@ -9,7 +9,7 @@ import java.util.List;
 public class WatchlistCache {
     private static WatchlistCache watchlistCache;
     private Hashtable<String, Podcast> htPodcast;
-    private static int limit = 100;
+    private static int limit = 10;
     private static int size;
 
     public WatchlistCache() {
@@ -42,7 +42,7 @@ public class WatchlistCache {
     }
 
     public static void removePodcast(String podcastId) {
-        if(getInstance().htPodcast.remove(podcastId) != null);
+        if(getInstance().htPodcast.remove(podcastId) != null)
             size--;
     }
 

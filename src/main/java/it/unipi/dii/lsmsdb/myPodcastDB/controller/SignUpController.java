@@ -300,7 +300,6 @@ public class SignUpController {
 
     @FXML
     void signUpSignUpButtonIn(MouseEvent event){
-        Logger.info("Signup button pressed");
         signUpSignUpButton.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-border-color: #4CAF50;" +
@@ -313,7 +312,6 @@ public class SignUpController {
 
     @FXML
     void signUpSignUpButtonOut(MouseEvent event){
-        Logger.info("Signup button released");
         signUpSignUpButton.setStyle(
                 "-fx-background-color: #4CAF50;" +
                         "-fx-border-color:  transparent;" +

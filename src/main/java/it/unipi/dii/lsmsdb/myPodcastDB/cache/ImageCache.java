@@ -30,7 +30,7 @@ public class ImageCache {
         if (this.loadedImages == this.cacheSize) {
             String lruImage = this.lruImages.removeLast();
             this.htImages.remove(lruImage);
-            Logger.info("Cache full");
+            Logger.info("Image Cache full");
         }
 
         // else update the LRU status

@@ -115,7 +115,6 @@ public class LoginController {
 
     @FXML
     void loginSignUpButtonIn(MouseEvent event){
-        Logger.info("Signup button in");
         loginSignUpButton.setStyle(
                 "-fx-background-color:  white;" +
                         "-fx-border-color:  #f4511e;" +
@@ -128,7 +127,6 @@ public class LoginController {
 
     @FXML
     void loginSgnUpButtonOut(MouseEvent event){
-        Logger.info("Login button out");
         loginSignUpButton.setStyle(
                 "-fx-background-color:  #f4511e;" +
                         "-fx-border-color:  transparent;" +

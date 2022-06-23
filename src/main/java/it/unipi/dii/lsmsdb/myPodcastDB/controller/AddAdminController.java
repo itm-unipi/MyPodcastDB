@@ -113,7 +113,6 @@ public class AddAdminController {
 
     @FXML
     void confirmButtonIn(MouseEvent event){
-        Logger.info("login button pressed");
         confirmButton.setStyle(
                 "-fx-background-color: white;" +
                         "-fx-border-color: #4CAF50;" +
@@ -126,7 +125,6 @@ public class AddAdminController {
 
     @FXML
     void confirmButtonOut(MouseEvent event){
-        Logger.info("login buttod released");
         confirmButton.setStyle(
                 "-fx-background-color: #4CAF50;" +
                         "-fx-border-color:  transparent;" +
@@ -139,7 +137,6 @@ public class AddAdminController {
 
     @FXML
     void cancelButtonIn(MouseEvent event){
-        Logger.info("sugnup butto pressed");
         cancelButton.setStyle(
                 "-fx-background-color:  white;" +
                         "-fx-border-color:  #f4511e;" +
@@ -152,7 +149,6 @@ public class AddAdminController {
 
     @FXML
     void cancelButtonOut(MouseEvent event){
-        Logger.info("login button released");
         cancelButton.setStyle(
                 "-fx-background-color:  #f4511e;" +
                         "-fx-border-color:  transparent;" +
