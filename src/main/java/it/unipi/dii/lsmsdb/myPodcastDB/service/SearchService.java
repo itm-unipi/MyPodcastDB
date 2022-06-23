@@ -242,18 +242,23 @@ public class SearchService {
         return result;
     }
 
-    public boolean addPodcastInWatchlist(Podcast podcast) {
+    public int addPodcastInWatchlist(Podcast podcast) {
         Neo4jManager.getInstance().openConnection();
-        boolean result = userNeo4jManager.addUserWatchLaterPodcast(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId());
+        int result = 0;
 
-        if (result) {
-            Logger.success("Podcast added into the watchlist: " + podcast);
-
-            // Updating cache
-            WatchlistCache.addPodcast(podcast);
-            Logger.info("Podcast added in cache " + podcast);
-            Logger.info("Podcast in watchlist: " + WatchlistCache.getAllPodcastsInWatchlist().toString());
+        if (WatchlistCache.addPodcast(podcast)) {
+            if (!userNeo4jManager.addUserWatchLaterPodcast(((User) MyPodcastDB.getInstance().getSessionActor()).getUsername(), podcast.getId()))
+                result = 2;
         } else {
+            Logger.info("Watchlist full!");
+            result = 1;
+        }
+
+        if (result == 0) {
+            Logger.success("Podcast added into the watchlist: " + podcast);
+            Logger.info("Podcast added in cache " + podcast);
+        } else {
+            WatchlistCache.removePodcast(podcast.getId());
             Logger.error("Error during the creation of the relationship");
         }
 

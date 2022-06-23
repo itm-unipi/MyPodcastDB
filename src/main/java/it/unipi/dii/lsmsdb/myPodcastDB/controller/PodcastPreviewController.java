@@ -11,11 +11,14 @@ import it.unipi.dii.lsmsdb.myPodcastDB.view.ViewNavigator;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -72,6 +75,8 @@ public class PodcastPreviewController {
     @FXML
     private HBox watchlistRemovedMessage;
 
+    private BorderPane mainPage;
+
     @FXML
     void onHoverPodcast(MouseEvent event) {
         this.podcastPreviewBox.setStyle("-fx-border-color: #DBDBDB; -fx-background-color: #E5E5E5; -fx-background-radius: 7px; -fx-border-radius: 7px;");
@@ -118,27 +123,39 @@ public class PodcastPreviewController {
             Logger.info("Removing from watchlist (and cache)");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/addWatchlist.png"));
             this.inWatchlist = !homePageService.removePodcastFromWatchlist(podcastPreview);
-
-            watchlistAddedMessage.setVisible(false);
-            watchlistRemovedMessage.setVisible(true);
-            FadeTransition boxMessage = new FadeTransition(Duration.seconds(2), watchlistRemovedMessage);
-            boxMessage.setFromValue(1.0);
-            boxMessage.setToValue(0);
-            boxMessage.play();
-
+            showRemovedLabel();
         } else {
-            // TODO: aggiungere alert se watchlist è troppo grande
-            Logger.info("Adding in watchlist (and cache)");
-            this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
-            this.inWatchlist = homePageService.addPodcastInWatchlist(podcastPreview);
+            int result = homePageService.addPodcastInWatchlist(podcastPreview);
 
-            watchlistAddedMessage.setVisible(true);
-            watchlistRemovedMessage.setVisible(false);
-            FadeTransition boxMessage = new FadeTransition(Duration.seconds(2), watchlistAddedMessage);
-            boxMessage.setFromValue(1.0);
-            boxMessage.setToValue(0);
-            boxMessage.play();
+            if (result == 0) {
+                Logger.info("Adding in watchlist (and cache)");
+                this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
+                this.inWatchlist = true;
+                showAddedLabel();
+            } else if (result == 1) {
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Watchlist has reached its maximum limit. Please remove some podcasts to free up space.");
+            } else {
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Something went wrong. Please try again.");
+            }
         }
+    }
+
+    void showAddedLabel() {
+        this.watchlistAddedMessage.setVisible(true);
+        this.watchlistRemovedMessage.setVisible(false);
+        FadeTransition fadeButton = new FadeTransition(Duration.seconds(1.5), this.watchlistAddedMessage);
+        fadeButton.setFromValue(1);
+        fadeButton.setToValue(0);
+        fadeButton.play();
+    }
+
+    void showRemovedLabel() {
+        this.watchlistAddedMessage.setVisible(false);
+        this.watchlistRemovedMessage.setVisible(true);
+        FadeTransition fadeButton = new FadeTransition(Duration.seconds(1.5), this.watchlistRemovedMessage);
+        fadeButton.setFromValue(1);
+        fadeButton.setToValue(0);
+        fadeButton.play();
     }
 
     @FXML
@@ -147,7 +164,9 @@ public class PodcastPreviewController {
         StageManager.showPage(ViewNavigator.PODCASTPAGE.getPage(), podcastPreview.getId());
     }
 
-    public void setData(Podcast podcast, int typeLabel, String valueLabel) {
+    public void setData(BorderPane mainPage, Podcast podcast, int typeLabel, String valueLabel) {
+        this.mainPage = mainPage;
+
         // TypeLabel can be: 0 -> no label, 1 -> likes, 2 -> rating, 3 -> star
         this.podcastPreview = podcast;
         this.actorType = MyPodcastDB.getInstance().getSessionType();

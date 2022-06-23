@@ -1,6 +1,7 @@
 package it.unipi.dii.lsmsdb.myPodcastDB.cache;
 
 import it.unipi.dii.lsmsdb.myPodcastDB.model.Podcast;
+import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -35,7 +36,6 @@ public class WatchlistCache {
     }
 
     public static void addPodcastList(List<Podcast> podcasts) {
-
         for (Podcast podcast : podcasts)
             if(getInstance().htPodcast.put(podcast.getId(), podcast) == null)
                 size++;

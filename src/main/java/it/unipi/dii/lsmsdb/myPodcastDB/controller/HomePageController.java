@@ -530,7 +530,7 @@ public class HomePageController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast, 0, null);
+            controller.setData(mainPage, podcast, 0, null);
 
             this.gridWatchlist.add(newPodcast, this.column++, this.row);
         }
@@ -548,7 +548,7 @@ public class HomePageController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast, 0, null);
+            controller.setData(mainPage, podcast, 0, null);
 
             this.gridSuggestedForCategory.add(newPodcast, this.column++, this.row);
         }
@@ -566,7 +566,7 @@ public class HomePageController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast, 0, null);
+            controller.setData(mainPage, podcast, 0, null);
 
             this.gridPodcastsBasedOnWatchlist.add(newPodcast, this.column++, this.row);
         }
@@ -600,7 +600,7 @@ public class HomePageController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast, 0, null);
+            controller.setData(mainPage, podcast, 0, null);
 
             this.gridPodcastsSuggestedForUsers.add(newPodcast, this.column++, this.row);
         }
@@ -630,9 +630,9 @@ public class HomePageController {
             PodcastPreviewController controller = fxmlLoader.getController();
             // Selecting the right controller's setData to distinguish the top rated podcast in user's country from the general top rated
             if (podcast.getValue2())
-                controller.setData(podcast.getValue0(), 3, podcast.getValue1().toString());
+                controller.setData(mainPage, podcast.getValue0(), 3, podcast.getValue1().toString());
             else
-                controller.setData(podcast.getValue0(), 2, podcast.getValue1().toString());
+                controller.setData(mainPage, podcast.getValue0(), 2, podcast.getValue1().toString());
 
             this.gridTopRated.add(newPodcast, this.column++, this.row);
         }
@@ -648,7 +648,7 @@ public class HomePageController {
 
             AnchorPane newPodcast = fxmlLoader.load();
             PodcastPreviewController controller = fxmlLoader.getController();
-            controller.setData(podcast.getValue0(), 1, podcast.getValue1().toString());
+            controller.setData(mainPage, podcast.getValue0(), 1, podcast.getValue1().toString());
 
             this.gridMostLikedPodcasts.add(newPodcast, this.column++, this.row);
         }

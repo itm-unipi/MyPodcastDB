@@ -196,11 +196,18 @@ public class AuthorReducedPodcastController {
             this.inWatchlist = !authorProfileService.removePodcastFromWatchlist(podcast);
             showRemovedLabel();
         } else {
-            // TODO: aggiungere alert se watchlist è troppo grande
-            Logger.info("Adding in watchlist (and cache)");
-            this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
-            this.inWatchlist = authorProfileService.addPodcastInWatchlist(podcast);
-            showAddedLabel();
+            int result = authorProfileService.addPodcastInWatchlist(podcast);
+
+            if (result == 0) {
+                Logger.info("Adding in watchlist (and cache)");
+                this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
+                this.inWatchlist = true;
+                showAddedLabel();
+            } else if (result == 1) {
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Watchlist has reached its maximum limit. Please remove some podcasts to free up space.");
+            } else {
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Something went wrong. Please try again.");
+            }
         }
     }
 
@@ -212,11 +219,19 @@ public class AuthorReducedPodcastController {
             this.inWatchlist = !searchService.removePodcastFromWatchlist(podcast);
             showRemovedLabel();
         } else {
-            // TODO: aggiungere alert se watchlist è troppo grande
-            Logger.info("Adding in watchlist (and cache)");
-            this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
-            this.inWatchlist = searchService.addPodcastInWatchlist(podcast);
-            showAddedLabel();
+            int result = searchService.addPodcastInWatchlist(podcast);
+
+            if (result == 0) {
+                Logger.info("Adding in watchlist (and cache)");
+                this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
+
+                this.inWatchlist = true;
+                showAddedLabel();
+            } else if (result == 1) {
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Watchlist has reached its maximum limit. Please remove some podcasts to free up space.");
+            } else {
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Something went wrong. Please try again.");
+            }
         }
     }
 
