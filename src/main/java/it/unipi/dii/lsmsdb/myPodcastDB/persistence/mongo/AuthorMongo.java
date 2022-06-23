@@ -30,13 +30,25 @@ public class AuthorMongo {
     public boolean addAuthor(Author author) {
         MongoManager manager = MongoManager.getInstance();
 
+        // create the array of embedded podcasts
+        List<Document> podcasts = new ArrayList<>();
+        for (Podcast podcast : author.getOwnPodcasts()) {
+            Document newPodcast = new Document()
+                    .append("podcastId", new ObjectId(podcast.getId()))
+                    .append("podcastName", podcast.getName())
+                    .append("podcastReleaseDate", podcast.getReleaseDate())
+                    .append("category", podcast.getPrimaryCategory())
+                    .append("artworkUrl600", podcast.getArtworkUrl600());
+            podcasts.add(newPodcast);
+        }
+
         try {
             Document newAuthor = new Document("name", author.getName())
                     .append("email", author.getEmail())
                     .append("password", author.getPassword())
                     .append("podcasts", new ArrayList<>())
-                    .append("picturePath", author.getPicturePath()
-                    );
+                    .append("picturePath", author.getPicturePath())
+                    .append("podcasts", podcasts);
 
             manager.getCollection("author").insertOne(newAuthor);
             author.setId(newAuthor.getObjectId("_id").toString());

@@ -584,8 +584,19 @@ public class AuthorProfileService {
         MongoManager.getInstance().closeConnection();
         Neo4jManager.getInstance().closeConnection();
 
-        if (deleteResult == 0)
+        if (deleteResult == 0) {
             Logger.success(podcastId + " deleted successfully!");
+
+            // Update session in order to avoid inconsistency in author profile
+            List<Podcast> ownPodcasts = ((Author)MyPodcastDB.getInstance().getSessionActor()).getOwnPodcasts();
+            for (Podcast p : ownPodcasts) {
+                if (p.getId().equals(podcastId)) {
+                    ownPodcasts.remove(p);
+                    break;
+                }
+            }
+            ((Author)MyPodcastDB.getInstance().getSessionActor()).setOwnPodcasts(ownPodcasts);
+        }
 
         return deleteResult;
     }

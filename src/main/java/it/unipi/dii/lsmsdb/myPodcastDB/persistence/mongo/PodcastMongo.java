@@ -88,6 +88,10 @@ public class PodcastMongo {
                 .append("reviews", reviews)
                 .append("preloadedReviews", preloadedReviews);
 
+        // if the id is given, use that (rollback)
+        if (podcast.getId() != null)
+            newPodcast.append("_id", new ObjectId(podcast.getId()));
+
         try{
             manager.getCollection("podcast").insertOne(newPodcast);
         }catch (Exception e){

@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorProfileController {
-    private final Author author;
+    private Author author;
 
     private final String actorType;
 
@@ -538,7 +538,8 @@ public class AuthorProfileController {
 
                 if (StageManager.getObjectIdentifier().equals(sessionActor.getName())) {
                     // Session author coincides with the author profile requested
-                    author.setName(sessionActor.getName());
+                    //author.setName(sessionActor.getName());
+                    author = sessionActor;
                     entityFound = authorProfileService.loadAuthorProfileAsPageOwner(this.author, this.followedAuthorsByAuthor, this.authorsToRetrieve);
 
                     authorName.setText(sessionActor.getName());
