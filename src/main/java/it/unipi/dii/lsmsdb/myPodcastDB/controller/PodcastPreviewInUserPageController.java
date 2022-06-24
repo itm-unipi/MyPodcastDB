@@ -143,7 +143,7 @@ public class PodcastPreviewInUserPageController {
                 Logger.error("Watch later relation already exists");
             else if(res == 2) {
                 Logger.error("Watchlist is full");
-                DialogManager.getInstance().createErrorAlert(mainPage, "Your watchlist is full");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Watchlist has reached its maximum limit, please remove some podcasts.");
             }
             else if(res == 3){
                 Logger.error("Adding watch later relation failed");

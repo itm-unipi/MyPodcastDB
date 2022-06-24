@@ -133,7 +133,7 @@ public class PodcastPreviewController {
                 this.inWatchlist = true;
                 showAddedLabel();
             } else if (result == 1) {
-                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Watchlist has reached its maximum limit. Please remove some podcasts to free up space.");
+                DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Watchlist has reached its maximum limit, please remove some podcasts.");
             } else {
                 DialogManager.getInstance().createErrorAlert(mainPage, "Add to watchlist - Error", "Something went wrong. Please try again.");
             }
