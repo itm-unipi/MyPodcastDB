@@ -86,7 +86,7 @@ public class HomePageService {
 
         Neo4jManager.getInstance().closeConnection();
         MongoManager.getInstance().closeConnection();
-        Logger.info("Homepage loaded");
+        Logger.success("Homepage service finished");
     }
 
     public void loadHomepageAsUnregistered(List<Triplet<Podcast, Float, Boolean>> topRated, List<Pair<Podcast, Integer>> mostLikedPodcasts, List<Pair<Author, Integer>> mostFollowedAuthors, int limit) {
@@ -107,7 +107,7 @@ public class HomePageService {
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
         MongoManager.getInstance().closeConnection();
-        Logger.info("Homepage loaded");
+        Logger.success("Homepage service finished");
     }
 
     public boolean loadMoreSuggested(List<Podcast> basedOnFollowedUsers, int limit, int skip) {
@@ -279,7 +279,7 @@ public class HomePageService {
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
         MongoManager.getInstance().closeConnection();
-        Logger.info("Homepage loaded");
+        Logger.success("Homepage service finished");
     }
 
     /***** AUTHOR HOMEPAGE ******/
@@ -300,7 +300,7 @@ public class HomePageService {
         this.queryMongoManager.getMostFollowedAuthor(mostFollowedAuthors);
 
         MongoManager.getInstance().closeConnection();
-        Logger.info("Homepage loaded");
+        Logger.success("Homepage service finished");
     }
 
     public boolean followAuthorAsAuthor(Author author) {

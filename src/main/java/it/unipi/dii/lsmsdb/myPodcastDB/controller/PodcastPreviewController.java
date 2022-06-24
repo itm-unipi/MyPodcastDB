@@ -187,11 +187,11 @@ public class PodcastPreviewController {
         } else if (typeLabel == 2) {
             // Average rating
             boxRating.setVisible(true);
-            ratingLabel.setText(valueLabel);
+            ratingLabel.setText(valueLabel.substring(0, 3));
         } else if (typeLabel == 3) {
             // Top country podcast
             boxTopCountry.setVisible(true);
-            ratingCountryLabel.setText(valueLabel);
+            ratingCountryLabel.setText(valueLabel.substring(0, 3));
         }
 
         // Check if podcast is in the user's watchlist
