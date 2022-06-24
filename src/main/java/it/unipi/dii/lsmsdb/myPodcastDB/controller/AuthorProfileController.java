@@ -292,7 +292,7 @@ public class AuthorProfileController {
             int deleteResult = authorProfileService.deleteAuthorAsAdmin(author);
 
             if (deleteResult == 0) {
-                DialogManager.getInstance().createInformationAlert(mainPage, "Delete Account", "Account delete successfully!");
+                DialogManager.getInstance().createInformationAlert(mainPage, "Delete Account", "Account deleted successfully!");
                 StageManager.showPage(ViewNavigator.HOMEPAGE.getPage());
             } else {
                 Logger.error("Error during the delete operation");

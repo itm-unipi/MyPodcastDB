@@ -375,13 +375,13 @@ public class AuthorProfileService {
         if (!authorMongoManager.deleteAuthorByName(author.getName())) {
             Logger.error(author.getName() + " deleted failed! (Mongo)");
             deleteResult = -1;
-        } else if (!authorNeo4jManager.deleteAuthor(author.getName())) {
-            Logger.error(author.getName() + " deleted failed! (Neo4J)");
-            deleteResult = -2;
-            deleteAuthorRollback(deleteResult, author, podcasts, deletedEmbeddedReviews);
         } else if (!podcastNeo4jManager.deletePodcastsOfAuthor(author.getName())) {
             // Delete podcasts on Neo4J. All the relationships will be deleted as well (detach mode).
             Logger.error("Error deleting podcasts of author on Neo4J");
+            deleteResult = -2;
+            deleteAuthorRollback(deleteResult, author, podcasts, deletedEmbeddedReviews);
+        } else if (!authorNeo4jManager.deleteAuthor(author.getName())) {
+            Logger.error(author.getName() + " deleted failed! (Neo4J)");
             deleteResult = -3;
             deleteAuthorRollback(deleteResult, author, podcasts, deletedEmbeddedReviews);
         } else {
@@ -661,13 +661,13 @@ public class AuthorProfileService {
         if (!authorMongoManager.deleteAuthorByName(authorToDelete.getName())) {
             Logger.error(authorToDelete.getName() + " deleted failed! (Mongo)");
             deleteResult = -1;
-        } else if (!authorNeo4jManager.deleteAuthor(authorToDelete.getName())) {
-            Logger.error(authorToDelete.getName() + " deleted failed! (Neo4J)");
-            deleteResult = -2;
-            deleteAuthorRollback(deleteResult, authorToDelete, podcasts, deletedEmbeddedReviews);
         } else if (!podcastNeo4jManager.deletePodcastsOfAuthor(authorToDelete.getName())) {
             // Delete podcasts on Neo4J. All the relationships will be deleted as well (detach mode).
             Logger.error("Error deleting podcasts of author on Neo4J");
+            deleteResult = -2;
+            deleteAuthorRollback(deleteResult, authorToDelete, podcasts, deletedEmbeddedReviews);
+        } else if (!authorNeo4jManager.deleteAuthor(authorToDelete.getName())) {
+            Logger.error(authorToDelete.getName() + " deleted failed! (Neo4J)");
             deleteResult = -3;
             deleteAuthorRollback(deleteResult, authorToDelete, podcasts, deletedEmbeddedReviews);
         } else {
@@ -755,19 +755,28 @@ public class AuthorProfileService {
             authorMongoManager.addAuthor(author);
         }
 
-        if (result <= -3) {
+        if (result == -3) {
             Logger.info("Rollback due to the failure of the podcasts' delete on Neo4J");
-            authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath());
 
-            // Restoring "created by" relationships because they were deleted when the author was deleted on Neo4J
-            if (result == -3) {
-                for (Podcast podcast : podcasts)
-                    podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
+            for (Podcast podcast : podcasts) {
+                // Restoring the podcast on neo4J
+                podcastNeo4jManager.addPodcast(podcast);
+
+                // Restoring the "created by" relationship
+                podcastNeo4jManager.addPodcastCreatedByAuthor(podcast);
+
+                // Restoring all the "belongs to" relationships
+                podcastNeo4jManager.addPodcastBelongsToCategory(podcast, podcast.getPrimaryCategory());
+                for (String category : podcast.getCategories()) {
+                    podcastNeo4jManager.addPodcastBelongsToCategory(podcast, category);
+                }
             }
         }
 
         if (result <= -4) {
             Logger.info("Rollback due to the failure of the podcasts' delete on Mongo");
+            authorNeo4jManager.addAuthor(author.getName(), author.getPicturePath());
+
             for (Podcast podcast : podcasts) {
                 // Restoring the podcast on neo4J
                 podcastNeo4jManager.addPodcast(podcast);
