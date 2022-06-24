@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmlConfig>
-    <mongoDBConfigType>cluster</mongoDBConfigType>
+    <mongoDBConfigType>local</mongoDBConfigType>
     <mongoDBLocalConfig>
         <mongoDBIp>localhost</mongoDBIp>
         <mongoDBPort>27017</mongoDBPort>
@@ -9,11 +9,11 @@
         <mongoDBPassword>password</mongoDBPassword>
     </mongoDBLocalConfig>
     <mongoDBClusterConfig>
-        <mongoDBIp1>localhost</mongoDBIp1>
-        <mongoDBPort1>27018</mongoDBPort1>
-        <mongoDBIp2>localhost</mongoDBIp2>
-        <mongoDBPort2>27019</mongoDBPort2>
-        <mongoDBIp3>localhost</mongoDBIp3>
+        <mongoDBIp1>172.16.4.226</mongoDBIp1>
+        <mongoDBPort1>27020</mongoDBPort1>
+        <mongoDBIp2>172.16.4.227</mongoDBIp2>
+        <mongoDBPort2>27020</mongoDBPort2>
+        <mongoDBIp3>172.16.4.228</mongoDBIp3>
         <mongoDBPort3>27020</mongoDBPort3>
         <writeConcern>1</writeConcern>
         <readPreferences>nearest</readPreferences>
