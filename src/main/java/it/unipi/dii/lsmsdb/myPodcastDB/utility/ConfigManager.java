@@ -74,7 +74,7 @@ public class ConfigManager {
     }
 
     public static String getMongoDBConnectorString() {
-        if (config.getMongoDBConfigType().equals("local")) {
+        if (config.getDatabasesConfigType().equals("local")) {
             String stringConnector = "mongodb://" +
                     config.getMongoDBLocalConfig().getMongoDBUser() + ":" +
                     config.getMongoDBLocalConfig().getMongoDBPassword() + "@" +
@@ -102,12 +102,17 @@ public class ConfigManager {
     }
 
     public static String getNeo4JConnectorString() {
-        String stringConnector = "neo4j://" +
-                // config.getNeo4JConfig().getNeo4JUser() + ":" +
-                // config.getNeo4JConfig().getNeo4JPassword() + "@" +
-                config.getNeo4JConfig().getNeo4JIp() + ":" +
-                config.getNeo4JConfig().getNeo4JPort() ;
-        return stringConnector;
+        if (config.getDatabasesConfigType().equals("local")) {
+            String stringConnector = "neo4j://" +
+                    config.getNeo4JLocalConfig().getNeo4JIp() + ":" +
+                    config.getNeo4JLocalConfig().getNeo4JPort();
+            return stringConnector;
+        } else {
+            String stringConnector = "bolt://" +
+                    config.getNeo4JRemoteConfig().getNeo4JIp() + ":" +
+                    config.getNeo4JRemoteConfig().getNeo4JPort();
+            return stringConnector;
+        }
     }
 
     public static boolean isInitialized(){
@@ -116,11 +121,21 @@ public class ConfigManager {
         else return true;
     }
 
-    public static String getNeo4JName() { return config.getNeo4JConfig().getNeo4JName(); }
+    public static String getNeo4JName() { return config.getNeo4JLocalConfig().getNeo4JName(); }
 
-    public static String getNeo4JUser() { return config.getNeo4JConfig().getNeo4JUser(); }
+    public static String getNeo4JUser() {
+        if (config.getDatabasesConfigType().equals("local"))
+            return config.getNeo4JLocalConfig().getNeo4JUser();
+        else
+            return config.getNeo4JRemoteConfig().getNeo4JUser();
+    }
 
-    public static String getNeo4JPassword() { return config.getNeo4JConfig().getNeo4JPassword(); }
+    public static String getNeo4JPassword() {
+        if (config.getDatabasesConfigType().equals("local"))
+            return config.getNeo4JLocalConfig().getNeo4JPassword();
+        else
+            return config.getNeo4JRemoteConfig().getNeo4JPassword();
+    }
 
     public static String getLogMode() { return config.getLogMode(); }
 

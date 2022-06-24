@@ -3,11 +3,11 @@
     <xs:element name="xmlConfig">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="mongoDBConfigType">
+                <xs:element name="databasesConfigType">
                     <xs:simpleType>
                         <xs:restriction base="xs:string">
                             <xs:enumeration value="local"/>
-                            <xs:enumeration value="cluster"/>
+                            <xs:enumeration value="remote"/>
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:element>
@@ -59,7 +59,19 @@
                     </xs:complexType>
                 </xs:element>
 
-                <xs:element name="neo4JConfig">
+                <xs:element name="neo4JLocalConfig">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="neo4JIp" type="xs:string"/>
+                            <xs:element name="neo4JPort" type="xs:string"/>
+                            <xs:element name="neo4JName" type="xs:string"/>
+                            <xs:element name="neo4JUser" type="xs:string"/>
+                            <xs:element name="neo4JPassword" type="xs:string"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+
+                <xs:element name="neo4JRemoteConfig">
                     <xs:complexType>
                         <xs:sequence>
                             <xs:element name="neo4JIp" type="xs:string"/>

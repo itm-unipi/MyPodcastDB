@@ -6,10 +6,11 @@ import java.io.Serializable;
 
 @XStreamAlias("xmlConfig")
 public class XMLconfig implements Serializable {
-    private String mongoDBConfigType;
+    private String databasesConfigType;
     private MongoDBLocalConfig mongoDBLocalConfig;
     private MongoDBClusterConfig mongoDBClusterConfig;
-    private Neo4JConfig neo4JConfig;
+    private Neo4JConfig neo4JLocalConfig;
+    private Neo4JConfig neo4JRemoteConfig;
     private String logMode;
     private int imageCacheSize;
 
@@ -22,12 +23,12 @@ public class XMLconfig implements Serializable {
         this.mongoDBLocalConfig = mongoDBConfig;
     }
 
-    public String getMongoDBConfigType() {
-        return mongoDBConfigType;
+    public String getDatabasesConfigType() {
+        return databasesConfigType;
     }
 
-    public void setMongoDBConfigType(String mongoDBConfigType) {
-        this.mongoDBConfigType = mongoDBConfigType;
+    public void setDatabasesConfigType(String databasesConfigType) {
+        this.databasesConfigType = databasesConfigType;
     }
 
     public MongoDBClusterConfig getMongoDBClusterConfig() {
@@ -38,12 +39,20 @@ public class XMLconfig implements Serializable {
         this.mongoDBClusterConfig = mongoDBClusterConfig;
     }
 
-    public Neo4JConfig getNeo4JConfig() {
-        return neo4JConfig;
+    public Neo4JConfig getNeo4JLocalConfig() {
+        return neo4JLocalConfig;
     }
 
-    public void setNeo4JConfig(Neo4JConfig neo4JConfig) {
-        this.neo4JConfig = neo4JConfig;
+    public void setNeo4JLocalConfig(Neo4JConfig neo4JLocalConfig) {
+        this.neo4JLocalConfig = neo4JLocalConfig;
+    }
+
+    public Neo4JConfig getNeo4JRemoteConfig() {
+        return neo4JRemoteConfig;
+    }
+
+    public void setNeo4JRemoteConfig(Neo4JConfig neo4JRemoteConfig) {
+        this.neo4JRemoteConfig = neo4JRemoteConfig;
     }
 
     public String getLogMode() {
@@ -65,10 +74,11 @@ public class XMLconfig implements Serializable {
     @Override
     public String toString() {
         return "XMLconfig{" +
-                "mongoDBConfigType='" + mongoDBConfigType + '\'' +
+                "databasesConfigType='" + databasesConfigType + '\'' +
                 ", mongoDBLocalConfig=" + mongoDBLocalConfig +
                 ", mongoDBClusterConfig=" + mongoDBClusterConfig +
-                ", neo4JConfig=" + neo4JConfig +
+                ", neo4JLocalConfig=" + neo4JLocalConfig +
+                ", neo4JRemoteConfig=" + neo4JRemoteConfig +
                 ", logMode='" + logMode + '\'' +
                 ", imageCacheSize=" + imageCacheSize +
                 '}';

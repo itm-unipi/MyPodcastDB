@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmlConfig>
-    <mongoDBConfigType>local</mongoDBConfigType>
+    <databasesConfigType>local</databasesConfigType>
     <mongoDBLocalConfig>
         <mongoDBIp>localhost</mongoDBIp>
         <mongoDBPort>27017</mongoDBPort>
@@ -21,13 +21,20 @@
         <mongoDBUser>admin</mongoDBUser>
         <mongoDBPassword>password</mongoDBPassword>
     </mongoDBClusterConfig>
-    <neo4JConfig>
+    <neo4JLocalConfig>
         <neo4JIp>localhost</neo4JIp>
         <neo4JPort>7687</neo4JPort>
         <neo4JName>myPodcastDB</neo4JName>
         <neo4JUser>neo4j</neo4JUser>
         <neo4JPassword>password</neo4JPassword>
-    </neo4JConfig>
+    </neo4JLocalConfig>
+    <neo4JRemoteConfig>
+        <neo4JIp>172.16.4.226</neo4JIp>
+        <neo4JPort>7687</neo4JPort>
+        <neo4JName>myPodcastDB</neo4JName>
+        <neo4JUser>neo4j</neo4JUser>
+        <neo4JPassword>neo4j</neo4JPassword>
+    </neo4JRemoteConfig>
     <logMode>verbose</logMode>
     <imageCacheSize>100</imageCacheSize>
 </xmlConfig>
