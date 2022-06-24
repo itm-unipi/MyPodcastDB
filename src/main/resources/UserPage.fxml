@@ -150,7 +150,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageUsernameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="132.0" style="-fx-background-color: transparent;" text="Biajo">
+                                    <TextField fx:id="userPageUsernameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="132.0" style="-fx-background-color: transparent;" text="Username">
                                        <padding>
                                           <Insets left="-1.0" />
                                        </padding>
@@ -166,7 +166,7 @@
                                     <Pane prefHeight="30.0" prefWidth="200.0">
                                        <children>
                                           <ComboBox fx:id="userPageCountryComboBox" layoutX="-2.0" layoutY="-1.0" prefHeight="30.0" prefWidth="182.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
-                                          <Label fx:id="userPageCountryLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Altamura" textFill="#434343">
+                                          <Label fx:id="userPageCountryLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Country" textFill="#434343">
                                              <font>
                                                 <Font name="Corbel Light" size="14.0" />
                                              </font>
@@ -181,7 +181,7 @@
                                     <Pane prefHeight="30.0" prefWidth="200.0">
                                        <children>
                                           <ComboBox fx:id="userPageFavGenreComboBox" layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
-                                          <Label fx:id="userPageFavGenreLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Horror" textFill="#434343">
+                                          <Label fx:id="userPageFavGenreLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Genre" textFill="#434343">
                                              <font>
                                                 <Font name="Corbel Light" size="14.0" />
                                              </font>
@@ -196,7 +196,7 @@
                                     <Pane prefHeight="30.0" prefWidth="200.0">
                                        <children>
                                           <ComboBox fx:id="userPageGenderComboBox" layoutX="-1.0" layoutY="1.0" prefHeight="30.0" prefWidth="180.0" style="-fx-background-color: white; -fx-background-radius: 10; -fx-font-family: Corbel; -fx-text-fill: #434343;" />
-                                          <Label fx:id="userPageGenderLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="famale" textFill="#434343">
+                                          <Label fx:id="userPageGenderLabel" minHeight="-Infinity" prefHeight="30.0" prefWidth="176.0" text="Gender" textFill="#434343">
                                              <font>
                                                 <Font name="Corbel Light" size="14.0" />
                                              </font>
@@ -228,7 +228,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageNameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="Biagio">
+                                    <TextField fx:id="userPageNameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="Name">
                                        <padding>
                                           <Insets left="-1.0" />
                                        </padding>
@@ -247,7 +247,7 @@
                                           <Insets left="-1.0" />
                                        </padding>
                                     </Label>
-                                    <TextField fx:id="userPageSurnameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="243.0" style="-fx-background-color: transparent;" text="Papiri">
+                                    <TextField fx:id="userPageSurnameTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="243.0" style="-fx-background-color: transparent;" text="Surname">
                                        <padding>
                                           <Insets left="-1.0" />
                                        </padding>
@@ -260,7 +260,7 @@
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
                                     </Label>
-                                    <TextField fx:id="userPageEmailTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="biagiopapiti@example.it">
+                                    <TextField fx:id="userPageEmailTextField" editable="false" minHeight="-Infinity" prefHeight="30.0" prefWidth="189.0" style="-fx-background-color: transparent;" text="email@example.it">
                                        <padding>
                                           <Insets left="-1.0" />
                                        </padding>
@@ -268,7 +268,7 @@
                                           <Font name="Corbel Light" size="15.0" />
                                        </font>
                                     </TextField>
-                                    <Label minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Age" textFill="#434343">
+                                    <Label fx:id="ageTitle" minHeight="-Infinity" prefHeight="30.0" prefWidth="315.0" text="Age" textFill="#434343">
                                        <font>
                                           <Font name="Corbel Bold" size="18.0" />
                                        </font>
@@ -492,7 +492,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <Button fx:id="userPageShowLikedButton" mnemonicParsing="false" onMouseClicked="#showLikedPodcastClick" onMouseEntered="#showLikedIn" onMouseExited="#showLikedOut" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 8;" text="Show Liked Podcast" textFill="WHITE">
+                              <Button fx:id="userPageShowLikedButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#showLikedPodcastClick" onMouseEntered="#showLikedIn" onMouseExited="#showLikedOut" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 8;" text="Show Liked Podcast" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel" size="16.0" />
                                  </font>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmlConfig>
-    <mongoDBConfigType>local</mongoDBConfigType>
+    <mongoDBConfigType>cluster</mongoDBConfigType>
     <mongoDBLocalConfig>
         <mongoDBIp>localhost</mongoDBIp>
         <mongoDBPort>27017</mongoDBPort>
@@ -10,11 +10,11 @@
     </mongoDBLocalConfig>
     <mongoDBClusterConfig>
         <mongoDBIp1>localhost</mongoDBIp1>
-        <mongoDBPort1>27017</mongoDBPort1>
+        <mongoDBPort1>27018</mongoDBPort1>
         <mongoDBIp2>localhost</mongoDBIp2>
-        <mongoDBPort2>27017</mongoDBPort2>
+        <mongoDBPort2>27019</mongoDBPort2>
         <mongoDBIp3>localhost</mongoDBIp3>
-        <mongoDBPort3>27017</mongoDBPort3>
+        <mongoDBPort3>27020</mongoDBPort3>
         <writeConcern>1</writeConcern>
         <readPreferences>nearest</readPreferences>
         <mongoDBName>myPodcastDB</mongoDBName>

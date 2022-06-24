@@ -83,8 +83,8 @@ public class ConfigManager {
             return stringConnector;
         } else {
             String stringConnector = "mongodb://" +
-                    config.getMongoDBClusterConfig().getMongoDBUser() + ":" +
-                    config.getMongoDBClusterConfig().getMongoDBPassword() + "@" +
+                    //config.getMongoDBClusterConfig().getMongoDBUser() + ":" +
+                    //config.getMongoDBClusterConfig().getMongoDBPassword() + "@" +
                     config.getMongoDBClusterConfig().getMongoDBIp1() + ":" +
                     config.getMongoDBClusterConfig().getMongoDBPort1() + "," +
                     config.getMongoDBClusterConfig().getMongoDBIp2() + ":" +
@@ -92,7 +92,7 @@ public class ConfigManager {
                     config.getMongoDBClusterConfig().getMongoDBIp3() + ":" +
                     config.getMongoDBClusterConfig().getMongoDBPort3() + "/?retryWrites=true&w=" +
                     config.getMongoDBClusterConfig().getWriteConcern() + "&readPreference=" +
-                    config.getMongoDBClusterConfig().getReadPreferences() + "&wtimeout=5000";
+                    config.getMongoDBClusterConfig().getReadPreferences() + "&wtimeout=5000&ssl=false";
             return stringConnector;
         }
     }

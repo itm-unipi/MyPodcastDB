@@ -67,6 +67,9 @@ public class UserPageController {
     private ComboBox userPageCountryComboBox;
 
     @FXML
+    private Label ageTitle;
+
+    @FXML
     private ImageView userPageCrossButton;
 
     @FXML
@@ -722,6 +725,7 @@ public class UserPageController {
         userPageSurnameTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPageEmailTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
         userPagePasswordTextField.setStyle("-fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;");
+        ageTitle.setText("Date of Birth");
         imageNumber = 0;
     }
 
@@ -766,8 +770,7 @@ public class UserPageController {
         userPageSurnameTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPageEmailTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
         userPagePasswordTextField.setStyle("-fx-background-color: transparent; -fx-border-color: transparent");
-
-
+        ageTitle.setText("Age");
     }
 
     @FXML
@@ -876,7 +879,7 @@ public class UserPageController {
         userPageGenderLabel.setText(pageOwner.getGender());
         userPageFavGenreLabel.setText(pageOwner.getFavouriteGenre());
         userPageAgeLabel.setText(pageOwner.getAge() + "");
-
+        ageTitle.setText("Age");
     }
 
     @FXML
