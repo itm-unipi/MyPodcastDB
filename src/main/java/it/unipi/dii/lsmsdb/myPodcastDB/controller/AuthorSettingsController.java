@@ -135,7 +135,7 @@ public class AuthorSettingsController {
 
             if (this.authorPassword.getText().equals(((Author)MyPodcastDB.getInstance().getSessionActor()).getPassword())) {
                 AuthorProfileService authorProfileService = new AuthorProfileService();
-                int deleteResult = authorProfileService.deleteAccountAsAuthor(this.author);
+                int deleteResult = authorProfileService.deleteAuthorAsAuthor(this.author);
 
                 if (deleteResult == 0) {
                     DialogManager.getInstance().createInformationAlert(this.dialogPane, "Delete Account", "Account deleted successfully!");

@@ -14,7 +14,6 @@ import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.PodcastNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.persistence.neo4j.UserNeo4j;
 import it.unipi.dii.lsmsdb.myPodcastDB.utility.Logger;
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -361,7 +360,7 @@ public class AuthorProfileService {
         return updateResult;
     }
 
-    public int deleteAccountAsAuthor(Author author) {
+    public int deleteAuthorAsAuthor(Author author) {
         Logger.info("Deleting account as author");
         MongoManager.getInstance().openConnection();
         Neo4jManager.getInstance().openConnection();
@@ -428,21 +427,32 @@ public class AuthorProfileService {
                 }
 
                 int deleted = deletedEmbeddedReviews.size();
-                Logger.info("Deleted " + deleted + " embedded reviews associated to author " + author.getName());
+                Logger.info("Deleted " + deleted + " embedded reviews");
 
                 if (embeddedDeleteError) {
                     Logger.error("Error deleting user's embedded reviews on Mongo");
                     deleteResult = -5;
                     deleteAuthorRollback(deleteResult, author, podcasts, deletedEmbeddedReviews);
                 } else {
-                    int deletedReviews = reviewMongoManager.deleteReviewsByAuthorUsername(author.getName());
-                    if (deletedReviews < 0) {
-                        Logger.error("Error deleting reviews on Mongo");
-                        deleteResult = -6;
-                        deleteAuthorRollback(deleteResult, author, podcasts, deletedEmbeddedReviews);
-                    } else {
-                        Logger.info("Deleted " + deletedReviews + " reviews associated to " + author.getName() + "'s podcasts");
+                    // POLICY ADOPTED: from now on no rollback will be performed anymore.
+                    // In this section will be deleted the author's podcast reviews using delete many by podcast id.
+                    // If a delete fails, another delete attempt will be made when all other deletes are completed.
+                    // If the second attempt also fails, the id of the reviews that were not deleted will be logged,
+                    // so that the admin can delete them later.
+                    List<Podcast> podcastsWithFailures = new ArrayList<>();
+
+                    for (Podcast podcast : podcasts) {
+                        int deletedReviews = reviewMongoManager.deleteReviewsByPodcastId(podcast.getId());
+                        if (deletedReviews < 0) {
+                            Logger.error("Failed to delete reviews associated to podcast " + podcast.getId());
+                            podcastsWithFailures.add(podcast);
+                        } else {
+                            Logger.info("Deleted " + deletedReviews + " reviews associated to podcast " + podcast.getId());
+                        }
                     }
+
+                    if (!podcastsWithFailures.isEmpty())
+                        retryToDeleteReviews(podcastsWithFailures);
                 }
             }
         }
@@ -726,21 +736,32 @@ public class AuthorProfileService {
                 }
 
                 int deleted = deletedEmbeddedReviews.size();
-                Logger.info("Deleted " + deleted + " embedded reviews associated to author " + authorToDelete.getName());
+                Logger.info("Deleted " + deleted + " embedded reviews");
 
                 if (embeddedDeleteError) {
                     Logger.error("Error deleting user's embedded reviews on Mongo");
                     deleteResult = -5;
                     deleteAuthorRollback(deleteResult, authorToDelete, podcasts, deletedEmbeddedReviews);
                 } else {
-                    int deletedReviews = reviewMongoManager.deleteReviewsByAuthorUsername(authorToDelete.getName());
-                    if (deletedReviews < 0) {
-                        Logger.error("Error deleting reviews on Mongo");
-                        deleteResult = -6;
-                        deleteAuthorRollback(deleteResult, authorToDelete, podcasts, deletedEmbeddedReviews);
-                    } else {
-                        Logger.info("Deleted " + deletedReviews + " reviews associated to " + authorToDelete.getName() + "'s podcasts");
+                    // POLICY ADOPTED: from now on no rollback will be performed anymore.
+                    // In this section will be deleted the author's podcast reviews using delete many by podcast id.
+                    // If a delete fails, another delete attempt will be made when all other deletes are completed.
+                    // If the second attempt also fails, the id of the reviews that were not deleted will be logged,
+                    // so that the admin can delete them later.
+                    List<Podcast> podcastsWithFailures = new ArrayList<>();
+
+                    for (Podcast podcast : podcasts) {
+                        int deletedReviews = reviewMongoManager.deleteReviewsByPodcastId(podcast.getId());
+                        if (deletedReviews < 0) {
+                            Logger.error("Failed to delete reviews associated to podcast " + podcast.getId());
+                            podcastsWithFailures.add(podcast);
+                        } else {
+                            Logger.info("Deleted " + deletedReviews + " reviews associated to podcast " + podcast.getId());
+                        }
                     }
+
+                    if (!podcastsWithFailures.isEmpty())
+                        retryToDeleteReviews(podcastsWithFailures);
                 }
             }
         }
@@ -749,7 +770,7 @@ public class AuthorProfileService {
         Neo4jManager.getInstance(). closeConnection();
 
         if (deleteResult == 0)
-            Logger.info("(" + authorToDelete.getName() + ") Author deleted successfully!");
+            Logger.success("(" + authorToDelete.getName() + ") Author deleted successfully!");
 
         return deleteResult;
     }
@@ -811,7 +832,7 @@ public class AuthorProfileService {
         }
 
         if (result <= -5) {
-            Logger.info("Rollback due to the failure of the user's embedded reviews (or normal reviews) delete on Mongo");
+            Logger.info("Rollback due to the failure of the user's embedded reviews delete on Mongo");
             for (Podcast podcast : podcasts) {
                 // Restoring the podcast on Mongo
                 podcastMongoManager.addPodcast(podcast);
@@ -821,6 +842,19 @@ public class AuthorProfileService {
                     User user = userMongoManager.findUserByUsername(review.getValue1());
                     user.getReviews().add(new Review(review.getValue0(), podcast.getId()));
                     userMongoManager.updateReviewsOfUser(user);
+                }
+            }
+        }
+    }
+
+    private void retryToDeleteReviews(List<Podcast> podcastsWithFailures) {
+        Logger.info("Retry to delete reviews");
+
+        // try to delete with deleteOne to limit the possible failures
+        for (Podcast podcast : podcastsWithFailures) {
+            for (Review review : podcast.getReviews()) {
+                if(!reviewMongoManager.deleteReviewById(review.getId())) {
+                    Logger.error("Failed second attempt to eliminate review " + review.getId());
                 }
             }
         }
