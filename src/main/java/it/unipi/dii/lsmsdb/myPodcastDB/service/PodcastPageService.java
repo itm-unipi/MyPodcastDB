@@ -345,20 +345,26 @@ public class PodcastPageService {
                         // get the total review
                         Review toDeleteReview = this.reviewMongo.findReviewById(review.getId());
 
-                        // get the user
-                        User userToUpdate = null;
-                        if (toDeleteReview != null) {
-                            userToUpdate = this.userMongo.findUserByUsername(toDeleteReview.getAuthorUsername());
-                            userToUpdate.removeReview(review);
-                        }
-
-                        // check the result
-                        if (toDeleteReview != null && userToUpdate != null && this.userMongo.updateReviewsOfUser(userToUpdate)) {
-                            // update the history of removed review for eventual rollback
-                            removedReviewsEmbedded.add(new Pair<>(userToUpdate.getUsername(), review.getId()));
-                        } else {
+                        if (toDeleteReview == null) {
                             resDelRevUser = false;
                             break;
+                        } else if (!toDeleteReview.getAuthorUsername().equals("Removed account")) {
+                            // get the user
+                            User userToUpdate = null;
+                            userToUpdate = this.userMongo.findUserByUsername(toDeleteReview.getAuthorUsername());
+
+                            // update the user object if not null
+                            if (userToUpdate != null)
+                                userToUpdate.removeReview(review);
+
+                            // check the result
+                            if (userToUpdate != null && this.userMongo.updateReviewsOfUser(userToUpdate)) {
+                                // update the history of removed review for eventual rollback
+                                removedReviewsEmbedded.add(new Pair<>(userToUpdate.getUsername(), review.getId()));
+                            } else {
+                                resDelRevUser = false;
+                                break;
+                            }
                         }
                     }
 

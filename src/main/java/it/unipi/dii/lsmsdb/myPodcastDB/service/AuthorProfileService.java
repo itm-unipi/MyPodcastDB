@@ -398,21 +398,27 @@ public class AuthorProfileService {
 
                 for (Podcast podcast : podcasts) {
                     for (Review reviewToDelete : podcast.getReviews()) {
-                        User user = null;
                         Review review = reviewMongoManager.findReviewById(reviewToDelete.getId());
 
-                        if (review != null) {
-                            user = userMongoManager.findUserByUsername(review.getAuthorUsername());
-                            user.removeReview(reviewToDelete);
-                        }
-
-                        if (user != null && review != null && userMongoManager.updateReviewsOfUser(user)) {
-                            Logger.info("Removed reviews " + review.getId() + " from" + review.getAuthorUsername());
-                            deletedEmbeddedReviews.add(new Pair<>(review.getId(), review.getAuthorUsername()));
-                            Logger.info("Review deleted successfully!");
-                        } else {
+                        if (review == null) {
                             embeddedDeleteError = true;
                             break;
+                        } else {
+                            if (!review.getAuthorUsername().equals("Removed account")) {
+                                User user = userMongoManager.findUserByUsername(review.getAuthorUsername());
+
+                                if (user != null)
+                                    user.removeReview(review);
+
+                                if (user != null && userMongoManager.updateReviewsOfUser(user)) {
+                                    Logger.info("Removed reviews " + review.getId() + " from" + review.getAuthorUsername());
+                                    deletedEmbeddedReviews.add(new Pair<>(review.getId(), review.getAuthorUsername()));
+                                    Logger.info("Review deleted successfully!");
+                                } else {
+                                    embeddedDeleteError = true;
+                                    break;
+                                }
+                            }
                         }
                     }
 
@@ -542,21 +548,27 @@ public class AuthorProfileService {
             boolean embeddedDeleteError = false;
 
             for (Review reviewToDelete: podcast.getReviews()) {
-                User user = null;
                 Review review = reviewMongoManager.findReviewById(reviewToDelete.getId());
 
-                if (review != null) {
-                    user = userMongoManager.findUserByUsername(review.getAuthorUsername());
-                    user.removeReview(review);
-                }
-
-                if (user != null && review != null && userMongoManager.updateReviewsOfUser(user)) {
-                    Logger.info("Removed reviews " + review.getId() + " from" + review.getAuthorUsername());
-                    deletedEmbeddedReviews.add(new Pair<>(review.getId(), review.getAuthorUsername()));
-                    Logger.info("Review deleted successfully!");
-                } else {
+                if (review == null) {
                     embeddedDeleteError = true;
                     break;
+                } else {
+                    if (!review.getAuthorUsername().equals("Removed account")) {
+                        User user = userMongoManager.findUserByUsername(review.getAuthorUsername());
+
+                        if (user != null)
+                            user.removeReview(review);
+
+                        if (user != null && userMongoManager.updateReviewsOfUser(user)) {
+                            Logger.info("Removed reviews " + review.getId() + " from" + review.getAuthorUsername());
+                            deletedEmbeddedReviews.add(new Pair<>(review.getId(), review.getAuthorUsername()));
+                            Logger.info("Review deleted successfully!");
+                        } else {
+                            embeddedDeleteError = true;
+                            break;
+                        }
+                    }
                 }
             }
 
@@ -684,21 +696,27 @@ public class AuthorProfileService {
 
                 for (Podcast podcast : podcasts) {
                     for (Review reviewToDelete : podcast.getReviews()) {
-                        User user = null;
                         Review review = reviewMongoManager.findReviewById(reviewToDelete.getId());
 
-                        if (review != null) {
-                            user = userMongoManager.findUserByUsername(review.getAuthorUsername());
-                            user.removeReview(reviewToDelete);
-                        }
-
-                        if (user != null && review != null && userMongoManager.updateReviewsOfUser(user)) {
-                            Logger.info("Removed reviews " + review.getId() + " from" + review.getAuthorUsername());
-                            deletedEmbeddedReviews.add(new Pair<>(review.getId(), review.getAuthorUsername()));
-                            Logger.info("Review deleted successfully!");
-                        } else {
+                        if (review == null) {
                             embeddedDeleteError = true;
                             break;
+                        } else {
+                            if (!review.getAuthorUsername().equals("Removed account")) {
+                                User user = userMongoManager.findUserByUsername(review.getAuthorUsername());
+
+                                if (user != null)
+                                    user.removeReview(review);
+
+                                if (user != null && userMongoManager.updateReviewsOfUser(user)) {
+                                    Logger.info("Removed reviews " + review.getId() + " from" + review.getAuthorUsername());
+                                    deletedEmbeddedReviews.add(new Pair<>(review.getId(), review.getAuthorUsername()));
+                                    Logger.info("Review deleted successfully!");
+                                } else {
+                                    embeddedDeleteError = true;
+                                    break;
+                                }
+                            }
                         }
                     }
 

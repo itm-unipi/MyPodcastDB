@@ -794,19 +794,19 @@ public class UserPageController {
             return;
         }
         else if(newUser.getUsername().indexOf('@') != -1){
-            Logger.error("Username not valid [not type @]");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Username not valid [not type @]");
+            Logger.error("Username not valid, you can't use \"@\"");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Username not valid, you can't use \"@\"");
             return;
         }
         if(newUser.getEmail().indexOf('@') == -1){
             Logger.error("Invalid email");
-            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "invalid email");
+            DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Invalid email");
             return;
         }
 
         if(!newUser.getUsername().equals(pageOwner.getUsername())) {
             if(pageOwner.getUsernameChanges() < maxUsernameChanges) {
-                String msg = "you can only change your username "+ (maxUsernameChanges - pageOwner.getUsernameChanges()) + " more " + (pageOwner.getUsernameChanges() > 1 ? "times" : "time") + ", you really want to continue ?";
+                String msg = "You can only change your username "+ (maxUsernameChanges - pageOwner.getUsernameChanges()) + " more " + (pageOwner.getUsernameChanges() > 1 ? "times" : "time") + ", you really want to continue ?";
                 boolean res = DialogManager.getInstance().createConfirmationAlert(userPageAnchorPane, msg);
                 if(!res)
                     return;
@@ -814,8 +814,8 @@ public class UserPageController {
                     newUser.setUsernameChanges(pageOwner.getUsernameChanges() + 1);
             }
             else{
-                Logger.error("Is not possible to change again the username");
-                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "Is not possible to change again the username");
+                Logger.error("It isn't possible to change again the username");
+                DialogManager.getInstance().createErrorAlert(userPageAnchorPane, "It isn't possible to change again the username");
                 return;
             }
         }
