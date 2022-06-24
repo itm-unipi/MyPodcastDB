@@ -197,7 +197,6 @@ public class PodcastPreviewController {
         // Check if podcast is in the user's watchlist
         this.inWatchlist = (WatchlistCache.getPodcast(this.podcastPreview.getId()) != null);
         if (inWatchlist) {
-            Logger.info("Podcast in the watchlist");
             this.watchlistStatus.setImage(ImageCache.getImageFromLocalPath("/img/removeWatchlist.png"));
         }
 

@@ -182,7 +182,7 @@ public class AdminDashboardController {
 
     private Admin admin;
     private AdminDashboardService service;
-    private final int limit = 39000;
+    private final int limit = 10;
 
     /**************************** Click and Enter Events ****************************/
 

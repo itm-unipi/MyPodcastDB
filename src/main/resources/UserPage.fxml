@@ -492,7 +492,7 @@
                                     </HBox>
                                  </children>
                               </VBox>
-                              <Button fx:id="userPageShowLikedButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#showLikedPodcastClick" onMouseEntered="#showLikedIn" onMouseExited="#showLikedOut" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 8;" text="Show Liked Podcast" textFill="WHITE">
+                              <Button fx:id="userPageShowLikedButton" focusTraversable="false" mnemonicParsing="false" onMouseClicked="#showLikedPodcastClick" onMouseEntered="#showLikedIn" onMouseExited="#showLikedOut" style="-fx-cursor: hand; -fx-background-color: grey; -fx-background-radius: 8;" text="Show Liked Podcasts" textFill="WHITE">
                                  <font>
                                     <Font name="Corbel" size="16.0" />
                                  </font>
