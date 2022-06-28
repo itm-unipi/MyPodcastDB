@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xmlConfig>
-    <databasesConfigType>local</databasesConfigType>
+    <databasesConfigType>remote</databasesConfigType>
     <mongoDBLocalConfig>
         <mongoDBIp>localhost</mongoDBIp>
         <mongoDBPort>27017</mongoDBPort>
