@@ -155,7 +155,10 @@ public class UserPageService {
         List<Podcast> podcasts = podcastNeo4jManager.showLikedPodcastsByUser(pageOwner, limit, skip);
         if(podcasts != null){
             lPodcast.addAll(podcasts);
-            LikedPodcastCache.addPodcastList(podcasts);
+
+            if (MyPodcastDB.getInstance().getSessionType().equals("User") && ((User)MyPodcastDB.getInstance().getSessionActor()).getUsername().equals(pageOwner))
+                LikedPodcastCache.addPodcastList(podcasts);
+
             res = 0;
         }
         else
